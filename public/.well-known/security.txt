@@ -1,0 +1,13 @@
+Contact: mailto:security@imashnujnoto.com
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: bg, en
+Canonical: https://imashnujnoto.com/.well-known/security.txt
+Policy: https://imashnujnoto.com/privacy
+
+# TAVORA EOOD — Security Disclosure Policy
+# We take security seriously. If you discover a vulnerability,
+# please report it responsibly. We will acknowledge your report
+# within 72 hours and work with you to resolve the issue.
+#
+# Please do NOT publicly disclose vulnerabilities before we have
+# had a chance to address them.
