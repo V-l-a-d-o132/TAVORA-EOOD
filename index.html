@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="bg">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/webp" href="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/e232f6df-04d9-4738-9beb-0ed8800a0ec8_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.webp?v=501711babf873985bfce13811f385bfa" />
+    <link rel="apple-touch-icon" href="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/e232f6df-04d9-4738-9beb-0ed8800a0ec8_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.webp?v=501711babf873985bfce13811f385bfa" />
+    <meta name="msapplication-TileImage" content="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/e232f6df-04d9-4738-9beb-0ed8800a0ec8_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.webp?v=501711babf873985bfce13811f385bfa" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Security Hardening — 2026 Standards                 -->
+    <!-- ════════════════════════════════════════════════ -->
+
+    <!-- Content Security Policy (CSP) Level 3 — tightened but functional -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://connect.facebook.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google.com https://www.gstatic.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https: blob:;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://connect.facebook.net https://www.facebook.com https://graph.facebook.com https://storage.readdy-site.link https://readdy.ai https://api.readdy.ai https://static.readdy.ai;
+        frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.facebook.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com;
+        media-src 'self' https://storage.readdy-site.link;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self' https://www.facebook.com;
+      "
+    />
+
+    <!-- Referrer Policy — strict control over referrer data -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Permissions Policy — restrict browser feature access -->
+    <meta
+      http-equiv="Permissions-Policy"
+      content="camera=(), microphone=(), geolocation=(self), interest-cohort=(), accelerometer=(), autoplay=(), clipboard-write=(self), display-capture=(), encrypted-media=(), gyroscope=(), magnetometer=(), payment=(), usb=(), xr-spatial-tracking=()"
+    />
+
+    <!-- Cross-Origin-Opener-Policy — mitigate cross-origin attacks -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups" />
+
+    <!-- Cross-Origin-Resource-Policy -->
+    <meta http-equiv="Cross-Origin-Resource-Policy" content="cross-origin" />
+
+    <!-- Critical CSS — inlined to avoid render-blocking -->
+    <style>
+      /* Critical path: skeleton + base font-faces */
+      #skeleton{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:18vh;font-family:system-ui,sans-serif;transition:opacity .25s}
+      #skeleton>div:first-child{width:144px;height:36px;background:#0A2540;border-radius:6px;margin-bottom:48px}
+      #skeleton>div:nth-child(2){width:min(520px,80vw);height:28px;background:#0A2540;border-radius:4px;margin-bottom:16px}
+      #skeleton>div:nth-child(3){width:min(360px,60vw);height:28px;background:rgba(10,37,64,0.5);border-radius:4px;margin-bottom:40px;opacity:.5}
+      #skeleton>div:nth-child(4){width:min(280px,50vw);height:14px;background:#1C1C1E;border-radius:3px;margin-bottom:12px;opacity:.25}
+      #skeleton>div:nth-child(5){width:min(240px,45vw);height:14px;background:#1C1C1E;border-radius:3px;margin-bottom:12px;opacity:.25}
+      #skeleton>div:nth-child(6){width:min(200px,40vw);height:14px;background:#1C1C1E;border-radius:3px;margin-bottom:48px;opacity:.25}
+      #skeleton>div:nth-child(7){width:min(180px,45vw);height:44px;background:#0A2540;border-radius:999px}
+      .skip-link{position:absolute;left:-9999px;z-index:100}
+      .skip-link:focus{left:8px;top:8px;background:#0A2540;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;font-family:sans-serif;font-size:14px}
+    </style>
+
+    <!-- Resource hints — critical for LCP/FCP. Max 4 preconnects -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://storage.readdy-site.link" />
+    <link rel="dns-prefetch" href="https://static.readdy.ai" />
+    <link rel="dns-prefetch" href="https://readdy.ai" />
+    <link rel="dns-prefetch" href="https://api.readdy.ai" />
+
+    <!-- Preload critical font stylesheet -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap&subset=cyrillic" />
+
+    <title>ТАВОРА ЕООД — Модерна агенция за дигитален маркетинг във Велико Търново | SEO, реклами, видео</title>
+    <meta name="description" content="ТАВОРА ЕООД е сред най-модерните дигитални маркетинг агенции във Велико Търново. SEO оптимизация, GEO за AI търсачки, рекламни кампании и видео продукция. Верифицируеми #1 позиции в Google и ChatGPT." />
+    <meta name="keywords" content="дигитален маркетинг Велико Търново, SEO Велико Търново, реклама Велико Търново, маркетинг агенция Велико Търново, SEO оптимизация Велико Търново" />
+    <meta name="author" content="ТАВОРА ЕООД" />
+    <link rel="canonical" href="https://imashnujnoto.com/" />
+    <meta name="last-modified" content="2026-05-20" />
+
+    <!-- Geo tags -->
+    <meta name="geo.region" content="BG-VTR" />
+    <meta name="geo.placename" content="Велико Търново, България" />
+    <meta name="geo.position" content="43.0785;25.6415" />
+    <meta name="ICBM" content="43.0785, 25.6415" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://imashnujnoto.com/" />
+    <meta property="og:title" content="Дигитален маркетинг Велико Търново | ТАВОРА ЕООД" />
+    <meta property="og:description" content="SEO оптимизация, рекламни кампании и видео продукция за бизнеси от Велико Търново. Реални #1 позиции в Google. ТАВОРА ЕООД." />
+    <meta property="og:locale" content="bg_BG" />
+    <meta property="og:site_name" content="ТАВОРА ЕООД — Дигитален маркетинг Велико Търново" />
+
+    <!-- OG Image -->
+    <meta property="og:image" content="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/e232f6df-04d9-4738-9beb-0ed8800a0ec8_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.webp?v=501711babf873985bfce13811f385bfa" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="ТАВОРА ЕООД — Дигитален маркетинг Велико Търново" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Дигитален маркетинг Велико Търново | ТАВОРА ЕООД" />
+    <meta name="twitter:description" content="SEO оптимизация, рекламни кампании и видео продукция за бизнеси от Велико Търново и цяла България. ТАВОРА ЕООД." />
+    <meta name="twitter:image" content="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/e232f6df-04d9-4738-9beb-0ed8800a0ec8_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.webp?v=501711babf873985bfce13811f385bfa" />
+
+    <!-- Schema.org structured data — LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://imashnujnoto.com/#organization",
+      "name": "ТАВОРА ЕООД",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/e232f6df-04d9-4738-9beb-0ed8800a0ec8_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.webp?v=501711babf873985bfce13811f385bfa",
+        "width": 512,
+        "height": 512,
+        "caption": "ТАВОРА ЕООД — Дигитален маркетинг Велико Търново"
+      },
+      "alternateName": ["Tavora", "Имаш нужното", "imashnujnoto"],
+      "description": "Дигитален маркетинг Велико Търново — SEO оптимизация, рекламни кампании, видео продукция и изработка на сайтове за бизнеси от Велико Търново и цяла България.",
+      "url": "https://imashnujnoto.com",
+      "telephone": "+359885189724",
+      "priceRange": "€€",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "ул. \"Велчо Джамджията\"",
+        "addressLocality": "Велико Търново",
+        "postalCode": "5000",
+        "addressCountry": "BG"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "43.0785",
+        "longitude": "25.6415"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Велико Търново" },
+        { "@type": "AdministrativeArea", "name": "Търновска област" },
+        { "@type": "Country", "name": "България" }
+      ],
+      "founder": {
+        "@type": "Person",
+        "@id": "https://imashnujnoto.com/vladimir-atanasov#person",
+        "name": "Владимир Веселинов Атанасов",
+        "url": "https://imashnujnoto.com/vladimir-atanasov"
+      },
+      "legalName": "ТАВОРА ЕООД",
+      "taxID": "208438650",
+      "inLanguage": "bg",
+      "serviceType": [
+        "SEO оптимизация",
+        "GEO оптимизация",
+        "Рекламни кампании",
+        "Видео продукция",
+        "Изработка на сайтове"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "21",
+        "bestRating": "5"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Клиент K-Food", "jobTitle": "Собственик" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "ТАВОРА ни класира на #1 в Google за 'корейска храна велико търново' и сега сме в ChatGPT. Резултатите са видими.",
+          "datePublished": "2026-03-15"
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Клиент Sunrise Food", "jobTitle": "Основател" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Сайт + SEO за 3–4 седмици достигнахме #1 за 'гъби кладница онлайн'. Професионална работа с реални резултати.",
+          "datePublished": "2026-02-20"
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Клиент Академика 245", "jobTitle": "Директор" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Видео продукцията за Академика 245 достигна милиони импресии. Натан и Владимир разбират бизнеса и аудиторията.",
+          "datePublished": "2026-01-10"
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Клиент Thalysta", "jobTitle": "Основател" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "ТАВОРА създаде нашия e-commerce сайт от нулата — SEO, реклами и видео. Жив сайт с реални резултати.",
+          "datePublished": "2026-04-20"
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Клиент NMOM", "jobTitle": "Директор" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Пълен пакет за нашата НПО — сайт, SEO и дигитална стратегия. Професионална работа от нулата.",
+          "datePublished": "2026-03-01"
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Клиент Budimse", "jobTitle": "Основател" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Създадоха нашата образователна платформа от нулата — сайт, SEO, GEO и дигитален маркетинг. Отлични резултати.",
+          "datePublished": "2026-02-15"
+        }
+      ],
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q139801651",
+        "https://scoolmedia.com/medijnata-gramotnost-v-30-sek-2/",
+        "https://bnrnews.bg/hristobotev/post/21467/samo-uau-li-e-digitalniyat-svyat",
+        "https://www.bta.bg/bg/news/725780-yoanna-zabcheva-vladimir-atanasov-i-vesel-stoyanov-sa-pobediteli-v-konkursa-me",
+        "https://bglobal.bg/111228-obqviha-pobeditelite-v-konkursa-mediinata",
+        "https://www.facebook.com/profile.php?id=61589264103453",
+        "https://www.instagram.com/marketingattavora/",
+        "https://www.tiktok.com/@tavoramarketingagency",
+        "https://www.youtube.com/@TavoraMarketingAgency",
+        "https://share.google/sP3ydTe4iqEO44qua"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Услуги за дигитален маркетинг",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Изработка на сайт",
+              "url": "https://imashnujnoto.com/uslugi/izrabotka-na-sait",
+              "description": "Уеб дизайн и разработка с акцент върху Core Web Vitals, SEO и GEO от първия ден."
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "price": "999",
+              "priceCurrency": "EUR",
+              "minPrice": "999"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "SEO & GEO оптимизация",
+              "url": "https://imashnujnoto.com/uslugi/seo-geo",
+              "description": "Технически SEO одит, GEO за AI търсачки, локално SEO за бизнеси от Велико Търново."
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "price": "390",
+              "priceCurrency": "EUR"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Рекламни кампании",
+              "url": "https://imashnujnoto.com/uslugi/reklamni-kampanii",
+              "description": "Управление на Meta, Google и TikTok реклами с пълна прозрачност."
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "price": "290",
+              "priceCurrency": "EUR",
+              "minPrice": "290"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Видео продукция",
+              "url": "https://imashnujnoto.com/uslugi/video-produkciya",
+              "description": "Професионална видео продукция за Facebook, YouTube и TikTok."
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "price": "290",
+              "priceCurrency": "EUR",
+              "minPrice": "290"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- Schema.org — WebSite with SearchAction (AEO critical) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://imashnujnoto.com/#website",
+      "name": "ТАВОРА ЕООД — Дигитален маркетинг Велико Търново",
+      "url": "https://imashnujnoto.com",
+      "description": "Дигитален маркетинг агенция в Велико Търново. SEO оптимизация, GEO за AI търсачки, рекламни кампании и видео продукция.",
+      "inLanguage": "bg",
+      "publisher": { "@id": "https://imashnujnoto.com/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://imashnujnoto.com/blog?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Schema.org — Person (AEO authority signal) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://imashnujnoto.com/vladimir-atanasov#person",
+      "name": "Владимир Веселинов Атанасов",
+      "givenName": "Владимир",
+      "familyName": "Атанасов",
+      "jobTitle": "Основател, SEO & GEO специалист",
+      "description": "Основател на ТАВОРА ЕООД. Специалист по дигитален маркетинг, SEO и GEO оптимизация за бизнеси от Велико Търново и цяла България.",
+      "url": "https://imashnujnoto.com/vladimir-atanasов",
+      "worksFor": { "@id": "https://imashnujnoto.com/#organization" },
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q139801651",
+        "https://scoolmedia.com/medijnata-gramotnost-v-30-sek-2/",
+        "https://bnrnews.bg/hristobotev/post/21467/samo-uau-li-e-digitalniyat-svyat",
+        "https://www.bta.bg/bg/news/725780-yoanna-zabcheva-vladimir-atanasov-i-vesel-stoyanov-sa-pobediteli-v-konkursa-me",
+        "https://bglobal.bg/111228-obqviha-pobeditelite-v-konkursa-mediinata",
+        "https://www.facebook.com/profile.php?id=61589264103453",
+        "https://www.instagram.com/marketingattavora/",
+        "https://www.tiktok.com/@tavoramarketingagency",
+        "https://www.youtube.com/@TavoraMarketingAgency",
+        "https://share.google/sP3ydTe4iqEO44qua",
+        "https://www.linkedin.com/in/vladimir-atanasov-tavora/"
+      ],
+      "knowsAbout": [
+        "Дигитален маркетинг",
+        "SEO оптимизация",
+        "GEO оптимизация",
+        "Generative Engine Optimization",
+        "AEO оптимизация",
+        "Рекламни кампании",
+        "Велико Търново",
+        "ChatGPT оптимизация",
+        "Perplexity оптимизация"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Велико Търново",
+        "addressCountry": "BG"
+      }
+    }
+    </script>
+
+    <!-- Schema.org — SpeakableSpecification (AI voice / AEO critical) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://imashnujnoto.com/#webpage",
+      "url": "https://imashnujnoto.com",
+      "name": "ТАВОРА ЕООД — Дигитален маркетинг Велико Търново",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": ["h1", ".entity-paragraph"]
+      }
+    }
+    </script>
+
+    <!-- Schema.org — Course -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "AI Уеб Дизайн Мастърклас",
+      "description": "Практически мастърклас за AI уеб дизайн, GEO и SEO оптимизация. Изградете устойчив дигитален бизнес с AI без агенция.",
+      "provider": {
+        "@type": "Organization",
+        "name": "ТАВОРА ЕООД",
+        "legalName": "ТАВОРА ЕООД",
+        "@id": "https://imashnujnoto.com/#organization"
+      },
+      "courseMode": "online",
+      "inLanguage": "bg",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Стандартен достъп",
+          "price": "320",
+          "priceCurrency": "EUR"
+        },
+        {
+          "@type": "Offer",
+          "name": "Премиум достъп",
+          "price": "590",
+          "priceCurrency": "EUR"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Google Fonts — Cyrillic subset, async via media="print" trick. Preloaded above -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap&subset=cyrillic" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap&subset=cyrillic" rel="stylesheet"></noscript>
+
+    <!-- Remixicon — deferred to reduce render-blocking -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" crossorigin="anonymous" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" crossorigin="anonymous"></noscript>
+
+    <meta name="google-site-verification" content="l3SVKl6_sG9T3CNrTIvA4CUFH3aiJxivkms0sPYwUEQ" />
+
+    <!-- Meta Pixel Code — dual pixel: TAVORA (global) + Academy (kurs pages only) -->
+    <script>
+    (function() {
+      var PIXEL_ID = '1417762636838758';
+      var ACADEMY_ID = '1742675203594120';
+
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+
+      // Init TAVORA pixel (global)
+      fbq('init', PIXEL_ID);
+
+      // Academy pixel initialized lazily in metaPixel.ts — no duplicate init here
+    })();
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1417762636838758&ev=PageView&noscript=1"
+      />
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1742675203594120&ev=PageView&noscript=1"
+      />
+    </noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- LLM / AI Discovery — link rel signals for ChatGPT, Perplexity, Gemini, Claude -->
+    <link rel="help" href="/llms.txt" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Knowledge Base — ТАВОРА ЕООД" />
+    <link rel="alternate" type="text/plain" href="/ai.txt" title="AI Discovery Manifest — ТАВОРА ЕООД" />
+
+    <!-- Security disclosure — RFC 9116 -->
+    <link rel="security-advisories" href="/.well-known/security.txt" />
+  </head>
+  <body>
+    <!-- Skeleton — visible instantly, removed by React on mount -->
+    <div id="root">
+      <div id="skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function() {
+        var sk = document.getElementById('skeleton');
+        if (!sk) return;
+        window.__removeSkeleton = function() {
+          sk.style.opacity = '0';
+          setTimeout(function() { sk.remove(); }, 250);
+        };
+        setTimeout(window.__removeSkeleton, 3000);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+# ════════════════════════════════════════════
+# Robots.txt — example.com
+# Optimized for AI search crawlers + traditional bots
+# ════════════════════════════════════════════
+
+# Google crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+# Google AI training opt-in/out (separate from Search)
+User-agent: Google-Extended
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+User-agent: MSNBot
+Allow: /
+
+# Yahoo Slurp
+User-agent: Slurp
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Yandex
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+# Apple
+User-agent: Applebot
+Allow: /
+
+# Social platforms
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+# ── OpenAI ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# ── Anthropic / Claude — three distinct bots, each with its own job ──
+# ClaudeBot: training data collection
+User-agent: ClaudeBot
+Allow: /
+
+# Claude-User: fetches a page when a person asks Claude to read it
+User-agent: Claude-User
+Allow: /
+
+# Claude-SearchBot: indexes content for Claude's search/citation feature
+User-agent: Claude-SearchBot
+Allow: /
+
+# ── Perplexity ──
+User-agent: PerplexityBot
+Allow: /
+
+# ── Other AI / research crawlers ──
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# SEO tool crawlers
+User-agent: SemrushBot
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+
+User-agent: MJ12bot
+Allow: /
+
+User-agent: DotBot
+Allow: /
+
+# ═══ Default rule for all other bots + disallow private/admin areas ═══
+User-agent: *
+Allow: /
+Disallow: /wp-admin/
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Disallow: /forgot-password/
+Disallow: /dashboard/
+Disallow: /*?s=
+
+# Sitemap (only real XML sitemaps belong here — llms.txt/ai.txt are not sitemaps,
+# they're already crawlable via the Allow: / rules above, no separate directive needed)
+Sitemap: https://imashnujnoto.com/sitemap.xml
