@@ -1,40 +1,13 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { authorizeEmail } from '../_shared/email-auth.ts';
+import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend@4";
-import Stripe from "npm:stripe@17";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!);
 
-async function getOrCreateDownsellPrice(): Promise<string> {
-  const PRODUCT_NAME = "Пътят на коприната — AI Business Blueprint | Академия TAVORA";
-  const PRICE_CENTS = 4900;
-
-  const allProducts = await stripe.products.list({ active: true, limit: 100 });
-  let product = allProducts.data.find((p) => p.name === PRODUCT_NAME);
-
-  if (!product) {
-    product = await stripe.products.create({
-      name: PRODUCT_NAME,
-      description: "10 модула от Пътят на коприната. Доживотен достъп.",
-    });
-  }
-
-  const prices = await stripe.prices.list({ product: product.id, active: true, limit: 5 });
-  const match = prices.data.find((p) => p.unit_amount === PRICE_CENTS && p.currency === "eur");
-  if (match) return match.id;
-
-  const price = await stripe.prices.create({
-    product: product.id,
-    unit_amount: PRICE_CENTS,
-    currency: "eur",
-  });
-  return price.id;
-}
 
 function formatBgDate(date: Date): string {
   const months = [
@@ -82,6 +55,8 @@ Deno.serve(async (req: Request) => {
     }
 
     const userId = body.user_id;
+    const authorizationError = await authorizeEmail(req,userId,supabase);
+    if(authorizationError) return authorizationError;
     if (!userId) {
       return new Response(JSON.stringify({ error: "Missing user_id" }), {
         status: 400,
@@ -89,7 +64,8 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const oldLastLoginAt = body.old_last_login_at;
+    const {data:loginProfile}=await supabase.from('profiles').select('last_login_at').eq('id',userId).single();
+    const oldLastLoginAt = loginProfile?.last_login_at;
     if (!oldLastLoginAt) {
       return new Response(JSON.stringify({ error: "Missing old_last_login_at" }), {
         status: 400,
@@ -113,24 +89,6 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const { error: logInsertErr } = await supabase
-      .from("email_logs")
-      .insert({ user_id: userId, email_type: "downsell" });
-
-    if (logInsertErr) {
-      if (logInsertErr.code === "23505") {
-        console.log("[downsell] Dedup: already claimed for user:", userId);
-        return new Response(JSON.stringify({ skipped: "already_sent", reason: "dedup" }), {
-          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-        });
-      }
-      console.error("[downsell] email_logs insert error:", JSON.stringify(logInsertErr));
-      return new Response(JSON.stringify({ error: "Failed to record email log" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      });
-    }
-
     const { data: authUser, error: authLookupErr } = await supabase.auth.admin.getUserById(userId);
     if (authLookupErr || !authUser?.user?.email) {
       return new Response(JSON.stringify({ error: "User not found" }), {
@@ -141,7 +99,7 @@ Deno.serve(async (req: Request) => {
 
     const userEmail = authUser.user.email;
     const userName = authUser.user.user_metadata?.full_name || "";
-    const firstName = userName ? userName.split(" ")[0] : userEmail.split("@")[0];
+    const firstName = String(userName ? userName.split(" ")[0] : userEmail.split("@")[0]).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 
     const { data: profile } = await supabase
       .from("profiles")
@@ -176,27 +134,17 @@ Deno.serve(async (req: Request) => {
     console.log("[downsell] Creating checkout for:", userEmail);
 
     // Stripe session за systems-10 (49 EUR → отключва 10 модула)
-    let checkoutUrl = "https://imashnujnoto.com/kurs/checkout?tier=systems-10";
-
-    try {
-      const priceId = await getOrCreateDownsellPrice();
-      const session = await stripe.checkout.sessions.create({
-        line_items: [{ price: priceId, quantity: 1 }],
-        mode: "payment",
-        success_url: "https://imashnujnoto.com/kurs/potvardjenie?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "https://imashnujnoto.com/kurs/checkout?tier=systems-10",
-        metadata: { tier: "systems-10", source: "downsell-email", user_id: userId },
-      });
-      if (session.url) checkoutUrl = session.url;
-    } catch (stripeErr) {
-      console.error("[downsell] Stripe error:", stripeErr);
-    }
+    const checkoutUrl = "https://imashnujnoto.com/kurs/checkout?tier=systems-10";
 
     const now = new Date();
     const expiresAt = new Date(now.getTime() + 72 * 60 * 60 * 1000);
     const expiresFormatted = formatBgDate(expiresAt);
 
     console.log("[downsell] Sending to:", userEmail);
+
+    const { data: lease, error: claimError } = await supabase.rpc('academy_claim_email', { p_user: userId, p_type: 'downsell' });
+    if (claimError) throw claimError;
+    if (!lease) return new Response(JSON.stringify({ skipped: 'already_claimed' }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 
     const { data: emailData, error: emailErr } = await resend.emails.send({
       from: "Tavora Digital <noreply@imashnujnoto.com>",
@@ -341,8 +289,10 @@ Deno.serve(async (req: Request) => {
   </table>
 </body>
 </html>`,
-    });
+    }, { idempotencyKey: 'academy-email:' + userId + ':downsell' });
 
+    const { error: finishError } = await supabase.rpc('academy_finish_email', { p_user: userId, p_type: 'downsell', p_lease: lease, p_sent: !emailErr });
+    if (finishError) throw finishError;
     if (emailErr) {
       console.error("[downsell] Resend error:", JSON.stringify(emailErr));
       return new Response(JSON.stringify({ error: "Failed to send email", detail: emailErr }), {

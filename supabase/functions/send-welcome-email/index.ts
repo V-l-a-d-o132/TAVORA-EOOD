@@ -1,5 +1,5 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { authorizeEmail } from '../_shared/email-auth.ts';
+import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend@4";
 
 const supabase = createClient(
@@ -45,31 +45,11 @@ Deno.serve(async (req: Request) => {
     }
 
     const userId = body.user_id;
+    const authorizationError = await authorizeEmail(req,userId,supabase);
+    if(authorizationError) return authorizationError;
     if (!userId) {
       return new Response(JSON.stringify({ error: "Missing user_id" }), {
         status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      });
-    }
-
-    // ── SERVER-SIDE DEDUP: insert email_logs row BEFORE anything else ──
-    // Unique constraint (user_id, email_type) + ON CONFLICT DO NOTHING guarantees
-    // exactly-one-send even when two requests race (e.g. double onAuthStateChange).
-    const { error: logInsertErr } = await supabase
-      .from("email_logs")
-      .insert({ user_id: userId, email_type: "welcome" });
-
-    if (logInsertErr) {
-      // 23505 = unique_violation → another request already claimed this send
-      if (logInsertErr.code === "23505") {
-        console.log("[welcome] Dedup: already claimed by another request for user:", userId);
-        return new Response(JSON.stringify({ skipped: "already_sent", reason: "dedup" }), {
-          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-        });
-      }
-      console.error("[welcome] email_logs insert error:", JSON.stringify(logInsertErr));
-      return new Response(JSON.stringify({ error: "Failed to record email log", detail: logInsertErr.message }), {
-        status: 500,
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });
     }
@@ -84,7 +64,7 @@ Deno.serve(async (req: Request) => {
 
     const userEmail = authUser.user.email;
     const userName = authUser.user.user_metadata?.full_name || "";
-    const firstName = userName ? userName.split(" ")[0] : userEmail.split("@")[0];
+    const firstName = String(userName ? userName.split(" ")[0] : userEmail.split("@")[0]).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 
     const { data: profile } = await supabase
       .from("profiles")
@@ -100,6 +80,10 @@ Deno.serve(async (req: Request) => {
     }
 
     console.log("[welcome] Sending welcome email to:", userEmail);
+
+    const { data: lease, error: claimError } = await supabase.rpc('academy_claim_email', { p_user: userId, p_type: 'welcome' });
+    if (claimError) throw claimError;
+    if (!lease) return new Response(JSON.stringify({ skipped: 'already_claimed' }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 
     const { data: emailData, error: emailErr } = await resend.emails.send({
       from: "Tavora Digital <noreply@imashnujnoto.com>",
@@ -235,8 +219,10 @@ Deno.serve(async (req: Request) => {
   </table>
 </body>
 </html>`,
-    });
+    }, { idempotencyKey: 'academy-email:' + userId + ':welcome' });
 
+    const { error: finishError } = await supabase.rpc('academy_finish_email', { p_user: userId, p_type: 'welcome', p_lease: lease, p_sent: !emailErr });
+    if (finishError) throw finishError;
     if (emailErr) {
       console.error("[welcome] Resend error:", JSON.stringify(emailErr));
       return new Response(JSON.stringify({ error: "Failed to send email", detail: emailErr }), {

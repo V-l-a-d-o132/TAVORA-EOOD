@@ -1,5 +1,6 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2.57.4";
+import { assertClientAnalyticsEvent } from "../_shared/analytics-policy.ts";
+import { HttpError } from "../_shared/academy-core.ts";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -134,6 +135,7 @@ Deno.serve(async (req: Request) => {
 
   try {
     const payload: CapiEventPayload = await req.json();
+    assertClientAnalyticsEvent(payload.pixel_id, payload.event_name);
 
     // Auto-extract client IP from request headers if not provided by caller
     if (!payload.user_data?.client_ip_address) {
@@ -185,6 +187,12 @@ Deno.serve(async (req: Request) => {
       }
     );
   } catch (err) {
+    if (err instanceof HttpError) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: err.status,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
     const message = err instanceof Error ? err.message : String(err);
     console.error("[meta-capi] Fatal error:", message);
     return new Response(
