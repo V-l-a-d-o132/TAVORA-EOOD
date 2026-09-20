@@ -494,7 +494,7 @@ export default function ModulePage() {
         onClose={() => setMobileSidebarOpen(false)}
       />
 
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-4 md:py-6"
+      <div className="mx-auto max-w-[1520px] px-4 py-4 md:px-6 md:py-6 xl:px-8"
         onTouchStart={(e) => {
           touchStartYRef.current = e.touches[0].clientY;
           touchStartTimeRef.current = Date.now();
@@ -655,7 +655,7 @@ export default function ModulePage() {
           </div>
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-5">
+        <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)] xl:gap-7">
           {/* Desktop Sidebar */}
           <ModuleSidebar
             moduleId={mod.id}
