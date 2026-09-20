@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getLessonData, fetchLessonData, type LessonSlide, type LessonData } from '@/mocks/interactive-lesson-data';
+import { fetchLessonData, type LessonSlide, type LessonData } from '@/lib/academy-content';
 import { supabase } from '@/lib/supabase';
 import { useFullscreen } from '@/pages/module/hooks/useFullscreen';
 import LockOverlay from '@/pages/module/components/LockOverlay';
@@ -45,27 +45,21 @@ const B = {
 };
 
 export default function InteractiveLesson({ moduleId, lessonId, userId, onComplete, onNextLesson, hasNextLesson = false, lockAfterComplete = false, isUnlocked = false, hasFullAccess = false, onSlideProgress }: InteractiveLessonProps) {
-  // ─── DATA LOADING (mock first, then Supabase override) ───
-  const [lessonData, setLessonData] = useState<LessonData>(() => getLessonData(moduleId, lessonId) || FALLBACK);
+  const [lessonData, setLessonData] = useState<LessonData>(FALLBACK);
   const [dataLoaded, setDataLoaded] = useState(false);
-
+  const [contentError, setContentError] = useState('');
   useEffect(() => {
     let cancelled = false;
     setDataLoaded(false);
-    // Set initial mock data immediately
-    const initialData = getLessonData(moduleId, lessonId) || FALLBACK;
-    if (!cancelled) setLessonData(initialData);
-    
-    // Then try Supabase
-    fetchLessonData(moduleId, lessonId).then((supabaseData) => {
-      if (!cancelled && supabaseData) {
-        setLessonData(supabaseData);
-      }
-      if (!cancelled) setDataLoaded(true);
-    });
-    
+    setLessonData(FALLBACK);
+    setContentError('');
+    fetchLessonData(moduleId, lessonId).then(data => {
+      if (!cancelled) setLessonData(data || FALLBACK);
+    }).catch(() => {
+      if (!cancelled) setContentError('Урокът не е достъпен. Проверете входа и достъпа си.');
+    }).finally(() => { if (!cancelled) setDataLoaded(true); });
     return () => { cancelled = true; };
-  }, [moduleId, lessonId]);
+  }, [moduleId, lessonId, userId]);
 
   const slides = lessonData.slides;
 
@@ -91,6 +85,8 @@ export default function InteractiveLesson({ moduleId, lessonId, userId, onComple
   const [showLockOverlay, setShowLockOverlay] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const [checkpointBusy, setCheckpointBusy] = useState(false);
+  const checkpointRequest = useRef(0);
   const [checkpointAnswer, setCheckpointAnswer] = useState<number | null>(null);
   const [checkpointRevealed, setCheckpointRevealed] = useState(false);
   const [interactiveRevealed, setInteractiveRevealed] = useState(false);
@@ -407,11 +403,30 @@ export default function InteractiveLesson({ moduleId, lessonId, userId, onComple
     }
   }, [isImmersiveFS, enterFullscreen]);
 
-  const handleCheckpointSelect = useCallback((idx: number) => {
-    if (checkpointRevealed) return;
+  useEffect(() => {
+    checkpointRequest.current += 1;
+    setCheckpointBusy(false);
+    setCheckpointAnswer(null);
+    setCheckpointRevealed(false);
+  }, [moduleId, lessonId, currentSlideIdx]);
+
+  const handleCheckpointSelect = useCallback(async (idx: number) => {
+    if (checkpointRevealed || checkpointBusy || !lessonId || !currentSlide) return;
+    const request = ++checkpointRequest.current;
+    setCheckpointBusy(true);
+    setContentError('');
+    const { data, error } = await supabase.rpc('academy_answer_checkpoint', {
+      p_module: moduleId, p_lesson: lessonId, p_slide: currentSlide.id, p_answer: idx,
+    });
+    if (request !== checkpointRequest.current) return;
+    setCheckpointBusy(false);
+    if (error) { setContentError('Отговорът не беше проверен. Опитайте отново.'); return; }
+    setLessonData(prev => ({ ...prev, slides: prev.slides.map(slide =>
+      slide.id === currentSlide.id && slide.checkpoint
+        ? { ...slide, checkpoint: { ...slide.checkpoint, ...data } } : slide) }));
     setCheckpointAnswer(idx);
     setCheckpointRevealed(true);
-  }, [checkpointRevealed]);
+  }, [checkpointRevealed, checkpointBusy, lessonId, moduleId, currentSlide]);
 
   const isInFullscreen = isImmersiveFS || !!document.fullscreenElement;
 
@@ -646,6 +661,7 @@ export default function InteractiveLesson({ moduleId, lessonId, userId, onComple
         </div>
       )}
 
+      {contentError && <p role="alert">{contentError}</p>}
       {slide.checkpoint && (
         <div className="space-y-3">
           <div className="p-4" style={{ background: B.surface, borderLeft: `2px solid ${B.accent}` }}>
@@ -680,7 +696,7 @@ export default function InteractiveLesson({ moduleId, lessonId, userId, onComple
                 <button
                   key={idx}
                   onClick={() => handleCheckpointSelect(idx)}
-                  disabled={checkpointRevealed}
+                  disabled={checkpointRevealed || checkpointBusy}
                   className="w-full text-left px-4 py-3.5 transition-all flex items-center gap-3"
                   style={btnStyle}
                 >
@@ -880,7 +896,7 @@ export default function InteractiveLesson({ moduleId, lessonId, userId, onComple
         <div className="w-12 h-12 flex items-center justify-center" style={{ border: `1px solid ${B.border}` }}>
           <i className="ri-file-unknow-line" style={{ color: B.textDim, fontSize: '18px' }} />
         </div>
-        <p className="text-base" style={{ color: B.textMuted }}>Урокът все още не е наличен</p>
+        <p className="text-base" style={{ color: B.textMuted }}>{contentError || (dataLoaded ? 'Урокът още не е публикуван.' : 'Зареждане на урока…')}</p>
       </div>
     );
   }
@@ -889,7 +905,7 @@ export default function InteractiveLesson({ moduleId, lessonId, userId, onComple
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20">
         <div className="w-10 h-10 border-2 animate-spin" style={{ borderColor: B.border, borderTopColor: B.accent, borderRadius: '50%' }} />
-        <p className="text-base" style={{ color: B.textMuted }}>Зареждаме урока...</p>
+        <p className="text-base" style={{ color: B.textMuted }}>{contentError || (dataLoaded ? 'Урокът още не е публикуван.' : 'Зареждане на урока…')}</p>
       </div>
     );
   }

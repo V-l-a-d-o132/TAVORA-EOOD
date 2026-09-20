@@ -6,11 +6,11 @@ import InteractiveLesson from '@/pages/module/components/InteractiveLesson';
 import PdfPresentationViewer from '@/pages/module/components/PdfPresentationViewer';
 import InlineQuiz from '@/pages/module/components/InlineQuiz';
 import ModuleLoginGate from '@/pages/module/components/ModuleLoginGate';
-import type { QuizQuestion } from '@/mocks/quiz-questions';
+import type { QuizQuestion } from '@/lib/academy-content';
 
 interface LessonContentViewerProps {
   moduleId: string;
-  modNumber: number;
+  modNumber: string | number;
   modTitle: string;
   modHomeworkPrompt: string;
   lessons: Array<{ id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string }>;
@@ -184,6 +184,9 @@ export default function LessonContentViewer({
             {/* Quiz */}
             {showQuiz && activeLesson && (
               <InlineQuiz
+                key={moduleId + activeLesson.id}
+                moduleId={moduleId}
+                lessonId={activeLesson.id}
                 questions={prefetchedQuestions}
                 lessonTitle={activeLesson.title}
                 onComplete={handleQuizComplete}

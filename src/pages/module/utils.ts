@@ -1,7 +1,6 @@
 import { LEARNING_SECTIONS } from '@/mocks/learning-platform';
 import { supabase } from '@/lib/supabase';
-import { getQuizForLesson, generateDefaultQuiz } from '@/mocks/quiz-questions';
-import type { QuizQuestion } from '@/mocks/quiz-questions';
+import type { QuizQuestion } from '@/lib/academy-content';
 import type { LessonProgress } from '@/pages/module/types';
 
 /* ─── Map module → pricing program tier ─── */
@@ -54,10 +53,9 @@ export function getNextModuleId(currentModuleId: string): { id: string; title: s
 }
 
 /* ─── Get PDF URL ─── */
-export async function getPdfUrl(_moduleId: string, _lessonId: string): Promise<string | null> {
-  // PDFs are loaded directly from Supabase Storage when available.
-  // Returning null silently avoids dead Edge Function calls (CORS errors).
-  return null;
+export async function getPdfUrl(moduleId: string, lessonId: string): Promise<string | null> {
+  const { data, error } = await supabase.storage.from('course-pdfs').createSignedUrl(moduleId + '/' + lessonId + '.pdf', 300);
+  return error ? null : data.signedUrl;
 }
 
 /* ─── Save user progress to Supabase ─── */
@@ -69,7 +67,7 @@ export async function saveProgress(
 ) {
   if (!userId || !moduleId || !lessonId) return;
   try {
-    await supabase.from('pdf_progress').upsert(
+    const { error } = await supabase.from('pdf_progress').upsert(
       {
         user_id: userId,
         module_id: moduleId,
@@ -77,44 +75,20 @@ export async function saveProgress(
         page_number: data.pageNumber || 1,
         total_pages: data.totalPages || 1,
         completed: data.completed ?? false,
-        quiz_score: data.quizScore ?? null,
-        quiz_total: data.quizTotal ?? null,
         updated_at: new Date().toISOString(),
       },
       { onConflict: 'user_id,module_id,lesson_id' }
     );
-  } catch {
-    // ignore save errors
+    if (error) throw error;
+  } catch (error) {
+    console.error('Progress could not be saved');
+    throw error;
   }
 }
 
-/* ─── Load quiz questions — Supabase first, mock fallback ─── */
+/* Questions never include answer keys. */
 export async function loadQuizQuestions(moduleId: string, lessonId: string): Promise<QuizQuestion[]> {
-  try {
-    const { data, error: err } = await supabase
-      .from('lesson_quizzes')
-      .select('*')
-      .eq('module_id', moduleId)
-      .eq('lesson_id', lessonId)
-      .order('order_index', { ascending: true });
-
-    if (!err && data && data.length > 0) {
-      return data.map((d) => ({
-        id: d.id,
-        question: d.question,
-        options: Array.isArray(d.options) ? d.options : JSON.parse(d.options || '[]'),
-        correctIndex: d.correct_index,
-        explanation: d.explanation || '',
-      }));
-    }
-  } catch {
-    /* fallback to mock */
-  }
-
-  const mockQuiz = getQuizForLesson(moduleId, lessonId);
-  if (mockQuiz && Array.isArray(mockQuiz.questions)) {
-    return mockQuiz.questions;
-  }
-
-  return generateDefaultQuiz(moduleId, lessonId, '').questions;
+  const { data, error } = await supabase.rpc('academy_get_quiz', { p_module: moduleId, p_lesson: lessonId });
+  if (error) throw error;
+  return data || [];
 }

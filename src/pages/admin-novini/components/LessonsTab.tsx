@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { LEARNING_SECTIONS } from '@/mocks/learning-platform';
-import { getLessonData, type LessonSlide, type LessonData } from '@/mocks/interactive-lesson-data';
+import type { LessonSlide, LessonData } from '@/lib/academy-content';
 
 interface LessonRecord {
   id: string;
@@ -61,7 +61,7 @@ export default function LessonsTab() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [importing, setImporting] = useState(false);
+  const importing = false;
   const [previewSlideIdx, setPreviewSlideIdx] = useState<number | null>(null);
 
   // Gemini paste modal
@@ -182,49 +182,8 @@ export default function LessonsTab() {
   };
 
   // Import all mock lessons into Supabase
-  const handleImportAll = async () => {
-    setImporting(true);
-    setError(null);
-    let imported = 0;
-    let skipped = 0;
-    let errors = 0;
-
-    for (const mod of allModules) {
-      const moduleId = mod.moduleId;
-      for (const lesson of mod.lessons) {
-        const lessonId = lesson.id;
-        const data = getLessonData(moduleId, lessonId);
-        
-        // Also try without lessonId (for module-level lessons)
-        const fallbackData = !data ? getLessonData(moduleId) : null;
-        const finalData = data || fallbackData;
-        
-        if (!finalData || finalData.slides.length === 0) {
-          skipped++;
-          continue;
-        }
-
-        try {
-          const { error: err } = await supabase.from('interactive_lessons').upsert({
-            module_id: moduleId,
-            lesson_id: lessonId,
-            title: finalData.title,
-            subtitle: finalData.subtitle || '',
-            duration: finalData.duration || '20 мин',
-            slides: finalData.slides,
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'module_id,lesson_id' });
-
-          if (err) { errors++; } else { imported++; }
-        } catch { errors++; }
-      }
-    }
-
-    setImporting(false);
-    const msg = `Импортнати ${imported} урока${skipped > 0 ? `, ${skipped} пропуснати (няма mock данни)` : ''}${errors > 0 ? `, ${errors} грешки` : ''}`;
-    setSuccess(msg);
-    setTimeout(() => setSuccess(null), 4000);
-    await fetchRecords();
+  const handleImportAll = () => {
+    setError('Защитеният импорт се извършва чрез проверена миграция. Използвайте редактора за отделни уроци.');
   };
 
   // Gemini paste: parse JSON and save directly to DB
@@ -788,7 +747,7 @@ function SlideFields({ slide, onChange }: { slide: LessonSlide; onChange: (updat
         <div className="space-y-3">
           <textarea value={slide.body || ''} onChange={(e) => onChange({ body: e.target.value })} placeholder="Основен текст..." rows={3} className="w-full px-3 py-2 text-sm bg-white border border-[#1C1C1E]/10 rounded-lg focus:outline-none focus:border-[#0A2540]/30 text-[#1C1C1E] resize-none" />
           <ArrayField label="Highlights" items={slide.highlights || []} onChange={(v) => onChange({ highlights: v })} placeholder="Highlight..." />
-          <NestedArrayField label="Примери" items={slide.examples || []} onChange={(v) => onChange({ examples: v })} fields={['label', 'text', 'highlight']} placeholders={['Label', 'Текст', 'Highlight']} />
+          <NestedArrayField label="Примери" items={slide.examples || []} onChange={(v) => onChange({ examples: v.map(x => ({ label: x.label || '', text: x.text || '', highlight: x.highlight })) })} fields={['label', 'text', 'highlight']} placeholders={['Label', 'Текст', 'Highlight']} />
         </div>
       );
 

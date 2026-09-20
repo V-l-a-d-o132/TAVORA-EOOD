@@ -1,20 +1,10 @@
 import { useState, useEffect, useCallback, useRef, memo } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { supabase } from '@/lib/supabase';
 
-/* ═══════════════════════════════════════════════════════════════
-   PDF.js Worker — bulletproof: try Vite resolve, fallback CDN
-   ═══════════════════════════════════════════════════════════════ */
-try {
-  const workerUrl = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url
-  ).href;
-  pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-} catch {
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://unpkg.com/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs';
-}
+// Ship the matching worker with the application instead of resolving a bare URL.
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 /* ── Types ── */
 interface PdfPresentationViewerProps {
@@ -114,7 +104,7 @@ function PdfPresentationViewer({
   /* Progress tracking */
   const prevPageRef = useRef(currentPage);
   const pageStartTime = useRef(Date.now());
-  const pageTimeMap = useRef<PageTimeMap>();
+  const pageTimeMap = useRef<PageTimeMap | undefined>(undefined);
   const visitedPages = useRef<Set<number>>(new Set());
   const quizPromptShown = useRef(false);
 
@@ -128,6 +118,7 @@ function PdfPresentationViewer({
   /* ═══════ Load PDF ═══════ */
   useEffect(() => {
     let destroyed = false;
+    const cache = pageCache.current;
     setLoading(true);
     setLoadError(false);
     setCurrentPage(savedPageNumber || 1);
@@ -143,7 +134,7 @@ function PdfPresentationViewer({
 
     const task = pdfjsLib.getDocument({
       url: pdfUrl,
-      cMapUrl: 'https://unpkg.com/pdfjs-dist@4.4.168/cmaps/',
+      cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/cmaps/`,
       cMapPacked: true,
     });
 
@@ -170,10 +161,10 @@ function PdfPresentationViewer({
         try { pdfDoc.destroy(); } catch { /* ignore */ }
       }
       // Revoke all cached bitmaps
-      pageCache.current.forEach((c) => {
+      cache.forEach((c) => {
         try { c.bitmap.close(); } catch { /* ignore */ }
       });
-      pageCache.current.clear();
+      cache.clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdfUrl, savedPageNumber]);
@@ -265,7 +256,6 @@ function PdfPresentationViewer({
   useEffect(() => {
     if (!pdfDoc || loading || loadError) return;
     drawCurrentPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdfDoc, currentPage, loading, loadError, drawCurrentPage]);
 
   /* ═══════ Progressive background loading ═══════ */
@@ -356,58 +346,6 @@ function PdfPresentationViewer({
     if (currentPage > 1) trackAndGo(currentPage - 1);
   }, [currentPage, trackAndGo]);
 
-  /* ═══════ Keyboard ═══════ */
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-
-      switch (e.key) {
-        case 'ArrowRight':
-        case 'ArrowDown':
-        case ' ':
-        case 'PageDown':
-          e.preventDefault();
-          nextPage();
-          break;
-        case 'ArrowLeft':
-        case 'ArrowUp':
-        case 'PageUp':
-          e.preventDefault();
-          prevPage();
-          break;
-        case 'Home':
-          e.preventDefault();
-          trackAndGo(1);
-          break;
-        case 'End':
-          e.preventDefault();
-          trackAndGo(numPages);
-          break;
-        case 'f':
-        case 'F11':
-          e.preventDefault();
-          toggleFullscreen();
-          break;
-        case 'Escape':
-          if (isFullscreen) {
-            e.preventDefault();
-            exitFullscreen();
-          }
-          break;
-        case 't':
-        case 'T':
-          e.preventDefault();
-          setShowThumbnails((s) => !s);
-          break;
-        default:
-          break;
-      }
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [nextPage, prevPage, trackAndGo, numPages, isFullscreen]);
-
   /* ═══════ Touch swipe ═══════ */
   useEffect(() => {
     const el = containerRef.current;
@@ -463,6 +401,59 @@ function PdfPresentationViewer({
     if (document.fullscreenElement) exitFullscreen();
     else enterFullscreen();
   }, [enterFullscreen, exitFullscreen]);
+
+  /* ═══════ Keyboard ═══════ */
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          nextPage();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevPage();
+          break;
+        case 'Home':
+          e.preventDefault();
+          trackAndGo(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          trackAndGo(numPages);
+          break;
+        case 'f':
+        case 'F11':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'Escape':
+          if (isFullscreen) {
+            e.preventDefault();
+            exitFullscreen();
+          }
+          break;
+        case 't':
+        case 'T':
+          e.preventDefault();
+          setShowThumbnails((s) => !s);
+          break;
+        default:
+          break;
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [nextPage, prevPage, trackAndGo, numPages, isFullscreen, exitFullscreen, toggleFullscreen]);
+
 
   useEffect(() => {
     const handler = () => setIsFullscreen(!!document.fullscreenElement);

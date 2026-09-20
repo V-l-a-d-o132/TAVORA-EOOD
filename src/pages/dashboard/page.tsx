@@ -109,9 +109,9 @@ export default function DashboardPage() {
       return b.condition(completedLessons, totalQuizCount, completedModules, totalModules);
     }
     if (b.id === 'first-quiz') {
-      return b.condition(completedLessons, totalQuizCount);
+      return b.condition(completedLessons, totalQuizCount, completedModules, totalModules);
     }
-    return b.condition(completedLessons);
+    return b.condition(completedLessons, totalQuizCount, completedModules, totalModules);
   });
 
   if (error) {

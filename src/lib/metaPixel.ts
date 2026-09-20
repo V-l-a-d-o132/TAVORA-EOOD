@@ -67,7 +67,7 @@ function recordEvent(key: string): void {
 /* ─── Safe fbq access ─── */
 function isFbqReady(): boolean {
   if (typeof window === 'undefined') return false;
-  return typeof (window as Record<string, unknown>).fbq === 'function';
+  return typeof (window as unknown as Record<string, unknown>).fbq === 'function';
 }
 
 function safeFbq(method: string, ...args: unknown[]): void {

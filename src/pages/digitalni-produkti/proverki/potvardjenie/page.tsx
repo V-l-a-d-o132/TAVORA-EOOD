@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
@@ -61,21 +61,8 @@ export default function DigitalniProduktiPotvardjeniePage() {
   const [copied, setCopied] = useState(false);
   const [modulesSelected, setModulesSelected] = useState(false);
 
-  useEffect(() => {
-    document.title = 'Плащането е успешно — Вашият код за достъп | ТАВОРА';
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/digitalni-produkti/proverki/potvardjenie');
 
-    if (!sessionId) {
-      setState('error');
-      setErrorMsg('Липсва информация за плащането. Моля, опитайте отново от страницата с цените.');
-      return;
-    }
-
-    verifyPayment();
-  }, [sessionId]);
-
-  const verifyPayment = async (retryCount = 0) => {
+  const verifyPayment = useCallback(async function verifyPayment(retryCount = 0) {
     try {
       const res = await fetch(`${SUPABASE_FUNCTIONS_URL}/stripe-verify`, {
         method: 'POST',
@@ -134,7 +121,22 @@ export default function DigitalniProduktiPotvardjeniePage() {
       setState('error');
       setErrorMsg('Грешка при свързване. Проверете интернета и опитайте отново.');
     }
-  };
+  }, [sessionId]);
+
+  useEffect(() => {
+    document.title = 'Плащането е успешно — Вашият код за достъп | ТАВОРА';
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/digitalni-produkti/proverki/potvardjenie');
+
+    if (!sessionId) {
+      setState('error');
+      setErrorMsg('Липсва информация за плащането. Моля, опитайте отново от страницата с цените.');
+      return;
+    }
+
+    verifyPayment();
+  }, [sessionId, verifyPayment]);
+
 
   const copyCode = async () => {
     try {

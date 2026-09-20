@@ -84,7 +84,7 @@ const tiers = [
 export default function ApplicationSection() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedTier, setSelectedTier] = useState<'website' | 'seo' | 'ads' | 'video' | 'full'>('website');
+  const [selectedTier, setSelectedTier] = useState<'website' | 'seo' | 'ads' | 'video' | 'full' | 'standard-course' | 'premium-course'>('website');
   const [activeTab, setActiveTab] = useState<'course' | 'services'>('course');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -235,7 +235,7 @@ export default function ApplicationSection() {
                     return (
                       <button
                         key={tier.id}
-                        onClick={() => setSelectedTier(tier.id as 'website' | 'seo' | 'ads' | 'video' | 'full')}
+                        onClick={() => setSelectedTier(tier.id as 'website' | 'seo' | 'ads' | 'video' | 'full' | 'standard-course' | 'premium-course')}
                         className={`w-full text-left p-4 md:p-5 rounded-2xl border transition-all duration-300 cursor-pointer relative overflow-hidden ${
                           isSelected && tier.highlight
                             ? 'border-[#0A2540] bg-[#0A2540]'
@@ -312,7 +312,7 @@ export default function ApplicationSection() {
                     return (
                       <button
                         key={tier.id}
-                        onClick={() => setSelectedTier(tier.id as 'website' | 'seo' | 'ads' | 'video' | 'full')}
+                        onClick={() => setSelectedTier(tier.id as 'website' | 'seo' | 'ads' | 'video' | 'full' | 'standard-course' | 'premium-course')}
                         className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 cursor-pointer relative ${
                           isSelected && tier.highlight
                             ? 'border-[#0A2540]/25 bg-[#0A2540]/4'

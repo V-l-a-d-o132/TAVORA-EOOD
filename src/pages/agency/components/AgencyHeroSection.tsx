@@ -75,7 +75,7 @@ export default function AgencyHeroSection() {
         clearTimeout(idleHandle);
       }
     };
-  }, []);
+  }, [isDesktop]);
 
   if (!ready) {
     // Render skeleton-like placeholder during A/B variant resolution

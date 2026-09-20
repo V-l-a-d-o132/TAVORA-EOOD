@@ -5,7 +5,7 @@ interface ModuleSidebarProps {
   moduleId: string;
   sectionTitle: string;
   modTitle: string;
-  moduleNumber: number;
+  moduleNumber: string | number;
   lessons: Array<{ id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string }>;
   activeLessonIndex: number;
   progressPercent: number;
