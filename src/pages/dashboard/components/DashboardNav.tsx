@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardNav() {
@@ -26,8 +26,7 @@ export default function DashboardNav() {
     { to: '/kurs', label: 'Модули', icon: 'ri-stack-line', active: isOnKurs || isOnModule },
   ];
 
-  const handleNavClick = (to: string) => {
-    navigate(to);
+  const handleNavClick = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
 
@@ -47,9 +46,10 @@ export default function DashboardNav() {
         {/* Desktop Center Nav */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
-            <button
+            <NavLink
               key={link.to}
-              onClick={() => handleNavClick(link.to)}
+              to={link.to}
+              onClick={handleNavClick}
               className="px-4 py-2 text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
               style={{
                 color: link.active ? '#fff' : '#888',
@@ -70,7 +70,7 @@ export default function DashboardNav() {
             >
               <i className={`${link.icon} mr-1.5`} />
               {link.label}
-            </button>
+            </NavLink>
           ))}
         </div>
 
@@ -112,8 +112,9 @@ export default function DashboardNav() {
                     <p className="text-sm font-medium truncate" style={{ color: '#fff' }}>{displayName}</p>
                     <p className="text-xs truncate mt-0.5" style={{ color: '#666' }}>{user?.email}</p>
                   </div>
-                  <button
-                    onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); handleNavClick('/dashboard'); }}
+                  <NavLink
+                    to="/dashboard"
+                    onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); handleNavClick(); }}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors md:hidden cursor-pointer"
                     style={{ color: '#888', background: 'none', border: 'none' }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#fff'; }}
@@ -121,9 +122,10 @@ export default function DashboardNav() {
                   >
                     <i className="ri-dashboard-line text-base" />
                     Прогрес
-                  </button>
-                  <button
-                    onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); handleNavClick('/kurs'); }}
+                  </NavLink>
+                  <NavLink
+                    to="/kurs"
+                    onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); handleNavClick(); }}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors md:hidden cursor-pointer"
                     style={{ color: '#888', background: 'none', border: 'none' }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#fff'; }}
@@ -131,7 +133,7 @@ export default function DashboardNav() {
                   >
                     <i className="ri-stack-line text-base" />
                     Модули
-                  </button>
+                  </NavLink>
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors cursor-pointer"
@@ -154,15 +156,16 @@ export default function DashboardNav() {
         <div className="md:hidden fixed inset-x-0 top-16 z-20" style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}>
           <div className="px-4 py-3 space-y-1">
             {navLinks.map((link) => (
-              <button
+              <NavLink
                 key={link.to}
-                onClick={() => { setMobileMenuOpen(false); handleNavClick(link.to); }}
+                to={link.to}
+                onClick={() => { setMobileMenuOpen(false); handleNavClick(); }}
                 className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors cursor-pointer"
                 style={{ color: link.active ? '#fff' : '#888', background: link.active ? '#111' : 'transparent', border: 'none' }}
               >
                 <i className={`${link.icon} text-base`} />
                 {link.label}
-              </button>
+              </NavLink>
             ))}
             <div className="my-2" style={{ borderTop: '1px solid #1a1a1a' }} />
             <button
