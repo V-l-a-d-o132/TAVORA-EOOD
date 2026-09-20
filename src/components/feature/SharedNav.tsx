@@ -125,7 +125,7 @@ export default function SharedNav({ variant = 'default' }: SharedNavProps) {
               className="h-7 md:h-9 w-auto object-contain"
               loading="eager"
               decoding="async"
-              fetchpriority="high"
+              fetchPriority="high"
             />
           </Link>
 

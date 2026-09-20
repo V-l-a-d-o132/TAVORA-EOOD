@@ -6,8 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { academyPixel } from '@/lib/metaPixel';
 import { C } from '@/pages/module/constants';
 import type { LessonProgress, ModuleProgressMap } from '@/pages/module/types';
-import { findModule, saveProgress, loadQuizQuestions, getNextModuleId } from '@/pages/module/utils';
-import type { QuizQuestion } from '@/mocks/quiz-questions';
+import { findModule, saveProgress, loadQuizQuestions, getNextModuleId, getPdfUrl } from '@/pages/module/utils';
+import type { QuizQuestion } from '@/lib/academy-content';
 import LockedModuleScreen from '@/pages/module/components/LockedModuleScreen';
 import ModuleSidebar from '@/pages/module/components/ModuleSidebar';
 import MobileLessonSheet from '@/pages/module/components/MobileLessonSheet';
@@ -29,6 +29,7 @@ export default function ModulePage() {
   const mod = found?.mod || null;
 
   /* ─── State ─── */
+  const checkoutRequest = useRef(crypto.randomUUID());
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const [progressMap, setProgressMap] = useState<ModuleProgressMap>();
@@ -74,12 +75,7 @@ export default function ModulePage() {
   const totalPoints = useMemo(() => {
     if (!mod || !Array.isArray(mod.lessons)) return 0;
     if (isModule1 && !user) return localCompletedLessons.length * 10;
-    let count = 0;
-    for (const l of mod.lessons) {
-      const p = progressMap?.[l.id];
-      if (p?.completed) count++;
-    }
-    return count * 10;
+    return mod.lessons.reduce((sum, lesson) => sum + (progressMap?.[lesson.id]?.xp || 0), 0);
   }, [mod, progressMap, isModule1, user, localCompletedLessons]);
 
   const currentLevel = useMemo(() => {
@@ -115,21 +111,19 @@ export default function ModulePage() {
     if (mod?.title) {
       academyPixel.viewContent(mod.title);
     }
-  }, [moduleId]);
+  }, [moduleId, mod?.title]);
 
   /* ─── Progress loading ─── */
   useEffect(() => {
+    setProgressMap(undefined);
     if (!user || !mod || !Array.isArray(mod.lessons)) return;
     let cancelled = false;
 
     (async () => {
       try {
         const lessonIds = mod.lessons.map((l) => l.id).filter(Boolean);
-        const { data } = await supabase
-          .from('pdf_progress')
-          .select('lesson_id, page_number, total_pages, completed, quiz_score, quiz_total')
-          .eq('user_id', user.id)
-          .in('lesson_id', lessonIds);
+        const { data, error } = await supabase.rpc('academy_get_module_progress', { p_module: mod.id });
+        if (error) throw error;
 
         if (cancelled) return;
 
@@ -139,13 +133,18 @@ export default function ModulePage() {
         });
         if (data && Array.isArray(data)) {
           data.forEach((row) => {
-            if (row && row.lesson_id) {
-              map[row.lesson_id] = {
-                completed: !!row.completed,
-                pageNumber: row.pageNumber || 1,
-                totalPages: row.totalPages || 0,
-                quizScore: row.quizScore ?? null,
-                quizTotal: row.quizTotal ?? null,
+            if (row && typeof row === 'object' && typeof row.lessonId === 'string') {
+              map[row.lessonId] = {
+                completed: row.completed === true,
+                pageNumber: 1,
+                totalPages: 0,
+                quizScore: typeof row.scorePercent === 'number' ? row.scorePercent : null,
+                quizTotal: typeof row.scorePercent === 'number' ? 100 : null,
+                xp: typeof row.xp === 'number' ? row.xp : 0,
+                scorePercent: typeof row.scorePercent === 'number' ? row.scorePercent : null,
+                masteryStatus: row.masteryStatus === 'mastered' || row.masteryStatus === 'practicing' ? row.masteryStatus : 'learning',
+                currentBlockKey: typeof row.currentBlockKey === 'string' ? row.currentBlockKey : null,
+                lastActivityAt: typeof row.lastActivityAt === 'string' ? row.lastActivityAt : null,
               };
             }
           });
@@ -196,7 +195,28 @@ export default function ModulePage() {
     }
   }, [moduleId]);
 
-  /* ─── PDF loading — handled via Supabase Storage when PDFs are available ─── */
+  const activePdfLesson = mod?.lessons?.[activeLessonIndex];
+  useEffect(() => {
+    let active = true;
+    setPdfUrl(null);
+    if (!moduleId || !activePdfLesson?.id || !activePdfLesson.pdfPath) return;
+    setPdfLoading(true);
+    getPdfUrl(moduleId, activePdfLesson.id).then(url => { if (active) setPdfUrl(url); })
+      .finally(() => { if (active) setPdfLoading(false); });
+    return () => { active = false; };
+  }, [moduleId, activePdfLesson, user?.id]);
+
+  const [serverAccess, setServerAccess] = useState<{ module: string; user: string; allowed: boolean } | null>(null);
+  useEffect(() => {
+    if (!moduleId) return;
+    let active = true;
+    setServerAccess(null);
+    void supabase.rpc('academy_has_module_access', { p_module: moduleId }).then(({ data, error }) => {
+      if (active) setServerAccess({ module: moduleId, user: user?.id || '', allowed: !error && data === true });
+    });
+    return () => { active = false; };
+  }, [moduleId, user?.id, hasFullAccess, unlockedModules]);
+
 
 
   /* ─── Quiz prefetch ─── */
@@ -226,7 +246,7 @@ export default function ModulePage() {
       });
 
     return () => { cancelled = true; };
-  }, [activeLessonIndex, mod]);
+  }, [activeLessonIndex, mod, user?.id]);
 
   /* ─── Actions ─── */
   const markLessonComplete = useCallback(async (lessonId: string) => {
@@ -307,8 +327,7 @@ export default function ModulePage() {
         .from('profiles')
         .update({ last_opened_lesson: payload })
         .eq('id', user.id)
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {}, () => {});
     }
 
     setContentTransitioning(true);
@@ -333,21 +352,22 @@ export default function ModulePage() {
     changeLesson(prev);
   }, [activeLessonIndex, changeLesson]);
 
-  const isModuleUnlocked = useMemo(() => {
-    if (!mod) return true;
-    if (isModule1) return true;
-    if (!mod.isLocked) return true;
-    if (hasFullAccess) return true;
-    if (unlockedModules.includes(mod.id)) return true;
-    return false;
-  }, [mod, hasFullAccess, unlockedModules, isModule1]);
+  const isModuleUnlocked = isModule1 || (serverAccess?.module === moduleId &&
+    serverAccess?.user === (user?.id || '') && serverAccess?.allowed === true);
 
   /* ─── Slide progress handler ─── */
   const handleSlideProgress = useCallback((lessonId: string, seen: number, total: number) => {
     setSlideProgressMap((prev) => ({ ...prev, [lessonId]: { seen, total } }));
   }, []);
 
-  const handleUnlock = useCallback(async (tier: string = 'premium') => {
+  const handleTrustedLessonProgress = useCallback((lessonId: string, progress: { completed: boolean; xp: number; scorePercent: number | null; masteryStatus: 'learning' | 'practicing' | 'mastered' }) => {
+    setProgressMap((previous) => {
+      const current = previous?.[lessonId] || { completed: false, pageNumber: 1, totalPages: 0, quizScore: null, quizTotal: null };
+      return { ...previous, [lessonId]: { ...current, completed: progress.completed, xp: progress.xp, scorePercent: progress.scorePercent, masteryStatus: progress.masteryStatus } };
+    });
+  }, []);
+
+  const handleUnlock = useCallback(async (tier: string = 'koprinena-pateka') => {
     if (!user) return;
     setCheckoutLoading(true);
     try {
@@ -360,7 +380,7 @@ export default function ModulePage() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ tier }),
+        body: JSON.stringify({ tier, request_id: checkoutRequest.current }),
       });
       const json = await res.json();
       if (json.url) {
@@ -695,6 +715,7 @@ export default function ModulePage() {
             setMobileSidebarOpen={setMobileSidebarOpen}
             slideProgressMap={slideProgressMap}
             onSlideProgress={handleSlideProgress}
+            onTrustedProgress={handleTrustedLessonProgress}
             nextModule={nextModule}
           />
         </div>

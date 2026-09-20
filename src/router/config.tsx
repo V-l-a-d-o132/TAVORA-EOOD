@@ -1,3 +1,4 @@
+const ResetPasswordPage = lazy(() => import('../pages/reset-password/page'));
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
 import NotFound from "../pages/NotFound";
@@ -83,6 +84,7 @@ const PerfektnotoVideoFunnelPage = lazy(() => import("../pages/kurs/perfektnoto-
 const MarketingBasicsFunnelPage = lazy(() => import("../pages/kurs/marketing-basics/page"));
 
 const routes: RouteObject[] = [
+  { path: '/reset-password', element: <ResetPasswordPage /> },
   {
     path: "/",
     element: <Home />,

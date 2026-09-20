@@ -1,0 +1,17 @@
+project_id = "plxqbbgjojxfnkgotrba"
+[functions.academy-stripe-checkout]
+verify_jwt = true
+[functions.academy-stripe-verify]
+verify_jwt = true
+[functions.academy-stripe-webhook]
+verify_jwt = false
+[functions.send-welcome-email]
+verify_jwt = true
+[functions.send-downsell-email]
+verify_jwt = true
+[functions.send-abandoned-cart-email]
+verify_jwt = true
+[functions.pdf-manager]
+verify_jwt = true
+[functions.meta-conversions-api]
+verify_jwt = false

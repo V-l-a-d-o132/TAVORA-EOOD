@@ -24,7 +24,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const isPublicModule = location.pathname === '/module/s01-m01';
 
   if (!user && !isPublicModule) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname+location.search)}`} replace />;
   }
 
   return <>{children}</>;

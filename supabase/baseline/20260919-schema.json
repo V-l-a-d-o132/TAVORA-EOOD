@@ -1,0 +1,3299 @@
+{
+  "captured_at": "2026-09-19",
+  "tables": [
+    {
+      "name": "public.profiles",
+      "rls_enabled": true,
+      "rows": 17,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "full_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "avatar_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "role",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'user'::text"
+        },
+        {
+          "name": "unlocked_modules",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "'[]'::jsonb"
+        },
+        {
+          "name": "has_full_access",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "welcome_email_sent",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "welcome_email_sent_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "welcome_email_offer_expires_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "last_login_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "downsell_email_sent",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "downsell_email_sent_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "checkout_entered_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "checkout_tier",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "abandoned_cart_email_sent",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "abandoned_cart_email_sent_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "abandoned_checkout_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "abandoned_checkout_tier",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "last_opened_lesson",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "video_progress_user_id_fkey",
+          "source_table": "public.video_progress",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "public.profiles",
+          "target_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "homework_user_id_fkey",
+          "source_table": "public.homework",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "public.profiles",
+          "target_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "profiles_id_fkey",
+          "source_table": "public.profiles",
+          "source_columns": [
+            "id"
+          ],
+          "target_table": "auth.users",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.video_progress",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "video_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "module_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "watched_seconds",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "0"
+        },
+        {
+          "name": "completed",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "video_progress_user_id_fkey",
+          "source_table": "public.video_progress",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "public.profiles",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.homework",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "module_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "content",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "submitted_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "'pending'::text",
+          "check": "status = ANY (ARRAY['pending'::text, 'reviewed'::text])"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "homework_user_id_fkey",
+          "source_table": "public.homework",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "public.profiles",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.news",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "title",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "category",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'Агенция'::text"
+        },
+        {
+          "name": "date",
+          "data_type": "date",
+          "format": "date",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "CURRENT_DATE"
+        },
+        {
+          "name": "summary",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "content",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "''::text"
+        },
+        {
+          "name": "published",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "image_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "''::text"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.course_applications",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "first_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "last_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "email",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "phone",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "''::text"
+        },
+        {
+          "name": "message",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "''::text"
+        },
+        {
+          "name": "interest",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "''::text"
+        },
+        {
+          "name": "status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'нова'::text"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.checklist_customers",
+      "rls_enabled": true,
+      "rows": 15,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "nextval('checklist_customers_id_seq'::regclass)"
+        },
+        {
+          "name": "email",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "password",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable",
+            "unique"
+          ]
+        },
+        {
+          "name": "is_active",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "true"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "tier",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "access_code",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "selected_modules",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "'[]'::jsonb"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.checklists",
+      "rls_enabled": true,
+      "rows": 10,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "nextval('checklists_id_seq'::regclass)"
+        },
+        {
+          "name": "num",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "icon",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "title",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "intro",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "tier",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'complete'::text"
+        },
+        {
+          "name": "items",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'[]'::jsonb"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.messages",
+      "rls_enabled": true,
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "subject",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "content",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "reply",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "is_read",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "replied_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "messages_user_id_fkey",
+          "source_table": "public.messages",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "auth.users",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.pdf_progress",
+      "rls_enabled": true,
+      "rows": 48,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "module_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "lesson_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "page_number",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "1"
+        },
+        {
+          "name": "total_pages",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "0"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "completed",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "quiz_score",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "quiz_total",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "page_times",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "'{}'::jsonb"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "pdf_progress_user_id_fkey",
+          "source_table": "public.pdf_progress",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "auth.users",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.lesson_quizzes",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "module_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "lesson_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "question",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "options",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'[]'::jsonb"
+        },
+        {
+          "name": "correct_index",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "0"
+        },
+        {
+          "name": "explanation",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "order_index",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "0"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.checklist_progress",
+      "rls_enabled": true,
+      "rows": 228,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "module_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "topic_id",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "item_id",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "completed",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "checklist_progress_user_id_fkey",
+          "source_table": "public.checklist_progress",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "auth.users",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.interactive_lessons",
+      "rls_enabled": true,
+      "rows": 218,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "module_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "lesson_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "title",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "subtitle",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "duration",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'20 мин'::text"
+        },
+        {
+          "name": "slides",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'[]'::jsonb"
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.email_logs",
+      "rls_enabled": true,
+      "rows": 50,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "bigint",
+          "format": "int8",
+          "options": [
+            "identity",
+            "updatable"
+          ],
+          "identity_generation": "ALWAYS"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "email_type",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "email_logs_user_id_fkey",
+          "source_table": "public.email_logs",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "auth.users",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.meta_capi_logs",
+      "rls_enabled": true,
+      "rows": 15,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "event_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "event_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "stripe_session_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "customer_email",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "amount",
+          "data_type": "numeric",
+          "format": "numeric",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "response_status",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "response_body",
+          "data_type": "jsonb",
+          "format": "jsonb",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.contact_messages",
+      "rls_enabled": true,
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "first_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "last_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "email",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "phone",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "service",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "message",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.lead_captures",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "email",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "full_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.leads",
+      "rls_enabled": true,
+      "rows": 59,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "rank",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "updatable"
+          ],
+          "check": "rank > 0"
+        },
+        {
+          "name": "business_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "category",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "sector",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "city",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "address",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "email",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable",
+            "unique"
+          ]
+        },
+        {
+          "name": "phone",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "website",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "social_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "google_maps_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "latitude",
+          "data_type": "double precision",
+          "format": "float8",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "longitude",
+          "data_type": "double precision",
+          "format": "float8",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "coordinates_status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'manual_review_required'::text",
+          "check": "coordinates_status = ANY (ARRAY['verified_google_place'::text, 'manual_review_required'::text])"
+        },
+        {
+          "name": "coordinates_source_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "maps_verified_name",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "maps_verified_address",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "source_website_status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "current_digital_status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "verification_status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "verification_date",
+          "data_type": "date",
+          "format": "date",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "verification_source_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "recommended_service",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "personalization_hook",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "email_subject",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "email_body",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "digital_need_score",
+          "data_type": "smallint",
+          "format": "int2",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "digital_need_score >= 0 AND digital_need_score <= 100"
+        },
+        {
+          "name": "commercial_fit_score",
+          "data_type": "smallint",
+          "format": "int2",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "commercial_fit_score >= 0 AND commercial_fit_score <= 100"
+        },
+        {
+          "name": "contactability_score",
+          "data_type": "smallint",
+          "format": "int2",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "contactability_score >= 0 AND contactability_score <= 100"
+        },
+        {
+          "name": "locality_score",
+          "data_type": "smallint",
+          "format": "int2",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "locality_score >= 0 AND locality_score <= 100"
+        },
+        {
+          "name": "verification_score",
+          "data_type": "smallint",
+          "format": "int2",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "verification_score >= 0 AND verification_score <= 100"
+        },
+        {
+          "name": "lead_score",
+          "data_type": "smallint",
+          "format": "int2",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "lead_score >= 0 AND lead_score <= 100"
+        },
+        {
+          "name": "priority",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "check": "priority = ANY (ARRAY['A'::text, 'B'::text])"
+        },
+        {
+          "name": "status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'new'::text",
+          "check": "status = ANY (ARRAY['new'::text, 'reviewed'::text, 'queued'::text, 'contacted'::text, 'replied'::text, 'meeting'::text, 'won'::text, 'lost'::text])"
+        },
+        {
+          "name": "do_not_contact",
+          "data_type": "boolean",
+          "format": "bool",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "false"
+        },
+        {
+          "name": "email_status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'not_sent'::text",
+          "check": "email_status = ANY (ARRAY['not_sent'::text, 'queued'::text, 'sent'::text, 'delivered'::text, 'bounced'::text, 'replied'::text, 'unsubscribed'::text])"
+        },
+        {
+          "name": "last_contacted_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "source_list",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "source_url",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ]
+    },
+    {
+      "name": "public.academy_purchases",
+      "rls_enabled": true,
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "gen_random_uuid()"
+        },
+        {
+          "name": "user_id",
+          "data_type": "uuid",
+          "format": "uuid",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "stripe_checkout_session_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable",
+            "unique"
+          ]
+        },
+        {
+          "name": "stripe_payment_intent_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "tier_id",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ]
+        },
+        {
+          "name": "amount_paid_cents",
+          "data_type": "integer",
+          "format": "int4",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "currency",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "'eur'::text"
+        },
+        {
+          "name": "status",
+          "data_type": "text",
+          "format": "text",
+          "options": [
+            "updatable"
+          ],
+          "default_value": "'paid'::text"
+        },
+        {
+          "name": "purchased_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "refunded_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        },
+        {
+          "name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "format": "timestamptz",
+          "options": [
+            "nullable",
+            "updatable"
+          ],
+          "default_value": "now()"
+        }
+      ],
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_key_constraints": [
+        {
+          "name": "academy_purchases_user_id_fkey",
+          "source_table": "public.academy_purchases",
+          "source_columns": [
+            "user_id"
+          ],
+          "target_table": "auth.users",
+          "target_columns": [
+            "id"
+          ]
+        }
+      ]
+    }
+  ],
+  "policies": [
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.uid() = id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can view own profile",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.uid() = id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can update own profile",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can insert own profile",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = id)"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.uid() = id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_select_own",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_insert_own",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.uid() = id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_update_own",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = id)"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "video_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "video_progress_select_own",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "video_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "video_progress_insert_own",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "video_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "video_progress_update_own",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "homework",
+      "permissive": "PERMISSIVE",
+      "policyname": "homework_select_own",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "homework",
+      "permissive": "PERMISSIVE",
+      "policyname": "homework_insert_own",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "homework",
+      "permissive": "PERMISSIVE",
+      "policyname": "homework_update_own",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "course_applications",
+      "permissive": "PERMISSIVE",
+      "policyname": "Anyone can insert application",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "course_applications",
+      "permissive": "PERMISSIVE",
+      "policyname": "Authenticated users can read applications",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "course_applications",
+      "permissive": "PERMISSIVE",
+      "policyname": "Authenticated users can update applications",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "checklists",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can read all messages",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can insert messages",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "true",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can update messages",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(bucket_id = 'course-pdfs'::text)",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow authenticated read course-pdfs",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow admin upload course-pdfs",
+      "schemaname": "storage",
+      "with_check": "((bucket_id = 'course-pdfs'::text) AND (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text]))))))"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "((bucket_id = 'course-pdfs'::text) AND (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text]))))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow admin update course-pdfs",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "((bucket_id = 'course-pdfs'::text) AND (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text]))))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow admin delete course-pdfs",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "pdf_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can read own pdf progress",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "pdf_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can insert own pdf progress",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "pdf_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can update own pdf progress",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "pdf_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can delete own pdf progress",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "checklist_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can manage own checklist progress",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can update own messages strict",
+      "schemaname": "public",
+      "with_check": "(auth.uid() = user_id)"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "interactive_lessons",
+      "permissive": "PERMISSIVE",
+      "policyname": "Anyone can read lessons",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text)))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "interactive_lessons",
+      "permissive": "PERMISSIVE",
+      "policyname": "Admin can manage lessons",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((auth.uid() = user_id) OR (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text))))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "messages",
+      "permissive": "RESTRICTIVE",
+      "policyname": "restrict_read_own_or_admin",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "((auth.uid() = user_id) OR (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text))))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "messages",
+      "permissive": "RESTRICTIVE",
+      "policyname": "restrict_update_own_or_admin",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text)))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "course_applications",
+      "permissive": "RESTRICTIVE",
+      "policyname": "restrict_read_admin",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(published = true)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "news",
+      "permissive": "PERMISSIVE",
+      "policyname": "Public can read news",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "lesson_quizzes",
+      "permissive": "PERMISSIVE",
+      "policyname": "Public can read quizzes",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.uid() = user_id)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "academy_purchases",
+      "permissive": "PERMISSIVE",
+      "policyname": "academy_purchases_read_own",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text)))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "course_applications",
+      "permissive": "RESTRICTIVE",
+      "policyname": "restrict_update_admin",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "((auth.uid() = user_id) OR (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text))))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "homework",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can manage own homework",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "contact_messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow delete for authenticated",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "((auth.uid() = user_id) OR (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND ((profiles.role = 'admin'::text) OR (profiles.role = 'super_admin'::text))))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "video_progress",
+      "permissive": "PERMISSIVE",
+      "policyname": "Users can manage own video progress",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "email_logs",
+      "permissive": "PERMISSIVE",
+      "policyname": "Service role can manage email_logs",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "lead_captures",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow select for authenticated",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "lead_captures",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow update for authenticated",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "lead_captures",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow delete for authenticated",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text])))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "checklist_customers",
+      "permissive": "PERMISSIVE",
+      "policyname": "Admin only all access",
+      "schemaname": "public",
+      "with_check": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text])))))"
+    },
+    {
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text])))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "news",
+      "permissive": "PERMISSIVE",
+      "policyname": "Admin only all access",
+      "schemaname": "public",
+      "with_check": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text])))))"
+    },
+    {
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text])))))",
+      "roles": [
+        "public"
+      ],
+      "tablename": "lesson_quizzes",
+      "permissive": "PERMISSIVE",
+      "policyname": "Admin only all access",
+      "schemaname": "public",
+      "with_check": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'super_admin'::text])))))"
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "contact_messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow insert for all",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "contact_messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow select for authenticated",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(auth.role() = 'authenticated'::text)",
+      "roles": [
+        "public"
+      ],
+      "tablename": "contact_messages",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow update for authenticated",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "public"
+      ],
+      "tablename": "lead_captures",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow insert for all",
+      "schemaname": "public",
+      "with_check": "true"
+    }
+  ],
+  "functions": [
+    {
+      "acl": [
+        "=X/postgres",
+        "postgres=X/postgres",
+        "anon=X/postgres",
+        "authenticated=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "name": "set_updated_at",
+      "definition": "CREATE OR REPLACE FUNCTION public.set_updated_at()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\nbegin\n  new.updated_at = now();\n  return new;\nend;\n$function$\n"
+    },
+    {
+      "acl": [
+        "=X/postgres",
+        "postgres=X/postgres",
+        "anon=X/postgres",
+        "authenticated=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "name": "handle_new_user",
+      "definition": "CREATE OR REPLACE FUNCTION public.handle_new_user()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nBEGIN\n  INSERT INTO public.profiles (id, full_name, role, created_at)\n  VALUES (\n    NEW.id,\n    COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.email),\n    'student',\n    NOW()\n  )\n  ON CONFLICT (id) DO NOTHING;\n  RETURN NEW;\nEND;\n$function$\n"
+    },
+    {
+      "acl": [
+        "=X/postgres",
+        "postgres=X/postgres",
+        "anon=X/postgres",
+        "authenticated=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "name": "prevent_role_self_escalation",
+      "definition": "CREATE OR REPLACE FUNCTION public.prevent_role_self_escalation()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nbegin\n  if new.role is distinct from old.role then\n    if not exists (\n      select 1 from profiles\n      where id = auth.uid()\n      and (role = 'admin' or role = 'super_admin')\n    ) then\n      raise exception 'Only admins can change role';\n    end if;\n  end if;\n  return new;\nend;\n$function$\n"
+    }
+  ],
+  "triggers": [
+    "CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user()",
+    "CREATE TRIGGER enforce_role_change BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION prevent_role_self_escalation()",
+    "CREATE TRIGGER leads_set_updated_at BEFORE UPDATE ON public.leads FOR EACH ROW EXECUTE FUNCTION set_updated_at()"
+  ],
+  "constraints": [
+    {
+      "name": "checklist_progress_pkey",
+      "type": "p",
+      "table": "checklist_progress",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "profiles_pkey",
+      "type": "p",
+      "table": "profiles",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "profiles_id_fkey",
+      "type": "f",
+      "table": "profiles",
+      "definition": "FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "video_progress_pkey",
+      "type": "p",
+      "table": "video_progress",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "video_progress_user_id_video_id_key",
+      "type": "u",
+      "table": "video_progress",
+      "definition": "UNIQUE (user_id, video_id)"
+    },
+    {
+      "name": "video_progress_user_id_fkey",
+      "type": "f",
+      "table": "video_progress",
+      "definition": "FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "homework_status_check",
+      "type": "c",
+      "table": "homework",
+      "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'reviewed'::text])))"
+    },
+    {
+      "name": "homework_pkey",
+      "type": "p",
+      "table": "homework",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "homework_user_id_fkey",
+      "type": "f",
+      "table": "homework",
+      "definition": "FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "homework_user_module_unique",
+      "type": "u",
+      "table": "homework",
+      "definition": "UNIQUE (user_id, module_id)"
+    },
+    {
+      "name": "news_pkey",
+      "type": "p",
+      "table": "news",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "course_applications_pkey",
+      "type": "p",
+      "table": "course_applications",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "checklist_customers_pkey",
+      "type": "p",
+      "table": "checklist_customers",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "checklist_customers_password_key",
+      "type": "u",
+      "table": "checklist_customers",
+      "definition": "UNIQUE (password)"
+    },
+    {
+      "name": "checklists_pkey",
+      "type": "p",
+      "table": "checklists",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "messages_pkey",
+      "type": "p",
+      "table": "messages",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "messages_user_id_fkey",
+      "type": "f",
+      "table": "messages",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "pdf_progress_pkey",
+      "type": "p",
+      "table": "pdf_progress",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "pdf_progress_user_id_module_id_lesson_id_key",
+      "type": "u",
+      "table": "pdf_progress",
+      "definition": "UNIQUE (user_id, module_id, lesson_id)"
+    },
+    {
+      "name": "pdf_progress_user_id_fkey",
+      "type": "f",
+      "table": "pdf_progress",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "pdf_progress_user_module_lesson_key",
+      "type": "u",
+      "table": "pdf_progress",
+      "definition": "UNIQUE (user_id, module_id, lesson_id)"
+    },
+    {
+      "name": "lesson_quizzes_pkey",
+      "type": "p",
+      "table": "lesson_quizzes",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "checklist_progress_user_id_module_id_item_id_key",
+      "type": "u",
+      "table": "checklist_progress",
+      "definition": "UNIQUE (user_id, module_id, item_id)"
+    },
+    {
+      "name": "checklist_progress_user_id_fkey",
+      "type": "f",
+      "table": "checklist_progress",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "interactive_lessons_pkey",
+      "type": "p",
+      "table": "interactive_lessons",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "interactive_lessons_module_id_lesson_id_key",
+      "type": "u",
+      "table": "interactive_lessons",
+      "definition": "UNIQUE (module_id, lesson_id)"
+    },
+    {
+      "name": "email_logs_pkey",
+      "type": "p",
+      "table": "email_logs",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "email_logs_user_email_type_unique",
+      "type": "u",
+      "table": "email_logs",
+      "definition": "UNIQUE (user_id, email_type)"
+    },
+    {
+      "name": "email_logs_user_id_fkey",
+      "type": "f",
+      "table": "email_logs",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "meta_capi_logs_pkey",
+      "type": "p",
+      "table": "meta_capi_logs",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "contact_messages_pkey",
+      "type": "p",
+      "table": "contact_messages",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "lead_captures_pkey",
+      "type": "p",
+      "table": "lead_captures",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "leads_rank_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK ((rank > 0))"
+    },
+    {
+      "name": "leads_coordinates_status_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK ((coordinates_status = ANY (ARRAY['verified_google_place'::text, 'manual_review_required'::text])))"
+    },
+    {
+      "name": "leads_digital_need_score_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK (((digital_need_score >= 0) AND (digital_need_score <= 100)))"
+    },
+    {
+      "name": "leads_commercial_fit_score_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK (((commercial_fit_score >= 0) AND (commercial_fit_score <= 100)))"
+    },
+    {
+      "name": "leads_contactability_score_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK (((contactability_score >= 0) AND (contactability_score <= 100)))"
+    },
+    {
+      "name": "leads_locality_score_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK (((locality_score >= 0) AND (locality_score <= 100)))"
+    },
+    {
+      "name": "leads_verification_score_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK (((verification_score >= 0) AND (verification_score <= 100)))"
+    },
+    {
+      "name": "leads_lead_score_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK (((lead_score >= 0) AND (lead_score <= 100)))"
+    },
+    {
+      "name": "leads_priority_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK ((priority = ANY (ARRAY['A'::text, 'B'::text])))"
+    },
+    {
+      "name": "leads_status_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK ((status = ANY (ARRAY['new'::text, 'reviewed'::text, 'queued'::text, 'contacted'::text, 'replied'::text, 'meeting'::text, 'won'::text, 'lost'::text])))"
+    },
+    {
+      "name": "leads_email_status_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK ((email_status = ANY (ARRAY['not_sent'::text, 'queued'::text, 'sent'::text, 'delivered'::text, 'bounced'::text, 'replied'::text, 'unsubscribed'::text])))"
+    },
+    {
+      "name": "leads_coordinate_pair_check",
+      "type": "c",
+      "table": "leads",
+      "definition": "CHECK ((((latitude IS NULL) AND (longitude IS NULL)) OR ((latitude IS NOT NULL) AND (longitude IS NOT NULL))))"
+    },
+    {
+      "name": "leads_pkey",
+      "type": "p",
+      "table": "leads",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "leads_email_key",
+      "type": "u",
+      "table": "leads",
+      "definition": "UNIQUE (email)"
+    },
+    {
+      "name": "academy_purchases_pkey",
+      "type": "p",
+      "table": "academy_purchases",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "academy_purchases_stripe_checkout_session_id_key",
+      "type": "u",
+      "table": "academy_purchases",
+      "definition": "UNIQUE (stripe_checkout_session_id)"
+    },
+    {
+      "name": "academy_purchases_user_id_fkey",
+      "type": "f",
+      "table": "academy_purchases",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    }
+  ],
+  "indexes": [
+    {
+      "indexdef": "CREATE UNIQUE INDEX lesson_quizzes_pkey ON public.lesson_quizzes USING btree (id)",
+      "indexname": "lesson_quizzes_pkey",
+      "tablename": "lesson_quizzes",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX idx_lesson_quizzes_module_lesson ON public.lesson_quizzes USING btree (module_id, lesson_id)",
+      "indexname": "idx_lesson_quizzes_module_lesson",
+      "tablename": "lesson_quizzes",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX checklist_progress_pkey ON public.checklist_progress USING btree (id)",
+      "indexname": "checklist_progress_pkey",
+      "tablename": "checklist_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX checklist_progress_user_id_module_id_item_id_key ON public.checklist_progress USING btree (user_id, module_id, item_id)",
+      "indexname": "checklist_progress_user_id_module_id_item_id_key",
+      "tablename": "checklist_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX meta_capi_logs_pkey ON public.meta_capi_logs USING btree (id)",
+      "indexname": "meta_capi_logs_pkey",
+      "tablename": "meta_capi_logs",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX idx_meta_capi_event_id ON public.meta_capi_logs USING btree (event_id)",
+      "indexname": "idx_meta_capi_event_id",
+      "tablename": "meta_capi_logs",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX news_pkey ON public.news USING btree (id)",
+      "indexname": "news_pkey",
+      "tablename": "news",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX course_applications_pkey ON public.course_applications USING btree (id)",
+      "indexname": "course_applications_pkey",
+      "tablename": "course_applications",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX interactive_lessons_pkey ON public.interactive_lessons USING btree (id)",
+      "indexname": "interactive_lessons_pkey",
+      "tablename": "interactive_lessons",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX interactive_lessons_module_id_lesson_id_key ON public.interactive_lessons USING btree (module_id, lesson_id)",
+      "indexname": "interactive_lessons_module_id_lesson_id_key",
+      "tablename": "interactive_lessons",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX email_logs_pkey ON public.email_logs USING btree (id)",
+      "indexname": "email_logs_pkey",
+      "tablename": "email_logs",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX email_logs_user_email_type_unique ON public.email_logs USING btree (user_id, email_type)",
+      "indexname": "email_logs_user_email_type_unique",
+      "tablename": "email_logs",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX checklist_customers_pkey ON public.checklist_customers USING btree (id)",
+      "indexname": "checklist_customers_pkey",
+      "tablename": "checklist_customers",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX checklist_customers_password_key ON public.checklist_customers USING btree (password)",
+      "indexname": "checklist_customers_password_key",
+      "tablename": "checklist_customers",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX contact_messages_pkey ON public.contact_messages USING btree (id)",
+      "indexname": "contact_messages_pkey",
+      "tablename": "contact_messages",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX academy_purchases_pkey ON public.academy_purchases USING btree (id)",
+      "indexname": "academy_purchases_pkey",
+      "tablename": "academy_purchases",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX academy_purchases_stripe_checkout_session_id_key ON public.academy_purchases USING btree (stripe_checkout_session_id)",
+      "indexname": "academy_purchases_stripe_checkout_session_id_key",
+      "tablename": "academy_purchases",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX idx_academy_purchases_user ON public.academy_purchases USING btree (user_id)",
+      "indexname": "idx_academy_purchases_user",
+      "tablename": "academy_purchases",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX idx_academy_purchases_pi ON public.academy_purchases USING btree (stripe_payment_intent_id)",
+      "indexname": "idx_academy_purchases_pi",
+      "tablename": "academy_purchases",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX checklists_pkey ON public.checklists USING btree (id)",
+      "indexname": "checklists_pkey",
+      "tablename": "checklists",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX lead_captures_pkey ON public.lead_captures USING btree (id)",
+      "indexname": "lead_captures_pkey",
+      "tablename": "lead_captures",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX video_progress_pkey ON public.video_progress USING btree (id)",
+      "indexname": "video_progress_pkey",
+      "tablename": "video_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX video_progress_user_id_video_id_key ON public.video_progress USING btree (user_id, video_id)",
+      "indexname": "video_progress_user_id_video_id_key",
+      "tablename": "video_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX homework_pkey ON public.homework USING btree (id)",
+      "indexname": "homework_pkey",
+      "tablename": "homework",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX homework_user_module_unique ON public.homework USING btree (user_id, module_id)",
+      "indexname": "homework_user_module_unique",
+      "tablename": "homework",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)",
+      "indexname": "profiles_pkey",
+      "tablename": "profiles",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX messages_pkey ON public.messages USING btree (id)",
+      "indexname": "messages_pkey",
+      "tablename": "messages",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX idx_messages_user_id ON public.messages USING btree (user_id)",
+      "indexname": "idx_messages_user_id",
+      "tablename": "messages",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX pdf_progress_pkey ON public.pdf_progress USING btree (id)",
+      "indexname": "pdf_progress_pkey",
+      "tablename": "pdf_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX pdf_progress_user_id_module_id_lesson_id_key ON public.pdf_progress USING btree (user_id, module_id, lesson_id)",
+      "indexname": "pdf_progress_user_id_module_id_lesson_id_key",
+      "tablename": "pdf_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX pdf_progress_user_module_lesson_key ON public.pdf_progress USING btree (user_id, module_id, lesson_id)",
+      "indexname": "pdf_progress_user_module_lesson_key",
+      "tablename": "pdf_progress",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX leads_pkey ON public.leads USING btree (id)",
+      "indexname": "leads_pkey",
+      "tablename": "leads",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX leads_email_key ON public.leads USING btree (email)",
+      "indexname": "leads_email_key",
+      "tablename": "leads",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX leads_rank_idx ON public.leads USING btree (rank)",
+      "indexname": "leads_rank_idx",
+      "tablename": "leads",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX leads_priority_score_idx ON public.leads USING btree (priority, lead_score DESC)",
+      "indexname": "leads_priority_score_idx",
+      "tablename": "leads",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX leads_send_queue_idx ON public.leads USING btree (rank) WHERE ((do_not_contact = false) AND (status = 'reviewed'::text) AND (email_status = 'not_sent'::text))",
+      "indexname": "leads_send_queue_idx",
+      "tablename": "leads",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX leads_coordinates_idx ON public.leads USING btree (latitude, longitude) WHERE ((latitude IS NOT NULL) AND (longitude IS NOT NULL))",
+      "indexname": "leads_coordinates_idx",
+      "tablename": "leads",
+      "schemaname": "public",
+      "tablespace": null
+    }
+  ],
+  "storage_buckets": [
+    {
+      "id": "checklist-files",
+      "public": false
+    },
+    {
+      "id": "course-pdfs",
+      "public": false
+    }
+  ],
+  "counts": {
+    "profiles": 17,
+    "unlocked": 7,
+    "full_access": 2
+  }
+}

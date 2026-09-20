@@ -1,5 +1,6 @@
+import { safeRedirect } from '@/lib/auth-redirect';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { metaPixel, academyPixel, generateEventId, getBrowserContext } from '@/lib/metaPixel';
 
@@ -15,7 +16,7 @@ function translateAuthError(message: string): string {
     return 'Невалиден имейл адрес. Проверете и опитайте отново.';
   }
   if (msg.includes('password') && msg.includes('short')) {
-    return 'Паролата е твърде кратка. Минимум 6 символа.';
+    return 'Паролата е твърде кратка. Минимум 12 символа.';
   }
   if (msg.includes('network') || msg.includes('fetch')) {
     return 'Проблем с връзката. Проверете интернета и опитайте отново.';
@@ -25,6 +26,8 @@ function translateAuthError(message: string): string {
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const [params]=useSearchParams();
+  const redirectTo=safeRedirect(params.get('redirect'));
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -45,8 +48,8 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Паролата трябва да е поне 6 символа.');
+    if (password.length < 12) {
+      setError('Паролата трябва да е поне 12 символа.');
       return;
     }
 
@@ -57,6 +60,7 @@ export default function RegisterPage() {
       password,
       options: {
         data: { full_name: fullName },
+        emailRedirectTo: `${window.location.origin}${redirectTo}`,
       },
     });
 
@@ -116,7 +120,7 @@ export default function RegisterPage() {
       return;
     }
 
-    navigate('/kurs');
+    navigate(redirectTo);
   };
 
   const handleGoogleLogin = async () => {
@@ -126,7 +130,7 @@ export default function RegisterPage() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/kurs`,
+        redirectTo: `${window.location.origin}${redirectTo}`,
       },
     });
 
@@ -196,7 +200,7 @@ export default function RegisterPage() {
               <p className="text-sm text-[#1B4332] font-light">
                 Регистрацията е успешна! Проверете имейла си за потвърждение.
               </p>
-              <Link to="/login" className="text-sm text-[#1B4332] font-medium hover:underline mt-2 inline-block cursor-pointer">
+              <Link to={'/login?redirect=' + encodeURIComponent(redirectTo)} className="text-sm text-[#1B4332] font-medium hover:underline mt-2 inline-block cursor-pointer">
                 Влез в акаунта →
               </Link>
             </div>
@@ -270,7 +274,7 @@ export default function RegisterPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      placeholder="Минимум 6 символа"
+                      placeholder="Минимум 12 символа"
                       className="w-full px-4 py-3 bg-white border border-[#E8E8E4] rounded-md text-sm text-[#1A1A1A] placeholder-[#BDBDB8] focus:outline-none focus:border-[#1A1A1A] transition-colors pr-10"
                     />
                     <button

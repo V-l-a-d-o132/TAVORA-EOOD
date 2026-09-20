@@ -5,7 +5,7 @@ interface ModuleSidebarProps {
   moduleId: string;
   sectionTitle: string;
   modTitle: string;
-  moduleNumber: number;
+  moduleNumber: string | number;
   lessons: Array<{ id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string }>;
   activeLessonIndex: number;
   progressPercent: number;
@@ -95,7 +95,7 @@ export default function ModuleSidebar({
                     {lesson.duration}
                     {slideInfo && slideInfo.total > 0 && !done && (
                       <span className="ml-2" style={{ color: C.textDim }}>
-                        · {slideInfo.seen}/{slideInfo.total} слайда
+                        · {slideInfo.seen}/{slideInfo.total} умения
                       </span>
                     )}
                   </span>

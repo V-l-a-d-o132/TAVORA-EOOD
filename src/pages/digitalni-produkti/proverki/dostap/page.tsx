@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, type FormEvent } from 'react';
+import { useEffect, useState, useRef, useCallback, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
@@ -139,13 +139,8 @@ export default function DigitalniProduktiDostapPage() {
     setLoading(false);
   }, []);
 
-  // Auto-submit when code is passed via URL
-  useEffect(() => {
-    if (!loading && urlCode && !autoSubmitted.current) {
-      autoSubmitted.current = true;
-      submitCode(urlCode);
-    }
-  }, [loading, urlCode]);
+
+
 
   useEffect(() => {
     if (!loading && !authenticated && !urlCode && accessCodeRef.current) {
@@ -153,7 +148,54 @@ export default function DigitalniProduktiDostapPage() {
     }
   }, [loading, authenticated, urlCode]);
 
-  const submitCode = async (code: string) => {
+  const loadChecklists = useCallback(async (tier: string, selectedModules: number[] | null) => {
+    try {
+      const { data: allChecklists, error: fetchError } = await supabase
+        .from('checklists')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (fetchError || !allChecklists) {
+        setError('Грешка при зареждане на модулите от базата.');
+        return;
+      }
+
+      if (tier === 'complete') {
+        setChecklists(
+          allChecklists.map((cl: Record<string, unknown>) => ({
+            id: cl.id as number,
+            num: cl.num as string,
+            icon: cl.icon as string,
+            title: cl.title as string,
+            intro: cl.intro as string,
+            items: (cl.items as ChecklistItem[]) || [],
+          }))
+        );
+      } else {
+        const moduleIds: number[] = Array.isArray(selectedModules) ? selectedModules : [];
+        const filtered = allChecklists
+          .filter((cl: Record<string, unknown>) => moduleIds.includes(cl.id as number))
+          .map((cl: Record<string, unknown>) => ({
+            id: cl.id as number,
+            num: cl.num as string,
+            icon: cl.icon as string,
+            title: cl.title as string,
+            intro: cl.intro as string,
+            items: (cl.items as ChecklistItem[]) || [],
+          }));
+        setChecklists(filtered);
+
+        if (moduleIds.length === 0) {
+          setShowModulePicker(true);
+        }
+      }
+    } catch (err: any) {
+      console.error('[Dostap] loadChecklists error:', err?.message || err);
+      setError('Грешка при зареждане на модулите: ' + (err?.message || 'неизвестна'));
+    }
+  }, []);
+
+  const submitCode = useCallback(async (code: string) => {
     setError('');
     setChecking(true);
 
@@ -198,7 +240,16 @@ export default function DigitalniProduktiDostapPage() {
     } finally {
       setChecking(false);
     }
-  };
+  }, [loadChecklists]);
+
+  useEffect(() => {
+    if (!loading && urlCode && !autoSubmitted.current) {
+      autoSubmitted.current = true;
+      submitCode(urlCode);
+    }
+  }, [loading, urlCode, submitCode]);
+
+  // Auto-submit when code is passed via URL
 
   const handleAccessCodeSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -227,52 +278,7 @@ export default function DigitalniProduktiDostapPage() {
     }
   };
 
-  const loadChecklists = async (tier: string, selectedModules: number[] | null) => {
-    try {
-      const { data: allChecklists, error: fetchError } = await supabase
-        .from('checklists')
-        .select('*')
-        .order('id', { ascending: true });
 
-      if (fetchError || !allChecklists) {
-        setError('Грешка при зареждане на модулите от базата.');
-        return;
-      }
-
-      if (tier === 'complete') {
-        setChecklists(
-          allChecklists.map((cl: Record<string, unknown>) => ({
-            id: cl.id as number,
-            num: cl.num as string,
-            icon: cl.icon as string,
-            title: cl.title as string,
-            intro: cl.intro as string,
-            items: (cl.items as ChecklistItem[]) || [],
-          }))
-        );
-      } else {
-        const moduleIds: number[] = Array.isArray(selectedModules) ? selectedModules : [];
-        const filtered = allChecklists
-          .filter((cl: Record<string, unknown>) => moduleIds.includes(cl.id as number))
-          .map((cl: Record<string, unknown>) => ({
-            id: cl.id as number,
-            num: cl.num as string,
-            icon: cl.icon as string,
-            title: cl.title as string,
-            intro: cl.intro as string,
-            items: (cl.items as ChecklistItem[]) || [],
-          }));
-        setChecklists(filtered);
-
-        if (moduleIds.length === 0 && !showModulePicker) {
-          setShowModulePicker(true);
-        }
-      }
-    } catch (err: any) {
-      console.error('[Dostap] loadChecklists error:', err?.message || err);
-      setError('Грешка при зареждане на модулите: ' + (err?.message || 'неизвестна'));
-    }
-  };
 
   const tierLabel =
     customerTier === 'complete'

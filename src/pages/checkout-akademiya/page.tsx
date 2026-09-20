@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -139,6 +139,8 @@ export default function CheckoutAkademiyaPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const requestId = useRef(crypto.randomUUID());
+
   const info = TIER_INFO[urlTier];
 
   // ViewContent on mount + record abandoned checkout
@@ -159,14 +161,11 @@ export default function CheckoutAkademiyaPage() {
           }
           return supabase
             .from('profiles')
-            .upsert({
-              id: user.id,
+            .update({
               abandoned_checkout_at: new Date().toISOString(),
               abandoned_checkout_tier: urlTier,
-              abandoned_cart_email_sent: false,
-            }, { onConflict: 'id' });
-        })
-        .catch(() => { /* ignore */ });
+            }).eq('id', user.id);
+        }, () => { /* ignore */ });
     }
   }, [info.label, user, urlTier]);
 
@@ -240,7 +239,7 @@ export default function CheckoutAkademiyaPage() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ tier: urlTier }),
+        body: JSON.stringify({ tier: urlTier, request_id: requestId.current }),
       });
       const json = await res.json();
       if (json.url) {
@@ -253,7 +252,7 @@ export default function CheckoutAkademiyaPage() {
     } finally {
       setLoading(false);
     }
-  }, [user, urlTier, info.label]);
+  }, [user, urlTier, info.label, info.metaValue]);
 
   return (
     <div className="min-h-screen" style={{ background: C.bg }}>

@@ -1,3 +1,4 @@
+import { safeRedirect } from '@/lib/auth-redirect';
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -26,7 +27,7 @@ function translateAuthError(message: string): string {
 export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get('redirect') || '/kurs';
+  const redirectTo = safeRedirect(searchParams.get('redirect'));
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -201,7 +202,7 @@ export default function LoginPage() {
 
           <p className="mt-8 text-center text-sm text-[#8A8A85] font-light">
             Нямаш акаунт?{' '}
-            <Link to="/register" className="text-[#0A2540] font-medium hover:underline cursor-pointer">
+            <Link to={'/register?redirect=' + encodeURIComponent(redirectTo)} className="text-[#0A2540] font-medium hover:underline cursor-pointer">
               Регистрирай се
             </Link>
           </p>
