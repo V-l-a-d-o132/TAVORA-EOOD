@@ -74,7 +74,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        { allowConstantExport: true, allowExportNames: ['useAuth', 'getReviewSchema', 'dispatchLevelUp', 'navigatePromise'] },
       ],
       '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -103,4 +103,3 @@ export default [
     },
   },
 ]
-

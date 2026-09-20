@@ -15,6 +15,16 @@ export default defineConfig({
     __READDY_AI_DOMAIN__: JSON.stringify(process.env.READDY_AI_DOMAIN || ""),
   },
   plugins: [
+    {
+      name: 'academy-content-boundary',
+      generateBundle(_options, bundle) {
+        for (const output of Object.values(bundle)) {
+          if (output.type === 'chunk' && output.moduleIds.some(id => id.includes('/mocks/interactive-lesson-data') || id.includes('/mocks/quiz-questions'))) {
+            this.error('Private academy content must not be bundled into the client.');
+          }
+        }
+      },
+    },
     react(),
     AutoImport({
       imports: [
@@ -88,18 +98,13 @@ export default defineConfig({
           if (ext === "css") return "css/[name]-[hash][extname]";
           return "assets/[name]-[hash][extname]";
         },
-        manualChunks: {
-          react: ["react", "react-dom"],
-          router: ["react-router-dom"],
-          i18n: ["i18next", "react-i18next", "i18next-browser-languagedetector"],
-          supabase: ["@supabase/supabase-js"],
-        },
+
       },
     },
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": resolve(import.meta.dirname, "./src"),
     },
   },
   server: {
