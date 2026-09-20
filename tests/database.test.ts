@@ -70,9 +70,25 @@ beforeAll(async () => {
         `INSERT INTO interactive_lessons(module_id,lesson_id,title,slides) VALUES
          ('s01-m01','test-lesson','Preview','[{"id":"cp1","type":"checkpoint","title":"Check","checkpoint":{"question":"Q","options":["a","b"],"correctIndex":1,"explanation":"Because"}}]'),
          ('s01-m02','test-lesson','Paid','[]');
+         INSERT INTO interactive_lessons(module_id,lesson_id,title,subtitle,duration,slides)
+         SELECT 's01-m01',lesson_id,title,'Запазен богат източник','25 мин',jsonb_build_array(
+           jsonb_build_object('type','title','title',title,'body','Реален бизнес проблем, който изисква решение и проверка.'),
+           jsonb_build_object('type','content','title','Принцип','body',repeat('Конкретно обяснение с контекст, ограничения и проверим резултат. ',20),'highlights',jsonb_build_array('Провери фактите','Не споделяй чувствителни данни','Запиши критерия за качество')),
+           jsonb_build_object('type','comparison','title','Слаб и работещ подход','leftSide',jsonb_build_object('label','Слаб','content','Обща команда без контекст'),'rightSide',jsonb_build_object('label','Работещ','content','Ясен вход, критерий и човешка проверка')),
+           jsonb_build_object('type','framework','title','Процес','frameworkSteps',jsonb_build_array(jsonb_build_object('title','Контекст','description','Дай проверими факти','example','Реален пример'),jsonb_build_object('title','Проверка','description','Определи собственик','example','Човек одобрява'))),
+           jsonb_build_object('type','interactive','title','Реши казуса','interactivePrompt',jsonb_build_object('scenario','Клиентска ситуация с реален риск.','task','Напиши конкретно решение.','hint','Определи критерий за успех.','revealAnswer','Примерно решение')),
+           jsonb_build_object('type','checkpoint','title','Проверка','checkpoint',jsonb_build_object('question','Кой подход е надежден?','options',jsonb_build_array('Ясен и проверим','Общ и непроверен','Автоматичен без надзор'),'correctIndex',0,'explanation','Надеждният процес има контекст, критерий и човешки контрол.')),
+           jsonb_build_object('type','summary','title','Обобщение','keyTakeaways',jsonb_build_array('Избирай проверими задачи','Човекът носи отговорност'),'cta','Приложи върху една реална задача.')
+         )
+         FROM (VALUES
+           ('l01-01','Основи на AI за бизнес — какво работи и какво не'),
+           ('l01-02','Prompt engineering на професионално ниво'),
+           ('l01-03','Мулти-моделна стратегия: ChatGPT, Claude, Gemini'),
+           ('l01-04','AI за бизнес решения всеки ден')
+         ) fixture(lesson_id,title);
          INSERT INTO interactive_lessons(module_id,lesson_id,title,slides)
          SELECT 's99-m99','migration-'||lpad(i::text,3,'0'),'Migration fixture '||i,'[]'::jsonb
-         FROM generate_series(1,216) i;`,
+         FROM generate_series(1,212) i;`,
       );
     }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
@@ -170,6 +186,31 @@ describe("Lesson Engine V2 migration and publication", () => {
     expect(JSON.stringify(lesson)).toContain("Основи на AI");
     expect(JSON.stringify(lesson)).not.toContain('"correct"');
     expect(JSON.stringify(lesson)).not.toContain("lesson_block_keys");
+  });
+
+  it("restores the four rich s01-m01 lessons as reviewable drafts without replacing published content", async () => {
+    await actor("service_role");
+    expect(await scalar(`SELECT count(*)::int n
+      FROM academy_lessons l
+      JOIN academy_lesson_versions d ON d.id=l.draft_version_id
+      WHERE l.module_id='s01-m01'
+        AND l.lesson_id LIKE 'l01-%'
+        AND d.change_note='Premium editorial restoration from the preserved legacy lesson'
+        AND l.published_version_id IS DISTINCT FROM l.draft_version_id`)).toEqual({ n: 4 });
+    expect(await scalar(`SELECT count(*)::int n
+      FROM academy_lesson_blocks b
+      JOIN academy_lesson_versions v ON v.id=b.version_id
+      JOIN academy_lessons l ON l.id=v.academy_lesson_id
+      WHERE l.module_id='s01-m01' AND l.lesson_id LIKE 'l01-%'
+        AND v.change_note='Premium editorial restoration from the preserved legacy lesson'
+        AND b.block_type IN ('before_after','step_reveal','practical_response','quiz','checklist','summary')`)).toEqual({ n: 28 });
+    const draft = await scalar(`SELECT academy_private.lesson_json(l.id,l.draft_version_id,true) lesson
+      FROM academy_lessons l WHERE l.module_id='s01-m01' AND l.lesson_id='l01-01'`);
+    expect(JSON.stringify(draft)).toContain("Карта за AI делегиране");
+    expect(JSON.stringify(draft)).toContain("Конкретно обяснение");
+    await actor("anon");
+    const published = await scalar("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson");
+    expect(JSON.stringify(published)).not.toContain("Карта за AI делегиране");
   });
 
   it("keeps drafts invisible to learners and gives admins a sanitized preview", async () => {
