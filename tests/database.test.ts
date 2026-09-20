@@ -65,14 +65,21 @@ beforeAll(async () => {
   );
   await db.exec("ALTER TABLE profiles ENABLE TRIGGER enforce_role_change");
   for (const f of files.slice(1)) {
+    if (f.includes("lesson_engine_v2_core")) {
+      await db.exec(
+        `INSERT INTO interactive_lessons(module_id,lesson_id,title,slides) VALUES
+         ('s01-m01','test-lesson','Preview','[{"id":"cp1","type":"checkpoint","title":"Check","checkpoint":{"question":"Q","options":["a","b"],"correctIndex":1,"explanation":"Because"}}]'),
+         ('s01-m02','test-lesson','Paid','[]');
+         INSERT INTO interactive_lessons(module_id,lesson_id,title,slides)
+         SELECT 's99-m99','migration-'||lpad(i::text,3,'0'),'Migration fixture '||i,'[]'::jsonb
+         FROM generate_series(1,216) i;`,
+      );
+    }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
   }
   await db.exec(
     `INSERT INTO academy_prices(price_id,tier_id,livemode,amount_cents,checkout_enabled) VALUES
  ('price_systems-10','systems-10',true,4900,true),('price_perfektno-video','perfektno-video',true,9900,true);
- INSERT INTO interactive_lessons(module_id,lesson_id,title,slides) VALUES
- ('s01-m01','test-lesson','Preview','[{"id":"cp1","type":"checkpoint","checkpoint":{"question":"Q","options":["a","b"],"correctIndex":1,"explanation":"Because"}}]'),
- ('s01-m02','test-lesson','Paid','[]');
  INSERT INTO lesson_quizzes(id,module_id,lesson_id,question,options,correct_index,explanation)
  VALUES('10000000-0000-4000-8000-000000000001','s01-m01','test-lesson','Q','["a","b"]',1,'Because');
  INSERT INTO storage.objects(bucket_id,name) VALUES('course-pdfs','s01-m02/paid.pdf'),('course-pdfs','s01-m01/preview.pdf');`,
@@ -143,7 +150,101 @@ describe("RLS and privileged operations", () => {
       n: 3,
     });
     expect(await scalar("SELECT count(*)::int n FROM interactive_lessons"))
-      .toEqual({ n: 2 });
+      .toEqual({ n: 218 });
+  });
+});
+
+describe("Lesson Engine V2 migration and publication", () => {
+  it("backs up and migrates all 218 legacy lessons without changing the source rows", async () => {
+    await actor("service_role");
+    expect(await scalar("SELECT count(*)::int n FROM academy_private.interactive_lessons_backup_20260920")).toEqual({ n: 218 });
+    expect(await scalar("SELECT count(*)::int n FROM academy_lessons WHERE source_legacy_id IS NOT NULL")).toEqual({ n: 218 });
+    expect(await scalar("SELECT count(*)::int n FROM interactive_lessons")).toEqual({ n: 218 });
+  });
+
+  it("publishes all 35 reference lessons and keeps answer keys out of the student payload", async () => {
+    await actor("service_role");
+    expect(await scalar("SELECT count(*)::int n FROM academy_lessons WHERE module_id IN ('s01-m01','s02-m01','s03-m01') AND status='published'")).toEqual({ n: 36 });
+    await actor("anon");
+    const lesson = await scalar("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson");
+    expect(JSON.stringify(lesson)).toContain("Основи на AI");
+    expect(JSON.stringify(lesson)).not.toContain('"correct"');
+    expect(JSON.stringify(lesson)).not.toContain("lesson_block_keys");
+  });
+
+  it("keeps drafts invisible to learners and gives admins a sanitized preview", async () => {
+    await actor("authenticated", ADMIN);
+    const source = (await db.query<{ id: string }>("SELECT id FROM academy_lessons WHERE module_id='s01-m01' AND lesson_id='l01-01'")).rows[0];
+    const draft = (await db.query<{ lesson: { versionId: string } }>(
+      "SELECT academy_admin_save_lesson($1,'s01-m01','l01-01','Draft only','','10 мин','цел','hook',10,$2,'test draft') lesson",
+      [source.id, [{ key: "objective", type: "objective", title: "Цел", content: { body: "draft secret" }, required: true, points: 5 }]],
+    )).rows[0].lesson;
+    const preview = await scalar(`SELECT academy_admin_preview_lesson('${source.id}','${draft.versionId}') lesson`);
+    expect(JSON.stringify(preview)).toContain("draft secret");
+    expect(JSON.stringify(preview)).not.toContain('"evaluation"');
+    await actor("anon");
+    const published = await scalar("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson");
+    expect(JSON.stringify(published)).not.toContain("draft secret");
+  });
+
+  it("autosaves and resumes at the exact block without marking the lesson complete", async () => {
+    await actor("authenticated", A);
+    const loaded = (await db.query<{ lesson: { versionId: string } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
+    await db.query("SELECT academy_autosave_lesson($1,$2,$3,$4,$5)", [
+      "s01-m01", "l01-01", loaded.versionId, "concept", { concept: { draft: "resume-here" } },
+    ]);
+    const resumed = (await db.query<{ lesson: { progress: { current_block_key: string; completed_at: string | null }; } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
+    expect(JSON.stringify(resumed)).toContain("resume-here");
+    expect(resumed.progress.current_block_key).toBe("concept");
+    expect(resumed.progress.completed_at).toBeNull();
+  });
+
+  it("validates quiz answers server-side, deduplicates attempts and completes only after every required block", async () => {
+    await actor("authenticated", A);
+    const lesson = (await db.query<{ lesson: { id: string; versionId: string; blocks: Array<{ key: string; type: string }> } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
+    const wrongId = crypto.randomUUID();
+    const wrong = await db.query<{ result: { correct: boolean; feedback: { complete: boolean } } }>(
+      "SELECT academy_complete_lesson_block($1,$2,$3,'quiz',$4,$5) result",
+      ["s01-m01", "l01-01", lesson.versionId, { answer: "b" }, wrongId],
+    );
+    expect(wrong.rows[0].result).toMatchObject({ correct: false, feedback: { complete: false } });
+    const repeated = await db.query("SELECT academy_complete_lesson_block($1,$2,$3,'quiz',$4,$5) result", ["s01-m01", "l01-01", lesson.versionId, { answer: "b" }, wrongId]);
+    expect(repeated.rows).toEqual(wrong.rows);
+
+    for (const block of lesson.blocks) {
+      const payload = block.key === "interaction" ? { selected: "a" }
+        : block.key === "quiz" ? { answer: "a" }
+        : block.key === "practice" ? { text: "Конкретен план с вход, проверим резултат и човешка проверка след изпълнението." }
+        : block.key === "reflection" ? { text: "Ще проверявам допусканията преди да приема препоръка от модел." }
+        : { acknowledged: true };
+      await db.query("SELECT academy_complete_lesson_block($1,$2,$3,$4,$5,$6)", ["s01-m01", "l01-01", lesson.versionId, block.key, payload, crypto.randomUUID()]);
+    }
+    expect((await db.query("SELECT completed_at IS NOT NULL completed,mastery_status,xp FROM academy_lesson_progress WHERE user_id=$1 AND academy_lesson_id=$2", [A, lesson.id])).rows[0]).toEqual({ completed: true, mastery_status: "mastered", xp: 75 });
+  });
+
+  it("evaluates anonymous preview attempts without writing trusted progress", async () => {
+    await actor("service_role");
+    const before = await scalar("SELECT count(*)::int n FROM academy_lesson_attempts_v2");
+    const version = (await db.query<{ id: string }>("SELECT published_version_id id FROM academy_lessons WHERE module_id='s01-m01' AND lesson_id='l01-02'")).rows[0].id;
+    await actor("anon");
+    const answer = await db.query<{ result: { preview: boolean; correct: boolean } }>("SELECT academy_complete_lesson_block($1,$2,$3,'quiz',$4,$5) result", ["s01-m01", "l01-02", version, { answer: "a" }, crypto.randomUUID()]);
+    expect(answer.rows[0].result).toMatchObject({ preview: true, correct: true });
+    await actor("service_role");
+    expect(await scalar("SELECT count(*)::int n FROM academy_lesson_attempts_v2")).toEqual(before);
+  });
+
+  it("allows version rollback only to admins and records a new immutable version", async () => {
+    await actor("service_role");
+    const lessonId = (await db.query<{ id: string }>("SELECT academy_lesson_id id FROM academy_lesson_versions WHERE title LIKE 'Основи на AI%' ORDER BY version_number LIMIT 1")).rows[0].id;
+    const oldVersion = (await db.query<{ id: string }>("SELECT id FROM academy_lesson_versions WHERE academy_lesson_id=$1 AND source_kind='reference' ORDER BY version_number LIMIT 1", [lessonId])).rows[0].id;
+    await actor("authenticated", A);
+    await expect(db.query("SELECT academy_admin_rollback_lesson($1,$2)", [lessonId, oldVersion])).rejects.toThrow();
+    await actor("authenticated", ADMIN);
+    const before = await scalar(`SELECT count(*)::int n FROM academy_lesson_versions WHERE academy_lesson_id='${lessonId}'`);
+    await db.query("SELECT academy_admin_rollback_lesson($1,$2)", [lessonId, oldVersion]);
+    const after = await scalar(`SELECT count(*)::int n FROM academy_lesson_versions WHERE academy_lesson_id='${lessonId}'`);
+    expect(after).toEqual({ n: Number(before.n) + 1 });
+    expect(await scalar(`SELECT status,published_version_id=draft_version_id same FROM academy_lessons WHERE id='${lessonId}'`)).toEqual({ status: "published", same: true });
   });
 });
 
