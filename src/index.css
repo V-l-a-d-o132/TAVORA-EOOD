@@ -250,3 +250,28 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+.admin-input {
+  width: 100%;
+  border: 1px solid rgba(28, 28, 30, 0.12);
+  border-radius: 0.625rem;
+  background: #fff;
+  padding: 0.7rem 0.8rem;
+  color: #1c1c1e;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.admin-input:focus {
+  border-color: rgba(10, 37, 64, 0.55);
+  box-shadow: 0 0 0 3px rgba(10, 37, 64, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

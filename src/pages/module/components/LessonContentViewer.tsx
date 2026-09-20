@@ -47,6 +47,7 @@ interface LessonContentViewerProps {
   slideProgressMap?: Record<string, { seen: number; total: number }>;
   onSlideProgress?: (lessonId: string, seen: number, total: number) => void;
   nextModule?: { id: string; title: string; sectionTitle: string } | null;
+  onTrustedProgress?: (lessonId: string, progress: { completed: boolean; xp: number; scorePercent: number | null; masteryStatus: 'learning' | 'practicing' | 'mastered' }) => void;
 }
 
 export default function LessonContentViewer({
@@ -88,6 +89,7 @@ export default function LessonContentViewer({
   slideProgressMap,
   onSlideProgress,
   nextModule,
+  onTrustedProgress,
 }: LessonContentViewerProps) {
   const completedCount = lessons.filter((l) => {
     const p = progressMap?.[l.id];
@@ -106,7 +108,7 @@ export default function LessonContentViewer({
       >
         {/* Interactive lesson mode for all modules */}
         {(moduleId.startsWith('s01-') || moduleId.startsWith('s02-') || moduleId.startsWith('s03-')) ? (
-          <div className="h-[calc(100dvh-180px)] md:h-[calc(100dvh-260px)] min-h-[300px] md:min-h-[480px]">
+          <div className="min-h-[480px]">
             <InteractiveLesson
               moduleId={moduleId}
               lessonId={lessons[activeLessonIndex]?.id}
@@ -122,6 +124,7 @@ export default function LessonContentViewer({
                   onSlideProgress(activeLesson.id, seen, total);
                 }
               }}
+              onTrustedProgress={onTrustedProgress}
             />
           </div>
         ) : (

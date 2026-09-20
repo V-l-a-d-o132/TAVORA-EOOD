@@ -5,6 +5,11 @@ export interface LessonProgress {
   totalPages: number;
   quizScore: number | null;
   quizTotal: number | null;
+  xp?: number;
+  scorePercent?: number | null;
+  masteryStatus?: 'learning' | 'practicing' | 'mastered';
+  currentBlockKey?: string | null;
+  lastActivityAt?: string | null;
 }
 
 export interface ModuleProgressMap {

@@ -95,7 +95,7 @@ export default function ModuleSidebar({
                     {lesson.duration}
                     {slideInfo && slideInfo.total > 0 && !done && (
                       <span className="ml-2" style={{ color: C.textDim }}>
-                        · {slideInfo.seen}/{slideInfo.total} слайда
+                        · {slideInfo.seen}/{slideInfo.total} умения
                       </span>
                     )}
                   </span>

@@ -75,12 +75,7 @@ export default function ModulePage() {
   const totalPoints = useMemo(() => {
     if (!mod || !Array.isArray(mod.lessons)) return 0;
     if (isModule1 && !user) return localCompletedLessons.length * 10;
-    let count = 0;
-    for (const l of mod.lessons) {
-      const p = progressMap?.[l.id];
-      if (p?.completed) count++;
-    }
-    return count * 10;
+    return mod.lessons.reduce((sum, lesson) => sum + (progressMap?.[lesson.id]?.xp || 0), 0);
   }, [mod, progressMap, isModule1, user, localCompletedLessons]);
 
   const currentLevel = useMemo(() => {
@@ -127,11 +122,8 @@ export default function ModulePage() {
     (async () => {
       try {
         const lessonIds = mod.lessons.map((l) => l.id).filter(Boolean);
-        const { data } = await supabase
-          .from('pdf_progress')
-          .select('lesson_id, page_number, total_pages, completed, quiz_score, quiz_total')
-          .eq('user_id', user.id)
-          .in('lesson_id', lessonIds);
+        const { data, error } = await supabase.rpc('academy_get_module_progress', { p_module: mod.id });
+        if (error) throw error;
 
         if (cancelled) return;
 
@@ -141,13 +133,18 @@ export default function ModulePage() {
         });
         if (data && Array.isArray(data)) {
           data.forEach((row) => {
-            if (row && row.lesson_id) {
-              map[row.lesson_id] = {
-                completed: !!row.completed,
-                pageNumber: row.page_number || 1,
-                totalPages: row.total_pages || 0,
-                quizScore: row.quiz_score ?? null,
-                quizTotal: row.quiz_total ?? null,
+            if (row && typeof row === 'object' && typeof row.lessonId === 'string') {
+              map[row.lessonId] = {
+                completed: row.completed === true,
+                pageNumber: 1,
+                totalPages: 0,
+                quizScore: typeof row.scorePercent === 'number' ? row.scorePercent : null,
+                quizTotal: typeof row.scorePercent === 'number' ? 100 : null,
+                xp: typeof row.xp === 'number' ? row.xp : 0,
+                scorePercent: typeof row.scorePercent === 'number' ? row.scorePercent : null,
+                masteryStatus: row.masteryStatus === 'mastered' || row.masteryStatus === 'practicing' ? row.masteryStatus : 'learning',
+                currentBlockKey: typeof row.currentBlockKey === 'string' ? row.currentBlockKey : null,
+                lastActivityAt: typeof row.lastActivityAt === 'string' ? row.lastActivityAt : null,
               };
             }
           });
@@ -361,6 +358,13 @@ export default function ModulePage() {
   /* ─── Slide progress handler ─── */
   const handleSlideProgress = useCallback((lessonId: string, seen: number, total: number) => {
     setSlideProgressMap((prev) => ({ ...prev, [lessonId]: { seen, total } }));
+  }, []);
+
+  const handleTrustedLessonProgress = useCallback((lessonId: string, progress: { completed: boolean; xp: number; scorePercent: number | null; masteryStatus: 'learning' | 'practicing' | 'mastered' }) => {
+    setProgressMap((previous) => {
+      const current = previous?.[lessonId] || { completed: false, pageNumber: 1, totalPages: 0, quizScore: null, quizTotal: null };
+      return { ...previous, [lessonId]: { ...current, completed: progress.completed, xp: progress.xp, scorePercent: progress.scorePercent, masteryStatus: progress.masteryStatus } };
+    });
   }, []);
 
   const handleUnlock = useCallback(async (tier: string = 'koprinena-pateka') => {
@@ -711,6 +715,7 @@ export default function ModulePage() {
             setMobileSidebarOpen={setMobileSidebarOpen}
             slideProgressMap={slideProgressMap}
             onSlideProgress={handleSlideProgress}
+            onTrustedProgress={handleTrustedLessonProgress}
             nextModule={nextModule}
           />
         </div>
