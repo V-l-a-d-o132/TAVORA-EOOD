@@ -61,7 +61,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const options = arr(block.content.options);
   const feedback = result?.feedback;
   const isCorrect = result?.correct;
-  const isSilkRoadFoundation = ['s01-m01', 's01-m02', 's01-m03', 's01-m04'].includes(moduleId || '');
+  const isSilkRoadFoundation = ['s01-m01', 's01-m02', 's01-m03', 's01-m04', 's01-m05', 's01-m06', 's01-m07', 's01-m08'].includes(moduleId || '');
   const stepLabel = !isSilkRoadFoundation ? 'Практическа стъпка'
     : block.type === 'quiz' ? 'Проверка на знанията'
     : block.type === 'objective' ? 'Цел на урока'

@@ -163,7 +163,7 @@ export default function LessonEngineV2({
       </div>
       <h1 className="mt-5 text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">{lesson.title}</h1>
       {lesson.subtitle && <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-300">{lesson.subtitle}</p>}
-      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">{['s01-m01', 's01-m02', 's01-m03', 's01-m04'].includes(moduleId) ? 'Цел на урока' : 'След този урок ще можеш да'}</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
+      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">{['s01-m01', 's01-m02', 's01-m03', 's01-m04', 's01-m05', 's01-m06', 's01-m07', 's01-m08'].includes(moduleId) ? 'Цел на урока' : 'След този урок ще можеш да'}</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
       <div className="mt-6"><div className="mb-2 flex items-center justify-between text-xs text-zinc-300"><span>Напредък в урока</span><span className="font-semibold text-white">{progressPercent}% · {completed.size}/{lesson.blocks.length}</span></div><div className="h-2.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 transition-[width] motion-reduce:transition-none" style={{ width: `${progressPercent}%` }} /></div></div>
     </header>
 
