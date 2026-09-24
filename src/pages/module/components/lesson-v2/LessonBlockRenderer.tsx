@@ -5,6 +5,7 @@ import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson
 interface Props {
   block: LessonBlockV2;
   lessonId: string;
+  moduleId?: string;
   initialState?: JsonObject;
   completed: boolean;
   onStateChange: (state: JsonObject) => void;
@@ -24,7 +25,7 @@ const obj = (value: unknown): JsonObject => value && typeof value === 'object' &
 const fieldClass = 'w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-500/20';
 const choiceClass = 'w-full rounded-xl border border-white/10 bg-white/[0.035] p-4 text-left text-sm text-zinc-200 transition hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/50';
 
-export default function LessonBlockRenderer({ block, lessonId, initialState, completed, onStateChange, onSubmit }: Props) {
+export default function LessonBlockRenderer({ block, lessonId, moduleId, initialState, completed, onStateChange, onSubmit }: Props) {
   const [state, setState] = useState<JsonObject>(initialState || {});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<BlockAttemptResult | null>(null);
@@ -60,6 +61,15 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
   const options = arr(block.content.options);
   const feedback = result?.feedback;
   const isCorrect = result?.correct;
+  const isSilkRoadFoundation = ['s01-m01', 's01-m02', 's01-m03', 's01-m04'].includes(moduleId || '');
+  const stepLabel = !isSilkRoadFoundation ? 'Практическа стъпка'
+    : block.type === 'quiz' ? 'Проверка на знанията'
+    : block.type === 'objective' ? 'Цел на урока'
+    : block.type === 'practical_response' ? 'Твоите бележки'
+    : block.type === 'summary' ? 'Обобщение'
+    : block.key === 'practice_brief' ? 'Практическа задача'
+    : block.key === 'model_solution' ? 'Решен пример'
+    : 'Учебен материал';
 
   const acknowledgement = (
     <button type="button" disabled={busy || completed} onClick={() => void submit({ acknowledged: true })}
@@ -214,7 +224,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
   }, [isCorrect, result]);
 
   return <section aria-labelledby={`block-${block.key}`} className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#15171c] to-[#101216] p-5 shadow-2xl shadow-black/20 sm:p-7 md:p-9">
-    <header className="mb-7 flex items-start justify-between gap-4"><div><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">Практическа стъпка</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div><span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span></header>
+    <header className="mb-7 flex items-start justify-between gap-4"><div><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">{stepLabel}</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div>{(!isSilkRoadFoundation || block.points > 0) && <span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span>}</header>
     {renderBlock()}
     {error && <div role="alert" className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100"><i className="ri-error-warning-line mr-2" />{error}</div>}
     {statusMessage && <div role="status" aria-live="polite" className={`mt-5 rounded-xl border p-4 text-sm ${statusMessage.tone}`}><p className="font-semibold"><i className={`${statusMessage.icon} mr-2`} />{statusMessage.title}</p>{s(feedback?.explanation) && <p className="mt-2 leading-6 opacity-90">{s(feedback?.explanation)}</p>}{isCorrect === false && <button type="button" onClick={() => setResult(null)} className="mt-3 font-semibold underline underline-offset-4">Нов опит</button>}</div>}

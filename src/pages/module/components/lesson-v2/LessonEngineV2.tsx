@@ -163,7 +163,7 @@ export default function LessonEngineV2({
       </div>
       <h1 className="mt-5 text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">{lesson.title}</h1>
       {lesson.subtitle && <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-300">{lesson.subtitle}</p>}
-      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">След този урок ще можеш да</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
+      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">{['s01-m01', 's01-m02', 's01-m03', 's01-m04'].includes(moduleId) ? 'Цел на урока' : 'След този урок ще можеш да'}</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
       <div className="mt-6"><div className="mb-2 flex items-center justify-between text-xs text-zinc-300"><span>Напредък в урока</span><span className="font-semibold text-white">{progressPercent}% · {completed.size}/{lesson.blocks.length}</span></div><div className="h-2.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 transition-[width] motion-reduce:transition-none" style={{ width: `${progressPercent}%` }} /></div></div>
     </header>
 
@@ -177,7 +177,7 @@ export default function LessonEngineV2({
     <nav aria-label="Стъпки на урока" className="mb-5 flex gap-2 overflow-x-auto pb-2">{lesson.blocks.map((block, index) => <button key={block.key} type="button" aria-label={`Стъпка ${index + 1}: ${block.title}`} aria-current={index === currentIndex ? 'step' : undefined} onClick={() => goTo(index)} className={`grid h-9 min-w-9 place-items-center rounded-xl border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 ${index === currentIndex ? 'border-red-400 bg-red-500 text-white' : completed.has(block.key) ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-white/10 bg-white/[0.04] text-zinc-500'}`}>{completed.has(block.key) ? <i className="ri-check-line" aria-hidden /> : index + 1}</button>)}</nav>
 
     <div data-lesson-block>
-      <LessonBlockRenderer key={`${lesson.versionId}:${currentBlock.key}`} block={currentBlock} lessonId={lesson.lessonId} initialState={blockState[currentBlock.key]} completed={completed.has(currentBlock.key)} onStateChange={(state) => saveDraftState(currentBlock.key, state)} onSubmit={async (payload) => {
+      <LessonBlockRenderer key={`${lesson.versionId}:${currentBlock.key}`} block={currentBlock} lessonId={lesson.lessonId} moduleId={moduleId} initialState={blockState[currentBlock.key]} completed={completed.has(currentBlock.key)} onStateChange={(state) => saveDraftState(currentBlock.key, state)} onSubmit={async (payload) => {
         const response = await completeLessonBlock(lesson, currentBlock, payload);
         if (response.feedback.complete === true) setCompleted((previous) => new Set(previous).add(currentBlock.key));
         const serverDone = response.progress?.completed_block_keys;
