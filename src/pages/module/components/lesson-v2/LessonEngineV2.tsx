@@ -9,6 +9,7 @@ import {
 } from '@/lib/lesson-engine-v2';
 import LessonBlockRenderer from './LessonBlockRenderer';
 import { LessonDraftQueue, type DraftSaveStatus } from '@/lib/lesson-draft-queue';
+import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 
 interface Props {
   moduleId: string;
@@ -169,7 +170,7 @@ export default function LessonEngineV2({
       </div>
       <h1 className="mt-5 text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">{lesson.title}</h1>
       {lesson.subtitle && <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-300">{lesson.subtitle}</p>}
-      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">{['s01-m01', 's01-m02', 's01-m03', 's01-m04', 's01-m05', 's01-m06', 's01-m07', 's01-m08', 's01-m09', 's01-m10', 's01-m11'].includes(moduleId) ? 'Цел на урока' : 'След този урок ще можеш да'}</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
+      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">Цел на урока</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
       <div className="mt-6"><div className="mb-2 flex items-center justify-between text-xs text-zinc-300"><span>Напредък в урока</span><span className="font-semibold text-white">{progressPercent}% · {requiredCompleted}/{requiredBlocks.length} задължителни стъпки</span></div><div className="h-2.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 transition-[width] motion-reduce:transition-none" style={{ width: `${progressPercent}%` }} /></div></div>
     </header>
 
@@ -209,7 +210,7 @@ export default function LessonEngineV2({
     </div>
 
     <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#08090b]/95 px-4 pb-[calc(.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl md:sticky md:mt-5 md:rounded-2xl md:border md:p-3" aria-label="Навигация в урока">
-      {!canAdvance && !isLast && <p className="mb-2 text-center text-xs text-amber-200/80">{moduleId.startsWith('s01-') && ['objective', 'rich_text', 'summary'].includes(currentBlock.type) ? 'Отбележи „Прочетох“, за да продължиш.' : currentBlock.type === 'quiz' ? 'Отговори на въпроса, за да продължиш.' : 'Изпълни задачата в тази стъпка, за да продължиш.'}</p>}
+      {!canAdvance && !isLast && <p className="mb-2 text-center text-xs text-amber-200/80">{lessonBlockPresentation(currentBlock).continueHint}</p>}
       <div className="mx-auto flex max-w-4xl items-center gap-3"><button type="button" disabled={currentIndex === 0} onClick={() => goTo(currentIndex - 1)} className="rounded-xl border border-white/10 px-4 py-3 text-sm text-zinc-300 disabled:opacity-30"><i className="ri-arrow-left-line mr-2" />Назад</button><div className="min-w-0 flex-1 text-center text-xs text-zinc-400"><span className="hidden sm:inline">Стъпка </span>{currentIndex + 1} / {lesson.blocks.length}</div>{!isLast ? <button type="button" disabled={!canAdvance} title={!canAdvance ? 'Завърши текущата задача' : undefined} onClick={() => goTo(currentIndex + 1)} className="rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-950/30 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500 disabled:shadow-none">Следваща<i className="ri-arrow-right-line ml-2" /></button> : hasNextLesson ? <button type="button" disabled={!allComplete} onClick={onNextLesson} className="rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500">Следващ урок<i className="ri-arrow-right-line ml-2" /></button> : <span className={`rounded-xl px-5 py-3 text-sm font-semibold ${allComplete ? 'bg-emerald-500/15 text-emerald-300' : 'bg-zinc-800 text-zinc-500'}`}>{allComplete ? 'Урокът е завършен' : 'Завърши всички задачи'}</span>}</div>
     </div>
 

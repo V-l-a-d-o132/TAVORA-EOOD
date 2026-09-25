@@ -43,6 +43,7 @@ function lesson(blocks: LessonBlockV2[], progress: LessonV2['progress'] = null):
 
 beforeEach(() => {
   vi.clearAllMocks();
+  HTMLElement.prototype.scrollIntoView = vi.fn();
   api.rpc.mockImplementation(async (name: string) => {
     if (name === 'academy_complete_lesson_block') return { data: result, error: null };
     if (name === 'academy_autosave_lesson') return { data: { saved: true }, error: null };
@@ -79,6 +80,28 @@ describe('Lesson Engine V2 block registry', () => {
 });
 
 describe('Lesson Engine V2 learning flow', () => {
+  it.each(['s01-m01', 's02-m01', 's03-m01'])('records reading and advances without claiming mastery in %s', async (moduleId) => {
+    const reading = { ...createBlock('concept', 0), points: 0, content: { body: 'Съществуващ учебен текст.' } };
+    const task = { ...createBlock('practical_response', 1), content: { prompt: 'Съществуваща задача.', minLength: 60 } };
+    const summary = createBlock('summary', 2);
+    const data = { ...lesson([reading, task, summary]), moduleId };
+    render(<LessonEngineV2 moduleId={moduleId} userId="student" lessonOverride={data} />);
+    expect(screen.getByText('Учебен материал')).toBeTruthy();
+    expect(screen.getByText('Съществуващ учебен текст.')).toBeTruthy();
+    expect(screen.queryByText('Разбрах и мога да го приложа')).toBeNull();
+    expect(screen.queryByLabelText('0 XP')).toBeNull();
+    expect((screen.getByRole('button', { name: 'Следваща' }) as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Прочетох' }));
+    await waitFor(() => expect((screen.getByRole('button', { name: 'Следваща' }) as HTMLButtonElement).disabled).toBe(false));
+    expect(api.rpc).toHaveBeenCalledWith('academy_complete_lesson_block', expect.objectContaining({ p_module: moduleId, p_block_key: reading.key, p_payload: { acknowledged: true } }));
+    expect(screen.queryByText('Проверките на знанията в урока са преминати.')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Следваща' }));
+    expect(screen.getByText('Съществуваща задача.')).toBeTruthy();
+    expect(screen.getByText('0 / минимум 60 знака')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Предай отговора' })).toBeTruthy();
+    expect((screen.getByRole('button', { name: 'Следваща' }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
   it('resumes on the exact server-saved block', () => {
     const blocks = [createBlock('objective', 0), createBlock('reflection', 1), createBlock('summary', 2)];
     const progress = {
@@ -146,10 +169,10 @@ describe('updated Silk Road lessons', () => {
     expect(screen.getByRole('heading', { name: blocks[0].title })).toBeTruthy();
   });
 
-  it('saves a note even when the learner immediately opens the next step', async () => {
+  it.each(['s01-m01', 's02-m01', 's03-m01'])('saves a note in %s even when the learner immediately opens the next step', async (moduleId) => {
     const note = { ...createBlock('practical_response', 0), required: false, points: 0 };
     const next = createBlock('summary', 1);
-    render(<LessonEngineV2 moduleId="s01-m01" userId="student" lessonOverride={lesson([note, next])} />);
+    render(<LessonEngineV2 moduleId={moduleId} userId="student" lessonOverride={{ ...lesson([note, next]), moduleId }} />);
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Решението ми остава запазено' } });
     fireEvent.click(screen.getByRole('button', { name: /Стъпка 2:/ }));
     await waitFor(() => expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({ p_current_block: next.key, p_state: { [note.key]: { text: 'Решението ми остава запазено' } } })));

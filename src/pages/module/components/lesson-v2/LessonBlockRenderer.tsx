@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson-engine-v2';
+import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 
 interface Props {
   block: LessonBlockV2;
@@ -25,7 +26,7 @@ const obj = (value: unknown): JsonObject => value && typeof value === 'object' &
 const fieldClass = 'w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-500/20';
 const choiceClass = 'w-full rounded-xl border border-white/10 bg-white/[0.035] p-4 text-left text-sm text-zinc-200 transition hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/50';
 
-export default function LessonBlockRenderer({ block, lessonId, moduleId, initialState, completed, onStateChange, onSubmit }: Props) {
+export default function LessonBlockRenderer({ block, lessonId, initialState, completed, onStateChange, onSubmit }: Props) {
   const [state, setState] = useState<JsonObject>(initialState || {});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<BlockAttemptResult | null>(null);
@@ -61,20 +62,12 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const options = arr(block.content.options);
   const feedback = result?.feedback;
   const isCorrect = result?.correct;
-  const isSilkRoadFoundation = ['s01-m01', 's01-m02', 's01-m03', 's01-m04', 's01-m05', 's01-m06', 's01-m07', 's01-m08', 's01-m09', 's01-m10', 's01-m11'].includes(moduleId || '');
-  const stepLabel = !isSilkRoadFoundation ? 'Практическа стъпка'
-    : block.type === 'quiz' ? 'Проверка на знанията'
-    : block.type === 'objective' ? 'Цел на урока'
-    : block.type === 'practical_response' ? 'Твоите бележки'
-    : block.type === 'summary' ? 'Обобщение'
-    : block.key === 'practice_brief' ? 'Практическа задача'
-    : block.key === 'model_solution' ? 'Решен пример'
-    : 'Учебен материал';
+  const { label: stepLabel } = lessonBlockPresentation(block);
 
   const acknowledgement = (
     <button type="button" disabled={busy || completed} onClick={() => void submit({ acknowledged: true })}
       className="mt-6 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-default disabled:opacity-60">
-      {completed ? 'Завършено' : busy ? 'Запазване…' : isSilkRoadFoundation ? 'Прочетох' : 'Разбрах и мога да го приложа'}
+      {completed ? 'Прочетено' : busy ? 'Запазване…' : 'Прочетох'}
     </button>
   );
 
@@ -169,7 +162,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       case 'practical_response':
       case 'reflection':
       case 'homework':
-        return <form onSubmit={(event) => { event.preventDefault(); void submit({ text: s(state.text) }); }}><p className="mb-4 whitespace-pre-line leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><textarea value={s(state.text)} onChange={(event) => update({ text: event.target.value })} rows={6} className={fieldClass} placeholder={s(block.content.placeholder, 'Напиши конкретен отговор…')} /><div className="mt-2 flex justify-between text-xs text-zinc-500"><span>Автоматично запазване</span><span>{isSilkRoadFoundation && !block.required ? `${s(state.text).length} знака · по избор` : `${s(state.text).length} / минимум ${n(block.content.minLength, 20)} знака`}</span></div><button disabled={busy} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">{isSilkRoadFoundation && !block.required ? 'Запази бележките' : 'Предай отговора'}</button></form>;
+        return <form onSubmit={(event) => { event.preventDefault(); void submit({ text: s(state.text) }); }}><p className="mb-4 whitespace-pre-line leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><textarea value={s(state.text)} onChange={(event) => update({ text: event.target.value })} rows={6} className={fieldClass} placeholder={s(block.content.placeholder, 'Напиши конкретен отговор…')} /><div className="mt-2 flex flex-wrap justify-between gap-x-4 gap-y-1 text-xs text-zinc-500"><span>Автоматично запазване</span><span>{!block.required ? `${s(state.text).length} знака · по избор` : `${s(state.text).length} / минимум ${n(block.content.minLength, 20)} знака`}</span></div><button disabled={busy} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">{!block.required ? 'Запази бележките' : 'Предай отговора'}</button></form>;
       case 'checklist': {
         const items = arr(block.content.items);
         const checked = strArr(state.checked);
@@ -223,8 +216,8 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
     return { tone: 'border-sky-500/30 bg-sky-500/10 text-sky-100', icon: 'ri-save-3-line', title: 'Запазено' };
   }, [isCorrect, result]);
 
-  return <section aria-labelledby={`block-${block.key}`} className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#15171c] to-[#101216] p-5 shadow-2xl shadow-black/20 sm:p-7 md:p-9">
-    <header className="mb-7 flex items-start justify-between gap-4"><div><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">{stepLabel}</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div>{(!isSilkRoadFoundation || block.points > 0) && <span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span>}</header>
+  return <section aria-labelledby={`block-${block.key}`} className="min-w-0 break-words rounded-3xl border border-white/10 bg-gradient-to-b from-[#15171c] to-[#101216] p-5 shadow-2xl shadow-black/20 sm:p-7 md:p-9">
+    <header className="mb-7 flex items-start justify-between gap-4"><div className="min-w-0"><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">{stepLabel}</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div>{block.points > 0 && <span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span>}</header>
     {renderBlock()}
     {error && <div role="alert" className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100"><i className="ri-error-warning-line mr-2" />{error}</div>}
     {statusMessage && <div role="status" aria-live="polite" className={`mt-5 rounded-xl border p-4 text-sm ${statusMessage.tone}`}><p className="font-semibold"><i className={`${statusMessage.icon} mr-2`} />{statusMessage.title}</p>{s(feedback?.explanation) && <p className="mt-2 leading-6 opacity-90">{s(feedback?.explanation)}</p>}{isCorrect === false && <button type="button" onClick={() => setResult(null)} className="mt-3 font-semibold underline underline-offset-4">Нов опит</button>}</div>}

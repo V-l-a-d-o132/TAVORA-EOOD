@@ -91,9 +91,9 @@ beforeEach(() => {
 afterEach(() => { cleanup(); document.body.style.overflow = ''; });
 
 describe('real academy lesson navigation', () => {
-  it('settles its progress updates and leaves the real lesson for the dashboard', async () => {
-    const page = setup();
-    await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m01', 0) });
+  it.each(['s01-m01', 's02-m01', 's03-m01'])('settles progress in %s and leaves the real lesson for the dashboard', async (moduleId) => {
+    const page = setup(`/module/${moduleId}`);
+    await screen.findByRole('heading', { level: 1, name: lessonTitle(moduleId, 0) });
     await act(async () => { await Promise.resolve(); });
     const settled = page.commits();
     await act(async () => { await Promise.resolve(); });
@@ -205,18 +205,18 @@ describe('real academy lesson navigation', () => {
     expect(document.body.style.overflow).toBe('');
   });
 
-  it('offers the next Silk Road module after all lessons in the current module are completed', async () => {
-    api.progress = findModule('s01-m10')!.mod.lessons.map(lesson => ({ lessonId: lesson.id, completed: true }));
-    setup('/module/s01-m10');
-    const link = await screen.findByRole('link', { name: /Следващ модул: The Revenue Blueprint/ });
-    expect(link.getAttribute('href')).toBe('/module/s01-m11');
+  it.each([['s01-m10', 's01-m11'], ['s02-m01', 's02-m02'], ['s03-m01', 's03-m02']])('offers the next module within the same course after completing %s', async (moduleId, nextModuleId) => {
+    api.progress = findModule(moduleId)!.mod.lessons.map(lesson => ({ lessonId: lesson.id, completed: true }));
+    setup(`/module/${moduleId}`);
+    const link = await screen.findByRole('link', { name: `Следващ модул: ${findModule(nextModuleId)!.mod.title}` });
+    expect(link.getAttribute('href')).toBe(`/module/${nextModuleId}`);
     fireEvent.click(link);
-    await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m11', 0) });
+    await screen.findByRole('heading', { level: 1, name: lessonTitle(nextModuleId, 0) });
   });
 
-  it('finishes Silk Road at the dashboard without sending the learner into a different paid program', async () => {
-    api.progress = findModule('s01-m11')!.mod.lessons.map(lesson => ({ lessonId: lesson.id, completed: true }));
-    setup('/module/s01-m11?lesson=3');
+  it.each(['s01-m11', 's02-m15', 's03-m20'])('finishes %s at the dashboard without sending the learner into a different paid program', async (moduleId) => {
+    api.progress = findModule(moduleId)!.mod.lessons.map(lesson => ({ lessonId: lesson.id, completed: true }));
+    setup(`/module/${moduleId}`);
     const link = await screen.findByRole('link', { name: 'Към таблото с напредъка' });
     expect(link.getAttribute('href')).toBe('/dashboard');
     expect(screen.queryByRole('link', { name: /Следващ модул/ })).toBeNull();
