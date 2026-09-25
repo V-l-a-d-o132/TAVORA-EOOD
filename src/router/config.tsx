@@ -74,6 +74,10 @@ const GorskiBorovinkiNomerEdnoPage = lazyWithReload(() => import("../pages/blog/
 const MarketingZaEcommercePlodovePage = lazyWithReload(() => import("../pages/blog/marketing-za-ecommerce-plodove-tarnovo/page"));
 const EcommerceSezonniProduktiPage = lazyWithReload(() => import("../pages/blog/ecommerce-sezonni-produkti-gorski-borovinki/page"));
 
+const LeskiKaruchkaNomerEdnoPage = lazyWithReload(() => import("../pages/blog/leski-karuchka-nomer-edno-google/page"));
+const MarketingLokalnaPlatformaPage = lazyWithReload(() => import("../pages/blog/marketing-lokalna-platforma-malki-gradove/page"));
+const OptimiziranSaitLokalnaUslugaPage = lazyWithReload(() => import("../pages/blog/optimiziran-sait-lokalna-usluga-leski-karuchka/page"));
+
 const ModulePage = lazyWithReload(() => import("../pages/module/page"));
 const DashboardPage = lazyWithReload(() => import("../pages/dashboard/page"));
 const CheckoutAkademiyaPage = lazyWithReload(() => import("../pages/checkout-akademiya/page"));
@@ -377,6 +381,18 @@ const routes: RouteObject[] = [
   {
     path: "/blog/ecommerce-sezonni-produkti-gorski-borovinki",
     element: <EcommerceSezonniProduktiPage />,
+  },
+  {
+    path: "/blog/leski-karuchka-nomer-edno-google",
+    element: <LeskiKaruchkaNomerEdnoPage />,
+  },
+  {
+    path: "/blog/marketing-lokalna-platforma-malki-gradove",
+    element: <MarketingLokalnaPlatformaPage />,
+  },
+  {
+    path: "/blog/optimiziran-sait-lokalna-usluga-leski-karuchka",
+    element: <OptimiziranSaitLokalnaUslugaPage />,
   },
   {
     path: "*",
