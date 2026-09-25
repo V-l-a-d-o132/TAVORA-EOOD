@@ -61,7 +61,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const options = arr(block.content.options);
   const feedback = result?.feedback;
   const isCorrect = result?.correct;
-  const isSilkRoadFoundation = ['s01-m01', 's01-m02', 's01-m03', 's01-m04', 's01-m05', 's01-m06', 's01-m07', 's01-m08'].includes(moduleId || '');
+  const isSilkRoadFoundation = ['s01-m01', 's01-m02', 's01-m03', 's01-m04', 's01-m05', 's01-m06', 's01-m07', 's01-m08', 's01-m09', 's01-m10', 's01-m11'].includes(moduleId || '');
   const stepLabel = !isSilkRoadFoundation ? 'Практическа стъпка'
     : block.type === 'quiz' ? 'Проверка на знанията'
     : block.type === 'objective' ? 'Цел на урока'
@@ -74,14 +74,14 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const acknowledgement = (
     <button type="button" disabled={busy || completed} onClick={() => void submit({ acknowledged: true })}
       className="mt-6 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-default disabled:opacity-60">
-      {completed ? 'Завършено' : busy ? 'Запазване…' : 'Разбрах и мога да го приложа'}
+      {completed ? 'Завършено' : busy ? 'Запазване…' : isSilkRoadFoundation ? 'Прочетох' : 'Разбрах и мога да го приложа'}
     </button>
   );
 
   const renderBlock = () => {
     switch (block.type) {
       case 'objective':
-        return <><p className="text-xl leading-relaxed text-white">{body || s(block.content.objective)}</p>{acknowledgement}</>;
+        return <><p className="whitespace-pre-line text-xl leading-relaxed text-white">{body || s(block.content.objective)}</p>{acknowledgement}</>;
       case 'hook':
         return <><blockquote className="border-l-4 border-red-500 pl-5 text-lg leading-relaxed text-zinc-200">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
@@ -169,7 +169,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       case 'practical_response':
       case 'reflection':
       case 'homework':
-        return <form onSubmit={(event) => { event.preventDefault(); void submit({ text: s(state.text) }); }}><p className="mb-4 whitespace-pre-line leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><textarea value={s(state.text)} onChange={(event) => update({ text: event.target.value })} rows={6} className={fieldClass} placeholder={s(block.content.placeholder, 'Напиши конкретен отговор…')} /><div className="mt-2 flex justify-between text-xs text-zinc-500"><span>Автоматично запазване</span><span>{s(state.text).length} / минимум {n(block.content.minLength, 20)} знака</span></div><button disabled={busy} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Предай отговора</button></form>;
+        return <form onSubmit={(event) => { event.preventDefault(); void submit({ text: s(state.text) }); }}><p className="mb-4 whitespace-pre-line leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><textarea value={s(state.text)} onChange={(event) => update({ text: event.target.value })} rows={6} className={fieldClass} placeholder={s(block.content.placeholder, 'Напиши конкретен отговор…')} /><div className="mt-2 flex justify-between text-xs text-zinc-500"><span>Автоматично запазване</span><span>{isSilkRoadFoundation && !block.required ? `${s(state.text).length} знака · по избор` : `${s(state.text).length} / минимум ${n(block.content.minLength, 20)} знака`}</span></div><button disabled={busy} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">{isSilkRoadFoundation && !block.required ? 'Запази бележките' : 'Предай отговора'}</button></form>;
       case 'checklist': {
         const items = arr(block.content.items);
         const checked = strArr(state.checked);

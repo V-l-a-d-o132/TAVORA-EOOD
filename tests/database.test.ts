@@ -289,6 +289,31 @@ describe("Lesson Engine V2 migration and publication", () => {
   });
 });
 
+describe("Silk Road current-edition reporting", () => {
+  it("excludes completion from an older version without deleting its history", async () => {
+    await actor("authenticated", A);
+    const module = (await db.query<{ result: Array<{ lessonId: string; completed: boolean; xp: number }> }>("SELECT academy_get_module_progress('s01-m01') result")).rows[0].result;
+    expect(module.find((row) => row.lessonId === "l01-01")).toMatchObject({ completed: false, xp: 0 });
+    const dashboard = (await db.query<{ result: Array<{ lesson_id: string; completed: boolean; xp: number }> }>("SELECT academy_get_silk_road_progress() result")).rows[0].result;
+    expect(dashboard.find((row) => row.lesson_id === "l01-01")).toMatchObject({ completed: false, xp: 0 });
+    const updated = (await db.query<{ lesson: { versionChanged: boolean; progress: unknown } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
+    expect(updated.versionChanged).toBe(true);
+    expect(updated.progress).toBeNull();
+    await actor();
+    const history = await scalar("SELECT p.completed_at IS NOT NULL completed, p.xp FROM academy_lesson_progress p JOIN academy_lessons l ON l.id=p.academy_lesson_id WHERE p.user_id='00000000-0000-4000-8000-000000000001' AND l.module_id='s01-m01' AND l.lesson_id='l01-01'");
+    expect(history).toEqual({ completed: true, xp: 75 });
+  });
+
+  it("requires authentication and excludes other users and locked modules", async () => {
+    await actor("anon");
+    await expect(db.query("SELECT academy_get_silk_road_progress()")).rejects.toThrow();
+    await actor("authenticated", B);
+    const rows = (await db.query<{ result: Array<{ module_id: string; completed: boolean; xp: number }> }>("SELECT academy_get_silk_road_progress() result")).rows[0].result;
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every((row) => row.module_id === "s01-m01" && !row.completed && row.xp === 0)).toBe(true);
+  });
+});
+
 describe("transactional payment ledger", () => {
   it("unlocks exact modules and repeated events create one purchase/outbox pair", async () => {
     await record("one");

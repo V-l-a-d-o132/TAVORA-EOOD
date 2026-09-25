@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 const api = vi.hoisted(() => ({
   rpc: vi.fn(),
@@ -99,8 +99,10 @@ describe('Lesson Engine V2 learning flow', () => {
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Достатъчно конкретен отговор' } });
     await vi.advanceTimersByTimeAsync(700);
     expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({ p_current_block: first.key }));
-    fireEvent.click(screen.getByRole('button', { name: 'Предай отговора' }));
-    await vi.runAllTimersAsync();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Предай отговора' }));
+      await vi.runAllTimersAsync();
+    });
     fireEvent.keyDown(window, { key: 'ArrowRight', altKey: true });
     expect(screen.getByRole('heading', { name: second.title })).toBeTruthy();
   });
@@ -128,6 +130,47 @@ describe('Lesson Engine V2 learning flow', () => {
   it('uses a controlled preparing state when published content is missing', () => {
     render(<LessonEngineV2 moduleId="s01-m01" lessonId="missing" lessonOverride={null} />);
     expect(screen.getByText('Урокът се подготвя')).toBeTruthy();
-    expect(screen.getByText(/Няма да ти показваме измислен/)).toBeTruthy();
+    expect(screen.getByText(/Можеш да продължиш с друг урок/)).toBeTruthy();
+  });
+});
+
+
+describe('updated Silk Road lessons', () => {
+  it('does not reuse answers, completion or XP from an older edition', () => {
+    const blocks = [createBlock('objective', 0), createBlock('quiz', 1)];
+    const previous = { currentBlockKey: blocks[1].key, blockState: {}, completedBlockKeys: blocks.map((b) => b.key), xp: 20, scorePercent: 100, masteryStatus: 'mastered' as const, completedAt: '2026-09-20', lastActivityAt: null };
+    render(<LessonEngineV2 moduleId="s01-m01" lessonOverride={{ ...lesson(blocks, previous), versionChanged: true }} />);
+    expect(screen.getByText(/Урокът е обновен/)).toBeTruthy();
+    expect(screen.getByText('0% · 0/2 задължителни стъпки')).toBeTruthy();
+    expect(screen.getByText('0 XP')).toBeTruthy();
+    expect(screen.getByRole('heading', { name: blocks[0].title })).toBeTruthy();
+  });
+
+  it('saves a note even when the learner immediately opens the next step', async () => {
+    const note = { ...createBlock('practical_response', 0), required: false, points: 0 };
+    const next = createBlock('summary', 1);
+    render(<LessonEngineV2 moduleId="s01-m01" userId="student" lessonOverride={lesson([note, next])} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Решението ми остава запазено' } });
+    fireEvent.click(screen.getByRole('button', { name: /Стъпка 2:/ }));
+    await waitFor(() => expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({ p_current_block: next.key, p_state: { [note.key]: { text: 'Решението ми остава запазено' } } })));
+  });
+
+  it('uses the same required-step denominator in the header and parent progress', () => {
+    const done = createBlock('objective', 0);
+    const note = { ...createBlock('practical_response', 1), required: false, points: 0 };
+    const progress = { currentBlockKey: done.key, blockState: {}, completedBlockKeys: [done.key, note.key], xp: 5, scorePercent: null, masteryStatus: 'learning' as const, completedAt: '2026-09-20', lastActivityAt: null };
+    const report = vi.fn();
+    render(<LessonEngineV2 moduleId="s01-m01" lessonOverride={lesson([done, note], progress)} onSlideProgress={report} />);
+    expect(screen.getByText('100% · 1/1 задължителни стъпки')).toBeTruthy();
+    expect(report).toHaveBeenLastCalledWith(1, 1);
+  });
+
+  it('shows optional notes and hides zero XP in module 11', () => {
+    const note = { ...createBlock('practical_response', 0), required: false, points: 0 };
+    render(<LessonBlockRenderer block={note} moduleId="s01-m11" lessonId="l11-04" completed={false} onStateChange={vi.fn()} onSubmit={vi.fn(async () => result)} />);
+    expect(screen.getByRole('button', { name: 'Запази бележките' })).toBeTruthy();
+    expect(screen.getByText('0 знака · по избор')).toBeTruthy();
+    expect(screen.queryByText(/минимум/)).toBeNull();
+    expect(screen.queryByLabelText('0 XP')).toBeNull();
   });
 });

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { C } from '@/pages/module/constants';
 import type { LessonProgress } from '@/pages/module/types';
 
@@ -9,102 +11,69 @@ interface MobileLessonSheetProps {
   activeLessonIndex: number;
   completedCount: number;
   totalLessons: number;
-  hasPrevLesson: boolean;
-  hasNextLesson: boolean;
   safeProgress: (lessonId: string) => LessonProgress;
   onChangeLesson: (idx: number) => void;
-  onGoPrev: () => void;
-  onGoNext: () => void;
   onClose: () => void;
 }
 
 export default function MobileLessonSheet({
-  open,
-  sectionTitle,
-  modTitle,
-  lessons,
-  activeLessonIndex,
-  completedCount,
-  totalLessons,
-  hasPrevLesson,
-  hasNextLesson,
-  safeProgress,
-  onChangeLesson,
-  onGoPrev,
-  onGoNext,
-  onClose,
+  open, sectionTitle, modTitle, lessons, activeLessonIndex,
+  completedCount, totalLessons, safeProgress, onChangeLesson, onClose,
 }: MobileLessonSheetProps) {
-  if (!open) return null;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!open || !dialog) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialog.showModal();
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
 
+  if (!open) return null;
   return (
-    <div className="fixed inset-0 z-40 lg:hidden" onClick={onClose}>
-      <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }} />
-      <div
-        className="absolute bottom-0 left-0 right-0 max-h-[75vh] overflow-hidden flex flex-col"
-        style={{ background: C.surface, borderTop: `1px solid ${C.border}` }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="shrink-0 px-5 py-4 flex items-center justify-between" style={{ borderBottom: `1px solid ${C.border}` }}>
-          <div>
-            <p className="text-xs uppercase tracking-wider" style={{ color: C.textDim }}>{sectionTitle}</p>
-            <p className="text-sm font-semibold" style={{ color: C.text }}>{modTitle}</p>
+    <dialog ref={dialogRef} id="module-lessons-dialog" aria-labelledby="module-lessons-title" aria-modal="true"
+      onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
+      className="fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none flex-col justify-end border-0 bg-transparent p-0 text-white backdrop:bg-black/70 open:flex">
+      <div className="mx-auto flex max-h-[80dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-[#111] shadow-2xl">
+        <header className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 px-5 py-4">
+          <div className="min-w-0">
+            <p className="text-xs text-zinc-400">{sectionTitle}</p>
+            <h2 id="module-lessons-title" className="mt-1 text-base font-semibold">Уроци · {modTitle}</h2>
+            <p className="mt-1 text-xs text-zinc-400">{completedCount} от {totalLessons} завършени</p>
           </div>
-          <button
-            onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center transition-colors"
-            style={{ background: C.bg, border: `1px solid ${C.border}` }}
-          >
-            <i className="ri-close-line" style={{ color: C.textDim }} />
+          <button type="button" aria-label="Затвори уроците" autoFocus onClick={onClose} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/10 text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400">
+            <i className="ri-close-line text-xl" aria-hidden />
           </button>
-        </div>
-        <div className="flex-1 overflow-y-auto" style={{ borderTop: `1px solid ${C.border}` }}>
-          {lessons.map((lesson, idx) => {
-            const p = safeProgress(lesson.id);
-            const done = p.completed;
-            const isActive = idx === activeLessonIndex;
+        </header>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          {lessons.map((lesson, index) => {
+            const done = safeProgress(lesson.id).completed;
+            const isActive = index === activeLessonIndex;
             return (
-              <button
-                key={lesson.id}
-                onClick={() => onChangeLesson(idx)}
-                className="w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors"
-                style={{ background: isActive ? '#1a0505' : 'transparent', borderBottom: `1px solid ${C.border}` }}
-              >
-                <div
-                  className="w-9 h-9 flex items-center justify-center shrink-0 text-sm font-semibold"
-                  style={{
-                    background: done ? C.success : isActive ? C.accent : C.border,
-                    color: '#fff',
-                  }}
-                >
-                  {done ? <i className="ri-check-line" /> : <span>{idx + 1}</span>}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm truncate ${isActive ? 'font-medium' : ''}`} style={{ color: isActive ? C.accent : C.textMuted }}>{lesson.title}</p>
-                  <span className="text-xs" style={{ color: C.textDim }}>{lesson.duration}</span>
-                </div>
+              <button key={lesson.id} type="button" aria-current={isActive ? 'page' : undefined}
+                onClick={() => { onClose(); onChangeLesson(index); }}
+                className="flex w-full items-center gap-3 border-b border-white/10 px-5 py-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-red-400"
+                style={{ background: isActive ? C.accentDim : 'transparent' }}>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-sm font-semibold" style={{ background: done ? C.success : isActive ? C.accent : C.border }}>
+                  {done ? <i className="ri-check-line" aria-label="Завършен" /> : index + 1}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className={`block text-sm leading-5 ${isActive ? 'font-semibold text-white' : 'text-zinc-300'}`}>{lesson.title}</span>
+                  <span className="mt-1 block text-xs text-zinc-400">{lesson.duration}</span>
+                </span>
               </button>
             );
           })}
         </div>
-        <div className="shrink-0 p-3 flex gap-2" style={{ borderTop: `1px solid ${C.border}` }}>
-          <button
-            onClick={onGoPrev}
-            disabled={!hasPrevLesson}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-3 text-sm transition-colors disabled:opacity-30"
-            style={{ background: C.bg, border: `1px solid ${C.border}`, color: C.textMuted }}
-          >
-            <i className="ri-arrow-left-line" /> Предишен
-          </button>
-          <button
-            onClick={onGoNext}
-            disabled={!hasNextLesson}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-3 text-sm font-bold transition-colors disabled:opacity-30"
-            style={{ background: C.accent, color: '#fff' }}
-          >
-            Следващ <i className="ri-arrow-right-line" />
-          </button>
-        </div>
+        <nav aria-label="Изход от урока" className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 px-4 pt-3 pb-[calc(.75rem+env(safe-area-inset-bottom))]">
+          <Link to="/dashboard" onClick={onClose} className="rounded-xl border border-white/15 px-3 py-3 text-center text-sm font-medium hover:bg-white/5">Към таблото</Link>
+          <Link to="/kurs" onClick={onClose} className="rounded-xl border border-white/15 px-3 py-3 text-center text-sm font-medium hover:bg-white/5">Всички модули</Link>
+        </nav>
       </div>
-    </div>
+    </dialog>
   );
 }

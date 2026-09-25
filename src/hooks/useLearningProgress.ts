@@ -19,6 +19,7 @@ export interface FlatModule {
 
 export interface ModuleProgressData {
   completedLessons: number;
+  completedLessonIds?: string[];
   quizCount: number;
   points: number;
   lastActivity: string | null;
@@ -83,6 +84,7 @@ const ALL_LESSON_IDS = ALL_MODULES.flatMap((m) => m.lessonIds);
 function findResumeTarget(
   modProgressMap: Record<string, ModuleProgressData>,
   unlockedModules: string[],
+  hasFullAccess: boolean,
 ): ResumeTarget | null {
   for (const section of LEARNING_SECTIONS) {
     let sectionHasIncomplete = false;
@@ -90,7 +92,7 @@ function findResumeTarget(
 
     for (const mod of section.modules) {
       // Skip locked modules that the user hasn't unlocked
-      if (mod.isLocked && !unlockedModules.includes(mod.id)) continue;
+      if (mod.isLocked && !hasFullAccess && !unlockedModules.includes(mod.id)) continue;
 
       const prog = modProgressMap[mod.id];
       const isComplete = prog && prog.completedLessons >= mod.lessons.length;
@@ -98,7 +100,9 @@ function findResumeTarget(
       if (!isComplete) {
         sectionHasIncomplete = true;
         if (!firstIncompleteInSection) {
-          const firstIncomplete = prog ? prog.completedLessons : 0;
+          const firstIncomplete = prog?.completedLessonIds
+            ? mod.lessons.findIndex((lesson) => !prog.completedLessonIds!.includes(lesson.id))
+            : prog ? prog.completedLessons : 0;
           const lessonIdx = Math.min(firstIncomplete, mod.lessons.length - 1);
           const lesson = mod.lessons[lessonIdx];
           firstIncompleteInSection = {
@@ -147,7 +151,6 @@ export function useLearningProgress(userId: string | undefined) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [fetchKey, setFetchKey] = useState(0);
-  const cancelledRef = useRef(false);
   const isManualRefetch = useRef(false);
 
   const refetch = useCallback(() => {
@@ -165,11 +168,15 @@ export function useLearningProgress(userId: string | undefined) {
 
   useEffect(() => {
     if (!userId) {
+      setModProgressMap({});
+      setModuleProgressMap({});
+      setSectionProgressMap({});
+      setHomeworkCount(0);
       setIsLoading(false);
       return;
     }
 
-    cancelledRef.current = false;
+    let cancelled = false;
 
     /* ─── Cache check (skip on manual refetch) ─── */
     if (!isManualRefetch.current) {
@@ -202,7 +209,7 @@ export function useLearningProgress(userId: string | undefined) {
 
     (async () => {
       try {
-        const [progressRes, homeworkRes] = await Promise.all([
+        const [progressRes, homeworkRes, silkRoadRes] = await Promise.all([
           supabase
             .from('pdf_progress')
             .select('module_id, lesson_id, completed, quiz_score, updated_at')
@@ -212,17 +219,19 @@ export function useLearningProgress(userId: string | undefined) {
             .from('homework')
             .select('id', { count: 'exact' })
             .eq('user_id', userId),
+          supabase.rpc('academy_get_silk_road_progress'),
         ]);
+        if (progressRes.error || homeworkRes.error || silkRoadRes.error) throw new Error('Progress unavailable');
 
-        if (cancelledRef.current) return;
+        if (cancelled) return;
 
         /* ---- build progress maps ---- */
-        const modRawMap: Record<string, { completed: Set<string>; quizCount: number; dates: string[] }> = {};
+        const modRawMap: Record<string, { completed: Set<string>; quizCount: number; dates: string[]; xp: number }> = {};
         const modCompTotal: Record<string, { completed: number; total: number }> = {};
         const secCompTotal: Record<string, { completed: number; total: number }> = {};
 
         ALL_MODULES.forEach((m) => {
-          modRawMap[m.moduleId] = { completed: new Set(), quizCount: 0, dates: [] };
+          modRawMap[m.moduleId] = { completed: new Set(), quizCount: 0, dates: [], xp: 0 };
           modCompTotal[m.moduleId] = { completed: 0, total: m.totalLessons };
         });
 
@@ -233,11 +242,22 @@ export function useLearningProgress(userId: string | undefined) {
         if (progressRes.data) {
           progressRes.data.forEach((row) => {
             const entry = modRawMap[row.module_id];
-            if (!entry) return;
-            if (row.completed) entry.completed.add(row.lesson_id);
+            if (!entry || row.module_id >= 's01-m01' && row.module_id <= 's01-m11') return;
+            if (row.completed) { entry.completed.add(row.lesson_id); entry.xp += 10; }
             if (row.quiz_score !== null && row.quiz_score !== undefined) entry.quizCount += 1;
             if (row.updated_at) entry.dates.push(row.updated_at);
           });
+        }
+
+        if (Array.isArray(silkRoadRes.data)) {
+          for (const row of silkRoadRes.data) {
+            const entry = modRawMap[row.module_id];
+            if (!entry) continue;
+            if (row.completed) entry.completed.add(row.lesson_id);
+            if (typeof row.quiz_score === 'number') entry.quizCount += 1;
+            entry.xp += typeof row.xp === 'number' ? row.xp : 0;
+            if (row.updated_at) entry.dates.push(row.updated_at);
+          }
         }
 
         /* final maps */
@@ -246,8 +266,9 @@ export function useLearningProgress(userId: string | undefined) {
         Object.entries(modRawMap).forEach(([modId, data]) => {
           finalModProgress[modId] = {
             completedLessons: data.completed.size,
+            completedLessonIds: [...data.completed],
             quizCount: data.quizCount,
-            points: data.completed.size * 10,
+            points: data.xp,
             lastActivity:
               data.dates.length > 0
                 ? data.dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0]
@@ -268,7 +289,7 @@ export function useLearningProgress(userId: string | undefined) {
           }
         });
 
-        if (cancelledRef.current) return;
+        if (cancelled) return;
 
         const hwCount = homeworkRes.count ?? 0;
 
@@ -287,9 +308,9 @@ export function useLearningProgress(userId: string | undefined) {
         setSectionProgressMap(secCompTotal);
         setHomeworkCount(hwCount);
       } catch {
-        if (!cancelledRef.current) setError(true);
+        if (!cancelled) setError(true);
       } finally {
-        if (!cancelledRef.current) {
+        if (!cancelled) {
           setIsLoading(false);
           isManualRefetch.current = false;
         }
@@ -297,7 +318,7 @@ export function useLearningProgress(userId: string | undefined) {
     })();
 
     return () => {
-      cancelledRef.current = true;
+      cancelled = true;
     };
   }, [userId, fetchKey, applyCachedState]);
 
@@ -310,11 +331,11 @@ export function useLearningProgress(userId: string | undefined) {
     return prog && prog.completedLessons >= m.totalLessons;
   }).length;
   const totalQuizCount = Object.values(modProgressMap).reduce((s, v) => s + v.quizCount, 0);
-  const totalPoints = completedLessons * 10 + homeworkCount * 15;
+  const totalPoints = Object.values(modProgressMap).reduce((sum, item) => sum + item.points, 0) + homeworkCount * 15;
   const overallPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
   const allDates = Object.values(modProgressMap).flatMap((v) => (v.lastActivity ? [v.lastActivity] : []));
 
-  const resumeTarget = findResumeTarget(modProgressMap, unlockedModules);
+  const resumeTarget = findResumeTarget(modProgressMap, unlockedModules, hasFullAccess);
 
   return {
     modProgressMap,

@@ -67,6 +67,7 @@ export default function ModuleSidebar({
             return (
               <button
                 key={lesson.id}
+                aria-current={isActive ? 'page' : undefined}
                 onClick={() => onChangeLesson(idx)}
                 className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400"
                 style={{
@@ -86,7 +87,7 @@ export default function ModuleSidebar({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p
-                    className="truncate text-sm leading-5"
+                    className="text-sm leading-5"
                     style={{ color: isActive ? '#fff' : C.textMuted, fontWeight: isActive ? 600 : 400 }}
                   >
                     {lesson.title}
@@ -95,7 +96,7 @@ export default function ModuleSidebar({
                     {lesson.duration}
                     {slideInfo && slideInfo.total > 0 && !done && (
                       <span className="ml-2" style={{ color: C.textDim }}>
-                        · {slideInfo.seen}/{slideInfo.total} умения
+                        · {slideInfo.seen}/{slideInfo.total} стъпки
                       </span>
                     )}
                   </span>

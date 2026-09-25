@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { C } from '@/pages/module/constants';
 import type { LessonProgress, ModuleProgressMap } from '@/pages/module/types';
@@ -21,8 +21,6 @@ interface LessonContentViewerProps {
   hasFullAccess: boolean;
   isModuleUnlocked: boolean;
   hasNextLesson: boolean;
-  contentKey: number;
-  contentTransitioning: boolean;
   pdfLoading: boolean;
   pdfUrl: string | null;
   currentProg: LessonProgress;
@@ -63,8 +61,6 @@ export default function LessonContentViewer({
   hasFullAccess,
   isModuleUnlocked,
   hasNextLesson,
-  contentKey,
-  contentTransitioning,
   pdfLoading,
   pdfUrl,
   currentProg,
@@ -95,17 +91,17 @@ export default function LessonContentViewer({
     const p = progressMap?.[l.id];
     return p?.completed === true;
   }).length;
+  const reportSlideProgress = useCallback((seen: number, total: number) => {
+    onSlideProgress?.(activeLesson.id, seen, total);
+  }, [activeLesson.id, onSlideProgress]);
 
   return (
-    <main className="min-w-0 space-y-5">
-      <div
-        key={contentKey}
-        className="transition-all duration-300 ease-out"
-        style={{
-          opacity: contentTransitioning ? 0 : 1,
-          ...(contentTransitioning ? { transform: 'translateY(6px)' } : {}),
-        }}
-      >
+    <main className={`min-w-0 space-y-5 ${moduleId.startsWith('s01-') && allCompleted ? 'pb-28 md:pb-0' : ''}`}>
+      {moduleId.startsWith('s01-') && modHomeworkPrompt && <details className="rounded-2xl border border-white/10 bg-[#111] p-4 text-zinc-300">
+        <summary className="cursor-pointer text-sm font-semibold text-white">Практически резултат от модул {modNumber}</summary>
+        <p className="mt-3 whitespace-pre-line text-sm leading-7">{modHomeworkPrompt}</p>
+      </details>}
+      <div key={`${moduleId}:${activeLesson.id}`}>
         {/* Interactive lesson mode for all modules */}
         {(moduleId.startsWith('s01-') || moduleId.startsWith('s02-') || moduleId.startsWith('s03-')) ? (
           <div className="min-h-[480px]">
@@ -119,11 +115,7 @@ export default function LessonContentViewer({
               lockAfterComplete={moduleId === 's01-m01' && !user && activeLessonIndex === lessons.length - 1}
               isUnlocked={isModuleUnlocked}
               hasFullAccess={hasFullAccess}
-              onSlideProgress={(seen, total) => {
-                if (onSlideProgress && activeLesson?.id) {
-                  onSlideProgress(activeLesson.id, seen, total);
-                }
-              }}
+              onSlideProgress={reportSlideProgress}
               onTrustedProgress={onTrustedProgress}
             />
           </div>
@@ -316,6 +308,12 @@ export default function LessonContentViewer({
           </>
         )}
       </div>
+      {moduleId.startsWith('s01-') && allCompleted && <section aria-label="Модулът е преминат" className="rounded-2xl border border-emerald-500/25 bg-emerald-500/5 p-5 text-white">
+        <h2 className="text-lg font-semibold">Уроците в модула са преминати</h2>
+        <p className="mt-2 text-sm leading-6 text-zinc-300">Сравни практическата си работа с критериите и примерните решения. Запази готовите материали за общия проект.</p>
+        {nextModule?.id.startsWith('s01-') ? <Link to={`/module/${nextModule.id}`} className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold">Следващ модул: {nextModule.title}</Link>
+          : <Link to="/dashboard" className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold">Към таблото с напредъка</Link>}
+      </section>}
     </main>
   );
 }

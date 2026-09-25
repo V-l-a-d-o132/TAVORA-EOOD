@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import DashboardNav from '@/pages/dashboard/components/DashboardNav';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,8 +17,13 @@ import { dispatchLevelUp } from '@/components/feature/LevelUpToast';
 /* ─── Module Page (Orchestrator) ─── */
 export default function ModulePage() {
   const { moduleId } = useParams<{ moduleId: string }>();
+  return <ModuleView key={moduleId} moduleId={moduleId} />;
+}
+
+function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   const { user, hasFullAccess, unlockedModules, refreshProfile } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const found = useMemo(() => {
     if (!moduleId) return null;
@@ -27,13 +32,15 @@ export default function ModulePage() {
 
   const section = found?.section || null;
   const mod = found?.mod || null;
+  const lessonParam = searchParams.get('lesson');
+  const requestedLesson = lessonParam !== null && /^\d+$/.test(lessonParam) ? Number(lessonParam) : 0;
+  const activeLessonIndex = requestedLesson < (mod?.lessons.length || 0) ? requestedLesson : 0;
 
   /* ─── State ─── */
   const checkoutRequest = useRef(crypto.randomUUID());
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const [progressMap, setProgressMap] = useState<ModuleProgressMap>();
-  const [activeLessonIndex, setActiveLessonIndex] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
@@ -45,24 +52,13 @@ export default function ModulePage() {
 
   const [prefetchedQuestions, setPrefetchedQuestions] = useState<QuizQuestion[]>([]);
   const [prefetchLoading, setPrefetchLoading] = useState(false);
-  const [contentTransitioning, setContentTransitioning] = useState(false);
-  const [contentKey, setContentKey] = useState(0);
-
-  // Swipe-up to open mobile sheet
-  const touchStartYRef = useRef(0);
-  const touchStartTimeRef = useRef(0);
-
   // Resume + slide progress tracking
-  const [hasAutoResumed, setHasAutoResumed] = useState(false);
+  const hasAutoResumed = useRef(false);
   const [slideProgressMap, setSlideProgressMap] = useState<Record<string, { seen: number; total: number }>>();
 
   // Public Module 1 support
   const isModule1 = moduleId === 's01-m01';
   const [localCompletedLessons, setLocalCompletedLessons] = useState<string[]>([]);
-
-  // Module 1 Login Gate
-  const [showBreadcrumbDropdown, setShowBreadcrumbDropdown] = useState(false);
-  const breadcrumbRef = useRef<HTMLDivElement>(null);
 
   // Next module for completion banner
   const nextModule = useMemo(() => {
@@ -93,18 +89,6 @@ export default function ModulePage() {
     }
     previousLevelRef.current = currentLevel;
   }, [currentLevel, totalPoints]);
-
-  // Close breadcrumb dropdown on outside click
-  useEffect(() => {
-    if (!showBreadcrumbDropdown) return;
-    const handler = (e: MouseEvent) => {
-      if (breadcrumbRef.current && !breadcrumbRef.current.contains(e.target as Node)) {
-        setShowBreadcrumbDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [showBreadcrumbDropdown]);
 
   /* ─── Academy Pixel ViewContent ─── */
   useEffect(() => {
@@ -160,29 +144,22 @@ export default function ModulePage() {
 
   /* ─── Auto-resume to first incomplete lesson ─── */
   useEffect(() => {
-    if (!progressMap || !mod || !Array.isArray(mod.lessons) || hasAutoResumed) return;
-
-    // Check for ?lesson= param from resume navigation
-    const params = new URLSearchParams(window.location.search);
-    const lessonParam = params.get('lesson');
-    if (lessonParam !== null) {
-      const idx = parseInt(lessonParam, 10);
-      if (idx >= 0 && idx < mod.lessons.length) {
-        setActiveLessonIndex(idx);
-      }
-      setHasAutoResumed(true);
+    if (hasAutoResumed.current || !mod) return;
+    // An explicit link always wins, even before progress has loaded.
+    if (lessonParam !== null || !user) {
+      hasAutoResumed.current = true;
       return;
     }
-
+    if (!progressMap) return;
     const firstIncomplete = mod.lessons.findIndex((l) => {
       const p = progressMap[l.id];
       return !p || !p.completed;
     });
     if (firstIncomplete > 0 && firstIncomplete < mod.lessons.length) {
-      setActiveLessonIndex(firstIncomplete);
+      navigate(`/module/${moduleId}?lesson=${firstIncomplete}`, { replace: true });
     }
-    setHasAutoResumed(true);
-  }, [progressMap, mod, hasAutoResumed]);
+    hasAutoResumed.current = true;
+  }, [progressMap, mod, lessonParam, moduleId, navigate, user]);
 
   /* ─── Notes loading ─── */
   useEffect(() => {
@@ -206,13 +183,13 @@ export default function ModulePage() {
     return () => { active = false; };
   }, [moduleId, activePdfLesson, user?.id]);
 
-  const [serverAccess, setServerAccess] = useState<{ module: string; user: string; allowed: boolean } | null>(null);
+  const [serverAccess, setServerAccess] = useState<{ module: string; user: string; allowed: boolean; failed: boolean } | null>(null);
   useEffect(() => {
     if (!moduleId) return;
     let active = true;
     setServerAccess(null);
     void supabase.rpc('academy_has_module_access', { p_module: moduleId }).then(({ data, error }) => {
-      if (active) setServerAccess({ module: moduleId, user: user?.id || '', allowed: !error && data === true });
+      if (active) setServerAccess({ module: moduleId, user: user?.id || '', allowed: !error && data === true, failed: !!error });
     });
     return () => { active = false; };
   }, [moduleId, user?.id, hasFullAccess, unlockedModules]);
@@ -303,10 +280,13 @@ export default function ModulePage() {
   }, [user, mod, activeLessonIndex, progressMap, isModule1]);
 
   const changeLesson = useCallback((idx: number) => {
+    setMobileSidebarOpen(false);
+    if (!mod?.lessons[idx]) return;
+    hasAutoResumed.current = true;
     if (idx === activeLessonIndex) return;
 
     // Use React Router navigate instead of raw history.replaceState
-    navigate(`/module/${moduleId}?lesson=${idx}`, { replace: true });
+    navigate(`/module/${moduleId}?lesson=${idx}`);
 
     /* persist last-opened lesson before navigating away */
     if (user && mod && Array.isArray(mod.lessons) && mod.lessons[idx]) {
@@ -330,15 +310,8 @@ export default function ModulePage() {
         .then(() => {}, () => {});
     }
 
-    setContentTransitioning(true);
-    setTimeout(() => {
-      setActiveLessonIndex(idx);
-      setShowQuiz(false);
-      setMobileSidebarOpen(false);
-      setContentKey((k) => k + 1);
-      setContentTransitioning(false);
-    }, 200);
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { /* ignore */ }
+    setShowQuiz(false);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [activeLessonIndex, user, mod, section, moduleId, navigate]);
 
   const goNext = useCallback(() => {
@@ -357,7 +330,10 @@ export default function ModulePage() {
 
   /* ─── Slide progress handler ─── */
   const handleSlideProgress = useCallback((lessonId: string, seen: number, total: number) => {
-    setSlideProgressMap((prev) => ({ ...prev, [lessonId]: { seen, total } }));
+    setSlideProgressMap((prev) => {
+      if (prev?.[lessonId]?.seen === seen && prev[lessonId].total === total) return prev;
+      return { ...prev, [lessonId]: { seen, total } };
+    });
   }, []);
 
   const handleTrustedLessonProgress = useCallback((lessonId: string, progress: { completed: boolean; xp: number; scorePercent: number | null; masteryStatus: 'learning' | 'practicing' | 'mastered' }) => {
@@ -409,11 +385,6 @@ export default function ModulePage() {
     return { completed: false, pageNumber: 1, totalPages: 0, quizScore: null, quizTotal: null };
   }, [progressMap]);
 
-  const goToPlatform = useCallback(() => {
-    navigate('/kurs');
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [navigate]);
-
   if (!found || !mod || !section) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: C.bg }}>
@@ -423,6 +394,16 @@ export default function ModulePage() {
         </div>
       </div>
     );
+  }
+
+  if (!isModule1 && (!serverAccess || serverAccess.failed)) {
+    return <div className="min-h-screen" style={{ background: C.bg }}>
+      <DashboardNav />
+      <div className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center gap-4 p-6 text-center text-zinc-300">
+        <p role="status">{serverAccess?.failed ? 'Не успяхме да проверим достъпа ти. Опитай отново.' : 'Зареждане на модула…'}</p>
+        {serverAccess?.failed && <button type="button" onClick={handleRefreshAccess} className="rounded-xl border border-white/20 px-5 py-3">Опитай отново</button>}
+      </div>
+    </div>;
   }
 
   if (!isModuleUnlocked) {
@@ -485,119 +466,17 @@ export default function ModulePage() {
         activeLessonIndex={activeLessonIndex}
         completedCount={completedCount}
         totalLessons={lessons.length}
-        hasPrevLesson={hasPrevLesson}
-        hasNextLesson={hasNextLesson}
         safeProgress={safeProgress}
         onChangeLesson={changeLesson}
-        onGoPrev={goPrev}
-        onGoNext={goNext}
         onClose={() => setMobileSidebarOpen(false)}
       />
 
-      <div className="mx-auto max-w-[1520px] px-4 py-4 md:px-6 md:py-6 xl:px-8"
-        onTouchStart={(e) => {
-          touchStartYRef.current = e.touches[0].clientY;
-          touchStartTimeRef.current = Date.now();
-        }}
-        onTouchEnd={(e) => {
-          const diffY = touchStartYRef.current - e.changedTouches[0].clientY;
-          const elapsed = Date.now() - touchStartTimeRef.current;
-          // Swipe UP (diffY > 0, meaning finger moved up) with quick gesture
-          if (diffY > 100 && elapsed < 300 && !mobileSidebarOpen) {
-            const scrollable = (e.target as HTMLElement)?.closest('.overflow-y-auto') as HTMLElement | null;
-            const atTop = !scrollable || scrollable.scrollTop <= 5;
-            if (atTop) {
-              setMobileSidebarOpen(true);
-            }
-          }
-        }}
-      >
-        {/* Breadcrumb — with dropdown for quick lesson switching */}
+      <div className="mx-auto max-w-[1520px] px-4 py-4 md:px-6 md:py-6 xl:px-8">
         <div className="flex items-center justify-between gap-3 mb-3 md:mb-5">
-          <nav className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm min-w-0" style={{ color: C.textDim }}>
-            <button
-              onClick={goToPlatform}
-              className="hover:text-white transition-colors flex items-center gap-1 shrink-0 whitespace-nowrap cursor-pointer"
-              style={{ color: C.textDim, background: 'none', border: 'none' }}
-            >
-              <i className="ri-home-line text-sm md:text-base" />
-              <span className="hidden sm:inline" style={{ color: C.textMuted }}>Платформа</span>
-            </button>
-            <i className="ri-arrow-right-s-line shrink-0 text-xs" />
-
-            {/* Lesson selector dropdown */}
-            <div className="relative" ref={breadcrumbRef}>
-              <button
-                onClick={() => setShowBreadcrumbDropdown(!showBreadcrumbDropdown)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs md:text-sm font-medium transition-colors whitespace-nowrap cursor-pointer"
-                style={{
-                  background: showBreadcrumbDropdown ? C.accentDim : 'transparent',
-                  border: `1px solid ${showBreadcrumbDropdown ? C.accent : 'transparent'}`,
-                  color: C.textMuted,
-                }}
-              >
-                <span className="truncate max-w-[120px] md:max-w-[180px]">{section.title} · М{mod.number}</span>
-                <i className="ri-arrow-down-s-line text-sm shrink-0" style={{ color: C.textDim }} />
-              </button>
-
-              {showBreadcrumbDropdown && (
-                <div
-                  className="absolute top-full left-0 mt-1 z-50 w-72 max-h-[360px] overflow-y-auto shadow-lg"
-                  style={{ background: C.surface, border: `1px solid ${C.border}` }}
-                >
-                  <div className="px-4 py-2.5" style={{ borderBottom: `1px solid ${C.border}` }}>
-                    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: C.textDim }}>{section.title}</p>
-                    <p className="text-sm font-semibold mt-0.5" style={{ color: C.text }}>{mod.title}</p>
-                  </div>
-                  {lessons.map((lesson, idx) => {
-                    const isActive = idx === activeLessonIndex;
-                    const p = safeProgress(lesson.id);
-                    const done = p.completed;
-                    return (
-                      <button
-                        key={lesson.id}
-                        onClick={() => {
-                          changeLesson(idx);
-                          setShowBreadcrumbDropdown(false);
-                        }}
-                        className="w-full text-left px-4 py-3 flex items-center gap-3 transition-colors cursor-pointer"
-                        style={{
-                          background: isActive ? '#1a0505' : 'transparent',
-                          borderLeft: isActive ? `3px solid ${C.accent}` : '3px solid transparent',
-                          borderBottom: `1px solid ${C.border}`,
-                          opacity: isActive ? 1 : 1,
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isActive) e.currentTarget.style.background = '#141414';
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isActive) e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <div
-                          className="w-7 h-7 flex items-center justify-center shrink-0 text-xs font-semibold"
-                          style={{
-                            background: done ? C.success : isActive ? C.accent : C.border,
-                            color: '#fff',
-                          }}
-                        >
-                          {done ? <i className="ri-check-line" /> : <span>{idx + 1}</span>}
-                        </div>
-                        <div className="min-w-0">
-                          <p className={`text-sm truncate ${isActive ? 'font-medium' : ''}`} style={{ color: isActive ? C.accent : C.textMuted }}>
-                            {lesson.title}
-                          </p>
-                          <span className="text-xs" style={{ color: C.textDim }}>{lesson.duration}</span>
-                        </div>
-                        {isActive && (
-                          <i className="ri-check-line shrink-0 ml-auto" style={{ color: C.accent, fontSize: '10px' }} />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+          <nav aria-label="Място в курса" className="flex min-w-0 items-center gap-2 text-xs md:text-sm" style={{ color: C.textMuted }}>
+            <Link to="/kurs" className="shrink-0 py-2 hover:text-white">Всички модули</Link>
+            <i className="ri-arrow-right-s-line shrink-0" aria-hidden />
+            <span className="truncate">{mod.title} · М{mod.number}</span>
           </nav>
           <div className="flex items-center gap-2 shrink-0">
             <span className="flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1.5 text-xs md:text-sm font-medium whitespace-nowrap" style={{ background: C.surface, border: `1px solid ${C.border}`, color: C.text }}>
@@ -624,6 +503,11 @@ export default function ModulePage() {
 
         {/* Mobile Lesson Toggle — compact with mini-progress */}
         <button
+          type="button"
+          aria-label="Уроци в модула"
+          aria-haspopup="dialog"
+          aria-expanded={mobileSidebarOpen}
+          aria-controls="module-lessons-dialog"
           onClick={() => setMobileSidebarOpen(true)}
           className="lg:hidden w-full flex items-center justify-between px-3 py-2.5 mb-3 text-left cursor-pointer"
           style={{ background: C.surface, border: `1px solid ${C.border}` }}
@@ -636,7 +520,8 @@ export default function ModulePage() {
               {isLessonCompleted ? <i className="ri-check-line" /> : <span>{activeLessonIndex + 1}</span>}
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium truncate" style={{ color: C.text }}>{activeLesson.title}</p>
+              <p className="text-sm font-medium" style={{ color: C.text }}>Уроци в модула</p>
+              <p className="text-xs leading-5" style={{ color: C.textMuted }}>{activeLesson.title}</p>
               <p className="text-[10px]" style={{ color: C.textDim }}>{activeLesson.duration} · {completedCount}/{lessons.length} завършени</p>
             </div>
           </div>
@@ -690,8 +575,6 @@ export default function ModulePage() {
             hasFullAccess={hasFullAccess}
             isModuleUnlocked={isModuleUnlocked}
             hasNextLesson={hasNextLesson}
-            contentKey={contentKey}
-            contentTransitioning={contentTransitioning}
             pdfLoading={pdfLoading}
             pdfUrl={pdfUrl}
             currentProg={currentProg}

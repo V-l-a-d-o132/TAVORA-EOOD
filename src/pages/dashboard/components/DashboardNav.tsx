@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -7,178 +7,72 @@ export default function DashboardNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
-
+  const profileRef = useRef<HTMLDivElement>(null);
+  const profileButton = useRef<HTMLButtonElement>(null);
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Колега';
-  const initials = displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+  const initials = displayName.split(' ').map((name: string) => name[0]).join('').toUpperCase().slice(0, 2);
 
-  const isOnKurs = location.pathname === '/kurs';
-  const isOnDashboard = location.pathname === '/dashboard';
-  const isOnModule = location.pathname.startsWith('/module/');
+  useEffect(() => { setDropdownOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (!profileRef.current?.contains(event.target as Node)) setDropdownOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setDropdownOpen(false);
+        profileButton.current?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOutside);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [dropdownOpen]);
 
-  const navLinks = [
-    { to: '/dashboard', label: 'Прогрес', icon: 'ri-dashboard-line', active: isOnDashboard },
-    { to: '/kurs', label: 'Модули', icon: 'ri-stack-line', active: isOnKurs || isOnModule },
-  ];
-
-  const handleNavClick = () => {
+  const leavePage = () => {
+    setDropdownOpen(false);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
+  const navLinks = [
+    { to: '/dashboard', label: 'Табло', icon: 'ri-dashboard-line', active: location.pathname === '/dashboard' },
+    { to: '/kurs', label: 'Модули', icon: 'ri-stack-line', active: location.pathname === '/kurs' },
+  ];
 
   return (
-    <nav className="w-full sticky top-0 z-30" style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}>
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between h-16">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-8 h-8 flex items-center justify-center" style={{ background: '#e53e3e' }}>
-            <span className="text-white text-xs font-bold tracking-wider">AI</span>
-          </div>
-          <span className="text-sm font-bold tracking-wide hidden sm:block" style={{ color: '#fff' }}>
-            Мастърклас
-          </span>
+    <nav aria-label="Навигация на академията" className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#0a0a0a]">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-2 px-4 md:px-8">
+        <Link to="/" aria-label="Начална страница" onClick={leavePage} className="flex shrink-0 items-center gap-2.5">
+          <span className="grid h-8 w-8 place-items-center bg-red-600 text-xs font-bold text-white">AI</span>
+          <span className="hidden text-sm font-bold text-white sm:block">Мастърклас</span>
         </Link>
-
-        {/* Desktop Center Nav */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="flex items-center gap-1">
           {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              onClick={handleNavClick}
-              className="px-4 py-2 text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
-              style={{
-                color: link.active ? '#fff' : '#888',
-                background: link.active ? '#1a1a1a' : 'transparent',
-              }}
-              onMouseEnter={(e) => {
-                if (!link.active) {
-                  e.currentTarget.style.background = '#111';
-                  e.currentTarget.style.color = '#fff';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!link.active) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#888';
-                }
-              }}
-            >
-              <i className={`${link.icon} mr-1.5`} />
-              {link.label}
+            <NavLink key={link.to} to={link.to} onClick={leavePage}
+              className={`flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400 sm:px-4 ${link.active ? 'bg-white/10 text-white' : 'text-zinc-300 hover:bg-white/5 hover:text-white'}`}>
+              <i className={`${link.icon} hidden sm:inline`} aria-hidden />{link.label}
             </NavLink>
           ))}
         </div>
-
-        {/* Right - User + Mobile Menu Toggle */}
-        <div className="flex items-center gap-2">
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden w-10 h-10 flex items-center justify-center transition-colors cursor-pointer"
-            style={{ color: '#888' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#888'; }}
-          >
-            <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-lg`} />
+        {user ? <div ref={profileRef} className="relative shrink-0">
+          <button ref={profileButton} type="button" aria-label="Меню на профила" aria-expanded={dropdownOpen} aria-controls="academy-profile-menu"
+            onClick={() => setDropdownOpen((open) => !open)} className="flex min-h-11 items-center gap-2 rounded-lg p-1.5 text-white hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/10 text-xs font-bold">{initials}</span>
+            <span className="hidden max-w-[120px] truncate text-sm md:block">{displayName}</span>
           </button>
-
-          {/* User dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 px-2 py-1.5 transition-colors cursor-pointer"
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#111'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-            >
-              <div className="w-9 h-9 flex items-center justify-center" style={{ background: '#1a1a1a' }}>
-                <span className="text-white text-xs font-bold">{initials}</span>
-              </div>
-              <span className="text-sm hidden sm:block max-w-[120px] truncate" style={{ color: '#fff' }}>
-                {displayName}
-              </span>
-              <i className="ri-arrow-down-s-line hidden sm:block" style={{ color: '#666' }} />
+          {dropdownOpen && <div id="academy-profile-menu" className="absolute right-0 top-full mt-2 w-60 rounded-xl border border-white/10 bg-[#111] p-2 shadow-2xl">
+            <div className="border-b border-white/10 px-3 py-3">
+              <p className="truncate text-sm font-medium text-white">{displayName}</p>
+              <p className="mt-1 truncate text-xs text-zinc-400">{user.email}</p>
+            </div>
+            <button type="button" onClick={async () => { setDropdownOpen(false); await signOut(); navigate('/'); }} className="mt-1 flex min-h-11 w-full items-center gap-2 rounded-lg px-3 text-left text-sm text-zinc-300 hover:bg-white/5 hover:text-white">
+              <i className="ri-logout-box-line" aria-hidden />Излез от акаунта
             </button>
-
-            {dropdownOpen && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setDropdownOpen(false)} />
-                <div className="absolute right-0 top-full mt-1 w-56 z-20 overflow-hidden" style={{ background: '#111', border: '1px solid #1a1a1a' }}>
-                  <div className="px-4 py-3" style={{ borderBottom: '1px solid #1a1a1a' }}>
-                    <p className="text-sm font-medium truncate" style={{ color: '#fff' }}>{displayName}</p>
-                    <p className="text-xs truncate mt-0.5" style={{ color: '#666' }}>{user?.email}</p>
-                  </div>
-                  <NavLink
-                    to="/dashboard"
-                    onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); handleNavClick(); }}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors md:hidden cursor-pointer"
-                    style={{ color: '#888', background: 'none', border: 'none' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#fff'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#888'; }}
-                  >
-                    <i className="ri-dashboard-line text-base" />
-                    Прогрес
-                  </NavLink>
-                  <NavLink
-                    to="/kurs"
-                    onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); handleNavClick(); }}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors md:hidden cursor-pointer"
-                    style={{ color: '#888', background: 'none', border: 'none' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#fff'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#888'; }}
-                  >
-                    <i className="ri-stack-line text-base" />
-                    Модули
-                  </NavLink>
-                  <button
-                    onClick={handleSignOut}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors cursor-pointer"
-                    style={{ color: '#888', background: 'none', border: 'none' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#e53e3e'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#888'; }}
-                  >
-                    <i className="ri-logout-box-line text-base" />
-                    Излез от акаунта
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+          </div>}
+        </div> : <Link to="/login" onClick={leavePage} className="grid min-h-11 place-items-center rounded-lg px-2 text-sm text-zinc-300 hover:text-white">Вход</Link>}
       </div>
-
-      {/* Mobile Menu Panel */}
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-16 z-20" style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}>
-          <div className="px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                onClick={() => { setMobileMenuOpen(false); handleNavClick(); }}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors cursor-pointer"
-                style={{ color: link.active ? '#fff' : '#888', background: link.active ? '#111' : 'transparent', border: 'none' }}
-              >
-                <i className={`${link.icon} text-base`} />
-                {link.label}
-              </NavLink>
-            ))}
-            <div className="my-2" style={{ borderTop: '1px solid #1a1a1a' }} />
-            <button
-              onClick={() => { setMobileMenuOpen(false); handleSignOut(); }}
-              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors cursor-pointer"
-              style={{ color: '#888', background: 'none', border: 'none' }}
-            >
-              <i className="ri-logout-box-line text-base" />
-              Излез от акаунта
-            </button>
-          </div>
-        </div>
-      )}
     </nav>
   );
 }

@@ -133,7 +133,7 @@ function normalizeLesson(value: unknown): LessonV2 | null {
   return {
     ...lesson,
     blocks: Array.isArray(lesson.blocks) ? lesson.blocks : [],
-    progress: normalizeProgress(lesson.progress),
+    progress: lesson.versionChanged ? null : normalizeProgress(lesson.progress),
     validation: lesson.validation || { errors: [], warnings: [] },
   };
 }
