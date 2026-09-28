@@ -174,7 +174,8 @@ export default function LessonEngineV2({
       <div className="mt-6"><div className="mb-2 flex items-center justify-between text-xs text-zinc-300"><span>Напредък в урока</span><span className="font-semibold text-white">{progressPercent}% · {requiredCompleted}/{requiredBlocks.length} задължителни стъпки</span></div><div className="h-2.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 transition-[width] motion-reduce:transition-none" style={{ width: `${progressPercent}%` }} /></div></div>
     </header>
 
-    {lesson.versionChanged && <p role="status" className="mb-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-4 text-sm leading-6 text-amber-100">Урокът е обновен. Премини през новата версия, за да запазиш напредъка си по нея.</p>}
+    {lesson.versionChanged && <p role="status" className="mb-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-4 text-sm leading-6 text-amber-100">Урокът е обновен. Започни новите задачи; предишният ти резултат е запазен.</p>}
+    {lesson.priorProgress && <p className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/5 p-4 text-sm leading-6 text-emerald-100">Предишен резултат: версия {lesson.priorProgress.version ?? 'по-ранна'}, {lesson.priorProgress.completedBlocks} завършени стъпки, {lesson.priorProgress.xp} XP{lesson.priorProgress.completedAt ? ' · завършен урок' : ''}. Резултатът е запазен в историята.</p>}
     {saveStatus === 'error' && <button type="button" onClick={() => void draftQueue.current?.flush()} className="mb-5 rounded-xl border border-red-400/30 p-3 text-sm text-red-200">Опитай отново да запазиш бележките</button>}
 
     {completed.size > 0 && <details className="mb-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4 sm:p-5">

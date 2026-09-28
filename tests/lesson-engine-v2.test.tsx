@@ -79,6 +79,31 @@ describe('Lesson Engine V2 block registry', () => {
   });
 });
 
+describe('graded choice retries', () => {
+  it.each(['quiz', 'scenario'] as const)('keeps %s available after a wrong answer and accepts a correction', async (type) => {
+    const block = {
+      ...createBlock(type, 0),
+      content: {
+        question: 'Кой ход можеш да провериш?',
+        prompt: 'Кой ход можеш да провериш?',
+        options: [{ id: 'a', label: 'Провери с тест' }, { id: 'b', label: 'Предположи резултата' }],
+      },
+    };
+    const submit = vi.fn(async (payload: JsonObject) => {
+      const chosen = type === 'quiz' ? payload.answer : payload.selected;
+      const correct = chosen === 'a';
+      return { ...result, correct, score: correct ? 2 : 0, maxScore: 2, feedback: { complete: correct, explanation: correct ? 'Провери и запиши резултата.' : 'Направи проверка и опитай пак.' } };
+    });
+    render(<LessonBlockRenderer block={block} lessonId="lesson" completed={false} onStateChange={vi.fn()} onSubmit={submit} />);
+    fireEvent.click(screen.getByRole('button', { name: /Предположи резултата/ }));
+    await waitFor(() => expect(submit).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect((screen.getByRole('button', { name: /Провери с тест/ }) as HTMLButtonElement).disabled).toBe(false));
+    fireEvent.click(screen.getByRole('button', { name: /Провери с тест/ }));
+    await waitFor(() => expect(submit).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect((screen.getByRole('button', { name: /Провери с тест/ }) as HTMLButtonElement).disabled).toBe(true));
+  });
+});
+
 describe('Lesson Engine V2 learning flow', () => {
   it.each(['s01-m01', 's02-m01', 's03-m01'])('records reading and advances without claiming mastery in %s', async (moduleId) => {
     const reading = { ...createBlock('concept', 0), points: 0, content: { body: 'Съществуващ учебен текст.' } };
@@ -162,8 +187,9 @@ describe('updated Silk Road lessons', () => {
   it('does not reuse answers, completion or XP from an older edition', () => {
     const blocks = [createBlock('objective', 0), createBlock('quiz', 1)];
     const previous = { currentBlockKey: blocks[1].key, blockState: {}, completedBlockKeys: blocks.map((b) => b.key), xp: 20, scorePercent: 100, masteryStatus: 'mastered' as const, completedAt: '2026-09-20', lastActivityAt: null };
-    render(<LessonEngineV2 moduleId="s01-m01" lessonOverride={{ ...lesson(blocks, previous), versionChanged: true }} />);
+    render(<LessonEngineV2 moduleId="s01-m01" lessonOverride={{ ...lesson(blocks, previous), versionChanged: true, priorProgress: { version: 1, completedBlocks: 2, xp: 20, scorePercent: 100, completedAt: '2026-09-20' } }} />);
     expect(screen.getByText(/Урокът е обновен/)).toBeTruthy();
+    expect(screen.getByText(/Предишен резултат: версия 1, 2 завършени стъпки, 20 XP/)).toBeTruthy();
     expect(screen.getByText('0% · 0/2 задължителни стъпки')).toBeTruthy();
     expect(screen.getByText('0 XP')).toBeTruthy();
     expect(screen.getByRole('heading', { name: blocks[0].title })).toBeTruthy();
