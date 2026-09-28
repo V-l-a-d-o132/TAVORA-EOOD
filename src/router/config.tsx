@@ -78,6 +78,13 @@ const LeskiKaruchkaNomerEdnoPage = lazyWithReload(() => import("../pages/blog/le
 const MarketingLokalnaPlatformaPage = lazyWithReload(() => import("../pages/blog/marketing-lokalna-platforma-malki-gradove/page"));
 const OptimiziranSaitLokalnaUslugaPage = lazyWithReload(() => import("../pages/blog/optimiziran-sait-lokalna-usluga-leski-karuchka/page"));
 
+const KakDaIzbereteTransportnaLentaPage = lazyWithReload(() => import("../pages/blog/kak-da-izberete-transportna-lenta/page"));
+const TransportnaLentaPrichiniZaIznosvanePage = lazyWithReload(() => import("../pages/blog/transportna-lenta-prichini-za-iznosvane/page"));
+const TransportniLentiZarnoprerabotkaRecikliranePage = lazyWithReload(() => import("../pages/blog/transportni-lenti-zarnoprerabotka-reciklirane/page"));
+const KakDaNamalimNeyavaniyataNoShowsSalonPage = lazyWithReload(() => import("../pages/blog/kak-da-namalim-neyavaniyata-no-shows-salon/page"));
+const OnlineRezervaciiVsTelefonniRezervaciiPage = lazyWithReload(() => import("../pages/blog/online-rezervacii-vs-telefonni-rezervacii/page"));
+const KakOnlainGrafikatVdigaPrihoditeNaSalonaPage = lazyWithReload(() => import("../pages/blog/kak-onlain-grafikat-vdiga-prihodite-na-salona/page"));
+
 const ModulePage = lazyWithReload(() => import("../pages/module/page"));
 const DashboardPage = lazyWithReload(() => import("../pages/dashboard/page"));
 const CheckoutAkademiyaPage = lazyWithReload(() => import("../pages/checkout-akademiya/page"));
@@ -393,6 +400,30 @@ const routes: RouteObject[] = [
   {
     path: "/blog/optimiziran-sait-lokalna-usluga-leski-karuchka",
     element: <OptimiziranSaitLokalnaUslugaPage />,
+  },
+  {
+    path: "/blog/kak-da-izberete-transportna-lenta",
+    element: <KakDaIzbereteTransportnaLentaPage />,
+  },
+  {
+    path: "/blog/transportna-lenta-prichini-za-iznosvane",
+    element: <TransportnaLentaPrichiniZaIznosvanePage />,
+  },
+  {
+    path: "/blog/transportni-lenti-zarnoprerabotka-reciklirane",
+    element: <TransportniLentiZarnoprerabotkaRecikliranePage />,
+  },
+  {
+    path: "/blog/kak-da-namalim-neyavaniyata-no-shows-salon",
+    element: <KakDaNamalimNeyavaniyataNoShowsSalonPage />,
+  },
+  {
+    path: "/blog/online-rezervacii-vs-telefonni-rezervacii",
+    element: <OnlineRezervaciiVsTelefonniRezervaciiPage />,
+  },
+  {
+    path: "/blog/kak-onlain-grafikat-vdiga-prihodite-na-salona",
+    element: <KakOnlainGrafikatVdigaPrihoditeNaSalonaPage />,
   },
   {
     path: "*",
