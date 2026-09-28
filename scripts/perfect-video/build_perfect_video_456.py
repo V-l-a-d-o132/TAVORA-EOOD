@@ -137,6 +137,12 @@ DECLARE
  rows_updated integer;
 BEGIN
  PERFORM pg_advisory_xact_lock(hashtext('perfect_video_modules_4_6_v5'));
+ -- Fresh installations can have no legacy Perfect Video content. The production
+ -- release is guarded for the complete 43-lesson catalog; do not fabricate it here.
+ IF (SELECT count(*) FROM public.academy_lessons
+     WHERE module_id IN ('s02-m04','s02-m05','s02-m06'))=0 THEN
+   RETURN;
+ END IF;
  IF (SELECT count(*) FROM public.academy_lessons WHERE module_id IN ('s02-m04','s02-m05','s02-m06'))<>43
     OR (SELECT count(*) FROM public.academy_lessons WHERE module_id='s02-m04')<>17
     OR (SELECT count(*) FROM public.academy_lessons WHERE module_id='s02-m05')<>8
