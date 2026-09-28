@@ -369,7 +369,7 @@ ALLOWED_TYPES = {
     "submission", "example", "summary",
 }
 ROOT = Path(__file__).resolve().parent
-MIGRATION_FILENAME = "20260928175443_perfect_video_modules_7_9_v6_release.sql"
+MIGRATION_FILENAME = "20260928182339_perfect_video_modules_7_9_v6_release.sql"
 
 
 def module_for(lesson_id: str) -> str:
