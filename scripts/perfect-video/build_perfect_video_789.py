@@ -361,6 +361,13 @@ FINAL_NOTES = {
 FORBIDDEN = {
     "practical_response", "reflection", "homework", "submission", "prompt_builder"
 }
+ALLOWED_TYPES = {
+    "objective", "hook", "concept", "rich_text", "step_reveal", "before_after",
+    "flip_cards", "sequence_sort", "matching", "image_hotspot", "decision_tree",
+    "case_study", "scenario", "client_simulation", "calculator", "prompt_builder",
+    "practical_response", "reflection", "checklist", "quiz", "homework",
+    "submission", "example", "summary",
+}
 ROOT = Path(__file__).resolve().parent
 MIGRATION_FILENAME = "20260928175443_perfect_video_modules_7_9_v6_release.sql"
 
@@ -606,8 +613,8 @@ def build_lesson(spec, index):
         mode="exact_order",
     ))
     blocks.append(make_block(
-        len(blocks), "summary", "Какво пренасяш в следващата задача",
-        "summary",
+        len(blocks), "summary", "summary",
+        "Какво пренасяш в следващата задача",
         {
             "takeaways": [spec["goal"], spec["fix"], spec["acceptance"]],
             "nextStep": spec["practice"],
@@ -1093,6 +1100,8 @@ def main():
         blocks = lesson["blocks"]
         if not 13 <= len(blocks) <= 20:
             raise SystemExit(f"Block count out of range for {spec['id']}: {len(blocks)}")
+        if any(block["block_type"] not in ALLOWED_TYPES for block in blocks):
+            raise SystemExit(f"Unsupported block type in {spec['id']}")
         if any(block["block_type"] in FORBIDDEN for block in blocks):
             raise SystemExit(f"Open-response block in {spec['id']}")
         checks = [block for block in blocks if block.get("answer_key")]
