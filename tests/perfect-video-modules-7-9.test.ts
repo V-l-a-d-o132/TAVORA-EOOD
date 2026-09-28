@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const migration = readFileSync(
   new URL(
-    "../supabase/migrations/20260928175443_perfect_video_modules_7_9_v6_release.sql",
+    "../supabase/migrations/20260928182339_perfect_video_modules_7_9_v6_release.sql",
     import.meta.url,
   ),
   "utf8",
