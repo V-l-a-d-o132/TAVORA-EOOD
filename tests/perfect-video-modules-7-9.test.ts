@@ -68,6 +68,13 @@ describe("Perfect Video modules 7–9 release content", () => {
   });
 
   it("uses substantial, practical material and closed automatic checks only", () => {
+    const allowedTypes = new Set([
+      "objective", "hook", "concept", "rich_text", "step_reveal", "before_after",
+      "flip_cards", "sequence_sort", "matching", "image_hotspot", "decision_tree",
+      "case_study", "scenario", "client_simulation", "calculator", "prompt_builder",
+      "practical_response", "reflection", "checklist", "quiz", "homework",
+      "submission", "example", "summary",
+    ]);
     const forbidden = new Set([
       "practical_response",
       "reflection",
@@ -94,6 +101,7 @@ describe("Perfect Video modules 7–9 release content", () => {
         lesson.blocks.length,
       );
       expect(lesson.blocks.some((block) => forbidden.has(block.block_type))).toBe(false);
+      expect(lesson.blocks.every((block) => allowedTypes.has(block.block_type))).toBe(true);
 
       const types = lesson.blocks.map((block) => block.block_type);
       expect(types.filter((type) => type === "quiz")).toHaveLength(2);
