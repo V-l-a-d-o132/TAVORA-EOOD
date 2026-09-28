@@ -72,7 +72,7 @@ DECLARE
  target public.academy_lessons%ROWTYPE;
  v_id uuid;
  seeded_version uuid;
- validation jsonb;
+ v_validation jsonb;
  required_count integer;
  quiz_count integer;
  scenario_count integer;
@@ -213,13 +213,13 @@ BEGIN
    END IF;
   END LOOP;
 
-  validation:=academy_private.lesson_validation(v_id);
-  IF coalesce(jsonb_array_length(validation->'errors'),0) > 0
-     OR coalesce(jsonb_array_length(validation->'warnings'),0) > 0 THEN
-   RAISE EXCEPTION 'Validation failed for %: %',lesson_spec->>'lesson_id',validation;
+  v_validation:=academy_private.lesson_validation(v_id);
+  IF coalesce(jsonb_array_length(v_validation->'errors'),0) > 0
+     OR coalesce(jsonb_array_length(v_validation->'warnings'),0) > 0 THEN
+   RAISE EXCEPTION 'Validation failed for %: %',lesson_spec->>'lesson_id',v_validation;
   END IF;
   UPDATE public.academy_lesson_versions
-  SET validation=validation
+  SET validation=v_validation
   WHERE id=v_id;
   UPDATE public.academy_lessons
   SET draft_version_id=v_id,updated_at=clock_timestamp()
