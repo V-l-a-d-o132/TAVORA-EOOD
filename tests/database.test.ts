@@ -615,3 +615,64 @@ describe("email delivery lease", () => {
     ).toEqual({ n: 0 });
   });
 });
+
+describe("Perfect Video v4.2 release safety", () => {
+  it("publishes 65 reviewed lessons, preserves prior progress and requires correct scenario choices", async () => {
+    await actor();
+    expect(await scalar(`SELECT count(*)::int n FROM academy_lessons
+      WHERE module_id IN ('s02-m01','s02-m02','s02-m03')
+        AND published_version_id=draft_version_id`)).toEqual({ n: 65 });
+    const ref = (await db.query<{
+      lesson_id: string;
+      version_id: string;
+      block_key: string;
+      correct: string;
+      options: Array<{ id: string }>;
+    }>(`SELECT l.id lesson_id, l.published_version_id version_id,
+              b.block_key, k.answer_key->>'correct' correct,
+              b.content->'options' options
+       FROM academy_lessons l
+       JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id
+       JOIN academy_private.lesson_block_keys k ON k.block_id=b.id
+       WHERE l.module_id='s02-m01' AND l.lesson_id='pv01-01'
+         AND b.block_type='scenario' ORDER BY b.position LIMIT 1`)).rows[0];
+    expect(ref).toBeTruthy();
+    const old = (await db.query<{ id: string }>(
+      "SELECT id FROM academy_lesson_versions WHERE academy_lesson_id=$1 AND id<>$2 ORDER BY version_number DESC LIMIT 1",
+      [ref.lesson_id, ref.version_id],
+    )).rows[0].id;
+    await db.query(`INSERT INTO academy_lesson_progress
+      (user_id,academy_lesson_id,version_id,current_block_key,completed_block_keys,xp)
+      VALUES($1,$2,$3,'hook',ARRAY['objective','hook'],7)`, [ADMIN, ref.lesson_id, old]);
+    await actor("authenticated", ADMIN);
+    const before = (await db.query<{ lesson: { versionChanged: boolean; progress: unknown; priorProgress: { completedBlocks: number; xp: number } } }>(
+      "SELECT academy_get_lesson_v2('s02-m01','pv01-01') lesson",
+    )).rows[0].lesson;
+    expect(before.versionChanged).toBe(true);
+    expect(before.progress).toBeNull();
+    expect(before.priorProgress).toMatchObject({ completedBlocks: 2, xp: 7 });
+
+    const wrongChoice = ref.options.find((option) => option.id !== ref.correct)?.id;
+    expect(wrongChoice).toBeTruthy();
+    const wrong = (await db.query<{ result: { correct: boolean; feedback: { complete: boolean; answer?: unknown }; progress: { completed_block_keys: string[] } } }>(
+      "SELECT academy_complete_lesson_block('s02-m01','pv01-01',$1,$2,$3,$4) result",
+      [ref.version_id, ref.block_key, { selected: wrongChoice }, crypto.randomUUID()],
+    )).rows[0].result;
+    expect(wrong.correct).toBe(false);
+    expect(wrong.feedback.complete).toBe(false);
+    expect(wrong.feedback.answer).toBeUndefined();
+    expect(wrong.progress.completed_block_keys).not.toContain(ref.block_key);
+    await actor();
+    const archived = (await db.query<{ snapshot: { xp: number; completed_block_keys: string[]; version_id: string } }>(
+      "SELECT snapshot FROM academy_private.lesson_progress_history WHERE user_id=$1 AND academy_lesson_id=$2 AND version_id=$3",
+      [ADMIN, ref.lesson_id, old],
+    )).rows[0].snapshot;
+    expect(archived).toMatchObject({ xp: 7, completed_block_keys: ['objective', 'hook'], version_id: old });
+    await actor("authenticated", ADMIN);
+    const correct = (await db.query<{ result: { correct: boolean; feedback: { complete: boolean } } }>(
+      "SELECT academy_complete_lesson_block('s02-m01','pv01-01',$1,$2,$3,$4) result",
+      [ref.version_id, ref.block_key, { selected: ref.correct }, crypto.randomUUID()],
+    )).rows[0].result;
+    expect(correct).toMatchObject({ correct: true, feedback: { complete: true } });
+  });
+});
