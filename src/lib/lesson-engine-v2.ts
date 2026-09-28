@@ -54,6 +54,7 @@ export interface LessonV2 {
   blocks: LessonBlockV2[];
   progress: LessonProgressV2 | null;
   versionChanged: boolean;
+  priorProgress?: { version: number | null; completedBlocks: number; xp: number; scorePercent: number | null; completedAt: string | null } | null;
   preview?: boolean;
   versions?: LessonVersionSummary[];
   audit?: LessonAuditEntry[];

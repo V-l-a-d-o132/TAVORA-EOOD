@@ -28,6 +28,7 @@ export interface BuildArticleSchemaOptions {
   breadcrumbLabel: string;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- Existing blog pages import this schema helper from this component.
 export function buildArticleSchema({
   id,
   name,

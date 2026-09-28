@@ -144,7 +144,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
       case 'client_simulation':
         return <div><p className="mb-5 whitespace-pre-line text-base leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><div className="space-y-3">{options.map((option, index) => {
           const id = s(option.id, String(index));
-          return <button key={id} type="button" disabled={busy || !!result} onClick={() => { update({ selected: id }); void submit({ selected: id }); }} className={`${choiceClass} ${s(state.selected) === id ? 'border-red-400 bg-red-500/10' : ''}`}>{s(option.label)}</button>;
+          return <button key={id} type="button" disabled={busy || completed || feedback?.complete === true} onClick={() => { update({ selected: id }); void submit({ selected: id }); }} className={`${choiceClass} ${s(state.selected) === id ? 'border-red-400 bg-red-500/10' : ''}`}>{s(option.label)}</button>;
         })}</div></div>;
       case 'case_study':
       case 'example':
@@ -181,7 +181,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
         const quizOptions = arr(block.content.options);
         return <div><p className="mb-5 text-lg font-semibold leading-7 text-white">{s(block.content.question, body)}</p><div className="space-y-3">{quizOptions.map((option, index) => {
           const id = s(option.id, String(index));
-          return <button key={id} type="button" disabled={busy || !!result} onClick={() => { update({ answer: id }); void submit({ answer: id }); }} className={`${choiceClass} ${s(state.answer) === id ? 'border-red-400 bg-red-500/10' : ''}`}><span className="mr-3 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/15 text-xs font-bold">{String.fromCharCode(65 + index)}</span>{s(option.label)}</button>;
+          return <button key={id} type="button" disabled={busy || completed || feedback?.complete === true} onClick={() => { update({ answer: id }); void submit({ answer: id }); }} className={`${choiceClass} ${s(state.answer) === id ? 'border-red-400 bg-red-500/10' : ''}`}><span className="mr-3 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/15 text-xs font-bold">{String.fromCharCode(65 + index)}</span>{s(option.label)}</button>;
         })}</div></div>;
       }
       case 'submission': {
