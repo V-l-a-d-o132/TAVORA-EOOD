@@ -6,10 +6,10 @@ const course = LEARNING_SECTIONS.find((section) =>
 );
 
 describe("Perfect Video modules 10–12 catalog", () => {
-  it("keeps the existing course size and complete lesson IDs", () => {
+  it("keeps the current course size and complete lesson IDs", () => {
     expect(course).toBeDefined();
     expect(course?.totalModules).toBe(15);
-    expect(course?.totalLessons).toBe(241);
+    expect(course?.totalLessons).toBe(246);
 
     const expected = {
       "s02-m10": Array.from({ length: 16 }, (_, i) => `pv10-${String(i + 1).padStart(2, "0")}`),

@@ -676,3 +676,69 @@ describe("Perfect Video v4.2 release safety", () => {
     expect(correct).toMatchObject({ correct: true, feedback: { complete: true } });
   });
 });
+
+describe("Perfect Video final exam", () => {
+  it("keeps keys private, rejects acknowledgements, scores one complete attempt and gates the final", async () => {
+    await actor();
+    const ref = (await db.query<{
+      version_id: string;
+      questions: Array<{ id: string; options: Array<{ id: string }> }>;
+      answers: Record<string, string>;
+    }>(`SELECT l.published_version_id version_id,
+              b.content->'questions' questions,k.answer_key->'answers' answers
+       FROM academy_lessons l JOIN academy_lesson_blocks b
+         ON b.version_id=l.published_version_id
+       JOIN academy_private.lesson_block_keys k ON k.block_id=b.id
+       WHERE l.module_id='s02-m15' AND l.lesson_id='pv15-09'
+         AND b.block_type='course_exam'`)).rows[0];
+    expect(ref.questions).toHaveLength(12);
+    await actor("authenticated", ADMIN);
+    const lesson = (await db.query<{ lesson: { blocks: unknown[] } }>(
+      "SELECT academy_get_lesson_v2('s02-m15','pv15-09') lesson",
+    )).rows[0].lesson;
+    expect(JSON.stringify(lesson.blocks)).not.toContain('"answer_key"');
+    expect(JSON.stringify(lesson.blocks)).not.toContain('"evaluation"');
+
+    await expect(db.query(
+      "SELECT academy_complete_lesson_block('s02-m15','pv15-09',$1,'exam',$2,$3)",
+      [ref.version_id, { acknowledged: true }, crypto.randomUUID()],
+    )).rejects.toThrow(/course exam endpoint/);
+    await expect(db.query(
+      "SELECT academy_submit_course_exam('s02-m15','pv15-09',$1,'exam',$2,$3)",
+      [ref.version_id, { answers: { q01: 'a' } }, crypto.randomUUID()],
+    )).rejects.toThrow(/every exam question/);
+
+    const wrongAnswers = Object.fromEntries(ref.questions.map((question) => [
+      question.id,
+      question.options.find((option) => option.id !== ref.answers[question.id])?.id,
+    ]));
+    const wrong = (await db.query<{ result: { correct: boolean; feedback: { complete: boolean; scorePercent: number; weakModules: string[]; answer?: unknown } } }>(
+      "SELECT academy_submit_course_exam('s02-m15','pv15-09',$1,'exam',$2,$3) result",
+      [ref.version_id, { answers: wrongAnswers }, crypto.randomUUID()],
+    )).rows[0].result;
+    expect(wrong).toMatchObject({ correct: false, feedback: { complete: false, scorePercent: 0 } });
+    expect(wrong.feedback.weakModules).toEqual(['s02-m01', 's02-m02', 's02-m03', 's02-m04']);
+    expect(wrong.feedback.answer).toBeUndefined();
+
+    const nearMiss = { ...ref.answers };
+    for (const question of ref.questions.slice(0, 3)) nearMiss[question.id] = wrongAnswers[question.id];
+    const belowThreshold = (await db.query<{ result: { correct: boolean; feedback: { complete: boolean; scorePercent: number } } }>(
+      "SELECT academy_submit_course_exam('s02-m15','pv15-09',$1,'exam',$2,$3) result",
+      [ref.version_id, { answers: nearMiss }, crypto.randomUUID()],
+    )).rows[0].result;
+    expect(belowThreshold).toMatchObject({ correct: false, feedback: { complete: false, scorePercent: 75 } });
+
+    const passAnswers = { ...ref.answers };
+    for (const question of ref.questions.slice(0, 2)) passAnswers[question.id] = wrongAnswers[question.id];
+    const passed = (await db.query<{ result: { correct: boolean; feedback: { complete: boolean; scorePercent: number; answer?: unknown } } }>(
+      "SELECT academy_submit_course_exam('s02-m15','pv15-09',$1,'exam',$2,$3) result",
+      [ref.version_id, { answers: passAnswers }, crypto.randomUUID()],
+    )).rows[0].result;
+    expect(passed).toMatchObject({ correct: true, feedback: { complete: true, scorePercent: 83 } });
+    expect(passed.feedback.answer).toBeUndefined();
+    await expect(db.query(
+      "SELECT academy_submit_course_exam('s02-m15','pv15-13',(SELECT published_version_id FROM academy_lessons WHERE lesson_id='pv15-13'),'exam',$1,$2)",
+      [{ answers: Object.fromEntries(Array.from({ length: 30 }, (_, i) => [`q${String(i + 1).padStart(2, '0')}`, 'a'])) }, crypto.randomUUID()],
+    )).rejects.toThrow(/12 previous module 15 lessons/);
+  });
+});

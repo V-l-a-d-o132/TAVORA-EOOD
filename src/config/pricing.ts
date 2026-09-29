@@ -104,11 +104,11 @@ export const PRICING_TIERS: PricingTier[] = [
     route: '/kurs/perfektnoto-video',
     checkoutTier: 'perfektno-video',
     moduleCount: 15,
-    lessonCount: 241,
+    lessonCount: 246,
     type: 'program',
     includes: [
       '15 модула',
-      '241+ урока',
+      '246 урока',
       'От идея до готово бизнес видео',
       'Доживотен достъп',
       'Бъдещи обновления',

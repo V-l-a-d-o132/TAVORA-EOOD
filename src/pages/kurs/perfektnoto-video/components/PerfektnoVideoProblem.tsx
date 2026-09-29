@@ -68,8 +68,8 @@ export default function PerfektnoVideoProblem() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-2xl bg-[#F9F9F7] border border-[#1C1C1E]/6">
         {[
-          { value: '15', label: 'модула · 20+ часа съдържание' },
-          { value: '241', label: 'урока с практически задачи' },
+          { value: '15', label: 'модула · учиш със свое темпо' },
+          { value: '246', label: 'урока с практически задачи' },
           { value: '+280%', label: 'ръст на трафик с видео (K-Food)' },
           { value: '30 дни', label: 'гаранция за възстановяване на сумата' },
         ].map((s) => (
