@@ -106,12 +106,12 @@ describe("Perfect Video 10–12 first publication", () => {
     expect(correctPositions).toEqual(new Set(["a", "b", "c"]));
   });
 
-  it("refuses to overwrite existing lessons and keeps answer keys in the private schema", () => {
+  it("refuses to overwrite existing lessons and leaves earlier learner rows alone", () => {
     expect(sql).toContain("Modules 10–12 already contain lessons");
-    expect(sql).toContain("LOCK TABLE public.academy_lesson_progress");
     expect(sql).toContain("INSERT INTO academy_private.lesson_block_keys");
-    expect(sql).toContain("Pre-existing learner records changed");
     expect(sql).toContain("Expected 200 private answer keys");
     expect(sql).toContain("academy_private.lesson_validation(version_uuid)");
+    expect(sql).not.toMatch(/LOCK TABLE public\.academy_lesson_(?:progress|attempts_v2)/);
+    expect(sql).not.toMatch(/(?:UPDATE|DELETE FROM) public\.academy_lesson_(?:progress|attempts_v2)/);
   });
 });

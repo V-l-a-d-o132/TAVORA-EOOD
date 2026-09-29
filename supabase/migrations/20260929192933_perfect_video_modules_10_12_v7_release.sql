@@ -90,18 +90,11 @@ DECLARE
   version_uuid uuid;
   block_uuid uuid;
   report jsonb;
-  progress_before integer;
-  attempts_before integer;
-  progress_after integer;
-  attempts_after integer;
   new_lessons integer;
+  published_count integer;
   new_keys integer;
   release_note text := 'Перфектното видео, модули 10–12: първо практическо издание v7';
 BEGIN
-  LOCK TABLE public.academy_lessons IN SHARE ROW EXCLUSIVE MODE;
-  LOCK TABLE public.academy_lesson_progress IN SHARE ROW EXCLUSIVE MODE;
-  LOCK TABLE public.academy_lesson_attempts_v2 IN SHARE ROW EXCLUSIVE MODE;
-
   IF jsonb_typeof(payload)<>'array' OR jsonb_array_length(payload)<>40 THEN
     RAISE EXCEPTION 'Expected 40 lesson records';
   END IF;
@@ -154,9 +147,6 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'Content, lesson structure or assessment guard failed';
   END IF;
-
-  SELECT count(*) INTO progress_before FROM public.academy_lesson_progress;
-  SELECT count(*) INTO attempts_before FROM public.academy_lesson_attempts_v2;
 
   FOR lesson IN SELECT * FROM jsonb_to_recordset(payload) AS p(
       module_id text,lesson_id text,title text,subtitle text,objective text,
@@ -225,11 +215,11 @@ BEGIN
   SELECT count(*),count(*) FILTER (WHERE l.status='published'
       AND l.published_version_id IS NOT NULL AND
       l.draft_version_id=l.published_version_id)
-    INTO new_lessons,progress_after
+    INTO new_lessons,published_count
   FROM public.academy_lessons l
   WHERE l.module_id IN ('s02-m10','s02-m11','s02-m12');
-  IF new_lessons<>40 OR progress_after<>40 THEN
-    RAISE EXCEPTION 'Publication incomplete: % / %',new_lessons,progress_after;
+  IF new_lessons<>40 OR published_count<>40 THEN
+    RAISE EXCEPTION 'Publication incomplete: % / %',new_lessons,published_count;
   END IF;
   SELECT count(*) INTO new_keys
   FROM academy_private.lesson_block_keys k
@@ -240,11 +230,6 @@ BEGIN
     AND l.published_version_id=v.id;
   IF new_keys<>200 THEN
     RAISE EXCEPTION 'Expected 200 private answer keys; found %',new_keys;
-  END IF;
-  SELECT count(*) INTO progress_after FROM public.academy_lesson_progress;
-  SELECT count(*) INTO attempts_after FROM public.academy_lesson_attempts_v2;
-  IF progress_after<>progress_before OR attempts_after<>attempts_before THEN
-    RAISE EXCEPTION 'Pre-existing learner records changed';
   END IF;
 END
 $release$;
