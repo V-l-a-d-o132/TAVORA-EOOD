@@ -15,6 +15,7 @@ const labels: Partial<Record<LessonBlockType, string>> = {
   example: 'Решен пример',
   summary: 'Обобщение',
   quiz: 'Проверка на знанията',
+  course_exam: 'Общ практически изпит',
   reflection: 'Размисъл',
   checklist: 'Списък за проверка',
   homework: 'Практическа задача',
@@ -30,6 +31,7 @@ export function lessonBlockPresentation(block: LessonBlockV2) {
     : labels[block.type] ?? 'Практическа стъпка';
   const continueHint = reading ? 'Отбележи „Прочетох“, за да продължиш.'
     : block.type === 'quiz' ? 'Отговори на въпроса, за да продължиш.'
+    : block.type === 'course_exam' ? 'Предай всички отговори наведнъж и премини изпита.'
     : 'Изпълни задачата в тази стъпка, за да продължиш.';
   return { label, reading, continueHint };
 }

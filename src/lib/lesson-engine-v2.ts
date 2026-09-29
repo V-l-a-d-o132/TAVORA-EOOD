@@ -5,7 +5,7 @@ export const LESSON_BLOCK_TYPES = [
   'flip_cards', 'sequence_sort', 'matching', 'image_hotspot', 'decision_tree',
   'case_study', 'scenario', 'client_simulation', 'calculator', 'prompt_builder',
   'practical_response', 'reflection', 'checklist', 'quiz', 'homework',
-  'submission', 'example', 'summary',
+  'submission', 'example', 'summary', 'course_exam',
 ] as const;
 
 export type LessonBlockType = (typeof LESSON_BLOCK_TYPES)[number];
@@ -174,7 +174,8 @@ export async function completeLessonBlock(
   payload: JsonObject,
   attemptId = crypto.randomUUID(),
 ) {
-  return rpc<BlockAttemptResult>('academy_complete_lesson_block', {
+  return rpc<BlockAttemptResult>(block.type === 'course_exam'
+    ? 'academy_submit_course_exam' : 'academy_complete_lesson_block', {
     p_module: lesson.moduleId,
     p_lesson: lesson.lessonId,
     p_version: lesson.versionId,
@@ -266,6 +267,7 @@ export const BLOCK_LABELS: Record<LessonBlockType, string> = {
   prompt_builder: 'Prompt builder', practical_response: 'Практически отговор', reflection: 'Рефлексия',
   checklist: 'Checklist', quiz: 'Тест', homework: 'Домашна работа', submission: 'Файл или линк',
   example: 'Практически пример', summary: 'Обобщение и следваща стъпка',
+  course_exam: 'Общ изпит',
 };
 
 export function createBlock(type: LessonBlockType, index: number): LessonBlockV2 {
@@ -284,6 +286,7 @@ export function createBlock(type: LessonBlockType, index: number): LessonBlockV2
   if (['practical_response', 'reflection', 'homework'].includes(type)) Object.assign(content, { prompt: '', minLength: 40 });
   if (type === 'checklist') content.items = [{ id: 'one', text: '', required: true }];
   if (type === 'quiz') Object.assign(content, { question: '', options: [{ id: 'a', label: '' }, { id: 'b', label: '' }] });
+  if (type === 'course_exam') Object.assign(content, { introduction: '', minimumPercent: 80, questions: [] });
   if (type === 'submission') Object.assign(content, { prompt: '', accept: 'link,file' });
   if (type === 'summary') Object.assign(content, { takeaways: [''], nextStep: '' });
   return { ...base, content };

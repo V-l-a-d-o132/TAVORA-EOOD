@@ -20,7 +20,7 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
           <div className="flex flex-wrap items-center gap-3 mb-5">
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-rose-50 text-rose-700">Видео продукция</span>
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-red-50 text-red-700">Академия TAVORA</span>
-            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">15 модула · 241+ урока</span>
+            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">15 модула · 246 урока</span>
           </div>
 
           <h1

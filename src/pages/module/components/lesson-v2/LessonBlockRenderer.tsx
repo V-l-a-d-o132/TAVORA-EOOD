@@ -184,6 +184,31 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
           return <button key={id} type="button" disabled={busy || completed || feedback?.complete === true} onClick={() => { update({ answer: id }); void submit({ answer: id }); }} className={`${choiceClass} ${s(state.answer) === id ? 'border-red-400 bg-red-500/10' : ''}`}><span className="mr-3 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/15 text-xs font-bold">{String.fromCharCode(65 + index)}</span>{s(option.label)}</button>;
         })}</div></div>;
       }
+      case 'course_exam': {
+        const questions = arr(block.content.questions);
+        const answers = obj(state.answers);
+        const answered = questions.filter((question) => typeof answers[s(question.id)] === 'string').length;
+        const weakModules = strArr(feedback?.weakModules);
+        return <div>
+          <p className="mb-4 leading-7 text-zinc-200">{s(block.content.introduction)}</p>
+          <p className="mb-6 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-sm text-zinc-200">Отговорени: {answered} от {questions.length}. Нужно е поне {n(block.content.minimumPercent, 80)}% в един пълен опит.</p>
+          <div className="space-y-8">{questions.map((question, index) => {
+            const questionId = s(question.id, `q${index + 1}`);
+            return <fieldset key={questionId} className="rounded-2xl border border-white/10 p-4 sm:p-5">
+              <legend className="px-2 text-base font-semibold leading-7 text-white">{index + 1}. {s(question.prompt)}</legend>
+              <div className="mt-3 space-y-3">{arr(question.options).map((option, optionIndex) => {
+                const optionId = s(option.id, String(optionIndex));
+                return <label key={optionId} className={`${choiceClass} flex cursor-pointer items-start gap-3 ${answers[questionId] === optionId ? 'border-red-400 bg-red-500/10' : ''}`}>
+                  <input type="radio" name={`${block.id}-${questionId}`} value={optionId} checked={answers[questionId] === optionId} disabled={busy || completed} onChange={() => update({ answers: { ...answers, [questionId]: optionId } })} className="mt-1 h-4 w-4 shrink-0 accent-red-500" />
+                  <span>{s(option.label)}</span>
+                </label>;
+              })}</div>
+            </fieldset>;
+          })}</div>
+          <button type="button" disabled={busy || completed || answered !== questions.length} onClick={() => void submit({ answers })} className="mt-7 rounded-xl bg-red-500 px-6 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40">{busy ? 'Оценяване…' : 'Предай целия изпит'}</button>
+          {result && <div className="mt-5 rounded-xl border border-white/15 p-4 text-sm text-zinc-200"><strong>Резултат: {n(feedback?.scorePercent)}%</strong><span className="ml-2">({n(feedback?.correctCount)} от {n(feedback?.totalQuestions)})</span>{weakModules.length > 0 && <p className="mt-2">Теми за повторение: {weakModules.map((moduleId) => `модул ${moduleId.slice(-2)}`).join(', ')}.</p>}</div>}
+        </div>;
+      }
       case 'submission': {
         const upload = async (file: File) => {
           setBusy(true);
