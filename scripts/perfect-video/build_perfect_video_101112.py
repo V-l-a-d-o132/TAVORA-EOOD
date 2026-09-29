@@ -11,7 +11,7 @@ from perfect_video_101112_content import LESSONS
 
 
 ROOT = Path(__file__).resolve().parents[2]
-MIGRATION = ROOT / "supabase/migrations/20260929192933_perfect_video_modules_10_12_v7_release.sql"
+MIGRATION = ROOT / "supabase/migrations/20260929194936_perfect_video_modules_10_12_v7_release.sql"
 PRIOR_MIGRATION = ROOT / "supabase/migrations/20260928182339_perfect_video_modules_7_9_v6_release.sql"
 EXPECTED = {"s02-m10": 16, "s02-m11": 16, "s02-m12": 8}
 TOPICS = {

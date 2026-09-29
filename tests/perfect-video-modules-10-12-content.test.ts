@@ -4,7 +4,7 @@ import { LEARNING_SECTIONS } from "../src/mocks/learning-platform";
 
 const sql = readFileSync(
   new URL(
-    "../supabase/migrations/20260929192933_perfect_video_modules_10_12_v7_release.sql",
+    "../supabase/migrations/20260929194936_perfect_video_modules_10_12_v7_release.sql",
     import.meta.url,
   ),
   "utf8",
