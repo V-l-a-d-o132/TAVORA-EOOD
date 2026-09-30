@@ -18,8 +18,8 @@ import { getTierById } from '@/config/pricing';
 const marketingBasics = getTierById('marketingBasics');
 
 const FAQ_ITEMS = [
-  { q: 'Колко струва Marketing Basics на Академия TAVORA?', a: `Пълната програма (20 модула, 177+ урока) е ${marketingBasics?.price} EUR еднократно. Първият модул е безплатен и не изисква карта.` },
-  { q: 'Колко време отнема цялата програма?', a: 'Marketing Basics съдържа 18+ часа в 20 модула (177 урока). Препоръчително темпо: по 1 модул на седмица — 20 седмици общо. Всеки модул е самостоятелен.' },
+  { q: 'Колко струва Marketing Basics на Академия TAVORA?', a: `Пълната програма (20 модула; 195 публикувани урока в модули 01–19, а модул 20 предстои) е ${marketingBasics?.price} EUR еднократно. Първият модул е безплатен и не изисква карта.` },
+  { q: 'Колко време отнема цялата програма?', a: 'Marketing Basics има 195 публикувани урока в модули 01–19. Модул 20 предстои. Времето за четене и практика е обозначено отделно; планирай работа по проектите според своя опит и бизнес.' },
   { q: 'Трябва ли ми предишен маркетинг опит?', a: 'Не. Започваме от абсолютната основа — "кой си ти, за кого си и защо теб" (Модул 01). Всеки следващ модул надгражда логически.' },
   { q: 'Ще мога ли веднага да приложа наученото в моя бизнес?', a: 'Да. Всеки урок завършва с конкретна практическа задача за твоя бизнес. След Група 1 ще имаш ясно позициониране. След Група 2 — пълно онлайн присъствие.' },
   { q: 'Как Marketing Basics се различава от „Пътят на коприната“?', a: 'Marketing Basics е чисто маркетингова програма за малък и локален бизнес. „Пътят на коприната“ е по-широка бизнес система с AI, дизайн и технически умения. Двете са самостоятелни и се допълват.' },
@@ -28,7 +28,7 @@ const FAQ_ITEMS = [
   { q: 'Гарантиран ли е конкретен финансов резултат?', a: 'Не. Академията предоставя знания, процеси и практически инструменти, но резултатите зависят от избраната ниша, изпълнението, пазара и отделеното време.' },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const courseUpdated = '2026-09-30';
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -38,9 +38,9 @@ const SCHEMA = {
       '@id': 'https://imashnujnoto.com/kurs/marketing-basics#webpage',
       url: 'https://imashnujnoto.com/kurs/marketing-basics',
       name: 'Marketing Basics — изгради маркетинг система | Академия TAVORA',
-      description: 'Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите. 20 модула, 177+ урока. ТАВОРА ЕООД.',
+      description: 'Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите. 195 публикувани урока в модули 01–19; модул 20 предстои. ТАВОРА ЕООД.',
       inLanguage: 'bg',
-      dateModified: today,
+      dateModified: courseUpdated,
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -55,10 +55,10 @@ const SCHEMA = {
       '@type': 'Course',
       '@id': 'https://imashnujnoto.com/kurs/marketing-basics#course',
       name: 'Marketing Basics',
-      description: '20-модулна маркетинг система за малък и локален бизнес. GEO, AI агенти и автоматизация са вградени директно в 177 урока. От позициониране до измерване на резултатите.',
+      description: '20-модулна маркетинг система за малък и локален бизнес. GEO, AI агенти и автоматизация са вградени директно в 195 публикувани урока; модул 20 предстои. От позициониране до измерване на резултатите.',
       url: 'https://imashnujnoto.com/kurs/marketing-basics',
       provider: { '@type': 'Organization', '@id': 'https://imashnujnoto.com/#organization', name: 'ТАВОРА ЕООД', legalName: 'ТАВОРА ЕООД', url: 'https://imashnujnoto.com' },
-      courseMode: 'online', inLanguage: 'bg', educationalLevel: 'Beginner to Advanced', timeRequired: 'PT18H',
+      courseMode: 'online', inLanguage: 'bg', educationalLevel: 'Beginner to Advanced',
       teaches: ['Маркетинг стратегия', 'Позициониране', 'Локално SEO', 'GEO оптимизация', 'Google Business Profile', 'Meta Advantage+', 'Google AI Max', 'Имейл маркетинг', 'Конверсионна оптимизация', 'Маркетинг аналитика'],
       offers: {
         '@type': 'Offer',
@@ -91,7 +91,7 @@ export default function MarketingBasicsFunnelPage() {
     document.title = 'Marketing Basics — изгради маркетинг система | Академия TAVORA';
     academyPixel.viewContent('Marketing Basics');
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', 'Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите. 20 модула, 177+ урока. ТАВОРА ЕООД.');
+    if (metaDesc) metaDesc.setAttribute('content', 'Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите. 195 публикувани урока в модули 01–19; модул 20 предстои. ТАВОРА ЕООД.');
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/kurs/marketing-basics');
 

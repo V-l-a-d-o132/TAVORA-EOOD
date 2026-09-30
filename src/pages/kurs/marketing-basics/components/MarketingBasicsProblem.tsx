@@ -68,8 +68,8 @@ export default function MarketingBasicsProblem() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-2xl bg-[#F9F9F7] border border-[#1C1C1E]/6">
         {[
-          { value: '20', label: 'модула · 18+ часа съдържание' },
-          { value: '177+', label: 'урока с практически задачи' },
+          { value: '20', label: 'модула по програма' },
+          { value: '195', label: 'урока с практически задачи' },
           { value: '4 групи', label: 'позициониране → превръщане' },
           { value: '30 дни', label: 'гаранция за възстановяване на сумата' },
         ].map((s) => (

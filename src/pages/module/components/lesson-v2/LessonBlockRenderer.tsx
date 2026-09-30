@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson-engine-v2';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
+import LessonRichText from './LessonRichText';
 
 interface Props {
   block: LessonBlockV2;
@@ -79,7 +80,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
         return <><blockquote className="border-l-4 border-red-500 pl-5 text-lg leading-relaxed text-zinc-200">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
       case 'rich_text':
-        return <><p className="whitespace-pre-line text-base leading-7 text-zinc-200">{body}</p>{arr(block.content.points).length > 0 && <ul className="mt-5 space-y-3">{arr(block.content.points).map((point, index) => <li key={s(point.id, String(index))} className="flex gap-3 text-zinc-200"><span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-red-500" />{s(point.text)}</li>)}</ul>}{acknowledgement}</>;
+        return <><LessonRichText content={block.content} />{acknowledgement}</>;
       case 'before_after': {
         const before = obj(block.content.before);
         const after = obj(block.content.after);
@@ -108,7 +109,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
             const next = flipped ? viewed : [...viewed, id];
             update({ viewed: next });
             if (next.length === cards.length) void submit({ viewed: next });
-          }} className="min-h-40 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-6 text-left focus:outline-none focus:ring-2 focus:ring-red-500/50"><span className="text-xs font-semibold uppercase tracking-[.18em] text-red-300">{flipped ? 'Обяснение' : 'Понятие'}</span><span className="mt-4 block text-lg font-semibold leading-7 text-white">{flipped ? s(card.back) : s(card.front)}</span><span className="mt-5 block text-xs text-zinc-500">Натисни, за да обърнеш картата</span></button>;
+          }} className="min-h-40 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-6 text-left focus:outline-none focus:ring-2 focus:ring-red-500/50"><span className="text-xs font-semibold uppercase tracking-[.18em] text-red-300">{block.key === 'model_solution' ? (flipped ? 'Примерно решение' : 'Сравни работата си') : (flipped ? 'Обяснение' : 'Понятие')}</span><span className="mt-4 block text-lg font-semibold leading-7 text-white">{flipped ? s(card.back) : s(card.front)}</span><span className="mt-5 block text-xs text-zinc-500">Натисни, за да обърнеш картата</span></button>;
         })}</div>;
       }
       case 'sequence_sort': {
