@@ -62,7 +62,7 @@ function calcLevel(points: number): { level: number; next: number; progress: num
   }
   const currentThreshold = thresholds[level - 1] || 0;
   const nextThreshold = thresholds[level] || currentThreshold + 500;
-  const progress = Math.round(((points - currentThreshold) / (nextThreshold - currentThreshold)) * 100);
+  const progress = level === thresholds.length ? 100 : Math.max(0, Math.min(100, Math.round(((points - currentThreshold) / (nextThreshold - currentThreshold)) * 100)));
   return { level, next: nextThreshold, progress };
 }
 
@@ -94,15 +94,17 @@ export default function DashboardPage() {
   const streak = calcStreak(allDates);
   const levelInfo = calcLevel(totalPoints);
 
-  // Level tracking — dispatch toast when level increases
-  const previousLevelRef = useRef(levelInfo.level);
+  // Loading existing XP or switching accounts is not a new level-up.
+  const previousLevelRef = useRef<{ userId: string; level: number } | null>(null);
 
   useEffect(() => {
-    if (previousLevelRef.current > 0 && levelInfo.level > previousLevelRef.current) {
+    if (isLoading || error || !user) return;
+    const previous = previousLevelRef.current;
+    if (previous?.userId === user.id && levelInfo.level > previous.level) {
       dispatchLevelUp(levelInfo.level, totalPoints);
     }
-    previousLevelRef.current = levelInfo.level;
-  }, [levelInfo.level, totalPoints]);
+    previousLevelRef.current = { userId: user.id, level: levelInfo.level };
+  }, [levelInfo.level, totalPoints, isLoading, error, user]);
 
   const earnedBadges = BADGES.filter((b) => {
     if (b.id === 'half-modules' || b.id === 'all-modules') {
@@ -205,14 +207,14 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center gap-1.5 text-sm font-semibold" style={{ color: C.text }}>
                       <i className="ri-star-line" style={{ color: C.accent }} />
-                      {totalPoints} точки
+                      {totalPoints} XP
                     </div>
                     <div className="flex items-center gap-1.5 text-sm font-semibold hidden sm:flex" style={{ color: C.text }}>
                       <i className="ri-award-line" style={{ color: C.textDim }} />
                       {earnedBadges.length} баджа
                     </div>
                   </div>
-                  <span className="text-xs" style={{ color: C.textDim }}>{totalPoints}/{levelInfo.next} XP</span>
+                  <span className="text-xs" style={{ color: C.textDim }}>{levelInfo.level === 10 ? 'Максимално ниво' : `${totalPoints}/${levelInfo.next} XP`}</span>
                 </div>
                 <div className="relative w-full overflow-hidden" style={{ height: '4px', background: C.border }}>
                   <div
@@ -224,6 +226,15 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
+
+        <details className="mb-6 text-sm" style={{ color: C.textMuted }}>
+          <summary className="cursor-pointer">Как се смятат XP и къде продължавам?</summary>
+          <div className="mt-3 space-y-2 leading-relaxed">
+            <p>XP са точките от завършените стъпки в актуалните версии на уроците от трите курса. Повтарянето на същата стъпка не носи допълнителни XP. Процентът на теста е отделен резултат.</p>
+            <p>„Продължи“ отваря последно посетения урок, а вътре се възстановяват последната запазена стъпка и отговори. За друго устройство е нужен същият профил и успешна синхронизация.</p>
+            <p>При нова версия на урока предишният резултат остава в историята, но не се брои за завършване на новите задачи.</p>
+          </div>
+        </details>
 
         {/* ─── Continue / Resume banner ─── */}
         {resumeTarget && !isLoading && (
@@ -238,7 +249,7 @@ export default function DashboardPage() {
                   <i className="ri-play-fill text-lg" style={{ color: C.accent }} />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.accent }}>Продължи обучението</p>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.accent }}>Продължи откъдето спря</p>
                   <p className="text-sm font-bold" style={{ color: C.text }}>
                     {resumeTarget.sectionTitle} — {resumeTarget.lessonTitle}
                   </p>
