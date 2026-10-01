@@ -152,7 +152,7 @@ export default function LearningPlatform() {
         </div>
 
         {/* ─── RESUME BANNER ─── */}
-        {resumeTarget && completedLessons > 0 && (
+        {resumeTarget && !isLoading && (
           <div
             onClick={() => navigate(`/module/${resumeTarget.moduleId}?lesson=${resumeTarget.lessonIndex}`)}
             className="relative overflow-hidden p-5 mb-8 cursor-pointer group"
