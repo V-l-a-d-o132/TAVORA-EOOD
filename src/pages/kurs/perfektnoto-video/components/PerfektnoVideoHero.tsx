@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 
 interface PerfektnoVideoHeroProps {
@@ -20,7 +21,7 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
           <div className="flex flex-wrap items-center gap-3 mb-5">
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-rose-50 text-rose-700">Видео продукция</span>
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-red-50 text-red-700">Академия TAVORA</span>
-            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">15 модула · 246 урока</span>
+            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">15 модула · {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока</span>
           </div>
 
           <h1
@@ -44,7 +45,7 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
               to="/kurs"
               className="px-6 py-3 bg-[#1C1C1E] text-white text-sm rounded-full hover:bg-[#1C1C1E]/85 transition-all cursor-pointer whitespace-nowrap font-medium"
             >
-              Започни с безплатния модул →
+              Към Академия TAVORA →
             </Link>
             <a
               href="#cena"
@@ -66,7 +67,7 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
               <strong className="text-[#1C1C1E]">Перфектното Видео</strong> е 15-модулната видео продукционна
               система на Академия TAVORA — от диагностика и стратегия до професионална продукция и FRAME
               сертификация. Програмата покрива както нискобюджетно заснемане само с телефон, така и работа с
-              професионален екип и техника. Модул 01 (Диагностика, стратегия и психология на вниманието) е безплатен.
+              професионален екип и техника. Перфектното Видео се отключва с покупка или предоставен достъп.
             </p>
           </div>
         </div>

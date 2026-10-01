@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { ACADEMY_PROGRAM_STATS, ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
+import { getTierById } from '@/config/pricing';
 import InlineIcon from '@/components/base/InlineIcon';
 import { supabase } from '@/lib/supabase';
 
@@ -219,15 +221,15 @@ export default function ApplicationSection() {
                       id: 'standard-course' as const,
                       name: 'AI Business Blueprint',
                       sub: '11 модула — от AI промптиране до Revenue Blueprint',
-                      price: '99 EUR',
-                      features: ['11 модула · 74+ урока', 'Revenue Blueprint система', 'Доживотен достъп', 'Безплатни обновления'],
+                      price: `${getTierById('silkRoad')?.price} EUR`,
+                      features: [`11 модула · ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока`, 'Revenue Blueprint система', 'Доживотен достъп', 'Безплатни обновления'],
                     },
                     {
                       id: 'premium-course' as const,
                       name: 'Пълен достъп',
-                      sub: 'Всички 3 програми + сертификат',
-                      price: '249 EUR',
-                      features: ['AI Business Blueprint (11 модула)', 'Перфектното Видео (15 модула)', 'Marketing Basics (20 модула)', 'Сертификат за завършване', 'Доживотен достъп до всичко'],
+                      sub: `Всички 3 програми · ${ACADEMY_TOTAL_STATS.lessonCount} урока + сертификат`,
+                      price: `${getTierById('fullAccess')?.price} EUR`,
+                      features: [`AI Business Blueprint (11 модула · ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока)`, `Перфектното Видео (15 модула · ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока)`, `Marketing Basics (20 модула · ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока)`, 'Сертификат за завършване', 'Доживотен достъп до всичко'],
                       highlight: true,
                     },
                   ].map((tier) => {

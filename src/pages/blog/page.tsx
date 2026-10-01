@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -192,8 +193,8 @@ const ARTICLES = [
     slug: '/blog/ai-business-blueprint-putyat-na-koprinata',
     category: 'AI & Бизнес',
     categoryColor: 'bg-violet-50 text-violet-700',
-    title: 'AI Business Blueprint — Пътят на коприната: от AI промптиране до €1,000-8,000/месец',
-    excerpt: '11-модулна система за изграждане на дигитален бизнес с AI. Всяка стъпка е тествана върху реални клиентски проекти — Sunrise Food, K-Food, NP Massage Studio.',
+    title: 'AI Business Blueprint — Пътят на коприната: от AI промптиране до система за клиенти',
+    excerpt: `11 модула и ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} публикувани урока за изграждане на дигитална услуга с AI. Оферта, сайт, съдържание, клиенти и Revenue Blueprint.`,
     readTime: '14 мин.',
     date: '7 Юли 2026',
     author: 'Владимир Атанасов',
@@ -207,7 +208,7 @@ const ARTICLES = [
     category: 'Видео продукция',
     categoryColor: 'bg-rose-50 text-rose-700',
     title: 'Перфектното Видео — от идея до готов продукт: пълната система за бизнес видео',
-    excerpt: '9 модула + бонус инструменти. От диагностика и стратегия до снимачен ден и монтаж. За предприемачи и маркетолози.',
+    excerpt: `15 модула и ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} публикувани урока. От стратегия и заснемане до монтаж, разпространение, аналитика и финален проект с изпити.`,
     readTime: '13 мин.',
     date: '7 Юли 2026',
     author: 'Владимир Атанасов & Натан Петков',
@@ -221,7 +222,7 @@ const ARTICLES = [
     category: 'Маркетинг',
     categoryColor: 'bg-emerald-50 text-emerald-700',
     title: 'Marketing Basics — от основа до скалиране: пълната маркетинг система за бизнес',
-    excerpt: '20 модула в 4 групи: позициониране, присъствие, трафик и превръщане. Системата, която всяка фирма трябва да има.',
+    excerpt: `20 модула и ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока: оферта, видимост, реклама, CRM, продажби и измерване. Финален практически проект и изпит върху целия курс.`,
     readTime: '12 мин.',
     date: '7 Юли 2026',
     author: 'Владимир Атанасов',

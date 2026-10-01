@@ -1,78 +1,12 @@
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MARKETING_BASICS_OCT2026_MODULES } from '@/data/marketing-basics-oct2026';
+import { MARKETING_BASICS_PUBLIC_GROUPS } from '@/data/academy-public-programs';
 
-function publishedModule(num: string) {
-  const module = MARKETING_BASICS_OCT2026_MODULES.find(item => item.number === num);
-  if (!module) throw new Error(`Missing Marketing Basics module ${num}`);
-  return { num, title: module.title, time: `${module.duration} · ${module.lessons.length} урока`, desc: module.subtitle };
-}
 
-const GROUPS = [
-  {
-    id: 'foundation',
-    title: 'Група 1: Основа и Позициониране',
-    subtitle: 'Кой си ти, за кого си, защо теб — плюс правна и технологична рамка',
-    icon: 'ri-focus-3-line',
-    color: '#3B5BDB',
-    modules: [
-      { num: '01', title: 'Основа — Кой, за кого, защо теб', time: '45мин · 7 урока', desc: 'AI тест за препоръка, категория на един, founder brand, позициониране vs реклама, конкурентен анализ. Фундаментът, без който всеки маркетинг бюджет е загуба.' },
-      { num: '02', title: 'Идеалният клиент и Zero-Party Данни', time: '45мин · 8 урока', desc: 'Jobs-to-be-done вместо демография, момент на спусъка, карта на възражения, банка от думи на клиента, Zero-party анкети, A/B/C клиентски нива, social listening.' },
-      { num: '03', title: 'Съобщението и AI цитирирането', time: '45мин · 8 урока', desc: '5-секунден тест за ясност, доказуемо твърдение с число, разбиване на мит, основен AI промпт за бранда, AI-четима "За нас" страница, одит спрямо конкуренти.' },
-      { num: '04', title: 'Юридическа рамка и Технологичен стек', time: '1ч · 10 урока', desc: 'Consent Mode v2, EU AI Act, минимален софтуерен стек, GDPR в практиката, no-code автоматизация, AI агенти за бизнеса, MCP на прост език, одит на абонаменти.' },
-    ],
-  },
-  {
-    id: 'presence',
-    title: 'Група 2: Присъствие и Видимост',
-    subtitle: 'Къде и как да те намират — в Google, AI и извън',
-    icon: 'ri-global-line',
-    color: '#2F9E44',
-    modules: [
-      { num: '05', title: 'Ценообразуване и AI-читаеми оферти', time: '45мин · 8 урока', desc: 'Ценообразуване на база стойност, ценова котва, имена на пакети, гаранции, скрипт за "скъпо е", AI-четими ценови страници, прозрачност като предимство.' },
-      publishedModule('06'),
-      publishedModule('07'),
-      publishedModule('08'),
-      publishedModule('09'),
-      publishedModule('10'),
-    ],
-  },
-  {
-    id: 'traffic',
-    title: 'Група 3: Трафик и Партньорства',
-    subtitle: 'Как да доведеш хора при теб — органично, платено, чрез партньори',
-    icon: 'ri-traffic-light-line',
-    color: '#E67700',
-    modules: [
-      publishedModule('11'),
-      publishedModule('12'),
-      publishedModule('13'),
-      publishedModule('14'),
-      publishedModule('15'),
-      publishedModule('16'),
-    ],
-  },
-  {
-    id: 'conversion',
-    title: 'Група 4: Превръщане и Метрики',
-    subtitle: 'Как интересът става продажба — и как знаеш кое работи',
-    icon: 'ri-exchange-funds-line',
-    color: '#e53e3e',
-    modules: [
-      publishedModule('17'),
-      publishedModule('18'),
-      publishedModule('19'),
-      publishedModule('20'),
-    ],
-  },
-];
+const GROUPS = MARKETING_BASICS_PUBLIC_GROUPS;
 
-const GROUP_DESC = [
-  'Първите 4 модула полагат фундамента: кой си, за кого работиш, какво казваш и каква е правната и технологична рамка. AI тестът за препоръка, founder brand и основният AI промпт са вградени директно.',
-  'Модули 05-10 изграждат цялостно онлайн присъствие — от цени и GBP до локално SEO, GEO оптимизация и E-E-A-T съдържание. Упражненията свързват откриваемостта с проверими факти и полезни страници.',
-  'Модули 11–16: видео и социално търсене, Meta Advantage+, Google AI Max, надеждни данни, кампании и партньорства. Всеки избор се проверява по качество, принос и капацитет.',
-  'Модули 17-20 затварят цикъла: лийд фунии със speed-to-lead, интерактивни магнити, имейл автоматизация и истинските метрики, които показват дали системата работи.',
-];
+const GROUP_DESC = GROUPS.map(group => group.description);
 
 export default function MarketingBasicsProgram() {
   const [openGroup, setOpenGroup] = useState<string | null>('foundation');
@@ -85,14 +19,14 @@ export default function MarketingBasicsProgram() {
       </div>
 
       <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-[#1C1C1E] mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-        20 модула · 209 публикувани урока —{' '}
+        20 модула · {ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока —{' '}
         <em className="text-[#1C1C1E]/55">маркетинг система за 2026.</em>
       </h2>
       <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-2">
         Всички 20 модула са публикувани. Финалът включва 90-дневен практически проект, четири групови проверки с 60 въпроса и отделен изпит с 40 въпроса върху целия курс.
       </p>
       <p className="text-xs text-[#1C1C1E]/50 mb-8">
-        Времето включва самостоятелната практика и е ориентировъчно. Източниците за новото издание са проверени към 30.09.2026.
+        Времето включва самостоятелната практика и е ориентировъчно. Каталогът е сверен с публикуваните версии към 01.10.2026.
       </p>
 
       <div className="space-y-4">
@@ -145,7 +79,7 @@ export default function MarketingBasicsProgram() {
           to="/kurs"
           className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#1C1C1E] text-white text-sm rounded-full hover:bg-[#1C1C1E]/85 transition-all cursor-pointer whitespace-nowrap font-medium"
         >
-          Започни с първия безплатен модул →
+          Към Академия TAVORA →
         </Link>
       </div>
     </section>

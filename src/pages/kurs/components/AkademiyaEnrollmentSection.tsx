@@ -1,3 +1,4 @@
+import { ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 import { metaPixel } from '@/lib/metaPixel';
 import { formatPrice, INDIVIDUAL_TOTAL, STANDALONE_PROGRAMS } from '@/config/pricing';
@@ -51,7 +52,7 @@ const MAIN_TIERS: MainTier[] = [
     recommended: true,
     includes: [
       'Всички 46 модула',
-      '492+ урока',
+      `${ACADEMY_TOTAL_STATS.lessonCount} урока`,
       'Трите пълни програми',
       'Тестове и практически материали',
       'Доживотен достъп',

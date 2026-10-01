@@ -1,3 +1,6 @@
+import { syncPageSocialMeta } from '@/lib/page-social-meta';
+import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
+import { MARKETING_BASICS_PUBLIC_GROUPS } from '@/data/academy-public-programs';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -10,7 +13,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Как е структурирана програмата?',
-    a: '20 модула в 4 групи: Позициониране (модули 1-5), Присъствие (6-10), Трафик (11-15) и Превръщане (16-20). Всяка група е самостоятелна фаза. 177 урока общо — от основи до advanced тактики.',
+    a: `20 модула в 4 групи: Основа и позициониране (01–04), Присъствие и видимост (05–10), Трафик и партньорства (11–16), Превръщане и метрики (17–20). Общо ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока, включително финалния практически проект и изпитите.`,
   },
   {
     q: 'Трябва ли ми предишен маркетинг опит?',
@@ -18,15 +21,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Колко време отнема?',
-    a: '177 урока, всеки между 15-45 минути. Най-добрият подход е по 1 модул на седмица — така цялата програма отнема 20 седмици. Но можеш и по-бързо, ако имаш време.',
+    a: `${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока с отделно време за четене, работа и проверки. Учиш със свое темпо. Финалният модул включва 90-дневен план за бизнес и общ изпит; това е периодът на проекта, а не обещание да завършиш курса за точно 90 дни.`,
   },
   {
     q: 'Как Marketing Basics се различава от AI Business Blueprint?',
-    a: 'Marketing Basics е чисто маркетингова програма — фокусирана върху стратегия, канали и конверсия. AI Business Blueprint включва и технически умения (изграждане на сайтове, AI инструменти, киберсигурност). Двете се допълват перфектно.',
+    a: 'Marketing Basics е за цялостна маркетинг система: оферта, видимост, реклама, CRM, продажби и измерване, с AI, данни и автоматизация в самите задачи. „Пътят на коприната“ е за изграждане и продажба на дигитална услуга с AI. Програмите са самостоятелни и се допълват.',
   },
   {
     q: 'Ще мога ли веднага да приложа наученото?',
-    a: 'Да — всеки модул завършва с конкретна задача: "направи X за твоя бизнес". След модул 5 ще имаш завършено позициониране. След модул 10 — пълно онлайн присъствие. След модул 20 — цялостна маркетинг система.',
+    a: 'Всеки модул съдържа работа по конкретен бизнес. Модули 01–04 изграждат основата; 05–10 свързват офертата с откриваемостта и сайта; 11–16 покриват трафик, измерване и партньорства; 17–20 свързват CRM, имейл, продажби и икономика. Финалът е практически проект и изпит върху целия курс.',
   },
   {
     q: 'Подходящо ли е за локален бизнес?',
@@ -34,7 +37,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const today = ACADEMY_CATALOG_VERIFIED_ON;
 
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
@@ -53,7 +56,7 @@ const ARTICLE_SCHEMA = {
       '@type': 'Article',
       '@id': 'https://imashnujnoto.com/blog/marketing-basics-palna-sistema#article',
       headline: 'Marketing Basics — пълната маркетинг система за бизнес: от основа до скалиране',
-      description: '20 модула в 4 групи: позициониране, присъствие, трафик и превръщане. Пълната маркетинг система за всеки бизнес. 177 урока. ТАВОРА ЕООД.',
+      description: `20 модула в 4 групи: позициониране, присъствие, трафик и превръщане. Пълната маркетинг система за всеки бизнес. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока. ТАВОРА ЕООД.`,
       url: 'https://imashnujnoto.com/blog/marketing-basics-palna-sistema',
       datePublished: '2026-07-07',
       dateModified: today,
@@ -160,70 +163,13 @@ const ARTICLE_SCHEMA = {
   ],
 };
 
-const GROUPS = [
-  {
-    id: 'positioning',
-    title: 'Група 1: Позициониране',
-    subtitle: 'Кой си ти, за кого си и защо някой би платил',
-    icon: 'ri-focus-3-line',
-    color: '#3B5BDB',
-    modules: [
-      { num: '01', title: 'Пазарен анализ', desc: 'Разбиране на пазара, конкурентите и възможностите през 2026.', lessons: 4 },
-      { num: '02', title: 'Идеален клиент (ICP)', desc: 'Дефиниране на точния профил на клиента, който искаш да привлечеш.', lessons: 4 },
-      { num: '03', title: 'Ценностно предложение', desc: 'Какво предлагаш, което никой друг не предлага — и защо има значение.', lessons: 4 },
-      { num: '04', title: 'Бранд идентичност', desc: 'Име, лого, глас, тон — всичко, което прави бранда разпознаваем.', lessons: 4 },
-      { num: '05', title: 'Ценова стратегия', desc: 'Колко да струва? Пакетиране, психология на цената, ъпсел.', lessons: 4 },
-    ],
-  },
-  {
-    id: 'presence',
-    title: 'Група 2: Присъствие',
-    subtitle: 'Къде и как да те намират',
-    icon: 'ri-global-line',
-    color: '#2F9E44',
-    modules: [
-      { num: '06', title: 'Уебсайт архитектура', desc: 'Структура на сайт, който продава — от начална страница до checkout.', lessons: 4 },
-      { num: '07', title: 'Google Business Profile', desc: 'GBP оптимизация за локален ранк — задължително за всеки бизнес.', lessons: 4 },
-      { num: '08', title: 'Социални мрежи', desc: 'Кои платформи за твоя бизнес? Стратегия за всяка.', lessons: 4 },
-      { num: '09', title: 'SEO за бизнес', desc: 'Техническо SEO, ключови думи, съдържание — за да те намират в Google.', lessons: 5 },
-      { num: '10', title: 'GEO за AI търсачки', desc: 'Оптимизация за ChatGPT, Perplexity и Google AI Overview.', lessons: 4 },
-    ],
-  },
-  {
-    id: 'traffic',
-    title: 'Група 3: Трафик',
-    subtitle: 'Как да доведеш хора при теб',
-    icon: 'ri-traffic-light-line',
-    color: '#E67700',
-    modules: [
-      { num: '11', title: 'Органичен трафик', desc: 'SEO съдържание, блог стратегия и дългосрочен растеж без реклами.', lessons: 4 },
-      { num: '12', title: 'Meta реклами', desc: 'Facebook + Instagram реклами — таргетиране, креативи, бюджет.', lessons: 4 },
-      { num: '13', title: 'Google Ads', desc: 'Search, Display и Shopping кампании за максимален обхват.', lessons: 4 },
-      { num: '14', title: 'Видео трафик', desc: 'YouTube, TikTok и Reels като канали за привличане.', lessons: 4 },
-      { num: '15', title: 'Email маркетинг', desc: 'Изграждане на списък, автоматизация и сегментация.', lessons: 4 },
-    ],
-  },
-  {
-    id: 'conversion',
-    title: 'Група 4: Превръщане',
-    subtitle: 'Как интересът става продажба',
-    icon: 'ri-exchange-funds-line',
-    color: '#e53e3e',
-    modules: [
-      { num: '16', title: 'Конверсионна психология', desc: 'Защо хората купуват — и как да им помогнеш.', lessons: 4 },
-      { num: '17', title: 'Лийд магнити и фунии', desc: 'Създаване на funnel, който води от интерес до покупка.', lessons: 4 },
-      { num: '18', title: 'Продажбен процес', desc: 'От запитване до договор — система за затваряне на сделки.', lessons: 4 },
-      { num: '19', title: 'Задържане и ъпсел', desc: 'Как да задържиш клиентите и да им продаваш повече.', lessons: 4 },
-      { num: '20', title: 'Анализ и оптимизация', desc: 'KPI-та, A/B тестове и постоянна оптимизация на funnel-а.', lessons: 4 },
-    ],
-  },
-];
+const GROUPS = MARKETING_BASICS_PUBLIC_GROUPS;
 
 const STATS_BAR = [
   { value: '20', label: 'модула' },
-  { value: '177', label: 'урока' },
-  { value: '4 групи', label: 'позициониране → превръщане' },
-  { value: '20 сед.', label: 'препоръчително време' },
+  { value: String(ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount), label: 'урока' },
+  { value: '4 групи', label: 'основа → видимост → трафик → продажби' },
+  { value: 'Със свое темпо', label: 'четене, практика и изпити' },
 ];
 
 const CASE_STUDIES = [
@@ -257,26 +203,26 @@ const FOOLPROOF_PATH = [
   {
     step: '01',
     title: 'Позиционирай се — Група 1',
-    desc: 'Без ясно позициониране всичко останало е загуба на пари. Първите 5 модула дефинират кой си, за кого си и защо.',
-    time: '5 седмици',
+    desc: 'Без ясно позициониране всичко останало е загуба на пари. Първите 4 модула дефинират кой си, за кого работиш, какво казваш и как подготвяш данните и инструментите.',
+    time: 'Модули 01–04',
   },
   {
     step: '02',
     title: 'Изгради присъствие — Група 2',
     desc: 'Сайт, Google Business, социални мрежи, SEO — всичко, от което се нуждаеш, за да те намират.',
-    time: '5 седмици',
+    time: 'Модули 05–10',
   },
   {
     step: '03',
     title: 'Генерирай трафик — Група 3',
     desc: 'Органичен и платен трафик. Кои канали работят за твоя бизнес и как да не гориш бюджета.',
-    time: '5 седмици',
+    time: 'Модули 11–16',
   },
   {
     step: '04',
     title: 'Превръщай в клиенти — Група 4',
     desc: 'Конверсия, продажби, задържане. Система, която носи предвидим резултат всеки месец.',
-    time: '5 седмици',
+    time: 'Модули 17–20',
   },
 ];
 
@@ -291,14 +237,16 @@ const RELATED = [
 
 export default function MarketingBasicsPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [openGroup, setOpenGroup] = useState<string | null>('positioning');
+  const [openGroup, setOpenGroup] = useState<string | null>('foundation');
 
   useEffect(() => {
     document.title = 'Marketing Basics — пълната маркетинг система за бизнес | ТАВОРА ЕООД';
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', 'Пълна маркетинг система: 20 модула в 4 групи — позициониране, присъствие, трафик и превръщане. 177 урока. За всеки бизнес. ТАВОРА ЕООД.');
+    if (metaDesc) metaDesc.setAttribute('content', `Пълна маркетинг система: 20 модула в 4 групи — позициониране, присъствие, трафик и превръщане. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока. За всеки бизнес. ТАВОРА ЕООД.`);
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/blog/marketing-basics-palna-sistema');
+
+    const restoreSocialMeta = syncPageSocialMeta();
 
     const id = 'schema-marketing-basics';
     let el = document.getElementById(id) as HTMLScriptElement | null;
@@ -311,6 +259,7 @@ export default function MarketingBasicsPage() {
     faqEl.textContent = JSON.stringify(FAQ_SCHEMA);
 
     return () => {
+      restoreSocialMeta();
       ['schema-marketing-basics', 'schema-marketing-basics-faq'].forEach((sid) => { const e = document.getElementById(sid); if (e) e.remove(); });
     };
   }, []);
@@ -352,7 +301,7 @@ export default function MarketingBasicsPage() {
             <p className="text-sm md:text-base text-[#1C1C1E]/65 max-w-2xl leading-relaxed mb-6">
               <strong className="text-[#1C1C1E]">20 модула в 4 групи:</strong> позициониране, присъствие, трафик и превръщане.
               Системата, която всяка фирма трябва да има — от кварталното кафене до онлайн магазина.
-              177 урока, тествани върху реални бизнеси.
+              {ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока с казуси, практика и проверки.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -476,7 +425,7 @@ export default function MarketingBasicsPage() {
               <span className="text-xs text-[#1C1C1E]/60">Пътят</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-light text-[#1C1C1E] mb-6" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-              20 седмици до цялостна маркетинг система.
+              Четири фази до проверима маркетинг система.
             </h2>
 
             <div className="space-y-6">
@@ -631,7 +580,7 @@ export default function MarketingBasicsPage() {
                   <span className="italic text-white/60">разгледай актуалната програма и цената</span>
                 </div>
                 <p className="text-sm text-white/75 max-w-md leading-relaxed">
-                  Първият модул (Пазарен анализ) е безплатен. Започни да изграждаш системата си днес.
+                  Първият модул е „Основа — Кой, за кого, защо теб“. Marketing Basics се отключва с покупка или предоставен достъп. Безплатният пробен модул на Академията е AI Advantage.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">

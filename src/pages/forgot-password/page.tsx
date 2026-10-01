@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
             <div className="w-8 h-8 bg-[#1A1A1A] rounded-sm flex items-center justify-center">
               <span className="text-white text-xs font-semibold tracking-wider">AI</span>
             </div>
-            <span className="text-[#1A1A1A] text-sm font-medium tracking-wide">Мастърклас</span>
+            <span className="text-[#1A1A1A] text-sm font-medium tracking-wide">Академия TAVORA</span>
           </Link>
 
           <h1 className="text-2xl font-light text-[#1A1A1A] mb-2 tracking-tight">Забравена парола</h1>

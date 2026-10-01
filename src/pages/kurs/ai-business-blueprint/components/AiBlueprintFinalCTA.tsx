@@ -14,7 +14,7 @@ export default function AiBlueprintFinalCTA() {
           </h2>
 
           <p className="text-sm text-white/75 leading-relaxed mb-8 max-w-lg">
-            Модул 01 (AI Advantage) е напълно безплатен — 2 часа, 4 урока, без нужда от карта.
+            Модул 01 (AI Advantage) е напълно безплатен — 4 урока с обяснения и задачи, без нужда от карта.
             Започни днес с безплатния първи модул и виж сам дали системата работи за теб.
           </p>
 

@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 export default function MarketingBasicsProblem() {
   return (
     <section id="problem" className="max-w-4xl mx-auto px-4 md:px-16 py-14 md:py-20">
@@ -20,8 +21,8 @@ export default function MarketingBasicsProblem() {
         <p>
           Маркетингът работи само когато е <strong className="text-[#1C1C1E]">система</strong>.
           Когато всяко действие е част от по-голям план. Когато знаеш кой е идеалният ти клиент (Модул 02),
-          какво да му кажеш (Модул 03), къде да те намери (Модули 05-08), как да го доведеш (Модули 11-15)
-          и какво да направи като дойде (Модули 16-20). Без тази последователност — просто гориш бюджет.
+          какво да му кажеш (Модул 03), къде да те намери (Модули 05–10), как да го доведеш (Модули 11–16)
+          и какво да направи като дойде (Модули 17–20). Без тази последователност — просто гориш бюджет.
         </p>
         <p>
           <strong className="text-[#1C1C1E]">Marketing Basics</strong> не е "още един маркетинг курс".
@@ -36,7 +37,7 @@ export default function MarketingBasicsProblem() {
           {
             icon: 'ri-user-search-line',
             title: 'Не знаеш кой е клиентът ти',
-            desc: 'Ако не знаеш кой купува — не знаеш на кого говориш. Модули 01-04 ти помагат да дефинираш идеалния клиент, посланието и цената.',
+            desc: 'Ако не знаеш кой купува — не знаеш на кого говориш. Модули 01–04 ти помагат да дефинираш клиента, посланието и работната рамка; модул 05 развива цените и офертата.',
           },
           {
             icon: 'ri-radar-line',
@@ -46,12 +47,12 @@ export default function MarketingBasicsProblem() {
           {
             icon: 'ri-traffic-light-line',
             title: 'Нямаш предвидим трафик',
-            desc: 'Един месец имаш клиенти, следващия — не. Трябва ти система за постоянен поток. Модули 11-15 покриват органичен и платен трафик.',
+            desc: 'Един месец имаш клиенти, следващия — не. Трябва ти система за постоянен поток. Модули 11–16 покриват органичен и платен трафик.',
           },
           {
             icon: 'ri-exchange-funds-line',
             title: 'Не превръщаш интереса в продажби',
-            desc: 'Идват хора, но не купуват. Нямаш фуния, лийд магнити, последващи имейли. Модули 16-20 са за превръщането на трафик в revenue.',
+            desc: 'Идват хора, но не купуват. Нямаш фуния, лийд магнити, последващи имейли. Модули 17–20 са за превръщането на трафик в revenue.',
           },
         ].map((item) => (
           <div key={item.title} className="p-5 rounded-2xl border border-[#1C1C1E]/8 bg-white flex items-start gap-3">
@@ -69,7 +70,7 @@ export default function MarketingBasicsProblem() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-2xl bg-[#F9F9F7] border border-[#1C1C1E]/6">
         {[
           { value: '20', label: 'модула по програма' },
-          { value: '209', label: 'урока, практика и изпити' },
+          { value: String(ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount), label: 'урока, практика и изпити' },
           { value: '4 групи', label: 'позициониране → превръщане' },
           { value: '30 дни', label: 'гаранция за възстановяване на сумата' },
         ].map((s) => (

@@ -14,7 +14,7 @@ export default function MarketingBasicsFinalCTA() {
           </h2>
 
           <p className="text-sm text-white/75 leading-relaxed mb-8 max-w-lg">
-            Първият модул (Основа) е напълно безплатен — без нужда от карта.
+            Програмата се отключва с покупка или предоставен достъп. Безплатният пробен модул на Академията е AI Advantage.
             Започни да изграждаш маркетинг системата на бизнеса си днес.
           </p>
 
@@ -23,7 +23,7 @@ export default function MarketingBasicsFinalCTA() {
               to="/kurs"
               className="px-8 py-3.5 bg-white text-[#0A2540] text-sm rounded-full hover:bg-white/90 transition-all cursor-pointer whitespace-nowrap text-center font-medium"
             >
-              Започни безплатно — първият модул е отключен →
+              Разгледай достъпа до програмата →
             </Link>
             <a
               href="#programa"
@@ -37,7 +37,7 @@ export default function MarketingBasicsFinalCTA() {
         <div className="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center gap-4 text-xs text-white/50">
           <div className="flex items-center gap-2">
             <i className="ri-shield-check-line text-white/60" />
-            <span>Първият модул е безплатен</span>
+            <span>20 модула с практически проект</span>
           </div>
           <div className="hidden sm:block w-1 h-1 rounded-full bg-white/20" />
           <div className="flex items-center gap-2">

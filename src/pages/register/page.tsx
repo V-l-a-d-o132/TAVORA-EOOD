@@ -158,7 +158,8 @@ export default function RegisterPage() {
             </h2>
             <div className="space-y-3 mt-6">
               {[
-                'Достъп до всички видео модули',
+                'Безплатен пробен модул AI Advantage',
+                'Платени програми според избрания пакет',
                 'Проследяване на твоя прогрес',
                 'Предаване на домашни задания',
                 'Персонален dashboard',
@@ -183,7 +184,7 @@ export default function RegisterPage() {
             <div className="w-8 h-8 bg-[#1A1A1A] rounded-sm flex items-center justify-center">
               <span className="text-white text-xs font-semibold tracking-wider">AI</span>
             </div>
-            <span className="text-[#1A1A1A] text-sm font-medium tracking-wide">Мастърклас</span>
+            <span className="text-[#1A1A1A] text-sm font-medium tracking-wide">Академия TAVORA</span>
           </Link>
 
           <h1 className="text-2xl font-light text-[#1A1A1A] mb-2 tracking-tight">Създай акаунт</h1>

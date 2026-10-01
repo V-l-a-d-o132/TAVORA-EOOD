@@ -1,4 +1,6 @@
+import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { useEffect } from 'react';
+import { ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
 import { useAuth } from '@/contexts/AuthContext';
 import { metaPixel } from '@/lib/metaPixel';
 import { academyPixel } from '@/lib/metaPixel';
@@ -75,7 +77,7 @@ const AKADEMIYA_SCHEMA = {
         '@type': 'Course',
         position: i + 1,
         name: p.name,
-        description: p.description,
+        description: `${p.description} ${p.moduleCount} модула, ${p.lessonCount} публикувани урока.`,
         url: `https://imashnujnoto.com${p.route}`,
         provider: {
           '@type': 'Organization',
@@ -111,16 +113,19 @@ export default function KursPage() {
     document.title = 'Академия TAVORA — AI, маркетинг и видео обучение | ТАВОРА ЕООД';
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Практическа академия по AI, маркетинг и видео. Научи се да създаваш и продаваш дигитални услуги — от оферта и сайт до съдържание и привличане на клиенти.');
+      metaDesc.setAttribute('content', `Академия TAVORA: три програми по AI, маркетинг и видео, ${ACADEMY_TOTAL_STATS.moduleCount} модула и ${ACADEMY_TOTAL_STATS.lessonCount} публикувани урока. Обяснения, практика, проекти и проверки.`);
     }
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/kurs');
+
+    const restoreSocialMeta = syncPageSocialMeta();
 
     // Meta Pixel ViewContent
     metaPixel.viewContent('Академия TAVORA — Образователна страница', 'Академия TAVORA');
     academyPixel.viewContent('Академия TAVORA — Образователна страница');
 
     return () => {
+      restoreSocialMeta();
       const existing = document.getElementById(id);
       if (existing) existing.remove();
     };

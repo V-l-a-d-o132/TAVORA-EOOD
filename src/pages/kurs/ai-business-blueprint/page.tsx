@@ -1,3 +1,6 @@
+import { syncPageSocialMeta } from '@/lib/page-social-meta';
+import { SILK_ROAD_FAQ } from '@/data/academy-public-faq';
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { useEffect } from 'react';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
@@ -17,36 +20,7 @@ import { getTierById } from '@/config/pricing';
 
 const silkRoad = getTierById('silkRoad');
 
-const FAQ_ITEMS = [
-  {
-    q: 'Колко струва „Пътят на коприната“ на Академия TAVORA?',
-    a: `Пълната програма (11 модула, 74+ урока) е ${silkRoad?.price} EUR еднократно. Стартовият пакет с първите 10 модула е 49 EUR. Първият модул (AI Advantage) е безплатен и не изисква карта.`,
-  },
-  {
-    q: 'Трябва ли ми технически опит, за да започна?',
-    a: 'Не. Първият модул (AI Advantage) започва от абсолютна нула — учиш се да работиш с ChatGPT, Claude и Gemini като професионалист, без предварителни технически познания. Всеки следващ модул надгражда върху предишния.',
-  },
-  {
-    q: 'За колко време мога да завърша цялата програма?',
-    a: 'Програмата съдържа 11 модула и 32+ часа структурирано съдържание. С темпо от 4-6 часа седмично се покрива за около 6-8 седмици. Всеки модул е самостоятелен.',
-  },
-  {
-    q: 'Кога ще видя първите резултати?',
-    a: 'Първите 3 модула ти дават умения да създадеш оферта и сайт. Резултатите зависят от твоята ниша, изпълнение и отделено време — академията не гарантира конкретен финансов резултат.',
-  },
-  {
-    q: 'Мога ли да купя само един модул, а не цялата програма?',
-    a: 'Не. Програмата се закупува като пакет — Стартовият пакет (първите 10 модула) или пълната програма (11 модула). Първият модул е безплатен, за да тестваш подхода преди да решиш.',
-  },
-  {
-    q: 'Гарантиран ли е конкретен финансов резултат?',
-    a: 'Не. Академията предоставя знания, процеси и практически инструменти, но резултатите зависят от избраната ниша, изпълнението, пазара и отделеното време.',
-  },
-  {
-    q: 'Какво става, ако не съм доволен?',
-    a: 'Имаш 30-дневна доброволна гаранция за възстановяване на сумата. Първият модул е безплатен — това е начинът да тестваш програмата без риск.',
-  },
-];
+const FAQ_ITEMS = SILK_ROAD_FAQ;
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -59,7 +33,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/kurs/ai-business-blueprint',
       name: 'Пътят на коприната — изгради дигитална услуга с AI | Академия TAVORA',
       description:
-        'Практическа програма за създаване на дигитална услуга с AI — от оферта и сайт до съдържание, намиране на клиенти и работна система. 11 модула, 74+ урока. ТАВОРА ЕООД.',
+        `Практическа програма за създаване на дигитална услуга с AI — от оферта и сайт до съдържание, намиране на клиенти и работна система. 11 модула, ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока. ТАВОРА ЕООД.`,
       inLanguage: 'bg',
       dateModified: today,
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
@@ -77,7 +51,7 @@ const SCHEMA = {
       '@id': 'https://imashnujnoto.com/kurs/ai-business-blueprint#course',
       name: 'Пътят на коприната (AI Business Blueprint)',
       description:
-        '11-модулна програма за изграждане на дигитална услуга с изкуствен интелект. Покрива AI промптиране, уеб дизайн с Readdy, SEO и GEO оптимизация, копирайтинг, изграждане на аудитория и конверсионни системи. 32+ часа съдържание, 74+ урока.',
+        `11-модулна програма за изграждане на дигитална услуга с изкуствен интелект. Покрива AI промптиране, уеб дизайн с Readdy, SEO и GEO оптимизация, копирайтинг, изграждане на аудитория и конверсионни системи. ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока.`,
       url: 'https://imashnujnoto.com/kurs/ai-business-blueprint',
       provider: {
         '@type': 'Organization',
@@ -153,7 +127,7 @@ export default function AiBusinessBlueprintFunnelPage() {
     if (metaDesc) {
       metaDesc.setAttribute(
         'content',
-        'Практическа програма за създаване на дигитална услуга с AI — от оферта и сайт до съдържание, намиране на клиенти и работна система. 11 модула, 74+ урока. ТАВОРА ЕООД.'
+        `Практическа програма за създаване на дигитална услуга с AI — от оферта и сайт до съдържание, намиране на клиенти и работна система. 11 модула, ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока. ТАВОРА ЕООД.`
       );
     }
 
@@ -161,6 +135,8 @@ export default function AiBusinessBlueprintFunnelPage() {
     if (canonical) {
       canonical.setAttribute('href', 'https://imashnujnoto.com/kurs/ai-business-blueprint');
     }
+
+    const restoreSocialMeta = syncPageSocialMeta();
 
     const id = 'schema-ai-blueprint-funnel';
     let el = document.getElementById(id) as HTMLScriptElement | null;
@@ -173,6 +149,7 @@ export default function AiBusinessBlueprintFunnelPage() {
     el.textContent = JSON.stringify(SCHEMA);
 
     return () => {
+      restoreSocialMeta();
       const existing = document.getElementById(id);
       if (existing) existing.remove();
     };

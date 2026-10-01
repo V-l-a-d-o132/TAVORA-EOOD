@@ -5,7 +5,7 @@
   <!-- Начална страница -->
   <url>
     <loc>https://imashnujnoto.com/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -92,7 +92,7 @@
   <!-- Блог основна -->
   <url>
     <loc>https://imashnujnoto.com/blog/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -130,19 +130,19 @@
   </url>
   <url>
     <loc>https://imashnujnoto.com/blog/ai-business-blueprint-putyat-na-koprinata/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
   <url>
     <loc>https://imashnujnoto.com/blog/perfektnoto-video-biznes-sistema/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
   <url>
     <loc>https://imashnujnoto.com/blog/marketing-basics-palna-sistema/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
@@ -358,25 +358,25 @@
   <!-- Курсове -->
   <url>
     <loc>https://imashnujnoto.com/kurs/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://imashnujnoto.com/kurs/ai-business-blueprint/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://imashnujnoto.com/kurs/perfektnoto-video/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://imashnujnoto.com/kurs/marketing-basics/</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -396,7 +396,7 @@
   </url>
   <url>
     <loc>https://imashnujnoto.com/terms/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>

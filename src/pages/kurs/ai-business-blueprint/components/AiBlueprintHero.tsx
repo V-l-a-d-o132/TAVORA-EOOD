@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 
 interface AiBlueprintHeroProps {
@@ -21,7 +22,7 @@ export default function AiBlueprintHero({ keyword }: AiBlueprintHeroProps) {
           <div className="flex flex-wrap items-center gap-3 mb-5">
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-violet-50 text-violet-700">AI &amp; Бизнес</span>
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-red-50 text-red-700">Академия TAVORA</span>
-            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">11 модула · 74+ урока</span>
+            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">11 модула · {ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока</span>
           </div>
 
           <h1
