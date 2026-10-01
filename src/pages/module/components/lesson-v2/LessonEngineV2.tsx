@@ -10,6 +10,7 @@ import {
 import LessonBlockRenderer from './LessonBlockRenderer';
 import { LessonDraftQueue, type DraftSaveStatus } from '@/lib/lesson-draft-queue';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
+import { notifyLearningProgressChanged, recordLessonVisit } from '@/lib/learning-resume';
 
 interface Props {
   moduleId: string;
@@ -56,9 +57,19 @@ export default function LessonEngineV2({
   const [xp, setXp] = useState(0);
   const [masteryStatus, setMasteryStatus] = useState<'learning' | 'practicing' | 'mastered'>('learning');
   const [saveStatus, setSaveStatus] = useState<DraftSaveStatus>('idle');
+  const [visitFailed, setVisitFailed] = useState(false);
   const [showPreviewGate, setShowPreviewGate] = useState(false);
   const draftQueue = useRef<LessonDraftQueue | null>(null);
   const completionReported = useRef(false);
+  const saveVisit = useCallback(async () => {
+    if (!userId || !lesson || previewMode) return;
+    try {
+      await recordLessonVisit(userId, lesson.moduleId, lesson.lessonId);
+      setVisitFailed(false);
+    } catch { setVisitFailed(true); }
+  }, [userId, lesson, previewMode]);
+
+  useEffect(() => { void saveVisit(); }, [saveVisit]);
 
   useEffect(() => {
     if (lessonOverride !== undefined) {
@@ -101,11 +112,23 @@ export default function LessonEngineV2({
     setSaveStatus('idle');
     if (!userId || !lesson || previewMode) return;
     const queue = new LessonDraftQueue(
-      (cursor, states) => autosaveLessonV2(moduleId, lesson.lessonId, lesson.versionId, cursor, states),
+      async (cursor, states) => {
+        const result = await autosaveLessonV2(moduleId, lesson.lessonId, lesson.versionId, cursor, states);
+        notifyLearningProgressChanged(userId);
+        return result;
+      },
       setSaveStatus,
     );
     draftQueue.current = queue;
+    const flush = () => { void queue.flush(); };
+    const hidden = () => { if (document.visibilityState === 'hidden') flush(); };
+    window.addEventListener('pagehide', flush);
+    window.addEventListener('online', flush);
+    document.addEventListener('visibilitychange', hidden);
     return () => {
+      window.removeEventListener('pagehide', flush);
+      window.removeEventListener('online', flush);
+      document.removeEventListener('visibilitychange', hidden);
       queue.dispose();
       if (draftQueue.current === queue) draftQueue.current = null;
     };
@@ -177,6 +200,7 @@ export default function LessonEngineV2({
     {lesson.versionChanged && <p role="status" className="mb-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-4 text-sm leading-6 text-amber-100">Урокът е обновен. Започни новите задачи; предишният ти резултат е запазен.</p>}
     {lesson.priorProgress && <p className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/5 p-4 text-sm leading-6 text-emerald-100">Предишен резултат: версия {lesson.priorProgress.version ?? 'по-ранна'}, {lesson.priorProgress.completedBlocks} завършени стъпки, {lesson.priorProgress.xp} XP{lesson.priorProgress.completedAt ? ' · завършен урок' : ''}. Резултатът е запазен в историята.</p>}
     {saveStatus === 'error' && <button type="button" onClick={() => void draftQueue.current?.flush()} className="mb-5 rounded-xl border border-red-400/30 p-3 text-sm text-red-200">Опитай отново да запазиш бележките</button>}
+    {visitFailed && <button type="button" onClick={() => void saveVisit()} className="mb-5 rounded-xl border border-red-400/30 p-3 text-sm text-red-200">Последният урок не е синхронизиран. Опитай отново.</button>}
 
     {completed.size > 0 && <details className="mb-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4 sm:p-5">
       <summary className="cursor-pointer text-sm font-semibold text-emerald-200">Завършени стъпки · {requiredCompleted}/{requiredBlocks.length}</summary>
@@ -192,6 +216,7 @@ export default function LessonEngineV2({
         const saved = await draftQueue.current?.flush();
         if (saved === false) throw new Error('Бележките още не са запазени. Провери връзката и опитай отново.');
         const response = await completeLessonBlock(lesson, currentBlock, payload);
+        if (userId && response.progress) notifyLearningProgressChanged(userId);
         if (response.feedback.complete === true) setCompleted((previous) => new Set(previous).add(currentBlock.key));
         const serverDone = response.progress?.completed_block_keys;
         if (Array.isArray(serverDone)) setCompleted(new Set(serverDone.filter((key): key is string => typeof key === 'string')));
