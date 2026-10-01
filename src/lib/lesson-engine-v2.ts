@@ -9,6 +9,12 @@ export const LESSON_BLOCK_TYPES = [
 ] as const;
 
 export type LessonBlockType = (typeof LESSON_BLOCK_TYPES)[number];
+export const RETIRED_OPEN_ANSWER_TYPES: readonly LessonBlockType[] = [
+  'prompt_builder', 'practical_response', 'reflection', 'homework', 'submission',
+];
+export const AUTHORABLE_LESSON_BLOCK_TYPES = LESSON_BLOCK_TYPES.filter(
+  (type) => !RETIRED_OPEN_ANSWER_TYPES.includes(type),
+);
 export type JsonObject = Record<string, unknown>;
 
 export interface LessonBlockV2 {
