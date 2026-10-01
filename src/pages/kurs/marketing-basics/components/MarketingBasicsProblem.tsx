@@ -25,9 +25,9 @@ export default function MarketingBasicsProblem() {
         </p>
         <p>
           <strong className="text-[#1C1C1E]">Marketing Basics</strong> не е "още един маркетинг курс".
-          Това е стекът, който ТАВОРА ЕООД прилага за реални клиенти —
-          от Sunrise Food (#1 Google за 3 седмици) до Thalysta (+340% продажби).
-          Всеки модул е тестван. Всеки резултат е верифицируем.
+          Програмата свързва позициониране, реални клиентски решения, откриваемост,
+          реклама, продажби и измерване. В практическите задачи работиш с конкретни
+          данни, ограничения и критерии за проверка на своето решение.
         </p>
       </div>
 
@@ -69,7 +69,7 @@ export default function MarketingBasicsProblem() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-2xl bg-[#F9F9F7] border border-[#1C1C1E]/6">
         {[
           { value: '20', label: 'модула по програма' },
-          { value: '195', label: 'урока с практически задачи' },
+          { value: '209', label: 'урока, практика и изпити' },
           { value: '4 групи', label: 'позициониране → превръщане' },
           { value: '30 дни', label: 'гаранция за възстановяване на сумата' },
         ].map((s) => (

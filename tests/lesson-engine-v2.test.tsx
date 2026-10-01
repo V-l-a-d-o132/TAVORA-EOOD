@@ -104,6 +104,37 @@ describe('graded choice retries', () => {
   });
 });
 
+describe('course exam feedback', () => {
+  it('requires all answers and explains a failed thematic minimum with review links', async () => {
+    const block = { ...createBlock('course_exam', 0), content: {
+      introduction: 'Synthetic exam', minimumPercent: 80, minimumGroupPercent: 60,
+      reviewMap: { 's03-m01': 'Позициониране' },
+      questions: [
+        { id: 'q1', prompt: 'Synthetic question one', options: [{ id: 'a', label: 'Choice one' }] },
+        { id: 'q2', prompt: 'Synthetic question two', options: [{ id: 'b', label: 'Choice two' }] },
+      ],
+    } };
+    const submit = vi.fn(async () => ({ ...result, correct: false, score: 90, maxScore: 100,
+      feedback: { complete: false, scorePercent: 90, correctCount: 36, totalQuestions: 40,
+        weakModules: ['s03-m01'], groupResults: [
+          { label: 'Основи · 01–04', correctCount: 4, totalQuestions: 8, scorePercent: 50, minimumPercent: 60, passed: false },
+        ], explanation: 'Повтори темите с грешки.' } }));
+    render(<LessonBlockRenderer block={block} lessonId="synthetic-exam" completed={false} onStateChange={vi.fn()} onSubmit={submit} />);
+    const button = screen.getByRole('button', { name: 'Предай целия изпит' }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    fireEvent.click(screen.getByRole('radio', { name: 'Choice one' }));
+    expect(button.disabled).toBe(true);
+    fireEvent.click(screen.getByRole('radio', { name: 'Choice two' }));
+    expect(button.disabled).toBe(false);
+    fireEvent.click(button);
+    await screen.findByText('Резултат: 90%');
+    expect(submit).toHaveBeenCalledWith({ answers: { q1: 'a', q2: 'b' } });
+    expect(screen.getByText(/4\/8 · 50% · нужни са поне 60%/)).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Модул 01 · Позициониране' }).getAttribute('href')).toBe('/module/s03-m01');
+    expect(screen.getByRole('button', { name: 'Нов опит' })).toBeTruthy();
+  });
+});
+
 describe('Lesson Engine V2 learning flow', () => {
   it.each(['s01-m01', 's02-m01', 's03-m01'])('records reading and advances without claiming mastery in %s', async (moduleId) => {
     const reading = { ...createBlock('concept', 0), points: 0, content: { body: 'Съществуващ учебен текст.' } };

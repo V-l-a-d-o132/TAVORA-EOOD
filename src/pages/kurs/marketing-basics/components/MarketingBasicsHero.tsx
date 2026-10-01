@@ -20,7 +20,7 @@ export default function MarketingBasicsHero({ keyword }: MarketingBasicsHeroProp
           <div className="flex flex-wrap items-center gap-3 mb-5">
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-emerald-50 text-emerald-700">Маркетинг</span>
             <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-red-50 text-red-700">Академия TAVORA</span>
-            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-sky-50 text-sky-700">20 модула · 195 публикувани урока</span>
+            <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-sky-50 text-sky-700">20 модула · 209 публикувани урока</span>
           </div>
 
           <h1
@@ -64,7 +64,7 @@ export default function MarketingBasicsHero({ keyword }: MarketingBasicsHeroProp
             <p className="text-sm text-[#1C1C1E]/65 leading-relaxed">
               <strong className="text-[#1C1C1E]">Marketing Basics</strong> е 20-модулната маркетинг система на
               Академия TAVORA, организирана в 4 фази: Позициониране, Присъствие, Трафик и Превръщане.
-              Модули 01–19 съдържат 195 публикувани урока. Модул 20 предстои.
+              Всички 20 модула са публикувани: 209 урока, практически проект и финален изпит.
               Работиш с учебни казуси, практически задачи и примерни решения за малък и локален бизнес.
             </p>
           </div>
