@@ -13,6 +13,7 @@ const api = vi.hoisted(() => ({
   accessError: false,
   progress: [] as Array<Record<string, unknown>>,
   progressRequest: null as null | Promise<{ data: unknown[]; error: null }>,
+  bookmark: null as unknown,
 }));
 vi.mock('../src/contexts/AuthContext', () => ({
   useAuth: () => ({ user: api.user, loading: false, signOut: vi.fn(), hasFullAccess: true, unlockedModules: api.unlockedModules, refreshProfile: vi.fn() }),
@@ -20,7 +21,10 @@ vi.mock('../src/contexts/AuthContext', () => ({
 vi.mock('../src/lib/supabase', () => ({
   supabase: {
     rpc: api.rpc,
-    from: () => ({ update: (payload: unknown) => ({ eq: () => { api.updateProfile(payload); return Promise.resolve({ error: null }); } }) }),
+    from: () => ({
+      update: (payload: unknown) => ({ eq: () => { api.updateProfile(payload); return Promise.resolve({ error: null }); } }),
+      select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { last_opened_lesson: api.bookmark }, error: null }) }) }),
+    }),
     storage: { from: () => ({ createSignedUrl: async () => ({ data: { signedUrl: '' }, error: null }) }) },
   },
 }));
@@ -69,6 +73,8 @@ beforeEach(() => {
   api.accessError = false;
   api.progress = [];
   api.progressRequest = null;
+  api.bookmark = null;
+  localStorage.clear();
   window.scrollTo = vi.fn();
   HTMLElement.prototype.scrollIntoView = vi.fn();
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute('open', ''); };
@@ -159,11 +165,30 @@ describe('real academy lesson navigation', () => {
     let resolve!: (value: { data: unknown[]; error: null }) => void;
     api.progressRequest = new Promise(done => { resolve = done; });
     setup();
-    await screen.findByRole('heading', { level: 1 });
+    await screen.findByText('Възстановяваме последния ти урок…');
     fireEvent.click(within(screen.getByRole('complementary', { name: '' })).getByRole('button', { name: new RegExp(lessonTitle('s01-m01', 2)) }));
     await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m01', 2) });
     await act(async () => { resolve({ data: [{ lessonId: 'l01-01', completed: true }], error: null }); });
     expect(screen.getByRole('heading', { level: 1, name: lessonTitle('s01-m01', 2) })).toBeTruthy();
+  });
+
+  it('resumes a later saved lesson without recording the temporary first lesson', async () => {
+    api.bookmark = { moduleId: 's01-m01', lessonId: 'l01-04', timestamp: '2026-10-01T12:00:00Z' };
+    setup();
+    await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m01', 3) });
+    await waitFor(() => expect(api.rpc).toHaveBeenCalledWith('academy_record_lesson_visit', expect.objectContaining({ p_lesson: 'l01-04', p_user: 'student' })));
+    expect(api.rpc.mock.calls.filter(call => call[0] === 'academy_record_lesson_visit').map(call => call[1].p_lesson)).toEqual(['l01-04']);
+  });
+
+  it('records direct links and browser Back/Forward, not only sidebar clicks', async () => {
+    setup('/module/s01-m01?lesson=2');
+    await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m01', 2) });
+    await waitFor(() => expect(api.rpc).toHaveBeenCalledWith('academy_record_lesson_visit', expect.objectContaining({ p_lesson: 'l01-03' })));
+    fireEvent.click(within(screen.getByRole('complementary', { name: '' })).getByRole('button', { name: new RegExp(lessonTitle('s01-m01', 1)) }));
+    await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m01', 1) });
+    fireEvent.click(screen.getByRole('button', { name: 'History back' }));
+    await screen.findByRole('heading', { level: 1, name: lessonTitle('s01-m01', 2) });
+    await waitFor(() => expect(api.rpc.mock.calls.filter(call => call[0] === 'academy_record_lesson_visit').map(call => call[1].p_lesson)).toEqual(['l01-03', 'l01-02', 'l01-03']));
   });
 
   it('does not let a profile menu cover the dashboard link', async () => {
