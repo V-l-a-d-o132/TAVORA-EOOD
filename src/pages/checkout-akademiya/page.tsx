@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_STATS, ACADEMY_STARTER_STATS, ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -45,10 +46,10 @@ const TIER_INFO: Record<CheckoutTier, TierInfo> = {
     price: '49 €',
     metaValue: 49,
     modulesCount: '10 модула',
-    lessonsCount: '70+ урока',
+    lessonsCount: `${ACADEMY_STARTER_STATS.lessonCount} урока`,
     includes: [
       'Първите 10 модула от „Пътят на коприната“',
-      '70+ интерактивни урока с тестове',
+      `${ACADEMY_STARTER_STATS.lessonCount} интерактивни урока с тестове`,
       'Без Revenue Blueprint (11-и модул)',
       'Доживотен достъп',
       '30 дни гаранция за връщане на парите',
@@ -59,10 +60,10 @@ const TIER_INFO: Record<CheckoutTier, TierInfo> = {
     price: '99 €',
     metaValue: 99,
     modulesCount: '11 модула',
-    lessonsCount: '74+ урока',
+    lessonsCount: `${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока`,
     includes: [
       '11 модула — от AI Advantage до Revenue Blueprint',
-      '74+ интерактивни урока с тестове',
+      `${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} интерактивни урока с тестове`,
       'Revenue Blueprint — оферти, ценообразуване, клиенти',
       'Доживотен достъп + бъдещи обновления',
       '30 дни гаранция за връщане на парите',
@@ -73,10 +74,10 @@ const TIER_INFO: Record<CheckoutTier, TierInfo> = {
     price: '99 €',
     metaValue: 99,
     modulesCount: '15 модула',
-    lessonsCount: '246 урока',
+    lessonsCount: `${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока`,
     includes: [
       '15 модула — от стратегия до монтаж',
-      '246 интерактивни урока',
+      `${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} интерактивни урока`,
       'От идея до готово бизнес видео',
       'Доживотен достъп + бъдещи обновления',
       '30 дни гаранция за връщане на парите',
@@ -87,10 +88,10 @@ const TIER_INFO: Record<CheckoutTier, TierInfo> = {
     price: '129 €',
     metaValue: 129,
     modulesCount: '20 модула',
-    lessonsCount: '177+ урока',
+    lessonsCount: `${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока`,
     includes: [
       '20 модула — от позициониране до продажби',
-      '177+ интерактивни урока',
+      `${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} интерактивни урока`,
       'Google Business Profile, реклами, SEO, имейл маркетинг',
       'Доживотен достъп + бъдещи обновления',
       '30 дни гаранция за връщане на парите',
@@ -101,11 +102,11 @@ const TIER_INFO: Record<CheckoutTier, TierInfo> = {
     price: '249 €',
     metaValue: 249,
     modulesCount: '46 модула',
-    lessonsCount: '492+ урока',
+    lessonsCount: `${ACADEMY_TOTAL_STATS.lessonCount} урока`,
     savingsNote: 'При отделна покупка: 327 €. Спестяваш 78 €.',
     includes: [
       'Всички 46 модула — трите пълни програми',
-      '492+ интерактивни урока с тестове',
+      `${ACADEMY_TOTAL_STATS.lessonCount} интерактивни урока с тестове`,
       'Тестове и практически материали',
       'Сертификат за завършване',
       'Доживотен достъп + бъдещи обновления',
@@ -117,7 +118,7 @@ const TIER_INFO: Record<CheckoutTier, TierInfo> = {
     price: '497 €',
     metaValue: 497,
     modulesCount: '46 модула',
-    lessonsCount: '492+ урока',
+    lessonsCount: `${ACADEMY_TOTAL_STATS.lessonCount} урока`,
     includes: [
       'Всичко от пълния достъп',
       '2 индивидуални онлайн срещи по 60 мин. с Владимир Атанасов',
@@ -277,7 +278,7 @@ export default function CheckoutAkademiyaPage() {
             Последната стъпка преди трансформацията
           </h1>
           <p className="text-sm md:text-base max-w-md mx-auto leading-relaxed" style={{ color: C.textMuted }}>
-            След като завършиш плащането, всички модули се отключват автоматично. Без чакане. Без кодове.
+            След като плащането бъде потвърдено, модулите от избрания пакет се отключват автоматично в акаунта ти.
           </p>
         </div>
 
@@ -343,13 +344,8 @@ export default function CheckoutAkademiyaPage() {
             <i className="ri-group-line" />
           </div>
           <div>
-            <p className="text-sm font-semibold" style={{ color: C.text }}>247+ колеги вече преминаха обучението</p>
-            <div className="flex items-center gap-1 mt-0.5">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <i key={s} className="ri-star-fill" style={{ color: C.accent, fontSize: '10px' }} />
-              ))}
-              <span className="text-xs ml-1" style={{ color: C.textDim }}>4.9 / 5.0</span>
-            </div>
+            <p className="text-sm font-semibold" style={{ color: C.text }}>Три програми, 46 модула и {ACADEMY_TOTAL_STATS.lessonCount} публикувани урока</p>
+            <p className="text-xs mt-0.5" style={{ color: C.textDim }}>Самостоятелна практика, проверки и бъдещи обновления</p>
           </div>
         </div>
 
@@ -393,7 +389,7 @@ export default function CheckoutAkademiyaPage() {
         <div className="mt-10 space-y-3">
           <h3 className="text-sm font-bold uppercase tracking-[0.1em] mb-4" style={{ color: C.textDim }}>Чести въпроси</h3>
           {[
-            { q: 'Как ще получа достъп?', a: 'Веднага след плащането. Модулите се отключват автоматично — без кодове, без чакане.' },
+            { q: 'Как ще получа достъп?', a: 'След потвърждение на плащането модулите от избрания пакет се отключват автоматично в акаунта ти.' },
             { q: 'Мога ли да върна парите?', a: 'Да. 30 дни гаранция. Пишеш ни и връщаме пълната сума. Без въпроси.' },
             { q: 'Колко време имам достъп?', a: 'Доживотен. Включително всички бъдещи обновления на модулите.' },
             { q: 'Трябва ли ми нещо допълнително?', a: 'Само интернет и желание да учиш. Всичко е в платформата.' },

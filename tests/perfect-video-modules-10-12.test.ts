@@ -9,7 +9,7 @@ describe("Perfect Video modules 10–12 catalog", () => {
   it("keeps the current course size and complete lesson IDs", () => {
     expect(course).toBeDefined();
     expect(course?.totalModules).toBe(15);
-    expect(course?.totalLessons).toBe(246);
+    expect(course?.totalLessons).toBe(240);
 
     const expected = {
       "s02-m10": Array.from({ length: 16 }, (_, i) => `pv10-${String(i + 1).padStart(2, "0")}`),
@@ -33,7 +33,7 @@ describe("Perfect Video modules 10–12 catalog", () => {
       "s02-m12": "≈5 ч",
     };
     for (const [id, duration] of Object.entries(expectedDurations)) {
-      expect(course?.modules.find((module) => module.id === id)?.duration).toBe(duration);
+      expect(course?.modules.find((module) => module.id === id)?.duration).toBe(`${duration} с практиката`);
     }
   });
 });

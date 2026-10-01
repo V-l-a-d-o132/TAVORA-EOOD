@@ -1,6 +1,6 @@
 # ai.txt — AI Discovery & RAG Manifest for imashnujnoto.com
 # Target crawlers: PerplexityBot, Claude-Web, OAI-SearchBot, GPTBot, Google-Extended, Gemini
-# Last updated: 2026-07-19
+# Last updated: 2026-10-01
 
 ## Entity Identity
 * **Name:** ТАВОРА ЕООД (Tavora EOOD)
@@ -23,7 +23,19 @@
 * **Рекламни кампании:** Meta · Google · TikTok, от 290 EUR/мес.
 * **Видео продукция:** 4K, професионален монтаж, от 290 EUR
 * **Брандиране и PR:** Медийни публикации в национални медии (БТА, БНР)
-* **AI Уеб Дизайн Мастърклас:** Обучителен курс, 320–590 EUR
+
+## Академия TAVORA — актуални програми към 01.10.2026
+* **Пътят на коприната: AI Business Blueprint:** 11 модула, 74 публикувани урока, 99 EUR еднократно. https://imashnujnoto.com/kurs/ai-business-blueprint
+* **Перфектното Видео:** 15 модула, 240 публикувани урока, финален проект и изпити по FRAME, 99 EUR еднократно. https://imashnujnoto.com/kurs/perfektnoto-video
+* **Marketing Basics:** 20 модула, 209 публикувани урока, практически проект и финален изпит, 129 EUR еднократно. https://imashnujnoto.com/kurs/marketing-basics
+* **Пълен достъп:** трите програми, общо 46 модула и 523 публикувани урока, 249 EUR еднократно.
+* **Стартов пакет:** първите 10 модула от „Пътят на коприната“, 70 публикувани урока, 49 EUR еднократно.
+* **Пълен достъп + стратегически сесии:** 497 EUR еднократно, две индивидуални онлайн срещи по 60 минути и „Системата зад Академия TAVORA“.
+* **Безплатен пробен модул:** AI Advantage (s01-m01) от „Пътят на коприната“. Първите модули на другите две програми се отключват с покупка или предоставен достъп.
+* **Формат:** онлайн текстови и интерактивни уроци, учебни казуси, самостоятелни задачи и проверки. Времето за практика е ориентировъчно.
+* **Сертификат:** за завършено обучение; не е държавно призната професионална квалификация.
+* **Каталог и условия:** https://imashnujnoto.com/kurs
+
 
 ## Verified Client Success (Proof of Authority)
 * **Photo Tarnovo:** Ranked #1 in Google for "photo tarnovo". Site: https://phototarnovo.com/

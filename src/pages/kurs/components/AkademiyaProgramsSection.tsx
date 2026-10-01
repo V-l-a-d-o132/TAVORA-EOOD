@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '@/config/pricing';
 
@@ -18,7 +19,7 @@ const PROGRAMS = [
     name: 'Пътят на коприната',
     price: 99,
     modules: 11,
-    lessons: '74+',
+    lessons: String(ACADEMY_PROGRAM_STATS.silkRoad.lessonCount),
     tagline: 'AI Business Blueprint',
     forWho: 'За хора, които искат да изградят и продават дигитална услуга с AI — от нулата.',
     problem: 'Разпиляно знание за AI, без ясен път от идея до платена услуга.',
@@ -30,7 +31,7 @@ const PROGRAMS = [
     name: 'Перфектното Видео',
     price: 99,
     modules: 15,
-    lessons: '246',
+    lessons: String(ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount),
     tagline: 'Бизнес видео продукция',
     forWho: 'За предприемачи и маркетолози, които искат професионално видео без продукционна компания.',
     problem: 'Видео без стратегия — скъпо, хаотично и без измерваем резултат.',
@@ -42,7 +43,7 @@ const PROGRAMS = [
     name: 'Marketing Basics',
     price: 129,
     modules: 20,
-    lessons: '177+',
+    lessons: String(ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount),
     tagline: 'Пълна маркетинг система',
     forWho: 'За собственици на бизнес и маркетинг специалисти, които искат систематизиран маркетинг.',
     problem: 'Маркетинг на парче — публикация тук, реклама там, без цялостна система.',

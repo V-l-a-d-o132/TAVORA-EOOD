@@ -1,0 +1,235 @@
+{
+  "verifiedOn": "2026-10-01",
+  "modules": [
+    {
+      "id": "s01-m01",
+      "lessons": 4
+    },
+    {
+      "id": "s01-m02",
+      "lessons": 10
+    },
+    {
+      "id": "s01-m03",
+      "lessons": 10
+    },
+    {
+      "id": "s01-m04",
+      "lessons": 10
+    },
+    {
+      "id": "s01-m05",
+      "lessons": 10
+    },
+    {
+      "id": "s01-m06",
+      "lessons": 10
+    },
+    {
+      "id": "s01-m07",
+      "lessons": 4
+    },
+    {
+      "id": "s01-m08",
+      "lessons": 4
+    },
+    {
+      "id": "s01-m09",
+      "lessons": 4
+    },
+    {
+      "id": "s01-m10",
+      "lessons": 4
+    },
+    {
+      "id": "s01-m11",
+      "lessons": 4
+    },
+    {
+      "id": "s02-m01",
+      "lessons": 24
+    },
+    {
+      "id": "s02-m02",
+      "lessons": 20
+    },
+    {
+      "id": "s02-m03",
+      "lessons": 21
+    },
+    {
+      "id": "s02-m04",
+      "lessons": 17
+    },
+    {
+      "id": "s02-m05",
+      "lessons": 8
+    },
+    {
+      "id": "s02-m06",
+      "lessons": 18
+    },
+    {
+      "id": "s02-m07",
+      "lessons": 16
+    },
+    {
+      "id": "s02-m08",
+      "lessons": 16
+    },
+    {
+      "id": "s02-m09",
+      "lessons": 11
+    },
+    {
+      "id": "s02-m10",
+      "lessons": 16
+    },
+    {
+      "id": "s02-m11",
+      "lessons": 16
+    },
+    {
+      "id": "s02-m12",
+      "lessons": 8
+    },
+    {
+      "id": "s02-m13",
+      "lessons": 18
+    },
+    {
+      "id": "s02-m14",
+      "lessons": 18
+    },
+    {
+      "id": "s02-m15",
+      "lessons": 13
+    },
+    {
+      "id": "s03-m01",
+      "lessons": 7
+    },
+    {
+      "id": "s03-m02",
+      "lessons": 8
+    },
+    {
+      "id": "s03-m03",
+      "lessons": 8
+    },
+    {
+      "id": "s03-m04",
+      "lessons": 10
+    },
+    {
+      "id": "s03-m05",
+      "lessons": 8
+    },
+    {
+      "id": "s03-m06",
+      "lessons": 12
+    },
+    {
+      "id": "s03-m07",
+      "lessons": 10
+    },
+    {
+      "id": "s03-m08",
+      "lessons": 14
+    },
+    {
+      "id": "s03-m09",
+      "lessons": 14
+    },
+    {
+      "id": "s03-m10",
+      "lessons": 12
+    },
+    {
+      "id": "s03-m11",
+      "lessons": 10
+    },
+    {
+      "id": "s03-m12",
+      "lessons": 12
+    },
+    {
+      "id": "s03-m13",
+      "lessons": 12
+    },
+    {
+      "id": "s03-m14",
+      "lessons": 10
+    },
+    {
+      "id": "s03-m15",
+      "lessons": 9
+    },
+    {
+      "id": "s03-m16",
+      "lessons": 8
+    },
+    {
+      "id": "s03-m17",
+      "lessons": 11
+    },
+    {
+      "id": "s03-m18",
+      "lessons": 9
+    },
+    {
+      "id": "s03-m19",
+      "lessons": 11
+    },
+    {
+      "id": "s03-m20",
+      "lessons": 14
+    }
+  ],
+  "editingModuleLessonIds": [
+    "pv09-01",
+    "pv09-02",
+    "pv09-04",
+    "pv09-05",
+    "pv09-06",
+    "pv09-07",
+    "pv09-08",
+    "pv09-09",
+    "pv09-10",
+    "pv09-11",
+    "pv09-12"
+  ],
+  "freeModuleId": "s01-m01",
+  "products": [
+    {
+      "tier": "systems-10",
+      "amountCents": 4900,
+      "modules": 10
+    },
+    {
+      "tier": "koprinena-pateka",
+      "amountCents": 9900,
+      "modules": 11
+    },
+    {
+      "tier": "perfektno-video",
+      "amountCents": 9900,
+      "modules": 15
+    },
+    {
+      "tier": "marketing-basics",
+      "amountCents": 12900,
+      "modules": 20
+    },
+    {
+      "tier": "premium-all",
+      "amountCents": 24900,
+      "modules": 46
+    },
+    {
+      "tier": "strategic_access",
+      "amountCents": 49700,
+      "modules": 46
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+import { syncPageSocialMeta } from '@/lib/page-social-meta';
+import { PERFECT_VIDEO_FAQ } from '@/data/academy-public-faq';
+import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { useEffect } from 'react';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
@@ -17,40 +20,7 @@ import { getTierById } from '@/config/pricing';
 
 const perfectVideo = getTierById('perfectVideo');
 
-const FAQ_ITEMS = [
-  {
-    q: 'Колко струва Перфектното Видео на Академия TAVORA?',
-    a: `Пълната програма (15 модула, 246 урока) е ${perfectVideo?.price} EUR еднократно. Модул 01 (Диагностика, стратегия и психология на вниманието) е безплатен и не изисква карта.`,
-  },
-  {
-    q: 'Трябва ли ми скъпа техника, за да започна?',
-    a: 'Не. Модул 07 (Мобилна видеография) показва как да снимаш професионално само с телефон. Модул 13 покрива работа с професионална продукция — когато си готов да мащабираш.',
-  },
-  {
-    q: 'За колко време мога да завърша програмата?',
-    a: 'Програмата има 15 модула и 246 урока. Учи със свое темпо: практическите задачи, снимките, монтажът и финалният тест изискват време и извън четенето.',
-  },
-  {
-    q: 'Чувствам се неудобно пред камера — ще ми помогне ли програмата?',
-    a: 'Да. Модули 01-03 се случват преди да включиш камера — стратегия, послание, психология. Когато знаеш точно какво ще кажеш и как, страхът намалява.',
-  },
-  {
-    q: 'Ще мога ли да предлагам видео продукция като платена услуга?',
-    a: 'Да. Модул 13 покрива бюджетиране, казуси по ниши и клиентски workflow. След програмата имаш и система, и портфолио от практическите задачи.',
-  },
-  {
-    q: 'Каква е разликата с гледане на YouTube туториали?',
-    a: 'YouTube дава изолирани техники. Перфектното Видео дава FRAME система — 15 модула в точната последователност от диагностика до анализ.',
-  },
-  {
-    q: 'Има ли AI модули в програмата?',
-    a: 'Да — Модул 12 е изцяло посветен на AI в целия видео процес. Но AI инструменти са вплетени и във всеки друг модул.',
-  },
-  {
-    q: 'Гарантиран ли е конкретен финансов резултат?',
-    a: 'Не. Академията предоставя знания, процеси и практически инструменти, но резултатите зависят от избраната ниша, изпълнението, пазара и отделеното време.',
-  },
-];
+const FAQ_ITEMS = PERFECT_VIDEO_FAQ;
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -62,7 +32,7 @@ const SCHEMA = {
       '@id': 'https://imashnujnoto.com/kurs/perfektnoto-video#webpage',
       url: 'https://imashnujnoto.com/kurs/perfektnoto-video',
       name: 'Перфектното Видео — видео съдържание с ясна стратегия | Академия TAVORA',
-      description: 'Практическа програма за видео продукция от идеята и сценария до заснемането, монтажа, публикуването и анализа на резултатите. 15 модула, 246 урока. ТАВОРА ЕООД.',
+      description: `Практическа програма за видео продукция от идеята и сценария до заснемането, монтажа, публикуването и анализа на резултатите. 15 модула, ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока. ТАВОРА ЕООД.`,
       inLanguage: 'bg',
       dateModified: today,
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
@@ -79,7 +49,7 @@ const SCHEMA = {
       '@type': 'Course',
       '@id': 'https://imashnujnoto.com/kurs/perfektnoto-video#course',
       name: 'Перфектното Видео',
-      description: '15-модулна FRAME система за бизнес видео продукция. Покрива диагностика, послание и психология, камера и композиция, осветление и цвят, звук, снимачен ден, мобилна видеография, batch filming, монтаж, публикуване, аналитика, AI, професионална продукция и финален практичен проект с изпити. 246 урока.',
+      description: `15-модулна FRAME система за бизнес видео продукция. Покрива диагностика, послание и психология, камера и композиция, осветление и цвят, звук, снимачен ден, мобилна видеография, batch filming, монтаж, публикуване, аналитика, AI, професионална продукция и финален практичен проект с изпити. ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока.`,
       url: 'https://imashnujnoto.com/kurs/perfektnoto-video',
       provider: {
         '@type': 'Organization',
@@ -132,17 +102,23 @@ export default function PerfektnotoVideoFunnelPage() {
     academyPixel.viewContent('Перфектното Видео');
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Практическа програма за видео продукция от идеята и сценария до заснемането, монтажа, публикуването и анализа на резултатите. 15 модула, 246 урока. ТАВОРА ЕООД.');
+      metaDesc.setAttribute('content', `Практическа програма за видео продукция от идеята и сценария до заснемането, монтажа, публикуването и анализа на резултатите. 15 модула, ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока. ТАВОРА ЕООД.`);
     }
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/kurs/perfektnoto-video');
+
+    const restoreSocialMeta = syncPageSocialMeta();
 
     const id = 'schema-perfektno-video-funnel';
     let el = document.getElementById(id) as HTMLScriptElement | null;
     if (!el) { el = document.createElement('script'); el.id = id; el.type = 'application/ld+json'; document.head.appendChild(el); }
     el.textContent = JSON.stringify(SCHEMA);
 
-    return () => { const existing = document.getElementById(id); if (existing) existing.remove(); };
+    return () => {
+      restoreSocialMeta();
+      const existing = document.getElementById(id);
+      if (existing) existing.remove();
+    };
   }, []);
 
   const keyword = 'FRAME система за бизнес видео продукция';

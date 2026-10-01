@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson-engine-v2';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
+import LessonRichText from './LessonRichText';
 
 interface Props {
   block: LessonBlockV2;
@@ -79,7 +80,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
         return <><blockquote className="border-l-4 border-red-500 pl-5 text-lg leading-relaxed text-zinc-200">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
       case 'rich_text':
-        return <><p className="whitespace-pre-line text-base leading-7 text-zinc-200">{body}</p>{arr(block.content.points).length > 0 && <ul className="mt-5 space-y-3">{arr(block.content.points).map((point, index) => <li key={s(point.id, String(index))} className="flex gap-3 text-zinc-200"><span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-red-500" />{s(point.text)}</li>)}</ul>}{acknowledgement}</>;
+        return <><LessonRichText content={block.content} />{acknowledgement}</>;
       case 'before_after': {
         const before = obj(block.content.before);
         const after = obj(block.content.after);
@@ -108,7 +109,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
             const next = flipped ? viewed : [...viewed, id];
             update({ viewed: next });
             if (next.length === cards.length) void submit({ viewed: next });
-          }} className="min-h-40 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-6 text-left focus:outline-none focus:ring-2 focus:ring-red-500/50"><span className="text-xs font-semibold uppercase tracking-[.18em] text-red-300">{flipped ? 'Обяснение' : 'Понятие'}</span><span className="mt-4 block text-lg font-semibold leading-7 text-white">{flipped ? s(card.back) : s(card.front)}</span><span className="mt-5 block text-xs text-zinc-500">Натисни, за да обърнеш картата</span></button>;
+          }} className="min-h-40 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-6 text-left focus:outline-none focus:ring-2 focus:ring-red-500/50"><span className="text-xs font-semibold uppercase tracking-[.18em] text-red-300">{block.key === 'model_solution' ? (flipped ? 'Примерно решение' : 'Сравни работата си') : (flipped ? 'Обяснение' : 'Понятие')}</span><span className="mt-4 block text-lg font-semibold leading-7 text-white">{flipped ? s(card.back) : s(card.front)}</span><span className="mt-5 block text-xs text-zinc-500">Натисни, за да обърнеш картата</span></button>;
         })}</div>;
       }
       case 'sequence_sort': {
@@ -188,10 +189,13 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
         const questions = arr(block.content.questions);
         const answers = obj(state.answers);
         const answered = questions.filter((question) => typeof answers[s(question.id)] === 'string').length;
-        const weakModules = strArr(feedback?.weakModules);
+        const weakModules = strArr(feedback?.weakModules).filter((moduleId) => /^s\d{2}-m\d{2}$/.test(moduleId));
+        const reviewMap = obj(block.content.reviewMap);
+        const groupResults = arr(feedback?.groupResults);
+        const minimumGroupPercent = n(block.content.minimumGroupPercent);
         return <div>
           <p className="mb-4 leading-7 text-zinc-200">{s(block.content.introduction)}</p>
-          <p className="mb-6 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-sm text-zinc-200">Отговорени: {answered} от {questions.length}. Нужно е поне {n(block.content.minimumPercent, 80)}% в един пълен опит.</p>
+          <p className="mb-6 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-sm text-zinc-200">Отговорени: {answered} от {questions.length}. Нужно е поне {n(block.content.minimumPercent, 80)}% в един пълен опит.{minimumGroupPercent > 0 && ` Изискват се и поне ${minimumGroupPercent}% във всяка тематична група.`}</p>
           <div className="space-y-8">{questions.map((question, index) => {
             const questionId = s(question.id, `q${index + 1}`);
             return <fieldset key={questionId} className="rounded-2xl border border-white/10 p-4 sm:p-5">
@@ -206,7 +210,16 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
             </fieldset>;
           })}</div>
           <button type="button" disabled={busy || completed || answered !== questions.length} onClick={() => void submit({ answers })} className="mt-7 rounded-xl bg-red-500 px-6 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40">{busy ? 'Оценяване…' : 'Предай целия изпит'}</button>
-          {result && <div className="mt-5 rounded-xl border border-white/15 p-4 text-sm text-zinc-200"><strong>Резултат: {n(feedback?.scorePercent)}%</strong><span className="ml-2">({n(feedback?.correctCount)} от {n(feedback?.totalQuestions)})</span>{weakModules.length > 0 && <p className="mt-2">Теми за повторение: {weakModules.map((moduleId) => `модул ${moduleId.slice(-2)}`).join(', ')}.</p>}</div>}
+          {result && <div className="mt-5 rounded-xl border border-white/15 p-4 text-sm text-zinc-200">
+            <strong>Резултат: {n(feedback?.scorePercent)}%</strong><span className="ml-2">({n(feedback?.correctCount)} от {n(feedback?.totalQuestions)})</span>
+            {groupResults.length > 0 && <ul aria-label="Резултати по тематични групи" className="mt-4 space-y-3">{groupResults.map((group, index) =>
+              <li key={index} className={`rounded-lg border p-3 ${group.passed === true ? 'border-emerald-500/25 text-emerald-100' : 'border-amber-500/40 text-amber-100'}`}>
+                <span className="block font-medium">{s(group.label)}</span>
+                <span>{n(group.correctCount)}/{n(group.totalQuestions)} · {n(group.scorePercent)}% · {group.passed === true ? 'покрит минимум' : `нужни са поне ${n(group.minimumPercent)}%`}</span>
+              </li>)}</ul>}
+            {weakModules.length > 0 && <div className="mt-4"><p className="font-medium">Теми за повторение:</p><ul className="mt-2 space-y-2">{weakModules.map((moduleId) =>
+              <li key={moduleId}><a href={`/module/${moduleId}`} className="underline underline-offset-4 hover:text-white">Модул {moduleId.slice(-2)}{s(reviewMap[moduleId]) ? ` · ${s(reviewMap[moduleId])}` : ''}</a></li>)}</ul></div>}
+          </div>}
         </div>;
       }
       case 'submission': {

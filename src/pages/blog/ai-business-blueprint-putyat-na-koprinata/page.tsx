@@ -1,3 +1,6 @@
+import { syncPageSocialMeta } from '@/lib/page-social-meta';
+import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
+import { SILK_ROAD_PUBLIC_MODULES } from '@/data/academy-public-programs';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -14,7 +17,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Колко време отнема да видя резултати?',
-    a: 'Първите 3 модула дават база за 2-3 седмици. Първи платени проекти идват при модул 6 (The Conversion System). Първите платени проекти са реалистични след няколко месеца последователна работа. Това не е "бързи пари" — това е система.',
+    a: 'Първите модули изграждат умения за AI, сайт и откриваемост. По-късно работиш по оферта, разговори с клиенти и икономика на услугата. Няма фиксиран срок за първи платен проект; зависи от пазара и изпълнението.',
   },
   {
     q: 'Какво прави тази програма различна от другите?',
@@ -22,11 +25,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Мога ли да получа достъп само до отделни модули?',
-    a: 'Да — всеки модул може да се закупи самостоятелно. Модул 01 (AI Advantage) е безплатен. Модулите 02-10 се отключват поотделно или на пакет. Модул 11 (The Revenue Blueprint) е премиум и изисква завършени минимум 5 други модула.',
+    a: 'Програмата се закупува като пакет. Стартовият пакет включва първите 10 модула; пълната програма включва и модул 11 — The Revenue Blueprint. AI Advantage е безплатният пробен модул. Няма отделна покупка на всеки модул.',
   },
   {
     q: 'Има ли гаранция за резултат?',
-    a: 'Никоя сериозна програма не може да гарантира резултат — зависи от теб. Но можем да гарантираме, че всеки модул съдържа точните стъпки, които ние използваме за реални клиенти. Ако ги следваш — системата работи.',
+    a: 'Никоя сериозна програма не може да гарантира резултат — зависи от теб. Но можем да гарантираме, че всеки модул съдържа точните стъпки, които ние използваме за реални клиенти. Прилагането им се проверява с твоята оферта, данни и клиентски разговори; самото завършване не гарантира доход.',
   },
   {
     q: 'Как се различава AI Blueprint от Marketing Basics и Перфектното Видео?',
@@ -34,7 +37,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const today = ACADEMY_CATALOG_VERIFIED_ON;
 
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
@@ -160,98 +163,7 @@ const ARTICLE_SCHEMA = {
   ],
 };
 
-const MODULES_LIST = [
-  {
-    num: '01',
-    tag: 'FREE',
-    title: 'AI Advantage',
-    subtitle: 'Научи се да работиш с AI като професионалист',
-    desc: 'Основи на работа с AI за бизнес. Prompt engineering на професионално ниво. Мулти-моделна стратегия с ChatGPT, Claude и Gemini.',
-    lessons: 4,
-    color: '#22c55e',
-  },
-  {
-    num: '02',
-    title: 'The Readdy Blueprint',
-    subtitle: 'Системата за създаване на сайтове, които се продават',
-    desc: 'AI-driven дизайн процес от нула до публикуван сайт. Архитектура на конвертиращ сайт. Продаващи елементи, които носят резултати.',
-    lessons: 5,
-    color: '#E67700',
-  },
-  {
-    num: '03',
-    title: 'Invisible Marketing',
-    subtitle: 'Как клиентите започват да те намират сами',
-    desc: 'SEO през 2026. GEO: как AI търсачките препоръчват сайтове. Локална SEO доминация. Пасивно привличане на клиенти.',
-    lessons: 5,
-    color: '#3B5BDB',
-  },
-  {
-    num: '04',
-    title: 'Content That Sells',
-    subtitle: 'Създавай съдържание, което носи запитвания',
-    desc: 'Стратегия на съдържанието. SEO статии, които класират и конвертират. Видео скриптове. Content repurposing.',
-    lessons: 4,
-    color: '#7048E8',
-  },
-  {
-    num: '05',
-    title: 'Audience Engine',
-    subtitle: 'Изгради аудитория, която се превръща в клиенти',
-    desc: 'Органичен растеж в социалните мрежи. LinkedIn B2B машина. Платени кампании с реален ROI.',
-    lessons: 4,
-    color: '#C2255C',
-  },
-  {
-    num: '06',
-    title: 'The Conversion System',
-    subtitle: 'Как превръщам интереса в платени проекти',
-    desc: 'Психология на конверсията. A/B тестване. Лийд магнити. Follow-up система за затваряне на сделки.',
-    lessons: 4,
-    color: '#2F9E44',
-  },
-  {
-    num: '07',
-    title: 'Professional Stack',
-    subtitle: 'Настрой бизнеса си като агенция',
-    desc: 'Домейни, хостинг, DNS. Инструменти на професионалиста. SSL, бекъп и мониторинг. Клиентски onboarding.',
-    lessons: 4,
-    color: '#0A2540',
-  },
-  {
-    num: '08',
-    title: 'Digital Protection',
-    subtitle: 'Защити бизнеса, който градиш',
-    desc: 'Киберсигурност. Пароли, 2FA. Phishing превенция. План за действие при инцидент.',
-    lessons: 4,
-    color: '#E67700',
-  },
-  {
-    num: '09',
-    title: 'Growth Analytics',
-    subtitle: 'Вземай решения по данни, а не по предположения',
-    desc: 'Google Analytics 4. KPI-та с реално значение. Data-driven decisions.',
-    lessons: 4,
-    color: '#3B5BDB',
-  },
-  {
-    num: '10',
-    title: 'Scale with AI',
-    subtitle: 'Автоматизирай процесите и освободи времето си',
-    desc: 'Имейл автоматизация. Social media автопилот. Lead capture фунии. No-code + AI.',
-    lessons: 4,
-    color: '#7048E8',
-  },
-  {
-    num: '11',
-    tag: 'PREMIUM',
-    title: 'The Revenue Blueprint',
-    subtitle: 'Системата за намиране и задържане на клиенти',
-    desc: 'Бизнес моделът. Система за намиране на клиенти. Ценообразуване и пакетиране на услугите.',
-    lessons: 4,
-    color: '#e53e3e',
-  },
-];
+const MODULES_LIST = SILK_ROAD_PUBLIC_MODULES;
 
 const CASE_STUDIES = [
   {
@@ -308,6 +220,8 @@ export default function AiBusinessBlueprintPage() {
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/blog/ai-business-blueprint-putyat-na-koprinata');
 
+    const restoreSocialMeta = syncPageSocialMeta();
+
     const id = 'schema-ai-blueprint';
     let el = document.getElementById(id) as HTMLScriptElement | null;
     if (!el) { el = document.createElement('script'); el.id = id; el.type = 'application/ld+json'; document.head.appendChild(el); }
@@ -319,6 +233,7 @@ export default function AiBusinessBlueprintPage() {
     faqEl.textContent = JSON.stringify(FAQ_SCHEMA);
 
     return () => {
+      restoreSocialMeta();
       ['schema-ai-blueprint', 'schema-ai-blueprint-faq'].forEach((sid) => { const e = document.getElementById(sid); if (e) e.remove(); });
     };
   }, []);
@@ -372,7 +287,7 @@ export default function AiBusinessBlueprintPage() {
                 Разгледай програмата →
               </Link>
               <Link
-                to="/digitalni-produkti/proverki"
+                to="/kurs/ai-business-blueprint"
                 className="px-6 py-3 border border-[#1C1C1E]/12 text-[#1C1C1E]/65 text-sm rounded-full hover:border-[#1C1C1E]/30 hover:text-[#1C1C1E] transition-all cursor-pointer whitespace-nowrap"
               >
                 Виж модулите
@@ -416,7 +331,7 @@ export default function AiBusinessBlueprintPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-2xl bg-[#F9F9F7] border border-[#1C1C1E]/6">
               {[
                 { value: '11', label: 'модула' },
-                { value: '74+', label: 'интерактивни урока' },
+                { value: String(ACADEMY_PROGRAM_STATS.silkRoad.lessonCount), label: 'интерактивни урока' },
                 { value: 'Доживотен', label: 'достъп до обновления' },
                 { value: '3+', label: 'клиенти на #1 в Google' },
               ].map((s) => (
@@ -494,7 +409,7 @@ export default function AiBusinessBlueprintPage() {
               <em className="text-[#1C1C1E]/65">11-те модула.</em>
             </h2>
             <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-8">
-              Всеки модул е самостоятелна стъпка. Можеш да вземеш един, няколко или всички. Първият е безплатен.
+              Всеки модул е стъпка в системата. AI Advantage е безплатен; платеният достъп е чрез Стартовия пакет с 10 модула или пълната програма с 11 модула.
             </p>
 
             <div className="space-y-3">
@@ -535,10 +450,10 @@ export default function AiBusinessBlueprintPage() {
 
             <div className="mt-6 text-center">
               <Link
-                to="/digitalni-produkti/proverki"
+                to="/kurs/ai-business-blueprint"
                 className="inline-flex items-center gap-2 text-sm text-[#0A2540] font-medium hover:underline cursor-pointer"
               >
-                Виж пълната програма и избери модули
+                Виж пълната програма и пакетите за достъп
                 <i className="ri-arrow-right-line text-xs" />
               </Link>
             </div>
@@ -723,7 +638,7 @@ export default function AiBusinessBlueprintPage() {
                 <Link to="/kurs/ai-business-blueprint" className="px-7 py-3.5 bg-white text-[#0A2540] text-sm rounded-full hover:bg-white/90 transition-all cursor-pointer whitespace-nowrap text-center font-medium">
                   Разгледай програмата →
                 </Link>
-                <Link to="/digitalni-produkti/proverki" className="px-7 py-3.5 border border-white/20 text-white/70 text-sm rounded-full hover:border-white/40 hover:text-white transition-all cursor-pointer whitespace-nowrap text-center">
+                <Link to="/kurs/ai-business-blueprint" className="px-7 py-3.5 border border-white/20 text-white/70 text-sm rounded-full hover:border-white/40 hover:text-white transition-all cursor-pointer whitespace-nowrap text-center">
                   Виж модулите
                 </Link>
               </div>

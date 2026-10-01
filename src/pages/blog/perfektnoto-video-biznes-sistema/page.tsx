@@ -1,3 +1,6 @@
+import { syncPageSocialMeta } from '@/lib/page-social-meta';
+import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
+import { PERFECT_VIDEO_PUBLIC_MODULES } from '@/data/academy-public-programs';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -14,7 +17,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Колко време отнема цялата програма?',
-    a: '15 модула с общо 246 урока. Времето зависи от снимките, монтажа и собствения ти проект; финалният модул включва и проверки по целия курс. Всеки модул е самостоятелен — можеш да вземеш само този, който ти трябва.',
+    a: `15 модула с общо ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока. Времето зависи от снимките, монтажа и собствения ти проект; финалният модул включва и проверки по целия курс. Програмата се закупува като пакет и учиш със свое темпо.`,
   },
   {
     q: 'Ще мога ли да правя видеа за клиенти след това?',
@@ -26,15 +29,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Има ли бонус инструменти?',
-    a: 'Да — включени са бонус инструменти: AI скриптов генератор, шум на аудитория, видео SEO чеклист, шаблони за договори и още. Неща, които ние реално използваме в продукцията си.',
+    a: 'Модул 14 е за шаблони, собствен стил и одит. Адаптираш hook, CTA и сценарий към свой проект, създаваш кратък стил гид и проверяваш старо видео за конкретни поправки.',
   },
   {
     q: 'Трябва ли ми предишен опит с видео?',
-    a: 'Не. Започваме от абсолютна нула. Модул 1 е диагностика — защо ти трябва видео изобщо. Модул 2 е стратегия. Едва в модул 5 стигаме до техника. Всичко е стъпка по стъпка.',
+    a: 'Не. Модул 01 започва с диагностика и стратегия, модул 02 развива посланието, а модули 03–05 покриват камера, светлина и звук. Следват организация, монтаж, разпространение, аналитика, AI и финален проект с изпити.',
   },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const today = ACADEMY_CATALOG_VERIFIED_ON;
 
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
@@ -160,80 +163,7 @@ const ARTICLE_SCHEMA = {
   ],
 };
 
-const MODULES = [
-  {
-    num: '01',
-    title: 'Диагностика на бизнеса',
-    subtitle: 'Преди да снимаш — разбери какво ти трябва',
-    desc: 'Анализ на бизнес целите. Какъв тип видео работи за твоята ниша? Анализ на конкурентите. Дефиниране на видео KPI-та.',
-    lessons: 4,
-    color: '#3B5BDB',
-  },
-  {
-    num: '02',
-    title: 'Видео стратегия',
-    subtitle: 'Платформи, формати и честота',
-    desc: 'Къде да публикуваш? TikTok, Reels, YouTube Shorts, YouTube Long, LinkedIn. Формати за всяка платформа. Календар на съдържанието.',
-    lessons: 5,
-    color: '#E67700',
-  },
-  {
-    num: '03',
-    title: 'Сценарий и сториборд',
-    subtitle: 'Какво ще кажеш и как ще го покажеш',
-    desc: 'Писане на видео скриптове, които задържат вниманието. Структура Hook-Story-Offer. Сториборд за визуално планиране.',
-    lessons: 4,
-    color: '#C2255C',
-  },
-  {
-    num: '04',
-    title: 'Предкамерна подготовка',
-    subtitle: 'Локация, грим, гардероб, реквизит',
-    desc: 'Избор на локация. Какво да облечеш пред камера. Минимален грим за видео. Реквизит, който разказва история. Чеклист за снимачен ден.',
-    lessons: 4,
-    color: '#2F9E44',
-  },
-  {
-    num: '05',
-    title: 'Техника и заснемане',
-    subtitle: 'Камера, звук, светлина — от бюджет до професионално',
-    desc: 'Опции за всякакъв бюджет — от смартфон до професионална камера. Осветление на 3 точки. Звук: защо е по-важен от картината. Снимачни техники.',
-    lessons: 5,
-    color: '#7048E8',
-  },
-  {
-    num: '06',
-    title: 'Снимачен ден',
-    subtitle: 'Практическо ръководство за снимачния процес',
-    desc: 'Тайминг на снимачния ден. Работа с хора пред камера — как да ги отпуснеш. B-roll техники. Какво да снимаш за всеки случай.',
-    lessons: 4,
-    color: '#e53e3e',
-  },
-  {
-    num: '07',
-    title: 'Монтаж и пост-продукция',
-    subtitle: 'От суров материал до готово видео',
-    desc: 'Избор на софтуер — от CapCut до DaVinci Resolve. Нарязване, преходи, цветокорекция. Добавяне на текст и графика. AI инструменти за монтаж.',
-    lessons: 5,
-    color: '#0A2540',
-  },
-  {
-    num: '08',
-    title: 'Публикуване и оптимизация',
-    subtitle: 'Качи видеото така, че да го гледат',
-    desc: 'SEO за видео — заглавия, описания, тагове. Thumbnails, които носят кликове. Оптимално време за публикуване. A/B тестване на видеа.',
-    lessons: 4,
-    color: '#E67700',
-  },
-  {
-    num: '09',
-    title: 'Монетизация',
-    subtitle: 'Как да печелиш от видео продукция',
-    desc: 'Ценообразуване на видео услуги. Пакетиране. Намиране на клиенти. Доставка и feedback loop. Мащабиране на видео бизнес.',
-    lessons: 3,
-    color: '#22c55e',
-  },
-];
+const MODULES = PERFECT_VIDEO_PUBLIC_MODULES;
 
 const VIDEO_STATS = [
   { value: '3x', label: 'по-висока конверсия с видео' },
@@ -295,6 +225,8 @@ export default function PerfektnotoVideoPage() {
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/blog/perfektnoto-video-biznes-sistema');
 
+    const restoreSocialMeta = syncPageSocialMeta();
+
     const id = 'schema-perfektno-video';
     let el = document.getElementById(id) as HTMLScriptElement | null;
     if (!el) { el = document.createElement('script'); el.id = id; el.type = 'application/ld+json'; document.head.appendChild(el); }
@@ -306,6 +238,7 @@ export default function PerfektnotoVideoPage() {
     faqEl.textContent = JSON.stringify(FAQ_SCHEMA);
 
     return () => {
+      restoreSocialMeta();
       ['schema-perfektno-video', 'schema-perfektno-video-faq'].forEach((sid) => { const e = document.getElementById(sid); if (e) e.remove(); });
     };
   }, []);
@@ -345,7 +278,7 @@ export default function PerfektnotoVideoPage() {
             </h1>
 
             <p className="text-sm md:text-base text-[#1C1C1E]/65 max-w-2xl leading-relaxed mb-6">
-              <strong className="text-[#1C1C1E]">15 модула.</strong>
+              <strong className="text-[#1C1C1E]">15 модула · {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} публикувани урока.</strong>
               От диагностика и стратегия до снимачен ден и монтаж — пълна система за бизнес видео продукция.
               Без значение дали снимаш с iPhone или RED камера — системата работи.
             </p>
@@ -439,7 +372,7 @@ export default function PerfektnotoVideoPage() {
             </div>
           </section>
 
-          {/* ── 9-ТЕ МОДУЛА ── */}
+          {/* ── 15-ТЕ МОДУЛА ── */}
           <section className="mb-14">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-[1px] bg-[#1C1C1E]/20 shrink-0" />
@@ -451,7 +384,7 @@ export default function PerfektnotoVideoPage() {
               <em className="text-[#1C1C1E]/65">от идея до готов продукт.</em>
             </h2>
             <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-8">
-              Всеки модул е самостоятелна стъпка в процеса. Не е нужно да вземеш всички — избери тези, които ти трябват.
+              Всеки модул е стъпка в процеса от диагностика до готово видео и финален проект. Програмата се отключва като пакет; можеш да се връщаш към отделните теми според задачата си.
             </p>
 
             <div className="space-y-3">
@@ -600,7 +533,7 @@ export default function PerfektnotoVideoPage() {
                   <span className="italic text-white/60">разгледай актуалната програма и цената</span>
                 </div>
                 <p className="text-sm text-white/75 max-w-md leading-relaxed">
-                  Първият модул (Диагностика) е безплатен. Започни да планираш видеата си днес.
+                  Програмата има 15 модула и финален проект с изпити. Безплатният пробен модул на Академията е AI Advantage от „Пътят на коприната“.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">

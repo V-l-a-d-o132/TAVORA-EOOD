@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS, ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
@@ -10,14 +11,19 @@ const TERMS_SCHEMA = {
   url: 'https://imashnujnoto.com/terms',
   name: 'Общи условия за ползване | ТАВОРА ЕООД',
   description:
-    'Общи условия за ползване на услугите на ТАВОРА ЕООД (ЕИК 208438650). Права и задължения на клиентите за дигитален маркетинг, SEO, реклами и видео продукция.',
+    'Общи условия за онлайн обученията на Академия TAVORA (ТАВОРА ЕООД, ЕИК 208438650). Формат на програмите, пакети, плащане, достъп и права на участниците.',
   inLanguage: 'bg',
-  dateModified: '2026-05-05',
+  dateModified: ACADEMY_CATALOG_VERIFIED_ON,
   isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
 };
 
 export default function TermsPage() {
   useEffect(() => {
+    document.title = 'Общи условия за Академия TAVORA | ТАВОРА ЕООД';
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute('content', TERMS_SCHEMA.description);
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute('href', TERMS_SCHEMA.url);
     const id = 'schema-terms';
     let el = document.getElementById(id) as HTMLScriptElement | null;
     if (!el) {
@@ -50,7 +56,7 @@ export default function TermsPage() {
             Общи условия за ползване
           </h1>
           <p className="text-sm text-[#1C1C1E]/65">
-            Последна актуализация: 11 април 2026 г. &nbsp;·&nbsp; В сила от: 11 април 2026 г.
+            Последна актуализация: 1 октомври 2026 г. &nbsp;·&nbsp; Първа редакция: 11 април 2026 г.
           </p>
         </div>
 
@@ -73,14 +79,16 @@ export default function TermsPage() {
               2. Описание на услугата
             </h2>
             <p>
-              Академия TAVORA предоставя онлайн образователна програма, включваща:
+              Академия TAVORA предоставя три самостоятелни онлайн програми. Публикуваният каталог към 1 октомври 2026 г. включва {ACADEMY_TOTAL_STATS.moduleCount} модула и {ACADEMY_TOTAL_STATS.lessonCount} урока. Достъпът зависи от избрания пакет:
             </p>
             <ul className="mt-3 space-y-2 list-none">
               {[
-                'Видео лекции и учебни материали (22+ часа)',
-                'Достъп до затворена общност (при Премиум план)',
-                'Индивидуални менторски сесии (при Премиум план)',
-                'Шаблони, ресурси и инструменти',
+                `„Пътят на коприната“ — 11 модула, ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока; „Перфектното Видео“ — 15 модула, ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока; Marketing Basics — 20 модула, ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока`,
+                'Онлайн текстови и интерактивни уроци, казуси, самостоятелни задачи, шаблони и проверки',
+                'AI Advantage от „Пътят на коприната“ е безплатният пробен модул; регистрацията сама по себе си не отключва платените програми',
+                'Стартовият пакет включва първите 10 модула от „Пътят на коприната“; пълният достъп включва трите програми',
+                'Пакетът „Пълен достъп + стратегически сесии“ включва две индивидуални онлайн срещи по 60 минути с Владимир Атанасов и „Системата зад Академия TAVORA“',
+                'Сертификатът в пакетите с пълен достъп е за завършено обучение и не е държавно призната професионална квалификация',
                 'Доживотен достъп до закупеното съдържание',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
@@ -96,7 +104,7 @@ export default function TermsPage() {
               3. Цени и плащане
             </h2>
             <p>
-              Всички цени са посочени в български лева (BGN) и включват ДДС, когато е приложимо.
+              Цените на пакетите на Академията и валутата на плащане са в евро (EUR). Крайната сума за избрания пакет е показана преди потвърждаване на плащането и включва ДДС, когато е приложимо.
               Плащането се извършва еднократно преди предоставяне на достъп до платформата.
               Доставчикът си запазва правото да променя цените, като промените не засягат вече сключени договори.
             </p>
@@ -158,7 +166,7 @@ export default function TermsPage() {
               {[
                 'Не споделят данни за достъп с трети лица',
                 'Не записват и не разпространяват съдържанието',
-                'Спазват уважителен тон в общността',
+                'Спазват уважителен тон при общуване с екипа и другите участници',
                 'Не използват платформата за незаконни цели',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
@@ -182,14 +190,14 @@ export default function TermsPage() {
               компетентен е съответният български съд.
             </p>
             <p className="mt-3">
-              Потребителите могат да използват и платформата за онлайн решаване на спорове на ЕС:{' '}
+              Информация за извънсъдебното решаване на потребителски спорове и признатите органи за алтернативно решаване на спорове е достъпна в портала на Европейската комисия:{' '}
               <a
-                href="https://ec.europa.eu/consumers/odr"
+                href="https://consumer-redress.ec.europa.eu/index_bg"
                 target="_blank"
                 rel="nofollow noopener noreferrer"
                 className="text-[#0A2540] underline underline-offset-2 hover:text-[#1B4332] transition-colors"
               >
-                ec.europa.eu/consumers/odr
+                Consumer Redress in the EU
               </a>
             </p>
           </section>

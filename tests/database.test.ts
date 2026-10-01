@@ -742,3 +742,127 @@ describe("Perfect Video final exam", () => {
     )).rejects.toThrow(/12 previous module 15 lessons/);
   });
 });
+
+// Synthetic fixtures only: the real Marketing Basics exam and its keys remain private.
+async function marketingExamFixture() {
+  await actor();
+  await db.exec("BEGIN");
+  await db.exec(`DO $fixture$
+    DECLARE i integer; lid uuid; vid uuid; bid uuid; questions jsonb; keys jsonb;
+      lo integer; hi integer; per_module integer;
+    BEGIN
+      FOR i IN 1..14 LOOP
+        INSERT INTO academy_lessons(module_id,lesson_id,status)
+          VALUES('s03-m20','lm20-'||lpad(i::text,2,'0'),'draft') RETURNING id INTO lid;
+        INSERT INTO academy_lesson_versions(academy_lesson_id,version_number,title,source_kind)
+          VALUES(lid,1,'Synthetic test lesson','editor') RETURNING id INTO vid;
+        UPDATE academy_lessons SET status='published',published_version_id=vid,draft_version_id=vid WHERE id=lid;
+        IF i>=10 THEN
+          lo:=CASE i WHEN 10 THEN 1 WHEN 11 THEN 5 WHEN 12 THEN 11 WHEN 13 THEN 17 ELSE 1 END;
+          hi:=CASE i WHEN 10 THEN 4 WHEN 11 THEN 10 WHEN 12 THEN 16 WHEN 13 THEN 20 ELSE 20 END;
+          per_module:=CASE WHEN i=14 THEN 2 ELSE 3 END;
+          SELECT jsonb_agg(jsonb_build_object('id','q'||n,'moduleId','s03-m'||lpad(m::text,2,'0'),
+            'prompt','Synthetic question '||n,'options',jsonb_build_array(
+              jsonb_build_object('id','a','label','Synthetic A'),jsonb_build_object('id','b','label','Synthetic B'))) ORDER BY n),
+            jsonb_object_agg('q'||n,'a') INTO questions,keys
+          FROM (SELECT m,row_number() OVER (ORDER BY m,j) n FROM generate_series(lo,hi) m
+            CROSS JOIN generate_series(1,per_module) j) q;
+          INSERT INTO academy_lesson_blocks(version_id,block_key,position,block_type,title,content,points,required)
+            VALUES(vid,'exam',0,'course_exam','Synthetic exam',jsonb_build_object('questions',questions,
+              'minimumPercent',80,'minimumGroupPercent',CASE WHEN i=14 THEN 60 ELSE 0 END),100,true)
+            RETURNING id INTO bid;
+          INSERT INTO academy_private.lesson_block_keys(block_id,answer_key,scoring)
+            VALUES(bid,jsonb_build_object('answers',keys),'{"mode":"aggregate"}');
+        END IF;
+      END LOOP;
+    END $fixture$;`);
+  return (await db.query<{ lesson_id: string; version_id: string; answers: Record<string, string> }>(`
+    SELECT l.lesson_id,l.published_version_id version_id,k.answer_key->'answers' answers
+    FROM academy_lessons l JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id
+    JOIN academy_private.lesson_block_keys k ON k.block_id=b.id WHERE l.module_id='s03-m20'
+    ORDER BY l.lesson_id`)).rows;
+}
+
+describe("Marketing Basics course exam", () => {
+  it("requires access, exact answers and current prerequisites while preserving private keys", async () => {
+    const refs = await marketingExamFixture();
+    const group = refs[0];
+    const final = refs[4];
+    const submit = (ref = group, answers: Record<string, unknown> = group.answers, attempt = crypto.randomUUID()) =>
+      db.query("SELECT academy_submit_course_exam('s03-m20',$1,$2,'exam',$3,$4) result",
+        [ref.lesson_id, ref.version_id, { answers }, attempt]);
+    // Expected errors use savepoints because the fixtures run in an isolated transaction.
+    async function rejects(action: () => Promise<unknown>, pattern: RegExp) {
+      await actor();
+      await db.exec("SAVEPOINT expected_error");
+      try { await expect(action()).rejects.toThrow(pattern); }
+      finally { await db.exec("ROLLBACK TO SAVEPOINT expected_error"); }
+    }
+    try {
+      await rejects(async () => { await actor("anon"); return submit(); }, /permission denied|Access denied/);
+      const outsider = '00000000-0000-4000-8000-000000000099';
+      await db.query("INSERT INTO auth.users(id,email) VALUES($1,'exam-outsider@example.invalid')", [outsider]);
+      await rejects(async () => { await actor("authenticated", outsider); return submit(); }, /Access denied/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return db.query("SELECT * FROM academy_private.lesson_block_keys"); }, /permission denied/);
+      await actor("authenticated", ADMIN);
+      const bundle = (await db.query<{ lesson: unknown }>("SELECT academy_get_lesson_v2('s03-m20','lm20-10') lesson")).rows[0].lesson;
+      expect(JSON.stringify(bundle)).not.toMatch(/answer_key|"evaluation"/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return db.query(
+        "SELECT academy_complete_lesson_block('s03-m20','lm20-10',$1,'exam',$2,$3)",
+        [group.version_id, { acknowledged: true }, crypto.randomUUID()]); }, /course exam endpoint/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { q1: 'a' }); }, /every exam question/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { ...group.answers, extra: 'a' }); }, /every exam question/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { ...group.answers, q1: 'invalid' }); }, /Invalid or missing/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit({ ...group, version_id: crypto.randomUUID() }); }, /Published exam not found/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(final, final.answers); }, /предишните 13/);
+      await actor();
+      await db.exec(`UPDATE academy_lesson_blocks SET content=jsonb_set(content,'{questions,0,moduleId}','"s03-m20"')
+        WHERE version_id='${group.version_id}'`);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(); }, /exam coverage/);
+    } finally { await actor(); await db.exec("ROLLBACK"); }
+  });
+
+  it("enforces 80% overall and 60% in each final group, with atomic and idempotent attempts", async () => {
+    const refs = await marketingExamFixture();
+    const final = refs[4];
+    type ExamResult = { correct: boolean; feedback: { complete: boolean; scorePercent: number;
+      groupResults: Array<{ passed: boolean; scorePercent: number }>; answer?: unknown; weakModules: string[] };
+      progress: { completed_block_keys: string[] } };
+    const submit = async (answers: Record<string, string>, attempt = crypto.randomUUID()) =>
+      (await db.query<{ result: ExamResult }>("SELECT academy_submit_course_exam('s03-m20','lm20-14',$1,'exam',$2,$3) result",
+        [final.version_id, { answers }, attempt])).rows[0].result;
+    const answersWithErrors = (indices: number[]) => ({ ...final.answers,
+      ...Object.fromEntries(indices.map((i) => [`q${i + 1}`, 'b'])) });
+    try {
+      await actor();
+      await db.query(`INSERT INTO academy_lesson_progress(user_id,academy_lesson_id,version_id,completed_at)
+        SELECT $1,id,published_version_id,now() FROM academy_lessons
+        WHERE module_id='s03-m20' AND lesson_id BETWEEN 'lm20-01' AND 'lm20-13'`, [ADMIN]);
+      await actor("authenticated", ADMIN);
+      const near = await submit(answersWithErrors([0,2,8,10,12,20,22,32,34]));
+      expect(near).toMatchObject({ correct: false, feedback: { complete: false, scorePercent: 77.5 } });
+      expect(near.feedback.groupResults.every((group) => group.passed)).toBe(true);
+      expect(near.progress.completed_block_keys).not.toContain('exam');
+      const highButUneven = await submit(answersWithErrors([0,1,2,3]));
+      expect(highButUneven).toMatchObject({ correct: false, feedback: { complete: false, scorePercent: 90 } });
+      expect(highButUneven.feedback.groupResults[0]).toMatchObject({ passed: false, scorePercent: 50 });
+      expect(highButUneven.feedback.answer).toBeUndefined();
+      expect(highButUneven.feedback.weakModules).toEqual(['s03-m01', 's03-m02']);
+      const attempt = crypto.randomUUID();
+      const passingAnswers = answersWithErrors([0,2,8,10,20,22,32,34]);
+      const pass = await submit(passingAnswers, attempt);
+      expect(pass).toMatchObject({ correct: true, feedback: { complete: true, scorePercent: 80 } });
+      expect(pass.progress.completed_block_keys).toContain('exam');
+      expect(pass.feedback.groupResults.every((group) => group.passed)).toBe(true);
+      expect((await submit(passingAnswers, attempt)).feedback).toEqual(pass.feedback);
+      await actor();
+      expect((await db.query<{ n: number }>("SELECT count(*)::int n FROM academy_lesson_attempts_v2 WHERE id=$1", [attempt])).rows[0].n).toBe(1);
+      await db.exec("SAVEPOINT conflict");
+      await actor("authenticated", ADMIN);
+      await expect(submit(final.answers, attempt)).rejects.toThrow(/Attempt conflict/);
+      await db.exec("ROLLBACK TO SAVEPOINT conflict");
+      await actor("authenticated", ADMIN);
+      await expect(submit(final.answers)).rejects.toThrow(/already passed/);
+    } finally { await db.exec("ROLLBACK"); await actor(); }
+  });
+});

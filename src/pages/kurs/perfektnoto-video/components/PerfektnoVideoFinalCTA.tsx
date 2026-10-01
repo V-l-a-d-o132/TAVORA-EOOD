@@ -10,11 +10,11 @@ export default function PerfektnoVideoFinalCTA() {
           <h2 className="text-2xl md:text-4xl font-light leading-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
             Перфектното Видео
             <br />
-            <span className="italic text-white/55">от безплатна диагностика до работа с професионална продукция</span>
+            <span className="italic text-white/55">от диагностика до работа с професионална продукция</span>
           </h2>
 
           <p className="text-sm text-white/75 leading-relaxed mb-8 max-w-lg">
-            Модул 01 (Диагностика) е напълно безплатен — без нужда от карта.
+            Програмата се отключва с покупка или предоставен достъп. Безплатният пробен модул на Академията е AI Advantage.
             Започни да анализираш видео нуждите на бизнеса си днес.
           </p>
 
@@ -23,7 +23,7 @@ export default function PerfektnoVideoFinalCTA() {
               to="/kurs"
               className="px-8 py-3.5 bg-white text-[#0A2540] text-sm rounded-full hover:bg-white/90 transition-all cursor-pointer whitespace-nowrap text-center font-medium"
             >
-              Започни безплатно — Модул 01 е отключен →
+              Разгледай достъпа до програмата →
             </Link>
             <a
               href="#programa"
@@ -37,7 +37,7 @@ export default function PerfektnoVideoFinalCTA() {
         <div className="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center gap-4 text-xs text-white/50">
           <div className="flex items-center gap-2">
             <i className="ri-shield-check-line text-white/60" />
-            <span>Модул 01 е безплатен</span>
+            <span>15 модула с практическа работа</span>
           </div>
           <div className="hidden sm:block w-1 h-1 rounded-full bg-white/20" />
           <div className="flex items-center gap-2">
