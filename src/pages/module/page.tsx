@@ -12,12 +12,13 @@ import LockedModuleScreen from '@/pages/module/components/LockedModuleScreen';
 import ModuleSidebar from '@/pages/module/components/ModuleSidebar';
 import MobileLessonSheet from '@/pages/module/components/MobileLessonSheet';
 import LessonContentViewer from '@/pages/module/components/LessonContentViewer';
-import { dispatchLevelUp } from '@/components/feature/LevelUpToast';
+import { newestBookmark, readLocalBookmark, type LessonBookmark } from '@/lib/learning-resume';
 
 /* ─── Module Page (Orchestrator) ─── */
 export default function ModulePage() {
   const { moduleId } = useParams<{ moduleId: string }>();
-  return <ModuleView key={moduleId} moduleId={moduleId} />;
+  const { user } = useAuth();
+  return <ModuleView key={`${moduleId}:${user?.id || 'anonymous'}`} moduleId={moduleId} />;
 }
 
 function ModuleView({ moduleId }: { moduleId: string | undefined }) {
@@ -54,6 +55,8 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   const [prefetchLoading, setPrefetchLoading] = useState(false);
   // Resume + slide progress tracking
   const hasAutoResumed = useRef(false);
+  const [resumeReady, setResumeReady] = useState(lessonParam !== null || !user);
+  const [savedBookmark, setSavedBookmark] = useState<LessonBookmark | null>(null);
   const [slideProgressMap, setSlideProgressMap] = useState<Record<string, { seen: number; total: number }>>();
 
   // Public Module 1 support
@@ -66,29 +69,12 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     return getNextModuleId(moduleId);
   }, [moduleId]);
 
-  // Level tracking — compute early before any conditional returns
-  const previousLevelRef = useRef(0);
+  // This header shows module XP. Global levels belong to the dashboard.
   const totalPoints = useMemo(() => {
     if (!mod || !Array.isArray(mod.lessons)) return 0;
     if (isModule1 && !user) return localCompletedLessons.length * 10;
     return mod.lessons.reduce((sum, lesson) => sum + (progressMap?.[lesson.id]?.xp || 0), 0);
   }, [mod, progressMap, isModule1, user, localCompletedLessons]);
-
-  const currentLevel = useMemo(() => {
-    const thresholds = [0, 50, 150, 300, 500, 750, 1000, 1500, 2000, 3000];
-    let level = 1;
-    for (let i = 1; i < thresholds.length; i++) {
-      if (totalPoints >= thresholds[i]) level = i + 1;
-    }
-    return level;
-  }, [totalPoints]);
-
-  useEffect(() => {
-    if (previousLevelRef.current > 0 && currentLevel > previousLevelRef.current) {
-      dispatchLevelUp(currentLevel, totalPoints);
-    }
-    previousLevelRef.current = currentLevel;
-  }, [currentLevel, totalPoints]);
 
   /* ─── Academy Pixel ViewContent ─── */
   useEffect(() => {
@@ -106,7 +92,10 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     (async () => {
       try {
         const lessonIds = mod.lessons.map((l) => l.id).filter(Boolean);
-        const { data, error } = await supabase.rpc('academy_get_module_progress', { p_module: mod.id });
+        const [{ data, error }, profile] = await Promise.all([
+          supabase.rpc('academy_get_module_progress', { p_module: mod.id }),
+          supabase.from('profiles').select('last_opened_lesson').eq('id', user.id).maybeSingle(),
+        ]);
         if (error) throw error;
 
         if (cancelled) return;
@@ -133,6 +122,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
             }
           });
         }
+        setSavedBookmark(newestBookmark([readLocalBookmark(user.id), profile.data?.last_opened_lesson], mod.id));
         setProgressMap(map);
       } catch {
         if (!cancelled) setErrorMsg('Грешка при зареждане на прогреса');
@@ -142,24 +132,31 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     return () => { cancelled = true; };
   }, [user, mod]);
 
-  /* ─── Auto-resume to first incomplete lesson ─── */
+  /* Explicit URL > latest bookmark in this module > last activity > first gap. */
   useEffect(() => {
-    if (hasAutoResumed.current || !mod) return;
+    if (!mod) return;
     // An explicit link always wins, even before progress has loaded.
     if (lessonParam !== null || !user) {
       hasAutoResumed.current = true;
+      setResumeReady(true);
       return;
     }
-    if (!progressMap) return;
+    if (hasAutoResumed.current || !progressMap) return;
+    const bookmarkedIndex = mod.lessons.findIndex(lesson => lesson.id === savedBookmark?.lessonId);
+    const latestLesson = mod.lessons.filter(lesson => progressMap[lesson.id]?.lastActivityAt)
+      .sort((a, b) => Date.parse(progressMap[b.id].lastActivityAt!) - Date.parse(progressMap[a.id].lastActivityAt!))[0];
     const firstIncomplete = mod.lessons.findIndex((l) => {
       const p = progressMap[l.id];
       return !p || !p.completed;
     });
-    if (firstIncomplete > 0 && firstIncomplete < mod.lessons.length) {
-      navigate(`/module/${moduleId}?lesson=${firstIncomplete}`, { replace: true });
-    }
+    const target = bookmarkedIndex >= 0 ? bookmarkedIndex : latestLesson ? mod.lessons.indexOf(latestLesson) : Math.max(0, firstIncomplete);
     hasAutoResumed.current = true;
-  }, [progressMap, mod, lessonParam, moduleId, navigate, user]);
+    if (target !== activeLessonIndex) {
+      navigate(`/module/${moduleId}?lesson=${target}`, { replace: true });
+      return;
+    }
+    setResumeReady(true);
+  }, [progressMap, mod, lessonParam, moduleId, navigate, user, savedBookmark, activeLessonIndex]);
 
   /* ─── Notes loading ─── */
   useEffect(() => {
@@ -283,36 +280,14 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     setMobileSidebarOpen(false);
     if (!mod?.lessons[idx]) return;
     hasAutoResumed.current = true;
-    if (idx === activeLessonIndex) return;
+    if (idx === activeLessonIndex && lessonParam !== null) return;
 
     // Use React Router navigate instead of raw history.replaceState
     navigate(`/module/${moduleId}?lesson=${idx}`);
 
-    /* persist last-opened lesson before navigating away */
-    if (user && mod && Array.isArray(mod.lessons) && mod.lessons[idx]) {
-      const lesson = mod.lessons[idx];
-      const payload = {
-        moduleId: mod.id,
-        lessonIndex: idx,
-        lessonTitle: lesson.title,
-        sectionTitle: section?.title || '',
-        timestamp: new Date().toISOString(),
-      };
-      /* localStorage for instant cross-page access */
-      try {
-        localStorage.setItem('tavora_last_opened_lesson', JSON.stringify(payload));
-      } catch { /* ignore */ }
-      /* Supabase for cross-device persistence */
-      supabase
-        .from('profiles')
-        .update({ last_opened_lesson: payload })
-        .eq('id', user.id)
-        .then(() => {}, () => {});
-    }
-
     setShowQuiz(false);
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [activeLessonIndex, user, mod, section, moduleId, navigate]);
+  }, [activeLessonIndex, lessonParam, mod, moduleId, navigate]);
 
   const goNext = useCallback(() => {
     if (!mod || !Array.isArray(mod.lessons)) return;
@@ -480,7 +455,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
           </nav>
           <div className="flex items-center gap-2 shrink-0">
             <span className="flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1.5 text-xs md:text-sm font-medium whitespace-nowrap" style={{ background: C.surface, border: `1px solid ${C.border}`, color: C.text }}>
-              <i className="ri-award-line" style={{ color: C.accent }} />{totalPoints}
+              <i className="ri-award-line" style={{ color: C.accent }} />{totalPoints} XP в модула
             </span>
             {saveStatus === 'saving' && <span className="text-xs flex items-center gap-1 hidden md:flex" style={{ color: C.textDim }}><i className="ri-loader-4-line animate-spin" style={{ fontSize: '10px' }} />Запис...</span>}
             {saveStatus === 'saved' && <span className="text-xs flex items-center gap-1 hidden md:flex font-medium" style={{ color: C.success }}><i className="ri-check-line" style={{ fontSize: '10px' }} />Запазено</span>}
@@ -562,7 +537,9 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
           />
 
           {/* Main Content */}
-          <LessonContentViewer
+          {!resumeReady ? <div className="p-8 text-zinc-300" role="status">
+            {errorMsg ? <><p>Не успяхме да възстановим позицията ти.</p><button type="button" onClick={handleRefreshAccess} className="mt-4 rounded-xl border border-white/20 px-5 py-3">Опитай отново</button></> : 'Възстановяваме последния ти урок…'}
+          </div> : <LessonContentViewer
             moduleId={mod.id}
             modNumber={mod.number}
             modTitle={mod.title}
@@ -600,7 +577,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
             onSlideProgress={handleSlideProgress}
             onTrustedProgress={handleTrustedLessonProgress}
             nextModule={nextModule}
-          />
+          />}
         </div>
       </div>
     </div>

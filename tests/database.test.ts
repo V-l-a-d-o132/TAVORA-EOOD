@@ -314,6 +314,81 @@ describe("Silk Road current-edition reporting", () => {
   });
 });
 
+describe("unified progress and resume", () => {
+  it("reports real current-edition XP for all courses without reading legacy completion or changing history", async () => {
+    await actor();
+    await db.exec("BEGIN");
+    try {
+      const refs = (await db.query<{ id: string; module_id: string; lesson_id: string; published_version_id: string }>(
+        `SELECT DISTINCT ON (left(module_id,3)) id,module_id,lesson_id,published_version_id
+         FROM academy_lessons WHERE published_version_id IS NOT NULL AND status<>'archived'
+           AND module_id IN ('s01-m01','s02-m02','s03-m01') ORDER BY left(module_id,3),lesson_id`
+      )).rows;
+      expect(refs).toHaveLength(3);
+      for (let i = 0; i < refs.length; i++) {
+        const l = refs[i];
+        await db.query(`INSERT INTO academy_lesson_progress(user_id,academy_lesson_id,version_id,xp,completed_at)
+          VALUES($1,$2,$3,$4,NULL) ON CONFLICT(user_id,academy_lesson_id)
+          DO UPDATE SET version_id=EXCLUDED.version_id,xp=EXCLUDED.xp,completed_at=NULL`, [ADMIN,l.id,l.published_version_id,[7,28,19][i]]);
+        await db.query(`INSERT INTO pdf_progress(user_id,module_id,lesson_id,completed)
+          VALUES($1,$2,$3,true) ON CONFLICT(user_id,module_id,lesson_id) DO UPDATE SET completed=true`, [ADMIN,l.module_id,l.lesson_id]);
+      }
+      const stored = await scalar("SELECT md5(jsonb_agg(p ORDER BY user_id,academy_lesson_id)::text) hash FROM academy_lesson_progress p");
+      await actor('authenticated',ADMIN);
+      const report = (await db.query<{ result: Array<{ module_id: string; lesson_id: string; completed: boolean; xp: number }> }>("SELECT academy_get_learning_progress() result")).rows[0].result;
+      for (let i = 0; i < refs.length; i++) {
+        expect(report.find(row => row.module_id===refs[i].module_id && row.lesson_id===refs[i].lesson_id)).toMatchObject({ completed:false,xp:[7,28,19][i] });
+      }
+      await actor();
+      expect(await scalar("SELECT md5(jsonb_agg(p ORDER BY user_id,academy_lesson_id)::text) hash FROM academy_lesson_progress p")).toEqual(stored);
+      const video = refs[1];
+      const old = (await db.query<{ id: string }>('SELECT id FROM academy_lesson_versions WHERE academy_lesson_id=$1 AND id<>$2 LIMIT 1',[video.id,video.published_version_id])).rows[0];
+      expect(old).toBeTruthy();
+      await db.query('UPDATE academy_lesson_progress SET version_id=$1,xp=99,completed_at=now() WHERE user_id=$2 AND academy_lesson_id=$3',[old.id,ADMIN,video.id]);
+      await actor('authenticated',ADMIN);
+      const module = (await db.query<{ result: Array<{lessonId: string; completed: boolean; xp: number}> }>('SELECT academy_get_module_progress($1) result',[video.module_id])).rows[0].result;
+      expect(module.find(row => row.lessonId===video.lesson_id)).toMatchObject({ completed:false,xp:0 });
+      const updated = (await db.query<{ result: Array<{ module_id: string; lesson_id: string; completed: boolean; xp: number }> }>('SELECT academy_get_learning_progress() result')).rows[0].result;
+      expect(updated.find(row => row.module_id===video.module_id && row.lesson_id===video.lesson_id)).toMatchObject({completed:false,xp:0});
+      await actor();
+      expect((await db.query<{xp:number}>('SELECT xp FROM academy_lesson_progress WHERE user_id=$1 AND academy_lesson_id=$2',[ADMIN,video.id])).rows[0].xp).toBe(99);
+    } finally { await db.exec('ROLLBACK'); await actor(); }
+  });
+
+  it('requires authentication and only returns the callers accessible progress', async () => {
+    await actor('anon');
+    await expect(db.query('SELECT academy_get_learning_progress()')).rejects.toThrow();
+    await actor('authenticated',B);
+    const rows = (await db.query<{ result: Array<{module_id: string; xp: number; completed: boolean}> }>('SELECT academy_get_learning_progress() result')).rows[0].result;
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every(row => ['s01-m01','s03-m02'].includes(row.module_id) && row.xp===0 && !row.completed)).toBe(true);
+  });
+
+  it('records stable IDs using server time without awarding XP or completing anything', async () => {
+    await actor();
+    await db.exec('BEGIN');
+    try {
+      const before = await scalar('SELECT count(*)::int n,sum(xp)::int xp FROM academy_lesson_progress');
+      await actor('authenticated',B);
+      const saved = (await db.query<{result:{moduleId:string;lessonId:string;timestamp:string}}>("SELECT academy_record_lesson_visit($1,'s01-m01','l01-04') result",[B])).rows[0].result;
+      expect(saved).toMatchObject({moduleId:'s01-m01',lessonId:'l01-04'});
+      expect(Number.isFinite(Date.parse(saved.timestamp))).toBe(true);
+      expect((await db.query<{last_opened_lesson:unknown}>('SELECT last_opened_lesson FROM profiles WHERE id=$1',[B])).rows[0].last_opened_lesson).toEqual(saved);
+      await actor();
+      expect(await scalar('SELECT count(*)::int n,sum(xp)::int xp FROM academy_lesson_progress')).toEqual(before);
+    } finally { await db.exec('ROLLBACK'); await actor(); }
+  });
+
+  it('rejects cross-account, locked, missing and anonymous bookmark writes', async () => {
+    await actor('authenticated',B);
+    await expect(db.query("SELECT academy_record_lesson_visit($1,'s01-m01','l01-01')",[A])).rejects.toThrow(/Access denied/);
+    await expect(db.query("SELECT academy_record_lesson_visit($1,'s03-m20','lm20-01')",[B])).rejects.toThrow(/Access denied/);
+    await expect(db.query("SELECT academy_record_lesson_visit($1,'s01-m01','missing')",[B])).rejects.toThrow(/not found/);
+    await actor('anon');
+    await expect(db.query("SELECT academy_record_lesson_visit($1,'s01-m01','l01-01')",[B])).rejects.toThrow();
+  });
+});
+
 describe("transactional payment ledger", () => {
   it("unlocks exact modules and repeated events create one purchase/outbox pair", async () => {
     await record("one");

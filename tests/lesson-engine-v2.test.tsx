@@ -43,6 +43,7 @@ function lesson(blocks: LessonBlockV2[], progress: LessonV2['progress'] = null):
 
 beforeEach(() => {
   vi.clearAllMocks();
+  localStorage.clear();
   HTMLElement.prototype.scrollIntoView = vi.fn();
   api.rpc.mockImplementation(async (name: string) => {
     if (name === 'academy_complete_lesson_block') return { data: result, error: null };
@@ -136,6 +137,24 @@ describe('course exam feedback', () => {
 });
 
 describe('Lesson Engine V2 learning flow', () => {
+  it('flushes a pending answer when the page is hidden, without waiting for debounce', async () => {
+    vi.useFakeTimers();
+    const note = { ...createBlock('reflection', 0), content: { prompt: 'Отговор', minLength: 3 } };
+    render(<LessonEngineV2 moduleId="s01-m01" userId="student" lessonOverride={lesson([note])} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Отговор преди излизане' } });
+    await act(async () => { fireEvent(window, new Event('pagehide')); });
+    expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({
+      p_current_block: note.key, p_state: { [note.key]: { text: 'Отговор преди излизане' } },
+    }));
+  });
+
+  it('does not replace a student bookmark from an admin preview', async () => {
+    render(<LessonEngineV2 moduleId="s01-m01" userId="student" previewMode lessonOverride={lesson([createBlock('objective', 0)])} />);
+    await act(async () => {});
+    expect(api.rpc.mock.calls.some(([name]) => name === 'academy_record_lesson_visit')).toBe(false);
+    expect(localStorage.getItem('tavora:last-lesson:student')).toBeNull();
+  });
+
   it.each(['s01-m01', 's02-m01', 's03-m01'])('records reading and advances without claiming mastery in %s', async (moduleId) => {
     const reading = { ...createBlock('concept', 0), points: 0, content: { body: 'Съществуващ учебен текст.' } };
     const task = { ...createBlock('practical_response', 1), content: { prompt: 'Съществуваща задача.', minLength: 60 } };
