@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { LEARNING_SECTIONS } from "../src/mocks/learning-platform";
+import { lessonReadingDuration } from "../src/lib/academy-reading-time";
 
 const sql = readFileSync(
   new URL(
@@ -49,7 +50,7 @@ describe("Perfect Video 13–14 publication", () => {
       for (const lesson of published) {
         const listing = catalog?.lessons.find((entry) => entry.id === lesson.lesson_id);
         expect(lesson.title).toBe(listing?.title);
-        expect(`${lesson.estimated_minutes} мин`).toBe(listing?.duration);
+        expect(listing?.duration).toBe(lessonReadingDuration(moduleId, lesson.lesson_id));
       }
     }
     expect(lessons.some((entry) => entry.module_id === "s02-m15")).toBe(false);

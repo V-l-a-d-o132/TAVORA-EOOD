@@ -26,14 +26,11 @@ describe("Perfect Video modules 10–12 catalog", () => {
     }
   });
 
-  it("exposes substantial practice durations instead of placeholder estimates", () => {
-    const expectedDurations = {
-      "s02-m10": "≈9 ч 48 мин",
-      "s02-m11": "≈9 ч 44 мин",
-      "s02-m12": "≈5 ч",
-    };
-    for (const [id, duration] of Object.entries(expectedDurations)) {
-      expect(course?.modules.find((module) => module.id === id)?.duration).toBe(`${duration} с практиката`);
+  it("labels reading only and leaves practice at the learner's pace", () => {
+    for (const id of ["s02-m10", "s02-m11", "s02-m12"]) {
+      const module = course?.modules.find((entry) => entry.id === id);
+      expect(module?.duration).toMatch(/^≈.+ четене$/);
+      expect(module?.lessons.every((lesson) => /^≈.+ четене$/.test(lesson.duration))).toBe(true);
     }
   });
 });

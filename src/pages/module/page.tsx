@@ -463,6 +463,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
         </div>
 
         {/* Module progress bar — hidden on mobile, shown on md+ */}
+        <p className="mb-3 text-xs leading-5" style={{ color: C.textDim }}>Посоченото време е ориентир само за четене. Упражненията са със собствено темпо.</p>
         <div className="mb-3 md:mb-5 hidden md:block">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-medium uppercase tracking-wider" style={{ color: C.textDim }}>Прогрес на модула</span>

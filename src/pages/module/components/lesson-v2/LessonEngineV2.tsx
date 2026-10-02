@@ -12,6 +12,7 @@ import LessonGlossary from './LessonGlossary';
 import { LessonDraftQueue, type DraftSaveStatus } from '@/lib/lesson-draft-queue';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import { notifyLearningProgressChanged, recordLessonVisit } from '@/lib/learning-resume';
+import { countVisibleLessonWords, lessonReadingDuration } from '@/lib/academy-reading-time';
 
 interface Props {
   moduleId: string;
@@ -189,11 +190,12 @@ export default function LessonEngineV2({
   return <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col pb-28 text-white" data-testid="lesson-engine-v2">
     <header className="mb-5 overflow-hidden rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(240,68,68,.14),transparent_38%),linear-gradient(145deg,#181b21,#0e1014)] p-5 shadow-2xl shadow-black/20 sm:p-7 md:p-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-zinc-300"><span className="rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1 text-red-200">Практически урок</span><span><i className="ri-time-line mr-1" />{lesson.duration}</span><span><i className="ri-star-line mr-1 text-amber-300" />{xp} XP</span></div>
+        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-zinc-300"><span className="rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1 text-red-200">Практически урок</span><span><i className="ri-time-line mr-1" />{lessonReadingDuration(moduleId, lesson.lessonId, countVisibleLessonWords(lesson))}</span><span><i className="ri-star-line mr-1 text-amber-300" />{xp} XP</span></div>
         <span aria-live="polite" className={`text-xs ${saveStatus === 'error' ? 'text-red-300' : 'text-zinc-400'}`}>{saveStatus === 'saving' ? 'Запазване…' : saveStatus === 'saved' ? 'Прогресът е запазен' : saveStatus === 'error' ? 'Проблем при запазване' : userId ? 'Автоматично запазване' : 'Преглед без запис'}</span>
       </div>
       <h1 className="mt-5 text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">{lesson.title}</h1>
       {lesson.subtitle && <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-300">{lesson.subtitle}</p>}
+      <p className="mt-3 text-xs leading-5 text-zinc-400">Ориентир само за четене. За упражненията отдели време според своята задача и темпо.</p>
       <div className="mt-5"><LessonGlossary key={lesson.id} text={`${lesson.title}\n${lesson.subtitle ?? ''}\n${lesson.objective}`} /></div>
       <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-400">Цел на урока</p><p className="mt-2 leading-7 text-white">{lesson.objective}</p></div>
       <div className="mt-6"><div className="mb-2 flex items-center justify-between text-xs text-zinc-300"><span>Напредък в урока</span><span className="font-semibold text-white">{progressPercent}% · {requiredCompleted}/{requiredBlocks.length} задължителни стъпки</span></div><div className="h-2.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 transition-[width] motion-reduce:transition-none" style={{ width: `${progressPercent}%` }} /></div></div>

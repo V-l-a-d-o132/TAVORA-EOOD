@@ -137,6 +137,14 @@ describe('course exam feedback', () => {
 });
 
 describe('Lesson Engine V2 learning flow', () => {
+  it('shows reading time from the visible lesson instead of its old duration metadata', () => {
+    const reading = { ...createBlock('concept', 0), content: { body: 'Кратък учебен текст за прочит.' } };
+    render(<LessonEngineV2 moduleId="s01-m01" userId="student" lessonOverride={lesson([reading])} />);
+    expect(screen.getByText('≈1 мин четене')).toBeTruthy();
+    expect(screen.getByText(/Ориентир само за четене/)).toBeTruthy();
+    expect(screen.queryByText('10 мин')).toBeNull();
+  });
+
   it('flushes a pending answer when the page is hidden, without waiting for debounce', async () => {
     vi.useFakeTimers();
     const note = { ...createBlock('reflection', 0), content: { prompt: 'Отговор', minLength: 3 } };
