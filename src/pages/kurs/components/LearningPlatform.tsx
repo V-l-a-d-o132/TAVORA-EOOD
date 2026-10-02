@@ -7,6 +7,7 @@ import { useLearningProgress, type ResumeTarget } from '@/hooks/useLearningProgr
 import { formatPrice, getTierById } from '@/config/pricing';
 import SearchModules from './SearchModules';
 import MessageAdmin from './MessageAdmin';
+import CourseIntroduction from './CourseIntroduction';
 
 /* ─── Brand ─── */
 const C = {
@@ -295,7 +296,7 @@ export default function LearningPlatform() {
               <div
                 className="p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 cursor-pointer"
                 style={{ background: C.accentDim, border: `1px solid ${C.accent}` }}
-                onClick={() => navigate('/module/s01-m01')}
+                onClick={() => setActiveSection('koprinena-pateka')}
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 flex items-center justify-center shrink-0" style={{ background: 'rgba(229,62,62,0.2)', border: `1px solid ${C.accent}` }}>
@@ -343,6 +344,16 @@ export default function LearningPlatform() {
                 <p className="text-sm" style={{ color: C.textMuted }}>{activeSectionData.subtitle}</p>
               </div>
             </div>
+
+            <CourseIntroduction
+              key={activeSectionData.id}
+              courseId={activeSectionData.id}
+              initiallyOpen={(sectionProgressMap[activeSectionData.id]?.completed || 0) === 0}
+              canStart={isModuleUnlocked(activeSectionData.modules[0])}
+              price={getSectionPrice(activeSectionData.id)}
+              onStart={() => goToModule(activeSectionData.modules[0])}
+              onUnlock={() => handleUnlock(getSectionTier(activeSectionData.id))}
+            />
 
             {/* Section progress */}
             <div className="p-5 mb-6" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
