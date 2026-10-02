@@ -23,7 +23,7 @@ export default function PerfektnoVideoProgram() {
         Всеки модул е самостоятелна стъпка в системата Focus → Record → Assemble → Measure → Evolve. Първият модул е диагностика и стратегия. Програмата се отключва с покупка или предоставен достъп.
       </p>
       <p className="text-xs text-[#1C1C1E]/50 mb-8">
-        {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока с практически задачи. Отдели време и за собствените снимки, монтаж и финалния изпит.
+        {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока с практически задачи. Диапазоните са само ориентир за четене; снимките, монтажът и упражненията са със собствено темпо.
       </p>
 
       <div className="space-y-3">

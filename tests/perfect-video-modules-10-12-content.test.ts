@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { LEARNING_SECTIONS } from "../src/mocks/learning-platform";
+import { lessonReadingDuration } from "../src/lib/academy-reading-time";
 
 const sql = readFileSync(
   new URL(
@@ -36,7 +37,7 @@ const lessons = JSON.parse(match[1]) as Lesson[];
 const section = LEARNING_SECTIONS.find((entry) => entry.id === "perfektno-video");
 
 describe("Perfect Video 10–12 first publication", () => {
-  it("publishes exactly the 40 catalog lessons with the same titles and durations", () => {
+  it("publishes exactly the 40 catalog lessons with titles and reading-only labels", () => {
     expect(lessons).toHaveLength(40);
     expect(new Set(lessons.map((entry) => entry.lesson_id)).size).toBe(40);
     for (const [moduleId, count] of Object.entries({
@@ -53,7 +54,7 @@ describe("Perfect Video 10–12 first publication", () => {
       for (const lesson of published) {
         const listing = catalog?.lessons.find((entry) => entry.id === lesson.lesson_id);
         expect(lesson.title).toBe(listing?.title);
-        expect(`${lesson.estimated_minutes} мин`).toBe(listing?.duration);
+        expect(listing?.duration).toBe(lessonReadingDuration(moduleId, lesson.lesson_id));
       }
     }
   });

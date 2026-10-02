@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { moduleReadingDuration } from '@/lib/academy-reading-time';
 
 // ────────────────── palette ──────────────────
 const C = {
@@ -214,7 +215,7 @@ export default function Module1PreviewSection() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
           {[
             { value: '4', label: 'Теми в безплатния модул', icon: 'ri-book-open-line' },
-            { value: '20–24 мин', label: 'Четене в пълния модул', icon: 'ri-time-line' },
+            { value: moduleReadingDuration('s01-m01', M1_LESSONS.map((lesson) => `l01-${String(lesson.id).padStart(2, '0')}`)).replace(/ четене$/, ''), label: 'Ориентир само за четене', icon: 'ri-time-line' },
             { value: '4', label: 'Практически извода', icon: 'ri-lightbulb-line' },
             { value: 'Безплатно', label: 'Завинаги твой', icon: 'ri-vip-crown-line' },
           ].map((stat) => (
