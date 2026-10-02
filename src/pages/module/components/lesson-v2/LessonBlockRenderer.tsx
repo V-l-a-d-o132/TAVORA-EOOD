@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase';
 import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson-engine-v2';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import LessonRichText from './LessonRichText';
+import LessonGlossary from './LessonGlossary';
+import { visibleGlossaryText } from '@/lib/academy-glossary';
 
 interface Props {
   block: LessonBlockV2;
@@ -256,6 +258,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
 
   return <section aria-labelledby={`block-${block.key}`} className="min-w-0 break-words rounded-3xl border border-white/10 bg-gradient-to-b from-[#15171c] to-[#101216] p-5 shadow-2xl shadow-black/20 sm:p-7 md:p-9">
     <header className="mb-7 flex items-start justify-between gap-4"><div className="min-w-0"><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">{stepLabel}</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div>{block.points > 0 && <span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span>}</header>
+    <LessonGlossary text={visibleGlossaryText(block.title, block.content)} />
     {renderBlock()}
     {error && <div role="alert" className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100"><i className="ri-error-warning-line mr-2" />{error}</div>}
     {statusMessage && <div role="status" aria-live="polite" className={`mt-5 rounded-xl border p-4 text-sm ${statusMessage.tone}`}><p className="font-semibold"><i className={`${statusMessage.icon} mr-2`} />{statusMessage.title}</p>{s(feedback?.explanation) && <p className="mt-2 leading-6 opacity-90">{s(feedback?.explanation)}</p>}{isCorrect === false && <button type="button" onClick={() => setResult(null)} className="mt-3 font-semibold underline underline-offset-4">Нов опит</button>}</div>}

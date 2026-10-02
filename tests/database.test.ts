@@ -260,7 +260,8 @@ describe("Lesson Engine V2 migration and publication", () => {
         : { acknowledged: true };
       await db.query("SELECT academy_complete_lesson_block($1,$2,$3,$4,$5,$6)", ["s01-m01", "l01-01", lesson.versionId, block.key, payload, crypto.randomUUID()]);
     }
-    expect((await db.query("SELECT completed_at IS NOT NULL completed,mastery_status,xp FROM academy_lesson_progress WHERE user_id=$1 AND academy_lesson_id=$2", [A, lesson.id])).rows[0]).toEqual({ completed: true, mastery_status: "mastered", xp: 75 });
+    // Retired open-answer blocks no longer award XP in the published edition.
+    expect((await db.query("SELECT completed_at IS NOT NULL completed,mastery_status,xp FROM academy_lesson_progress WHERE user_id=$1 AND academy_lesson_id=$2", [A, lesson.id])).rows[0]).toEqual({ completed: true, mastery_status: "mastered", xp: 55 });
   });
 
   it("evaluates anonymous preview attempts without writing trusted progress", async () => {
@@ -301,7 +302,7 @@ describe("Silk Road current-edition reporting", () => {
     expect(updated.progress).toBeNull();
     await actor();
     const history = await scalar("SELECT p.completed_at IS NOT NULL completed, p.xp FROM academy_lesson_progress p JOIN academy_lessons l ON l.id=p.academy_lesson_id WHERE p.user_id='00000000-0000-4000-8000-000000000001' AND l.module_id='s01-m01' AND l.lesson_id='l01-01'");
-    expect(history).toEqual({ completed: true, xp: 75 });
+    expect(history).toEqual({ completed: true, xp: 55 });
   });
 
   it("requires authentication and excludes other users and locked modules", async () => {
