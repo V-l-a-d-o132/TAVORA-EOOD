@@ -1,5 +1,6 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync } from 'node:fs';
+import { LEARNING_SECTIONS } from '../../src/mocks/learning-platform';
 
 export const STUDENT = '00000000-0000-4000-8000-000000000091';
 export const OTHER = '00000000-0000-4000-8000-000000000092';
@@ -12,9 +13,12 @@ type Block = {
 type Source = { module_id: string; lesson_id: string; version: Record<string, unknown>; blocks: Block[] };
 const ids = (prefix: string, count: number) => Array.from({ length: count }, (_, i) => `${prefix}-${String(i + 1).padStart(2, '0')}`);
 
-function sourceFixture(): Source[] {
-  return [...ids('l01', 4), ...ids('l02', 10)].map(lessonId => {
-    const moduleId = lessonId.startsWith('l01') ? 's01-m01' : 's01-m02';
+function sourceFixture(allModules: boolean): Source[] {
+  const counts = allModules ? [4, 10, 10, 10, 10, 10, 4, 4, 4, 4, 4] : [4, 10];
+  const titles = new Map(LEARNING_SECTIONS[0].modules.flatMap(module => module.lessons.map(lesson => [lesson.id, lesson.title] as const)));
+  return counts.flatMap((count, index) => ids(`l${String(index + 1).padStart(2, '0')}`, count)).map(lessonId => {
+    const moduleNumber = Number(lessonId.slice(1, 3));
+    const moduleId = `s01-m${lessonId.slice(1, 3)}`;
     const theoryCount = moduleId === 's01-m01' ? 5 : 4;
     const blocks: Block[] = [];
     const add = (key: string, type: string, required = true, points = 5) => {
@@ -38,15 +42,15 @@ function sourceFixture(): Source[] {
     return {
       module_id: moduleId, lesson_id: lessonId,
       version: {
-        version_number: moduleId === 's01-m01' ? 9 : 7, title: `Предишен урок ${lessonId}`,
+        version_number: lessonId === 'l10-01' ? 6 : lessonId === 'l11-04' ? 2 : [9, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5][moduleNumber - 1], title: titles.get(lessonId),
         subtitle: 'Запазено обяснение', duration: '25 мин', objective: 'Провери фактите и резултата.',
-        hook: 'Практическа задача с ясни ограничения.', source_kind: 'editor', change_note: 'silk_road_final_20260924',
+        hook: 'Практическа задача с ясни ограничения.', source_kind: 'editor', change_note: ['l10-01', 'l11-04'].includes(lessonId) ? 'silk_road_practical_review_20260925' : 'silk_road_final_20260924',
       }, blocks,
     };
   });
 }
 
-export async function createSilkDatabase() {
+export async function createSilkDatabase(allModules = false) {
   const db = new PGlite();
   await db.exec(`CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role BYPASSRLS;
     CREATE SCHEMA auth; CREATE SCHEMA storage;
@@ -71,8 +75,8 @@ export async function createSilkDatabase() {
   await db.query("INSERT INTO academy_access_grants(user_id,source,full_access) VALUES($1,'test-editorial-fixture',true)", [STUDENT]);
   const source: Source[] = process.env.SILK_ROAD_SOURCE_SNAPSHOT
     ? JSON.parse(readFileSync(process.env.SILK_ROAD_SOURCE_SNAPSHOT, 'utf8')) as Source[]
-    : sourceFixture();
-  for (const item of source) {
+    : sourceFixture(allModules);
+  for (const item of source.filter(item => allModules || ['s01-m01', 's01-m02'].includes(item.module_id))) {
     const v = item.version;
     const lesson = (await db.query<{ id: string }>(
       'INSERT INTO academy_lessons(id,module_id,lesson_id,status) VALUES(coalesce($1::uuid,gen_random_uuid()),$2,$3,\'draft\') RETURNING id',

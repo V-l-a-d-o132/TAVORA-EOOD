@@ -60,6 +60,21 @@ afterEach(() => {
 });
 
 describe('Lesson Engine V2 block registry', () => {
+  it('shows the opening once with practical outcomes and a check, including legacy paragraphs', () => {
+    const block = { ...createBlock('objective', 0), key: 'objective', title: 'Какво ще можеш след урока', content: {
+      body: 'Разбираш каква е задачата.\n\nПроверяваш действителния резултат.',
+      outcomes: ['Описваш проблема.', 'Проверяваш условията.', 'Разпознаваш грешката.'],
+      deliverable: 'План и проверен учебен запис.', check: 'Сравняваш обещанието с получения запис.',
+    } };
+    render(<LessonEngineV2 moduleId="s01-m01" lessonOverride={{ ...lesson([block]), objective: 'Разбираш каква е задачата.' }} onNextLesson={vi.fn()} hasNextLesson={false} />);
+    expect(screen.getAllByRole('heading', { name: 'Какво ще можеш след урока' })).toHaveLength(1);
+    expect(screen.getAllByText('Разбираш каква е задачата.')).toHaveLength(1);
+    expect(screen.getByRole('list', { name: 'Умения в този урок' }).querySelectorAll('li')).toHaveLength(3);
+    expect(screen.getByText('План и проверен учебен запис.')).toBeTruthy();
+    expect(screen.getByText('Сравняваш обещанието с получения запис.')).toBeTruthy();
+    expect(screen.getByText('Проверяваш действителния резултат.').tagName).toBe('P');
+  });
+
   it.each(LESSON_BLOCK_TYPES)('renders the %s block with an accessible heading', (type) => {
     const block = createBlock(type, 0);
     render(<LessonBlockRenderer block={block} lessonId="lesson" completed={false} onStateChange={vi.fn()} onSubmit={vi.fn(async () => result)} />);
