@@ -46,7 +46,7 @@ export default function AiBlueprintProblem() {
           {
             icon: 'ri-tools-line',
             title: 'Твърде много инструменти',
-            desc: 'ChatGPT, Claude, Readdy, Canva, CapCut, Meta Ads, Google Analytics — кой инструмент за какво? В кой ред? Без roadmap е хаос.',
+            desc: 'Имаш избор от модели, редактори и услуги. За да избереш, първо трябва да знаеш какъв проблем решаваш, как ще провериш резултата и кой ще го поддържа.',
           },
           {
             icon: 'ri-error-warning-line',

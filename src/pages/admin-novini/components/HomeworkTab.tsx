@@ -15,7 +15,7 @@ interface HomeworkItem {
 const STATUS_OPTIONS = ['нова', 'прегледана', 'одобрена', 'върната за корекции'];
 const MODULE_LABELS: Record<string, string> = {
   's01-m01': 'Пътят на коприната – AI Advantage',
-  's01-m02': 'Пътят на коприната – The Readdy Blueprint',
+  's01-m02': 'Пътят на коприната – От човешки проблем до работеща страница',
   's01-m03': 'Пътят на коприната – Invisible Marketing',
   's01-m04': 'Пътят на коприната – Content That Sells',
   's01-m05': 'Пътят на коприната – Audience Engine',

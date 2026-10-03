@@ -132,7 +132,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
         const left = arr(block.content.left);
         const right = arr(block.content.right);
         const matches = obj(state.matches);
-        return <><div className="space-y-4">{left.map((item, index) => {
+        return <>{body && <p className="mb-5 whitespace-pre-line text-base leading-7 text-zinc-200">{body}</p>}<div className="space-y-4">{left.map((item, index) => {
           const id = s(item.id, String(index));
           return <label key={id} className="grid gap-2 rounded-xl border border-white/10 p-4 md:grid-cols-[1fr_1fr] md:items-center"><span className="text-sm font-medium text-zinc-200">{s(item.text)}</span><select aria-label={`Свържи ${s(item.text)}`} value={s(matches[id])} onChange={(event) => update({ matches: { ...matches, [id]: event.target.value } })} className={fieldClass}><option value="">Избери понятие</option>{right.map((candidate, rightIndex) => <option key={s(candidate.id, String(rightIndex))} value={s(candidate.id, String(rightIndex))}>{s(candidate.text)}</option>)}</select></label>;
         })}</div><button type="button" disabled={busy || Object.keys(matches).length < left.length} onClick={() => void submit({ matches })} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Провери връзките</button></>;
