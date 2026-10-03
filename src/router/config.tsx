@@ -86,6 +86,7 @@ const OnlineRezervaciiVsTelefonniRezervaciiPage = lazyWithReload(() => import(".
 const KakOnlainGrafikatVdigaPrihoditeNaSalonaPage = lazyWithReload(() => import("../pages/blog/kak-onlain-grafikat-vdiga-prihodite-na-salona/page"));
 
 const ModulePage = lazyWithReload(() => import("../pages/module/page"));
+const AcademyLabPage = lazyWithReload(() => import("../pages/academy-lab/page"));
 const DashboardPage = lazyWithReload(() => import("../pages/dashboard/page"));
 const CheckoutAkademiyaPage = lazyWithReload(() => import("../pages/checkout-akademiya/page"));
 const KursPotvardjeniePage = lazyWithReload(() => import("../pages/kurs-potvardjenie/page"));
@@ -316,6 +317,10 @@ const routes: RouteObject[] = [
   {
     path: "/course/:moduleId",
     element: <CourseRedirect />,
+  },
+  {
+    path: "/academy-labs/silk-road",
+    element: <AcademyLabPage />,
   },
   {
     path: "/module/:moduleId",

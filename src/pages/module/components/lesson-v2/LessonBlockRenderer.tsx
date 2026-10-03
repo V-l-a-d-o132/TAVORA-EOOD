@@ -4,6 +4,7 @@ import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import LessonRichText from './LessonRichText';
 import LessonGlossary from './LessonGlossary';
+import LessonOutcomes from './LessonOutcomes';
 import { visibleGlossaryText } from '@/lib/academy-glossary';
 
 interface Props {
@@ -77,7 +78,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
   const renderBlock = () => {
     switch (block.type) {
       case 'objective':
-        return <><p className="whitespace-pre-line text-xl leading-relaxed text-white">{body || s(block.content.objective)}</p>{acknowledgement}</>;
+        return <><LessonOutcomes content={{ ...block.content, body: body || s(block.content.objective) }} />{acknowledgement}</>;
       case 'hook':
         return <><blockquote className="border-l-4 border-red-500 pl-5 text-lg leading-relaxed text-zinc-200">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
@@ -256,8 +257,8 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
     return { tone: 'border-sky-500/30 bg-sky-500/10 text-sky-100', icon: 'ri-save-3-line', title: 'Запазено' };
   }, [isCorrect, result]);
 
-  return <section aria-labelledby={`block-${block.key}`} className="min-w-0 break-words rounded-3xl border border-white/10 bg-gradient-to-b from-[#15171c] to-[#101216] p-5 shadow-2xl shadow-black/20 sm:p-7 md:p-9">
-    <header className="mb-7 flex items-start justify-between gap-4"><div className="min-w-0"><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">{stepLabel}</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div>{block.points > 0 && <span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span>}</header>
+  return <section aria-labelledby={`block-${block.key}`} className={`min-w-0 break-words rounded-3xl border border-white/10 bg-gradient-to-b from-[#15171c] to-[#101216] p-5 shadow-2xl shadow-black/20 ${block.type === 'objective' ? 'sm:p-6 md:p-7' : 'sm:p-7 md:p-9'}`}>
+    <header className="mb-5 flex items-start justify-between gap-4"><div className="min-w-0"><span className="text-[11px] font-bold uppercase tracking-[.2em] text-red-300">{stepLabel}</span><h2 id={`block-${block.key}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-[1.7rem]">{block.title}</h2></div>{block.points > 0 && <span aria-label={`${block.points} XP`} className="shrink-0 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-200">+{block.points} XP</span>}</header>
     <LessonGlossary text={visibleGlossaryText(block.title, block.content)} />
     {renderBlock()}
     {error && <div role="alert" className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100"><i className="ri-error-warning-line mr-2" />{error}</div>}
