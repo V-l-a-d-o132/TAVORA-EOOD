@@ -6,6 +6,7 @@ import LessonRichText from './LessonRichText';
 import LessonGlossary from './LessonGlossary';
 import LessonOutcomes from './LessonOutcomes';
 import { visibleGlossaryText } from '@/lib/academy-glossary';
+import { lessonOptionOrder } from '@/lib/lesson-option-order';
 
 interface Props {
   block: LessonBlockV2;
@@ -30,7 +31,7 @@ const obj = (value: unknown): JsonObject => value && typeof value === 'object' &
 const fieldClass = 'w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-500/20';
 const choiceClass = 'w-full rounded-xl border border-white/10 bg-white/[0.035] p-4 text-left text-sm text-zinc-200 transition hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/50';
 
-export default function LessonBlockRenderer({ block, lessonId, initialState, completed, onStateChange, onSubmit }: Props) {
+export default function LessonBlockRenderer({ block, lessonId, moduleId, initialState, completed, onStateChange, onSubmit }: Props) {
   const [state, setState] = useState<JsonObject>(initialState || {});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<BlockAttemptResult | null>(null);
@@ -63,7 +64,11 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
   };
 
   const body = s(block.content.body);
-  const options = arr(block.content.options);
+  const options = useMemo(() => {
+    const choices = arr(block.content.options);
+    return moduleId?.startsWith('s01-') && ['quiz', 'scenario'].includes(block.type)
+      ? lessonOptionOrder(choices, `${lessonId}/${block.id}`) : choices;
+  }, [block.content.options, block.id, block.type, lessonId, moduleId]);
   const feedback = result?.feedback;
   const isCorrect = result?.correct;
   const { label: stepLabel } = lessonBlockPresentation(block);
@@ -154,7 +159,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
       case 'example':
         return <><div className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-5"><p className="whitespace-pre-line leading-7 text-zinc-200">{body || s(block.content.case)}</p>{s(block.content.solution) && <div className="mt-5 border-t border-white/10 pt-4"><span className="text-xs font-bold uppercase tracking-widest text-amber-300">Решение</span><p className="mt-2 leading-7 text-zinc-300">{s(block.content.solution)}</p></div>}</div>{acknowledgement}</>;
       case 'calculator':
-        return <form onSubmit={(event) => { event.preventDefault(); void submit({ value: s(state.value) }); }}><p className="mb-4 leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><div className="flex items-center gap-3"><input inputMode="decimal" aria-label={s(block.content.label, 'Стойност')} value={s(state.value)} onChange={(event) => update({ value: event.target.value })} className={fieldClass} placeholder={s(block.content.placeholder, '0')} /><span className="text-sm text-zinc-400">{s(block.content.unit)}</span></div><button disabled={busy || !s(state.value)} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Изчисли и провери</button></form>;
+        return <form onSubmit={(event) => { event.preventDefault(); const value = moduleId?.startsWith('s01-') ? s(state.value).trim().replace(',', '.') : s(state.value); void submit({ value }); }}><p className="mb-4 leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><div className="flex items-center gap-3"><input inputMode="decimal" aria-label={s(block.content.label, 'Стойност')} value={s(state.value)} onChange={(event) => update({ value: event.target.value })} className={fieldClass} placeholder={s(block.content.placeholder, '0')} /><span className="text-sm text-zinc-400">{s(block.content.unit)}</span></div><button disabled={busy || !s(state.value)} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Изчисли и провери</button></form>;
       case 'prompt_builder': {
         const fields = arr(block.content.fields);
         const values = obj(state.fields);
@@ -182,7 +187,7 @@ export default function LessonBlockRenderer({ block, lessonId, initialState, com
         })}</div>;
       }
       case 'quiz': {
-        const quizOptions = arr(block.content.options);
+        const quizOptions = options;
         return <div><p className="mb-5 text-lg font-semibold leading-7 text-white">{s(block.content.question, body)}</p><div className="space-y-3">{quizOptions.map((option, index) => {
           const id = s(option.id, String(index));
           return <button key={id} type="button" disabled={busy || completed || feedback?.complete === true} onClick={() => { update({ answer: id }); void submit({ answer: id }); }} className={`${choiceClass} ${s(state.answer) === id ? 'border-red-400 bg-red-500/10' : ''}`}><span className="mr-3 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/15 text-xs font-bold">{String.fromCharCode(65 + index)}</span>{s(option.label)}</button>;

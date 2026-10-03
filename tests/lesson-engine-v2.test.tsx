@@ -93,6 +93,17 @@ describe('Lesson Engine V2 block registry', () => {
     expect(submit).toHaveBeenCalledWith({ answer: 'a' });
     expect(screen.getByText('Критерият позволява проверка.')).toBeTruthy();
   });
+
+  it('accepts a Bulgarian decimal comma in a Silk Road calculation without changing the resumed input', async () => {
+    const block = { ...createBlock('calculator', 0), content: { label: 'Принос в евро', prompt: 'Изчисли приноса.' } };
+    const save = vi.fn();
+    const submit = vi.fn(async () => result);
+    render(<LessonBlockRenderer block={block} moduleId="s01-m11" lessonId="l11-04" completed={false} onStateChange={save} onSubmit={submit} />);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Принос в евро' }), { target: { value: '1320,00' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Изчисли и провери' }));
+    await waitFor(() => expect(submit).toHaveBeenCalledWith({ value: '1320.00' }));
+    expect(save).toHaveBeenCalledWith({ value: '1320,00' });
+  });
 });
 
 describe('graded choice retries', () => {

@@ -1,0 +1,9 @@
+﻿request_id,date,visitor,contact,topic,message,source
+Z-001,2026-10-03,A,case-a@example.invalid,час,Искам час за диагностика в петък.,email
+Z-002,2026-10-03,B,case-b@example.invalid,час,Има ли свободен час утре?,form
+Z-003,2026-10-03,C,case-c@example.invalid,цена,Диагностиката още ли е 20 евро?,email
+Z-004,2026-10-03,D,case-d@example.invalid,час,Кога мога да донеса велосипед?,form
+Z-005,2026-10-03,E,case-e@example.invalid,час,Може ли в понеделник?,email
+Z-006,2026-10-03,F,case-f@example.invalid,цена,Ремонтът включен ли е в диагностиката?,form
+Z-007,2026-10-03,G,case-g@example.invalid,час,Искам да уточня ден за преглед.,form
+Z-002,2026-10-03,B,case-b@example.invalid,час,Има ли свободен час утре?,form
