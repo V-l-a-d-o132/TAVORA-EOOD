@@ -6,7 +6,7 @@ import LessonRichText from './LessonRichText';
 import LessonGlossary from './LessonGlossary';
 import LessonOutcomes from './LessonOutcomes';
 import { visibleGlossaryText } from '@/lib/academy-glossary';
-import { lessonOptionOrder } from '@/lib/lesson-option-order';
+import { lessonOptionOrder, usesIndependentPractice } from '@/lib/lesson-option-order';
 
 interface Props {
   block: LessonBlockV2;
@@ -66,7 +66,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const body = s(block.content.body);
   const options = useMemo(() => {
     const choices = arr(block.content.options);
-    return moduleId?.startsWith('s01-') && ['quiz', 'scenario'].includes(block.type)
+    return usesIndependentPractice(moduleId) && ['quiz', 'scenario'].includes(block.type)
       ? lessonOptionOrder(choices, `${lessonId}/${block.id}`) : choices;
   }, [block.content.options, block.id, block.type, lessonId, moduleId]);
   const feedback = result?.feedback;
@@ -136,7 +136,9 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       }
       case 'matching': {
         const left = arr(block.content.left);
-        const right = arr(block.content.right);
+        const candidates = arr(block.content.right);
+        const right = ['s02-m01', 's02-m02', 's02-m03'].includes(moduleId || '') && block.key.startsWith('checkpoint_video_')
+          ? lessonOptionOrder(candidates, `${lessonId}/${block.id}/matching`) : candidates;
         const matches = obj(state.matches);
         return <>{body && <p className="mb-5 whitespace-pre-line text-base leading-7 text-zinc-200">{body}</p>}<div className="space-y-4">{left.map((item, index) => {
           const id = s(item.id, String(index));
@@ -159,7 +161,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       case 'example':
         return <><div className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-5"><p className="whitespace-pre-line leading-7 text-zinc-200">{body || s(block.content.case)}</p>{s(block.content.solution) && <div className="mt-5 border-t border-white/10 pt-4"><span className="text-xs font-bold uppercase tracking-widest text-amber-300">Решение</span><p className="mt-2 leading-7 text-zinc-300">{s(block.content.solution)}</p></div>}</div>{acknowledgement}</>;
       case 'calculator':
-        return <form onSubmit={(event) => { event.preventDefault(); const value = moduleId?.startsWith('s01-') ? s(state.value).trim().replace(',', '.') : s(state.value); void submit({ value }); }}><p className="mb-4 leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><div className="flex items-center gap-3"><input inputMode="decimal" aria-label={s(block.content.label, 'Стойност')} value={s(state.value)} onChange={(event) => update({ value: event.target.value })} className={fieldClass} placeholder={s(block.content.placeholder, '0')} /><span className="text-sm text-zinc-400">{s(block.content.unit)}</span></div><button disabled={busy || !s(state.value)} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Изчисли и провери</button></form>;
+        return <form onSubmit={(event) => { event.preventDefault(); const value = usesIndependentPractice(moduleId) ? s(state.value).trim().replace(',', '.') : s(state.value); void submit({ value }); }}><p className="mb-4 leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><div className="flex items-center gap-3"><input inputMode="decimal" aria-label={s(block.content.label, 'Стойност')} value={s(state.value)} onChange={(event) => update({ value: event.target.value })} className={fieldClass} placeholder={s(block.content.placeholder, '0')} /><span className="text-sm text-zinc-400">{s(block.content.unit)}</span></div><button disabled={busy || !s(state.value)} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Изчисли и провери</button></form>;
       case 'prompt_builder': {
         const fields = arr(block.content.fields);
         const values = obj(state.fields);

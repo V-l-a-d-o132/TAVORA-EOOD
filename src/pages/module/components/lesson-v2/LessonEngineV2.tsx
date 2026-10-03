@@ -222,6 +222,14 @@ export default function LessonEngineV2({
       </p>)}
     </div>}
 
+    {['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && <div className="mb-5 rounded-2xl border border-white/10 p-4 text-sm leading-6 text-zinc-300">
+      <a href="/academy-labs/perfect-video/start" className="font-semibold text-red-300 underline underline-offset-4">Първи клип: учебна папка и проверка на файла</a>
+      <p className="mt-2">Започни с предоставения бриф или се върни към своята версия. Графичният пример не удостоверява снимане или реален бизнес резултат.</p>
+      {lesson.blocks.filter(block => block.key.startsWith('checkpoint_video_')).map(block => <p key={block.key} className="mt-2">
+        {typeof block.content.skillName === 'string' ? block.content.skillName : block.title}: <span className={completed.has(block.key) ? 'text-emerald-300' : 'text-zinc-400'}>{completed.has(block.key) ? 'премината учебна проверка' : 'още няма премината проверка'}</span>
+      </p>)}
+    </div>}
+
     <div className="mb-2 flex items-center justify-between gap-4"><p className="text-[11px] font-bold uppercase tracking-[.18em] text-zinc-500">Стъпка {currentIndex + 1} от {lesson.blocks.length}</p><span className="hidden shrink-0 text-xs text-zinc-500 md:inline">Alt + ← / →</span></div>
     <nav aria-label="Стъпки на урока" className="mb-5 flex gap-2 overflow-x-auto pb-2">{lesson.blocks.map((block, index) => <button key={block.key} type="button" aria-label={`Стъпка ${index + 1}: ${block.title}`} aria-current={index === currentIndex ? 'step' : undefined} onClick={() => goTo(index)} className={`grid h-9 min-w-9 place-items-center rounded-xl border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 ${index === currentIndex ? 'border-red-400 bg-red-500 text-white' : completed.has(block.key) ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-white/10 bg-white/[0.04] text-zinc-500'}`}>{completed.has(block.key) ? <i className="ri-check-line" aria-hidden /> : index + 1}</button>)}</nav>
 

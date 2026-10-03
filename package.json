@@ -51,6 +51,7 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit --project tsconfig.app.json",
     "test": "vitest run",
+    "test:browser": "playwright test --config playwright.video.config.ts",
     "typecheck": "tsc --noEmit --project tsconfig.app.json",
     "check:edge": "deno check supabase/functions/academy-stripe-checkout/index.ts supabase/functions/academy-stripe-verify/index.ts supabase/functions/academy-stripe-webhook/index.ts supabase/functions/send-welcome-email/index.ts supabase/functions/send-abandoned-cart-email/index.ts supabase/functions/send-downsell-email/index.ts supabase/functions/pdf-manager/index.ts supabase/functions/meta-conversions-api/index.ts scripts/reconcile-academy.ts"
   },
