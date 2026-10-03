@@ -115,6 +115,7 @@ describe('compatible first video practice', () => {
     expect(screen.getByText('28 XP')).toBeTruthy();
     expect(screen.getByText('100% · 1/1 задължителни стъпки')).toBeTruthy();
     expect(screen.getByText('още няма премината проверка')).toBeTruthy();
+    expect(screen.getByText('Задължителните стъпки са преминати. Новите проверки по избор се отчитат отделно.')).toBeTruthy();
     expect(screen.queryByText('премината учебна проверка')).toBeNull();
     expect(screen.getByRole('link', { name: 'Първи клип: учебна папка и проверка на файла' }).getAttribute('href')).toBe('/academy-labs/perfect-video/start');
   });

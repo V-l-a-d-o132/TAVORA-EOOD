@@ -41,11 +41,14 @@ test('records, downloads and independently reads a real 25-second video', async 
   const download = await pendingDownload;
   const clipPath = testInfo.outputPath(download.suggestedFilename());
   await download.saveAs(clipPath);
-  const probe = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_format', '-show_streams', '-of', 'json', clipPath], { encoding: 'utf8' }));
+  const probe = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_packets', '-show_format', '-show_streams', '-of', 'json', clipPath], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
   const video = probe.streams.find((stream: { codec_type: string }) => stream.codec_type === 'video');
   expect(video.width).toBe(1080); expect(video.height).toBe(1920);
-  expect(Number(probe.format.duration)).toBeGreaterThanOrEqual(24);
-  expect(Number(probe.format.duration)).toBeLessThanOrEqual(26);
+  const packets = probe.packets.filter((packet: { stream_index: number }) => packet.stream_index === video.index);
+  const start = Math.min(...packets.map((packet: { pts_time: string }) => Number(packet.pts_time)));
+  const end = Math.max(...packets.map((packet: { pts_time: string; duration_time?: string }) => Number(packet.pts_time) + (Number(packet.duration_time) || 0)));
+  const duration = Number.isFinite(Number(probe.format.duration)) ? Number(probe.format.duration) : end - start;
+  expect(duration).toBeGreaterThanOrEqual(24); expect(duration).toBeLessThanOrEqual(26);
   expect(probe.streams.some((stream: { codec_type: string }) => stream.codec_type === 'audio')).toBe(false);
   expect(readFileSync(clipPath).length).toBeGreaterThan(10000);
   writeFileSync(testInfo.outputPath('ffprobe.json'), JSON.stringify(probe, null, 2));
