@@ -51,7 +51,7 @@ const SCHEMA = {
       '@id': 'https://imashnujnoto.com/kurs/ai-business-blueprint#course',
       name: 'Пътят на коприната (AI Business Blueprint)',
       description:
-        `11-модулна програма за изграждане на дигитална услуга с изкуствен интелект. Покрива AI промптиране, уеб дизайн с Readdy, SEO и GEO оптимизация, копирайтинг, изграждане на аудитория и конверсионни системи. ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока.`,
+        `11-модулна програма за изграждане на малък продукт или дигитална услуга. Покрива формулиране на проблем, ясни задания към AI, уеб дизайн, SEO и GEO, копирайтинг, аудитория, завършено действие и автоматизация. ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока с казуси и проверки. Първи модул безплатен.`,
       url: 'https://imashnujnoto.com/kurs/ai-business-blueprint',
       provider: {
         '@type': 'Organization',
@@ -66,7 +66,7 @@ const SCHEMA = {
       timeRequired: 'PT32H',
       teaches: [
         'AI за бизнес',
-        'Уеб дизайн с Readdy AI',
+        'Уеб дизайн и проверка на работеща страница',
         'SEO и GEO оптимизация',
         'Копирайтинг и съдържание',
         'Изграждане на аудитория',
