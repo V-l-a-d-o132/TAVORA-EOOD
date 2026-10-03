@@ -41,6 +41,15 @@ describe('first video project checks the artifact that is rendered and recorded'
     expect(fileChecks({ width: 1080, height: 1920, seconds: null, bytes: 100, mime: 'video/webm' }).map(check => check.passed)).toEqual([true, false]);
     expect(fileChecks({ width: 1920, height: 1080, seconds: 25, bytes: 100, mime: 'video/mp4' }).map(check => check.passed)).toEqual([false, true]);
   });
+  it('permits local video playback without expanding script or network sources', () => {
+    const html = readFileSync('index.html', 'utf8');
+    const sources = (directive: string) => html.match(new RegExp(`\\b${directive} ([^;]+);`))?.[1].trim().split(/\s+/u);
+    expect(sources('media-src')).toEqual(["'self'", 'blob:', 'https://storage.readdy-site.link']);
+    expect(sources('default-src')).toEqual(["'self'"]);
+    expect(sources('script-src')).not.toContain('blob:');
+    expect(sources('connect-src')).not.toContain('blob:');
+    expect(sources('object-src')).toEqual(["'none'"]);
+  });
   it('fails with a usable fallback when the browser cannot record', async () => {
     vi.stubGlobal('MediaRecorder', undefined);
     await expect(recordVideoTimeline(buildVideoTimeline(VIDEO_STUDY_CASES[0], valid()), new AbortController().signal, vi.fn())).rejects.toThrow('Изтегли сценария');

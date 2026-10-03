@@ -56,6 +56,12 @@ test('records, downloads and independently reads a real 25-second video', async 
   execFileSync('ffmpeg', ['-y', '-ss', '11', '-i', clipPath, '-frames:v', '1', testInfo.outputPath('video-price-frame.png')]);
   await page.getByRole('button', { name: 'Провери получения файл', exact: true }).click();
   await expect(page.getByText('Преминато: Файлът е вертикален 9:16', { exact: true })).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  const player = page.locator('video[aria-label="Твоята записана графична версия"]');
+  await expect.poll(() => player.evaluate((video: HTMLVideoElement) => video.videoWidth)).toBe(1080);
+  await player.evaluate(async (video: HTMLVideoElement) => { video.muted = true; await video.play(); });
+  await expect.poll(() => player.evaluate((video: HTMLVideoElement) => video.currentTime)).toBeGreaterThan(0);
+  await player.evaluate((video: HTMLVideoElement) => video.pause());
   // Some MediaRecorder outputs do not expose a finite duration to HTMLVideoElement.
   // The learner must see an explicit unknown, never a fabricated passing result.
   const browserMetadata = await page.getByText(/^Отчетени свойства на /).innerText();
