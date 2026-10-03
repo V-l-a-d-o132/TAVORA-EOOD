@@ -8,7 +8,7 @@ async function fillPlan(page: Page, secondCase = false) {
   for (const [label, value] of [
     ['Източник на цената', 'current'], ['Начало на клипа', 'question'],
     ['Условие за получаване', secondCase ? 'clarify' : 'pickup'], ['Последно действие', 'ask'],
-  ]) await page.getByLabel(label, { exact: true }).selectOption(value);
+  ]) await page.getByRole('combobox', { name: label, exact: true }).selectOption(value, { timeout: 10000 });
 }
 
 test.beforeEach(async ({ page }) => {
