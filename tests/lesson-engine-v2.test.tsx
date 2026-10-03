@@ -94,15 +94,55 @@ describe('Lesson Engine V2 block registry', () => {
     expect(screen.getByText('Критерият позволява проверка.')).toBeTruthy();
   });
 
-  it('accepts a Bulgarian decimal comma in a Silk Road calculation without changing the resumed input', async () => {
+  it.each(['s01-m11', 's02-m01', 's02-m02', 's02-m03'])('accepts a Bulgarian decimal comma in %s without changing the resumed input', async (moduleId) => {
     const block = { ...createBlock('calculator', 0), content: { label: 'Принос в евро', prompt: 'Изчисли приноса.' } };
     const save = vi.fn();
     const submit = vi.fn(async () => result);
-    render(<LessonBlockRenderer block={block} moduleId="s01-m11" lessonId="l11-04" completed={false} onStateChange={save} onSubmit={submit} />);
+    render(<LessonBlockRenderer block={block} moduleId={moduleId} lessonId="l11-04" completed={false} onStateChange={save} onSubmit={submit} />);
     fireEvent.change(screen.getByRole('textbox', { name: 'Принос в евро' }), { target: { value: '1320,00' } });
     fireEvent.click(screen.getByRole('button', { name: 'Изчисли и провери' }));
     await waitFor(() => expect(submit).toHaveBeenCalledWith({ value: '1320.00' }));
     expect(save).toHaveBeenCalledWith({ value: '1320,00' });
+  });
+});
+
+describe('compatible first video practice', () => {
+  it('keeps old completion and XP while showing the new check as not yet passed', () => {
+    const opening = { ...createBlock('objective', 0), key: 'objective' };
+    const check = { ...createBlock('scenario', 1), key: 'checkpoint_video_handoff_20261003', title: 'Нова проверка', required: false, points: 0 };
+    const progress = { currentBlockKey: opening.key, blockState: {}, completedBlockKeys: [opening.key], xp: 28, scorePercent: 100, masteryStatus: 'mastered' as const, completedAt: '2026-10-02', lastActivityAt: null };
+    render(<LessonEngineV2 moduleId="s02-m03" lessonOverride={{ ...lesson([opening, check], progress), moduleId: 's02-m03', lessonId: 'pv03-21' }} />);
+    expect(screen.getByText('28 XP')).toBeTruthy();
+    expect(screen.getByText('100% · 1/1 задължителни стъпки')).toBeTruthy();
+    expect(screen.getByText('още няма премината проверка')).toBeTruthy();
+    expect(screen.getByText('Задължителните стъпки са преминати. Новите проверки по избор се отчитат отделно.')).toBeTruthy();
+    expect(screen.queryByText('премината учебна проверка')).toBeNull();
+    expect(screen.getByRole('link', { name: 'Първи клип: учебна папка и проверка на файла' }).getAttribute('href')).toBe('/academy-labs/perfect-video/start');
+  });
+  it('resumes a quiz by its grading ID with stable unordered choices', async () => {
+    const block = { ...createBlock('quiz', 0), id: 'stable-video-quiz', content: { question: 'Избери проверимото.', options: [{ id: 'a', label: 'Първо твърдение' }, { id: 'b', label: 'Запазен избор' }, { id: 'c', label: 'Трето твърдение' }] } };
+    const props = { block, moduleId: 's02-m02', lessonId: 'pv02-03', completed: false, initialState: { answer: 'b' }, onStateChange: vi.fn(), onSubmit: vi.fn(async () => result) };
+    const { rerender } = render(<LessonBlockRenderer {...props} />);
+    const order = screen.getAllByRole('button').map(button => button.textContent);
+    rerender(<LessonBlockRenderer {...props} initialState={{ answer: 'b' }} />);
+    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual(order);
+    expect(screen.getByRole('button', { name: /Запазен избор/ }).className).toContain('border-red-400');
+    fireEvent.click(screen.getByRole('button', { name: /Запазен избор/ }));
+    await waitFor(() => expect(props.onSubmit).toHaveBeenCalledWith({ answer: 'b' }));
+  });
+  it('keeps original matching choices unchanged and resumes new shuffled matches by ID', async () => {
+    const block = { ...createBlock('matching', 0), id: 'stable-video-match', key: 'checkpoint_video_hook_20261003', content: { left: [{ id: 'hook', text: 'Първо обещание' }, { id: 'fact', text: 'Втори факт' }], right: [{ id: 'a', text: 'Първа връзка' }, { id: 'b', text: 'Запазена връзка' }] } };
+    const props = { block, moduleId: 's02-m02', lessonId: 'pv02-03', completed: false, initialState: { matches: { hook: 'b', fact: 'a' } }, onStateChange: vi.fn(), onSubmit: vi.fn(async () => result) };
+    const { rerender } = render(<LessonBlockRenderer {...props} />);
+    const select = () => screen.getByRole('combobox', { name: 'Свържи Първо обещание' }) as HTMLSelectElement;
+    const order = [...select().options].map(option => option.value);
+    expect(select().value).toBe('b');
+    rerender(<LessonBlockRenderer {...props} />);
+    expect([...select().options].map(option => option.value)).toEqual(order);
+    fireEvent.click(screen.getByRole('button', { name: 'Провери връзките' }));
+    await waitFor(() => expect(props.onSubmit).toHaveBeenCalledWith({ matches: { hook: 'b', fact: 'a' } }));
+    rerender(<LessonBlockRenderer {...props} block={{ ...block, key: 'original_matching' }} />);
+    expect([...select().options].map(option => option.value)).toEqual(['', 'a', 'b']);
   });
 });
 

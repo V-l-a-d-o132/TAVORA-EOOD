@@ -211,13 +211,21 @@ export default function LessonEngineV2({
     {completed.size > 0 && <details className="mb-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4 sm:p-5">
       <summary className="cursor-pointer text-sm font-semibold text-emerald-200">Завършени стъпки · {requiredCompleted}/{requiredBlocks.length}</summary>
       <ul className="mt-3 flex flex-wrap gap-2">{lesson.blocks.filter((block) => completed.has(block.key)).map((block) => <li key={block.key} className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-100"><i className="ri-check-line mr-1" />{block.title}</li>)}</ul>
-      {masteryStatus === 'mastered' && <p className="mt-3 text-sm font-medium text-white">Проверките на знанията в урока са преминати.</p>}
+      {masteryStatus === 'mastered' && <p className="mt-3 text-sm font-medium text-white">{['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && lesson.blocks.some(block => block.key.startsWith('checkpoint_video_')) ? 'Задължителните стъпки са преминати. Новите проверки по избор се отчитат отделно.' : 'Проверките на знанията в урока са преминати.'}</p>}
     </details>}
 
     {moduleId.startsWith('s01-') && <div className="mb-5 rounded-2xl border border-white/10 p-4 text-sm leading-6 text-zinc-300">
       <a href="/academy-labs/silk-road/start" className="font-semibold text-red-300 underline underline-offset-4">Начален маршрут и учебна папка</a>
       <p className="mt-2">Започни с предоставения казус или се върни към проверката на своя прототип.</p>
       {lesson.blocks.filter(block => block.key.startsWith('checkpoint_')).map(block => <p key={block.key} className="mt-2">
+        {typeof block.content.skillName === 'string' ? block.content.skillName : block.title}: <span className={completed.has(block.key) ? 'text-emerald-300' : 'text-zinc-400'}>{completed.has(block.key) ? 'премината учебна проверка' : 'още няма премината проверка'}</span>
+      </p>)}
+    </div>}
+
+    {['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && <div className="mb-5 rounded-2xl border border-white/10 p-4 text-sm leading-6 text-zinc-300">
+      <a href="/academy-labs/perfect-video/start" className="font-semibold text-red-300 underline underline-offset-4">Първи клип: учебна папка и проверка на файла</a>
+      <p className="mt-2">Започни с предоставения бриф или се върни към своята версия. Графичният пример не удостоверява снимане или реален бизнес резултат.</p>
+      {lesson.blocks.filter(block => block.key.startsWith('checkpoint_video_')).map(block => <p key={block.key} className="mt-2">
         {typeof block.content.skillName === 'string' ? block.content.skillName : block.title}: <span className={completed.has(block.key) ? 'text-emerald-300' : 'text-zinc-400'}>{completed.has(block.key) ? 'премината учебна проверка' : 'още няма премината проверка'}</span>
       </p>)}
     </div>}

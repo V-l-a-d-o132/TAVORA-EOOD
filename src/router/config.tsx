@@ -88,6 +88,7 @@ const KakOnlainGrafikatVdigaPrihoditeNaSalonaPage = lazyWithReload(() => import(
 const ModulePage = lazyWithReload(() => import("../pages/module/page"));
 const AcademyLabPage = lazyWithReload(() => import("../pages/academy-lab/page"));
 const SilkRoadStartPage = lazyWithReload(() => import("../pages/silk-road-start/page"));
+const PerfectVideoStartPage = lazyWithReload(() => import("../pages/perfect-video-start/page"));
 const DashboardPage = lazyWithReload(() => import("../pages/dashboard/page"));
 const CheckoutAkademiyaPage = lazyWithReload(() => import("../pages/checkout-akademiya/page"));
 const KursPotvardjeniePage = lazyWithReload(() => import("../pages/kurs-potvardjenie/page"));
@@ -99,6 +100,7 @@ const MarketingBasicsFunnelPage = lazyWithReload(() => import("../pages/kurs/mar
 
 const routes: RouteObject[] = [
   { path: '/academy-labs/silk-road/start', element: <SilkRoadStartPage /> },
+  { path: '/academy-labs/perfect-video/start', element: <PerfectVideoStartPage /> },
   { path: '/reset-password', element: <ResetPasswordPage /> },
   {
     path: "/",

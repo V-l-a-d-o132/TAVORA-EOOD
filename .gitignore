@@ -12,3 +12,4 @@ supabase/.temp/
 .env.production
 *.pem
 .academy-private/
+__pycache__/

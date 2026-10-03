@@ -1,4 +1,8 @@
 /** Stable across resume, independent of grading IDs and restricted to unordered choices. */
+export function usesIndependentPractice(moduleId?: string): boolean {
+  return !!moduleId && (moduleId.startsWith('s01-') || ['s02-m01', 's02-m02', 's02-m03'].includes(moduleId));
+}
+
 export function lessonOptionOrder<T>(items: readonly T[], seed: string): T[] {
   let state = 2166136261;
   for (const char of seed) state = Math.imul(state ^ char.charCodeAt(0), 16777619);
