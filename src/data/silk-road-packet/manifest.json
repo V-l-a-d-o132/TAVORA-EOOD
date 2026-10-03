@@ -1,0 +1,16 @@
+{
+  "version": "2026-10-03.1",
+  "invented": true,
+  "audio": {
+    "synthetic": true,
+    "generator": "eSpeak NG Bulgarian through espeakng-loader 0.2.4",
+    "transcript": "Здравейте. Видях старата обява за диагностика на велосипед за двадесет евро. Може ли да ми потвърдите час за петък? Не знам дали тази обява още важи. Благодаря."
+  },
+  "files": [
+    "approved-conditions.pdf",
+    "inquiries.csv",
+    "old-advert.svg",
+    "voicemail.wav",
+    "voicemail-transcript.txt"
+  ]
+}
