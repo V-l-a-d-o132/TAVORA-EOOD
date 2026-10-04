@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -30,9 +31,9 @@ const ARTICLE_SCHEMA = {
       timeRequired: 'PT6M',
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=SEO%20optimization%20search%20engine%20ranking%20Google%20analytics%20dashboard%20professional%20business%20Veliko%20Tarnovo%20Bulgaria%20clean%20modern%20office%20setup%20with%20charts%20and%20graphs&width=1200&height=630&seq=blog-seo-vt-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog-seo-vt' },
       breadcrumb: {
@@ -203,9 +204,9 @@ export default function BlogSEOVTPage() {
       <SharedNav />
 
       <div className="w-full h-[200px] md:h-[420px] overflow-hidden relative">
-        <img
-          src="https://readdy.ai/api/search-image?query=SEO%20optimization%20search%20engine%20ranking%20Google%20analytics%20dashboard%20professional%20business%20Veliko%20Tarnovo%20Bulgaria%20clean%20modern%20office%20setup%20with%20charts%20and%20graphs&width=1200&height=630&seq=blog-seo-vt-hero&orientation=landscape"
-          alt="SEO оптимизация за бизнеси в Търново — ТАВОРА ЕООД"
+        <img loading="lazy" decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           title="SEO Велико Търново"
           className="w-full h-full object-cover object-top"
         />

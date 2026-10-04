@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 import LazyVideo from '@/components/feature/LazyVideo';
+import { EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL, EDITORIAL_IMAGE_ALT } from '@/config/editorial-image';
 
 const FAQ_ITEMS = [
   {
@@ -44,6 +45,7 @@ const SCHEMA = {
       '@type': 'WebPage',
       '@id': 'https://imashnujnoto.com/video-produkciya-veliko-tarnovo#webpage',
       url: 'https://imashnujnoto.com/video-produkciya-veliko-tarnovo',
+      image: EDITORIAL_IMAGE_URL,
       name: 'Видео продукция Велико Търново | Професионално заснемане на реклами — ТАВОРА ЕООД',
       description:
         'Професионално заснемане на реклами и видеа във Велико Търново и областта. Камери, микрофони, осветление. Видео за бизнеси, НПО и събития. ТАВОРА ЕООД.',
@@ -56,7 +58,7 @@ const SCHEMA = {
           { '@type': 'ListItem', position: 2, name: 'Видео продукция Велико Търново', item: 'https://imashnujnoto.com/video-produkciya-veliko-tarnovo' },
         ],
       },
-      dateModified: '2026-05-05',
+      dateModified: '2026-10-04',
     },
     {
       '@type': 'VideoObject',
@@ -217,6 +219,7 @@ export default function VideoProdukciyaVelikoTarnovoPage() {
       <main className="max-w-6xl mx-auto px-4 md:px-16">
         {/* Hero */}
         <div className="py-6 md:py-24">
+          <img src={EDITORIAL_IMAGE_SRC} alt={EDITORIAL_IMAGE_ALT} width={2048} height={1154} loading="lazy" decoding="async" className="w-full aspect-video object-cover rounded-2xl mb-8" />
           <div className="flex items-center gap-3 mb-4 md:mb-6">
             <div className="w-8 h-[1px] bg-[#0A2540]/30 shrink-0" />
             <span className="text-xs text-[#1C1C1E]/60">Видео продукция · Велико Търново</span>

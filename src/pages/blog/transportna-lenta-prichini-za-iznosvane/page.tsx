@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import BlogArticleLayout, {
   ArticleSection,
   buildArticleSchema,
@@ -6,7 +7,7 @@ import BlogArticleLayout, {
 } from '@/pages/blog/components/BlogArticleLayout';
 
 const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=worn%20damaged%20industrial%20conveyor%20belt%20close%20up%20with%20cracks%20and%20abrasion%20in%20a%20factory%20maintenance%20inspection%20scene%20warm%20side%20lighting%20professional%20engineering%20photography%20high%20detail&width=1200&height=630&seq=blog-transportna-lenta-iznosvane-hero-01&orientation=landscape';
+  EDITORIAL_IMAGE_URL;
 
 const SCHEMA = buildArticleSchema({
   id: 'transportna-lenta-prichini-za-iznosvane',
@@ -50,7 +51,7 @@ export default function TransportnaLentaPrichiniZaIznosvanePage() {
       date="28 Сеп 2026"
       readTime="10 мин. четене"
       heroImage={HERO_IMAGE}
-      heroAlt="Износена транспортна лента с пукнатини в завод"
+      heroAlt={EDITORIAL_IMAGE_ALT}
       breadcrumbLabel="Износване на транспортна лента"
       title={
         <>

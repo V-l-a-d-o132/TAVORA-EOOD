@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { PERFECT_VIDEO_PUBLIC_MODULES } from '@/data/academy-public-programs';
@@ -91,9 +92,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=professional%20video%20production%20studio%20setup%20camera%20equipment%20lighting%20rig%20cinematic%20atmosphere%20behind%20the%20scenes%20filmmaking%20clean%20minimalist%20dark%20background%20dramatic%20shadows%20red%20accent%20lights%20editorial%20quality&width=1200&height=630&seq=blog-video-system-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       about: [
@@ -302,9 +303,9 @@ export default function PerfektnotoVideoPage() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=professional%20video%20production%20filmmaking%20behind%20the%20scenes%20cinematic%20lighting%20setup%20camera%20on%20tripod%20crew%20working%20dark%20moody%20studio%20atmosphere%20dramatic%20shadows%20red%20and%20warm%20accent%20lights%20professional%20equipment%20editorial%20photography%20no%20text&width=1400&height=420&seq=blog-video-hero-img&orientation=landscape"
-            alt="Перфектното Видео — система за бизнес видео продукция"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

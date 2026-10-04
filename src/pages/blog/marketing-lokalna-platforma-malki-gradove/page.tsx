@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -19,7 +20,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/blog/marketing-lokalna-platforma-malki-gradove',
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/marketing-lokalna-platforma-malki-gradove' },
       inLanguage: 'bg',
-      image: 'https://readdy.ai/api/search-image?query=Horse%20drawn%20cart%20traveling%20along%20a%20quiet%20road%20through%20a%20small%20Bulgarian%20town%20in%20summer%20daylight%20warm%20tones%20authentic%20documentary%20photography%20community%20no%20text&width=1200&height=630&seq=blog-leski-karuchka-marketing-hero-01&orientation=landscape',
+      image: EDITORIAL_IMAGE_URL,
       articleSection: 'Локален бизнес',
       keywords: 'локален маркетинг, малък град, локална платформа, Левски, Лески Каручка, доверие',
     },
@@ -91,9 +92,9 @@ export default function MarketingLokalnaPlatformaPage() {
 
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src="https://readdy.ai/api/search-image?query=Horse%20drawn%20cart%20traveling%20along%20a%20quiet%20road%20through%20a%20small%20Bulgarian%20town%20in%20summer%20daylight%20warm%20tones%20authentic%20documentary%20photography%20community%20no%20text&width=1200&height=630&seq=blog-leski-karuchka-marketing-hero-01&orientation=landscape"
-              alt="Локална платформа в малък град — уроци от Лески Каручка"
+            <img loading="lazy" width={2048} height={1154}
+              src={EDITORIAL_IMAGE_SRC}
+              alt={EDITORIAL_IMAGE_ALT}
               className="w-full h-full object-cover object-top"
               decoding="async"
             />
@@ -120,7 +121,7 @@ export default function MarketingLokalnaPlatformaPage() {
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

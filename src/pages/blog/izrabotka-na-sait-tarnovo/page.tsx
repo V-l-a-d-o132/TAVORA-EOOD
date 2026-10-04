@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -40,7 +41,7 @@ const FAQ_SCHEMA = {
   })),
 };
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -70,9 +71,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=web%20design%20development%20website%20creation%20laptop%20screen%20modern%20UI%20design%20clean%20minimal%20white%20background%20professional%20workspace%20Veliko%20Tarnovo%20Bulgaria&width=1200&height=630&seq=blog-sait-tarnovo-og&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/blog#page' },
       about: [
@@ -312,9 +313,9 @@ export default function IzrabotkaNaSaitTarnovoPage() {
 
         {/* Hero image */}
         <div className="w-full h-[260px] md:h-[380px] rounded-2xl overflow-hidden mb-12">
-          <img
-            src="https://readdy.ai/api/search-image?query=web%20design%20development%20website%20creation%20laptop%20screen%20modern%20UI%20design%20clean%20minimal%20white%20background%20professional%20workspace%20Bulgaria%20Veliko%20Tarnovo%202026&width=1200&height=630&seq=blog-sait-tarnovo-hero&orientation=landscape"
-            alt="Изработка на сайт Велико Търново — ТАВОРА ЕООД"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

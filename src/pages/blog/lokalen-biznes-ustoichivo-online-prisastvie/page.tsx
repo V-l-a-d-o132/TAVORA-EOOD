@@ -1,9 +1,10 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -21,7 +22,7 @@ const ARTICLE_SCHEMA = {
       url: 'https://imashnujnoto.com/blog/lokalen-biznes-ustoichivo-online-prisastvie',
       wordCount: 2600,
       timeRequired: 'PT10M',
-      image: { '@type': 'ImageObject', url: 'https://readdy.ai/api/search-image?query=small%20local%20business%20sustainable%20online%20presence%20digital%20strategy%20wellness%20industry%20massage%20studio%20warm%20natural%20light%20clean%20minimal%20white%20background%20professional%20photography%20Bulgaria&width=1200&height=630&seq=blog-lokalen-biznes-hero&orientation=landscape', width: 1200, height: 630 },
+      image: { '@type': 'ImageObject', url: EDITORIAL_IMAGE_URL, width: 2048, height: 1154 },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/lokalen-biznes-ustoichivo-online-prisastvie' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -166,11 +167,11 @@ export default function LokalenBiznesUstoichivoOnlinePrisastviePage() {
 
       {/* HERO IMAGE */}
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
-          src="https://readdy.ai/api/search-image?query=small%20local%20business%20sustainable%20online%20presence%20digital%20strategy%20wellness%20industry%20massage%20studio%20warm%20natural%20light%20clean%20minimal%20white%20background%20professional%20photography%20Bulgaria&width=1400&height=420&seq=blog-lokalen-biznes-hero-img&orientation=landscape"
-          alt="Локални бизнеси — устойчиво онлайн присъствие в уелнес индустрията"
+        <img decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           className="w-full h-full object-cover object-top"
-          loading="eager"
+          loading="lazy"
         />
       </div>
 

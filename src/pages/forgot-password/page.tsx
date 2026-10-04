@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-[#FAFAF8] flex">
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async" width={800} height={1000}
           src="https://readdy.ai/api/search-image?query=abstract%20minimalist%20luxury%20background%20with%20soft%20warm%20beige%20and%20cream%20tones%2C%20elegant%20geometric%20shapes%2C%20subtle%20gold%20accents%2C%20high%20end%20editorial%20aesthetic%2C%20clean%20sophisticated%20composition%2C%20muted%20palette%2C%20artistic%20texture&width=800&height=1000&seq=forgot-bg-1&orientation=portrait"
           alt="Platform visual"
           className="w-full h-full object-cover object-top"

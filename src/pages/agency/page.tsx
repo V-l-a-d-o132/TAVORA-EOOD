@@ -73,12 +73,6 @@ const ORG_SCHEMA = {
     'https://www.youtube.com/@TavoraMarketingAgency',
     'https://share.google/sP3ydTe4iqEO44qua',
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    reviewCount: '21',
-    bestRating: '5',
-  },
 };
 
 const BREADCRUMB_SCHEMA = {
@@ -95,7 +89,7 @@ const BREADCRUMB_SCHEMA = {
       '@type': 'ListItem',
       position: 2,
       name: 'Агенция за дигитален маркетинг',
-      item: 'https://imashnujnoto.com/agency',
+      item: 'https://imashnujnoto.com/',
     },
   ],
 };
@@ -103,8 +97,8 @@ const BREADCRUMB_SCHEMA = {
 const WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  '@id': 'https://imashnujnoto.com/agency#webpage',
-  url: 'https://imashnujnoto.com/agency',
+  '@id': 'https://imashnujnoto.com/#webpage',
+  url: 'https://imashnujnoto.com/',
   name: 'ТАВОРА ЕООД — Модерна агенция за дигитален маркетинг във Велико Търново',
   description:
     'ТАВОРА ЕООД е сред най-модерните агенции за дигитален маркетинг във Велико Търново. SEO, GEO за AI търсачки, реклами, видео и изработка на сайтове. Верифицируеми #1 резултати.',
@@ -115,7 +109,7 @@ const WEBPAGE_SCHEMA = {
     '@type': 'SpeakableSpecification',
     cssSelector: ['h1', '.entity-paragraph'],
   },
-  dateModified: new Date().toISOString().split('T')[0],
+  dateModified: '2026-10-04',
 };
 
 export default function AgencyPage() {
@@ -131,7 +125,7 @@ export default function AgencyPage() {
     }
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical)
-      canonical.setAttribute('href', 'https://imashnujnoto.com/agency');
+      canonical.setAttribute('href', 'https://imashnujnoto.com/');
 
     const schemas = [
       { id: 'schema-agency-org', data: ORG_SCHEMA },

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import BlogArticleLayout, {
   ArticleSection,
   buildArticleSchema,
@@ -6,7 +7,7 @@ import BlogArticleLayout, {
 } from '@/pages/blog/components/BlogArticleLayout';
 
 const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=modern%20hair%20and%20beauty%20salon%20reception%20desk%20with%20tablet%20showing%20appointment%20calendar%20warm%20natural%20lighting%20clean%20minimal%20interior%20professional%20photography%20high%20detail%20soft%20tones&width=1200&height=630&seq=blog-no-shows-salon-hero-01&orientation=landscape';
+  EDITORIAL_IMAGE_URL;
 
 const SCHEMA = buildArticleSchema({
   id: 'kak-da-namalim-neyavaniyata-no-shows-salon',
@@ -49,7 +50,7 @@ export default function KakDaNamalimNeyavaniyataNoShowsSalonPage() {
       date="28 Сеп 2026"
       readTime="11 мин. четене"
       heroImage={HERO_IMAGE}
-      heroAlt="Рецепция на салон с график за резервации"
+      heroAlt={EDITORIAL_IMAGE_ALT}
       breadcrumbLabel="Намаляване на неявяванията"
       title={
         <>

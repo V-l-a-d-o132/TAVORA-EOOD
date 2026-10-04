@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
+import { EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL, EDITORIAL_IMAGE_ALT } from '@/config/editorial-image';
 
 interface NewsItem {
   id: string;
@@ -54,10 +55,10 @@ function buildNewsSchema(items: NewsItem[]) {
           description: item.summary,
           url: `https://imashnujnoto.com/novini`,
           datePublished: item.date,
-          author: { '@type': 'Person', name: 'ТАВОРА ЕООД', url: 'https://imashnujnoto.com/za-tavora' },
+          author: { '@type': 'Organization', name: 'ТАВОРА ЕООД', url: 'https://imashnujnoto.com/za-tavora' },
           publisher: { '@id': 'https://imashnujnoto.com/#organization' },
           articleSection: item.category,
-          image: item.image_url ? { '@type': 'ImageObject', url: item.image_url } : undefined,
+          image: { '@type': 'ImageObject', url: item.image_url || EDITORIAL_IMAGE_URL },
           position: i + 1,
         })),
       },
@@ -175,11 +176,13 @@ export default function NoviniPage() {
                 itemType="https://schema.org/BlogPosting"
                 className={`group rounded-2xl border border-[#1C1C1E]/8 bg-white overflow-hidden hover:-translate-y-0.5 transition-all duration-300 ${i === 0 && filterCat === 'Всички' ? 'md:col-span-2 lg:col-span-2' : ''}`}
               >
-                {item.image_url && (
+                {(
                   <div className={`w-full overflow-hidden ${i === 0 && filterCat === 'Всички' ? 'h-52 md:h-64' : 'h-44'}`}>
-                    <img
-                      src={item.image_url}
-                      alt={item.title}
+                    <img loading="lazy" decoding="async"
+                      src={item.image_url || EDITORIAL_IMAGE_SRC}
+                      alt={item.image_url ? item.title : EDITORIAL_IMAGE_ALT}
+                      width={2048}
+                      height={1154}
                       itemProp="image"
                       className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
                     />

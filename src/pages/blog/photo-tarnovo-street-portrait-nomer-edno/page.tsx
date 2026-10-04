@@ -1,9 +1,10 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -21,7 +22,7 @@ const ARTICLE_SCHEMA = {
       url: 'https://imashnujnoto.com/blog/photo-tarnovo-street-portrait-nomer-edno',
       wordCount: 2400,
       timeRequired: 'PT9M',
-      image: { '@type': 'ImageObject', url: 'https://readdy.ai/api/search-image?query=Tsarevets%20Fortress%20Veliko%20Tarnovo%20Bulgaria%20street%20portrait%20photographer%20golden%20hour%20light%20ancient%20stone%20walls%20traveler%20portrait%20authentic%20moment%20professional%20camera%20setup&width=1200&height=630&seq=blog-photo-tarnovo-1-hero&orientation=landscape', width: 1200, height: 630 },
+      image: { '@type': 'ImageObject', url: EDITORIAL_IMAGE_URL, width: 2048, height: 1154 },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/photo-tarnovo-street-portrait-nomer-edno' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -166,11 +167,11 @@ export default function PhotoTarnovoStreetPortraitNomerEdnoPage() {
 
       {/* HERO IMAGE */}
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
-          src="https://readdy.ai/api/search-image?query=Tsarevets%20Fortress%20Veliko%20Tarnovo%20Bulgaria%20golden%20hour%20street%20portrait%20photography%20young%20traveler%20getting%20portrait%20taken%20ancient%20stone%20walls%20warm%20Balkan%20light%20professional%20camera%20relaxed%20natural%20posing&width=1400&height=420&seq=blog-photo-tarnovo-1-hero-img&orientation=landscape"
-          alt="Photo Tarnovo — street portrait фотограф на Царевец, Велико Търново, #1 в Google"
+        <img decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           className="w-full h-full object-cover object-top"
-          loading="eager"
+          loading="lazy"
         />
       </div>
 

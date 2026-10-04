@@ -137,7 +137,7 @@ export default function ClientReviewsSection({ limit }: { limit?: number }) {
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F9F9F7] border border-[#1C1C1E]/8">
                 {r.avatarUrl ? (
-                  <img
+                  <img decoding="async"
                     src={r.avatarUrl}
                     alt={r.name}
                     className="w-full h-full object-cover"
@@ -207,7 +207,7 @@ export default function ClientReviewsSection({ limit }: { limit?: number }) {
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F9F9F7] border border-[#1C1C1E]/8">
                       {r.avatarUrl ? (
-                        <img
+                        <img decoding="async"
                           src={r.avatarUrl}
                           alt={r.name}
                           className="w-full h-full object-cover"

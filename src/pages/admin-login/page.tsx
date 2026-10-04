@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/">
-            <img
+            <img loading="lazy" decoding="async"
               src="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/777dce2a-8731-4235-b0be-7837a840c3c9_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.png?v=f6135e7442d441feef102ad2f8425862"
               alt="ТАВОРА ЕООД"
               className="h-8 w-auto object-contain mx-auto mb-4"

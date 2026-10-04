@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { SILK_ROAD_PUBLIC_MODULES } from '@/data/academy-public-programs';
@@ -91,9 +92,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=dark%20minimalist%20futuristic%20AI%20business%20blueprint%20digital%20transformation%20neural%20network%20glowing%20nodes%20interconnected%20pathways%20deep%20black%20background%20red%20geometric%20accents%20professional%20cinematic%20atmosphere%20editorial%20quality&width=1200&height=630&seq=blog-ai-blueprint-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       about: [
@@ -298,9 +299,9 @@ export default function AiBusinessBlueprintPage() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=dark%20minimalist%20futuristic%20AI%20business%20blueprint%20digital%20neural%20network%20glowing%20interconnected%20nodes%20deep%20black%20background%20dramatic%20red%20geometric%20accents%20clean%20professional%20cinematic%20atmosphere%20no%20text&width=1400&height=420&seq=blog-ai-blueprint-hero-img&orientation=landscape"
-            alt="AI Business Blueprint — Пътят на коприната"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -34,7 +35,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
@@ -88,9 +89,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=free%20SEO%20optimization%20strategy%20small%20business%20zero%20budget%20Google%20ranking%20organic%20traffic%20growth%20green%20charts%20arrows%20pointing%20up%20clean%20minimal%20white%20background%20professional&width=1200&height=630&seq=bezplaten-seo-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       about: [
@@ -451,9 +452,9 @@ export default function BezplatenSeoNomerEdnoPage() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=free%20SEO%20optimization%20strategy%20small%20business%20zero%20budget%20Google%20ranking%20organic%20traffic%20growth%20green%20charts%20arrows%20pointing%20up%20clean%20minimal%20white%20background%20professional%20Bulgarian%20business&width=1400&height=420&seq=bezplaten-seo-hero-img&orientation=landscape"
-            alt="Безплатен SEO за номер 1 в Google"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -69,9 +70,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=video%20marketing%20strategy%20business%20professional%20camera%20filming%20crew%20modern%20office%20content%20creation%20studio%20setup%20clean%20minimal%20white%20background%20Bulgaria%202026&width=1200&height=630&seq=video-marketing-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -296,9 +297,9 @@ export default function VideoMarketingBiznesTarnovoPage() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=video%20marketing%20strategy%20professional%20camera%20filming%20crew%20modern%20office%20content%20creation%20studio%20setup%20clean%20minimal%20white%20background%20Bulgaria%20Tarnovo%20business%202026&width=1400&height=420&seq=video-marketing-hero-img&orientation=landscape"
-            alt="Видео маркетинг за бизнеси в Търново"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

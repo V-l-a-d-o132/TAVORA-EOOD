@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -19,7 +20,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/blog/leski-karuchka-nomer-edno-google',
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/leski-karuchka-nomer-edno-google' },
       inLanguage: 'bg',
-      image: 'https://readdy.ai/api/search-image?query=Quiet%20small%20Bulgarian%20town%20street%20at%20golden%20hour%20with%20a%20traditional%20wooden%20horse%20drawn%20cart%20warm%20natural%20light%20authentic%20editorial%20photography%20no%20text&width=1200&height=630&seq=blog-leski-karuchka-seo-hero-01&orientation=landscape',
+      image: EDITORIAL_IMAGE_URL,
       articleSection: 'SEO казус',
       keywords: 'каручка Левски, SEO Левски, локално SEO, Google Business Profile, GEO оптимизация, Лески Каручка',
     },
@@ -92,9 +93,9 @@ export default function LeskiKaruchkaNomerEdnoPage() {
 
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src="https://readdy.ai/api/search-image?query=Quiet%20small%20Bulgarian%20town%20street%20at%20golden%20hour%20with%20a%20traditional%20wooden%20horse%20drawn%20cart%20warm%20natural%20light%20authentic%20editorial%20photography%20no%20text&width=1200&height=630&seq=blog-leski-karuchka-seo-hero-01&orientation=landscape"
-              alt="Лески Каручка — SEO казус за локална услуга в Левски"
+            <img loading="lazy" width={2048} height={1154}
+              src={EDITORIAL_IMAGE_SRC}
+              alt={EDITORIAL_IMAGE_ALT}
               className="w-full h-full object-cover object-top"
               decoding="async"
             />
@@ -121,7 +122,7 @@ export default function LeskiKaruchkaNomerEdnoPage() {
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

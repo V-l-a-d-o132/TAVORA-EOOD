@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -67,9 +68,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=professional%20video%20production%20NGO%20social%20campaign%20filming%20crew%20Bulgaria%20Veliko%20Tarnovo%20documentary%20camera%20equipment%20studio%20setup%20clean%20minimal&width=1200&height=630&seq=blog-npo-video-og&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/blog#page' },
       about: [
@@ -269,9 +270,9 @@ export default function VideoNPOTarnovoPage() {
 
         {/* Hero image */}
         <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-12">
-          <img
-            src="https://readdy.ai/api/search-image?query=professional%20video%20production%20NGO%20social%20campaign%20filming%20crew%20Bulgaria%20Veliko%20Tarnovo%20documentary%20camera%20equipment%20outdoor%20location%20authentic%20storytelling%20warm%20light&width=1200&height=630&seq=blog-npo-video-hero&orientation=landscape"
-            alt="Видео продукция за НПО организации в Търново — ТАВОРА ЕООД"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

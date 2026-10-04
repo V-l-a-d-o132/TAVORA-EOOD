@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import BlogArticleLayout, {
   ArticleSection,
   buildArticleSchema,
@@ -6,7 +7,7 @@ import BlogArticleLayout, {
 } from '@/pages/blog/components/BlogArticleLayout';
 
 const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=conveyor%20belt%20transporting%20grain%20and%20recycled%20material%20in%20an%20industrial%20grain%20silo%20facility%20dusty%20warm%20golden%20light%20professional%20engineering%20photography%20high%20detail%20neutral%20industrial%20tones&width=1200&height=630&seq=blog-lenti-zarno-recycling-hero-01&orientation=landscape';
+  EDITORIAL_IMAGE_URL;
 
 const SCHEMA = buildArticleSchema({
   id: 'transportni-lenti-zarnoprerabotka-reciklirane',
@@ -48,7 +49,7 @@ export default function TransportniLentiZarnoprerabotkaRecikliranePage() {
       date="28 Сеп 2026"
       readTime="9 мин. четене"
       heroImage={HERO_IMAGE}
-      heroAlt="Транспортна лента при зърно и рециклиране"
+      heroAlt={EDITORIAL_IMAGE_ALT}
       breadcrumbLabel="Ленти за зърно и рециклиране"
       title={
         <>

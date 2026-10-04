@@ -274,13 +274,7 @@ export const academyPixel = {
    */
   pageView(): void {
     if (!ACADEMY_PIXEL_ID || !isFbqReady()) return;
-    try {
-      const f = window.fbq as (...a: unknown[]) => void;
-      f('trackSingle', ACADEMY_PIXEL_ID, 'PageView');
-      if (import.meta.env.DEV) console.log('[MetaPixel][Academy] 🔥 PageView');
-    } catch {
-      /* silent */
-    }
+    safeFbqSingle('PageView');
   },
 
   /**

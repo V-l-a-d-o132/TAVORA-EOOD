@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import BlogArticleLayout, {
   ArticleSection,
   buildArticleSchema,
@@ -6,7 +7,7 @@ import BlogArticleLayout, {
 } from '@/pages/blog/components/BlogArticleLayout';
 
 const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=modern%20salon%20owner%20comparing%20smartphone%20booking%20app%20with%20old%20telephone%20notebook%20on%20a%20clean%20desk%20warm%20natural%20lighting%20minimal%20professional%20photography%20high%20detail%20soft%20tones&width=1200&height=630&seq=blog-online-vs-telefon-rezervacii-hero-01&orientation=landscape';
+  EDITORIAL_IMAGE_URL;
 
 const SCHEMA = buildArticleSchema({
   id: 'online-rezervacii-vs-telefonni-rezervacii',
@@ -48,7 +49,7 @@ export default function OnlineRezervaciiVsTelefonniRezervaciiPage() {
       date="28 Сеп 2026"
       readTime="9 мин. четене"
       heroImage={HERO_IMAGE}
-      heroAlt="Сравнение на онлайн резервации и телефонни записвания"
+      heroAlt={EDITORIAL_IMAGE_ALT}
       breadcrumbLabel="Онлайн срещу телефонни резервации"
       title={
         <>

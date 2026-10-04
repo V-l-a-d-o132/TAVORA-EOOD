@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import BlogArticleLayout, {
   ArticleSection,
   buildArticleSchema,
@@ -6,7 +7,7 @@ import BlogArticleLayout, {
 } from '@/pages/blog/components/BlogArticleLayout';
 
 const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=industrial%20conveyor%20belt%20system%20in%20a%20clean%20manufacturing%20facility%20close%20up%20of%20rubber%20belt%20on%20rollers%20warm%20industrial%20lighting%20professional%20engineering%20photography%20high%20detail%20neutral%20tones&width=1200&height=630&seq=blog-transportna-lenta-izbor-hero-01&orientation=landscape';
+  EDITORIAL_IMAGE_URL;
 
 const SCHEMA = buildArticleSchema({
   id: 'kak-da-izberete-transportna-lenta',
@@ -49,7 +50,7 @@ export default function KakDaIzbereteTransportnaLentaPage() {
       date="28 Сеп 2026"
       readTime="11 мин. четене"
       heroImage={HERO_IMAGE}
-      heroAlt="Транспортна лента и ролки в индустриална линия"
+      heroAlt={EDITORIAL_IMAGE_ALT}
       breadcrumbLabel="Как да изберете транспортна лента"
       title={
         <>

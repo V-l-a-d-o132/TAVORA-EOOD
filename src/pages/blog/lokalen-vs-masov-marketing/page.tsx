@@ -1,9 +1,10 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -21,7 +22,7 @@ const ARTICLE_SCHEMA = {
       url: 'https://imashnujnoto.com/blog/lokalen-vs-masov-marketing',
       wordCount: 2800,
       timeRequired: 'PT11M',
-      image: { '@type': 'ImageObject', url: 'https://readdy.ai/api/search-image?query=local%20marketing%20vs%20national%20mass%20marketing%20comparison%20illustration%20contrasting%20approaches%20small%20business%20local%20storefront%20vs%20large%20billboard%20digital%20screen%20analytical%20concept%20clean%20minimal%20white%20background&width=1200&height=630&seq=blog-lokalen-vs-masov-hero&orientation=landscape', width: 1200, height: 630 },
+      image: { '@type': 'ImageObject', url: EDITORIAL_IMAGE_URL, width: 2048, height: 1154 },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/lokalen-vs-masov-marketing' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -165,11 +166,11 @@ export default function LokalenVsMasovMarketingPage() {
 
       {/* HERO IMAGE */}
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
-          src="https://readdy.ai/api/search-image?query=local%20marketing%20vs%20national%20mass%20marketing%20comparison%20illustration%20contrasting%20approaches%20small%20business%20local%20storefront%20vs%20large%20billboard%20digital%20screen%20analytical%20concept%20clean%20minimal%20white%20background&width=1400&height=420&seq=blog-lokalen-vs-masov-hero-img&orientation=landscape"
-          alt="Локален маркетинг vs масов маркетинг — фундаменталните разлики"
+        <img decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           className="w-full h-full object-cover object-top"
-          loading="eager"
+          loading="lazy"
         />
       </div>
 

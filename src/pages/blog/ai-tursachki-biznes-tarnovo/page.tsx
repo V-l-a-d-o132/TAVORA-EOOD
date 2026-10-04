@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -34,7 +35,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
@@ -83,9 +84,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=AI%20search%20engine%20optimization%20ChatGPT%20Perplexity%20GEO%20generative%20engine%20futuristic%20technology%20digital%20brain%20neural%20network%20clean%20minimal%20white%20background%20professional%20Bulgaria%202026&width=1200&height=630&seq=ai-tursachki-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -377,9 +378,9 @@ export default function AiTursachkiBiznesTarnovoPage() {
 
         {/* HERO IMAGE */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=AI%20search%20engine%20optimization%20ChatGPT%20Perplexity%20GEO%20generative%20engine%20futuristic%20technology%20digital%20brain%20neural%20network%20clean%20minimal%20white%20background%20professional%20Bulgaria%202026&width=1400&height=420&seq=ai-tursachki-hero-img&orientation=landscape"
-            alt="AI търсачки и бизнес в Търново — GEO оптимизация"
+          <img width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
             loading="lazy" decoding="async"
           />
