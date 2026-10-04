@@ -61,7 +61,6 @@ const SCHEMA = {
       courseMode: 'online',
       inLanguage: 'bg',
       educationalLevel: 'Beginner to Advanced',
-      timeRequired: 'PT20H',
       teaches: ['Видео продукция', 'Видео маркетинг', 'Снимачни техники', 'Видео монтаж', 'Осветление и цвят', 'Звук и аудио', 'AI за видео', 'Мобилна видеография', 'YouTube аналитика'],
       offers: {
         '@type': 'Offer',

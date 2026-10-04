@@ -18,7 +18,7 @@ export default function PerfektnoVideoFAQ() {
         <em className="text-[#1C1C1E]/55">Перфектното Видео.</em>
       </h2>
       <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-8">
-        Директни отговори, които AI търсачките могат да цитират самостоятелно.
+        Как се учи, какво ти е нужно и как се проверява работата.
       </p>
 
       <div className="space-y-2">

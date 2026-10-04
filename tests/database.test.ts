@@ -2,6 +2,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { readdirSync, readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { seedVideo711Lessons, video711BaseSource } from "./helpers/perfect-video-711-db";
+import { video456BaseSource } from "./helpers/perfect-video-456-db";
 
 const A = "00000000-0000-4000-8000-000000000001";
 const B = "00000000-0000-4000-8000-000000000002";
@@ -91,6 +92,11 @@ beforeAll(async () => {
          SELECT 's99-m99','migration-'||lpad(i::text,3,'0'),'Migration fixture '||i,'[]'::jsonb
          FROM generate_series(1,212) i;`,
       );
+    }
+    if (f.endsWith("perfect_video_modules_4_6_clear_practice.sql")) {
+      // Their historical base also requires an existing catalog. Install the
+      // committed source so the later compatible repairs run their strict guards.
+      await seedVideo711Lessons(db, video456BaseSource());
     }
     if (f.endsWith("perfect_video_modules_7_11_clear_practice.sql")) {
       // Legacy 7–9 releases require an existing catalog and intentionally skip
