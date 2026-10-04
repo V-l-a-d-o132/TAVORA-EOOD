@@ -1,6 +1,7 @@
 import { PGlite } from "@electric-sql/pglite";
 import { readdirSync, readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { seedVideo711Lessons, video711BaseSource } from "./helpers/perfect-video-711-db";
 
 const A = "00000000-0000-4000-8000-000000000001";
 const B = "00000000-0000-4000-8000-000000000002";
@@ -90,6 +91,14 @@ beforeAll(async () => {
          SELECT 's99-m99','migration-'||lpad(i::text,3,'0'),'Migration fixture '||i,'[]'::jsonb
          FROM generate_series(1,212) i;`,
       );
+    }
+    if (f.endsWith("perfect_video_modules_7_11_clear_practice.sql")) {
+      // Legacy 7–9 releases require an existing catalog and intentionally skip
+      // this fresh schema fixture. Seed their committed published curriculum so
+      // the new migration exercises its full 75-lesson guard, without weakening it.
+      await seedVideo711Lessons(db, video711BaseSource().filter(
+        (lesson) => ["s02-m07", "s02-m08", "s02-m09"].includes(lesson.module_id),
+      ));
     }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
   }
