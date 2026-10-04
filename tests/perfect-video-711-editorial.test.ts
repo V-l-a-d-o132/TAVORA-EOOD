@@ -1,11 +1,13 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createVideo711Database } from './helpers/perfect-video-711-db';
 import { actor, learnerRecords, OTHER, STUDENT } from './helpers/silk-road-db';
 
 const migration = readFileSync('supabase/migrations/20261004083926_perfect_video_modules_7_11_clear_practice.sql', 'utf8');
 const release = 'perfect_video_modules_7_11_clear_practice_20261004';
+const delivery = JSON.parse(execFileSync('python3', ['scripts/perfect-video/build_perfect_video_711_delivery.py', '--json'], { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 })) as { stages: string[]; apply: string; cleanup: string; parts: number };
 let db: PGlite;
 let before: Awaited<ReturnType<typeof learnerRecords>>;
 let identity: Record<string, unknown>[];
@@ -33,7 +35,14 @@ beforeAll(async () => {
   identity = (await db.query('SELECT l.*,v.version_number FROM academy_lessons l JOIN academy_lesson_versions v ON v.id=l.published_version_id ORDER BY l.id')).rows;
   original = (await db.query('SELECT b.*,k.answer_key,k.scoring FROM academy_lesson_blocks b LEFT JOIN academy_private.lesson_block_keys k ON k.block_id=b.id ORDER BY b.id')).rows;
   outside = (await db.query("SELECT to_jsonb(v) version,to_jsonb(b) block,to_jsonb(k) key FROM academy_lessons l JOIN academy_lesson_versions v ON v.id=l.published_version_id JOIN academy_lesson_blocks b ON b.version_id=v.id LEFT JOIN academy_private.lesson_block_keys k ON k.block_id=b.id WHERE l.module_id NOT IN ('s02-m07','s02-m08','s02-m09','s02-m10','s02-m11') ORDER BY b.id")).rows;
-  await db.exec(migration);
+  for (const stage of delivery.stages) await db.exec(stage);
+  for (const user of [STUDENT, OTHER]) {
+    await actor(db, 'authenticated', user);
+    expect((await db.query('SELECT details FROM academy_lesson_audit')).rows).toEqual([]);
+  }
+  await actor(db);
+  await db.exec(delivery.apply);
+  await db.exec(delivery.cleanup);
 }, 60000);
 afterAll(async () => { await db?.close(); });
 
@@ -111,6 +120,7 @@ describe('compatible editorial publication of video modules 7–11', () => {
 
   it('is repeatable without duplicate archives and rejects incomplete publication history', async () => {
     await db.exec(migration);
+    await db.exec(delivery.apply);
     expect((await db.query<{ n: number }>("SELECT count(*)::int n FROM academy_lesson_audit WHERE details->>'release'=$1", [release])).rows[0].n).toBe(75);
     expect(await learnerRecords(db)).toEqual(before);
     await db.exec('BEGIN');
@@ -124,12 +134,27 @@ describe('compatible editorial publication of video modules 7–11', () => {
     const driftDb = await createVideo711Database();
     try {
       await driftDb.exec("UPDATE academy_lesson_blocks SET content=jsonb_set(content,'{body}','\"Changed outside this release\"') WHERE block_key='objective' AND version_id=(SELECT published_version_id FROM academy_lessons WHERE lesson_id='pv11-16')");
+      for (const stage of delivery.stages) await driftDb.exec(stage);
       const snapshot = async () => (await driftDb.query('SELECT (SELECT jsonb_agg(to_jsonb(b) ORDER BY id) FROM academy_lesson_blocks b) blocks,(SELECT jsonb_agg(to_jsonb(v) ORDER BY id) FROM academy_lesson_versions v) versions,(SELECT jsonb_agg(to_jsonb(a) ORDER BY id) FROM academy_lesson_audit a) audit')).rows;
       const prior = await snapshot();
       const students = await learnerRecords(driftDb);
-      await expect(driftDb.exec(migration)).rejects.toThrow('Video source drift for pv11-16');
+      await expect(driftDb.exec(delivery.apply)).rejects.toThrow('Video source drift for pv11-16');
       expect(await snapshot()).toEqual(prior);
       expect(await learnerRecords(driftDb)).toEqual(students);
     } finally { await driftDb.close(); }
+  }, 60000);
+
+  it('rejects changed staged payload before altering any lesson or learner row', async () => {
+    const stagedDb = await createVideo711Database();
+    try {
+      for (const stage of delivery.stages) await stagedDb.exec(stage);
+      await stagedDb.query("UPDATE academy_lesson_audit SET details=jsonb_set(details,'{payload_text}',to_jsonb((details->>'payload_text')||' ')) WHERE details->>'delivery_for'=$1 AND (details->>'delivery_part')::integer=$2", [release, delivery.parts]);
+      const snapshot = async () => (await stagedDb.query('SELECT (SELECT jsonb_agg(to_jsonb(b) ORDER BY id) FROM academy_lesson_blocks b) blocks,(SELECT jsonb_agg(to_jsonb(v) ORDER BY id) FROM academy_lesson_versions v) versions,(SELECT jsonb_agg(to_jsonb(a) ORDER BY id) FROM academy_lesson_audit a) audit')).rows;
+      const prior = await snapshot();
+      const students = await learnerRecords(stagedDb);
+      await expect(stagedDb.exec(delivery.apply)).rejects.toThrow('Video delivery payload hash mismatch');
+      expect(await snapshot()).toEqual(prior);
+      expect(await learnerRecords(stagedDb)).toEqual(students);
+    } finally { await stagedDb.close(); }
   }, 60000);
 });
