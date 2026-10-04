@@ -18,6 +18,12 @@ test('every sitemap page renders with its own canonical and native lazy images',
   for (const path of paths) {
     await page.goto(path);
     await expect(page.locator('h1').first(), path).toBeVisible();
+    if (path === '/') {
+      // The separated homepage sections must render automatically for readers
+      // and crawlers, without requiring a scroll or a click to fetch content.
+      await expect(page.locator('#results')).toBeVisible();
+      await expect(page.locator('footer').first()).toBeVisible();
+    }
     await expect(page.locator('link[rel="canonical"]'), path).toHaveAttribute('href', `https://imashnujnoto.com${path}`);
     await expect(page.locator('meta[name="robots"]'), path).toHaveAttribute('content', /index,follow/);
     await expect(page.locator('meta[property="og:url"]'), path).toHaveAttribute('content', `https://imashnujnoto.com${path}`);
