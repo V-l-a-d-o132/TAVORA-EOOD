@@ -3,6 +3,11 @@ export function usesIndependentPractice(moduleId?: string): boolean {
   return !!moduleId && (moduleId.startsWith('s01-') || ['s02-m01', 's02-m02', 's02-m03'].includes(moduleId));
 }
 
+/** Choice presentation can change without changing saved answer IDs or grading. */
+export function usesShuffledChoices(moduleId?: string): boolean {
+  return usesIndependentPractice(moduleId) || /^s02-m(?:0[4-9]|1[0-5])$/.test(moduleId || '');
+}
+
 export function lessonOptionOrder<T>(items: readonly T[], seed: string): T[] {
   let state = 2166136261;
   for (const char of seed) state = Math.imul(state ^ char.charCodeAt(0), 16777619);

@@ -6,7 +6,7 @@ import LessonRichText from './LessonRichText';
 import LessonGlossary from './LessonGlossary';
 import LessonOutcomes from './LessonOutcomes';
 import { visibleGlossaryText } from '@/lib/academy-glossary';
-import { lessonOptionOrder, usesIndependentPractice } from '@/lib/lesson-option-order';
+import { lessonOptionOrder, usesIndependentPractice, usesShuffledChoices } from '@/lib/lesson-option-order';
 
 interface Props {
   block: LessonBlockV2;
@@ -66,7 +66,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const body = s(block.content.body);
   const options = useMemo(() => {
     const choices = arr(block.content.options);
-    return usesIndependentPractice(moduleId) && ['quiz', 'scenario'].includes(block.type)
+    return usesShuffledChoices(moduleId) && ['quiz', 'scenario'].includes(block.type)
       ? lessonOptionOrder(choices, `${lessonId}/${block.id}`) : choices;
   }, [block.content.options, block.id, block.type, lessonId, moduleId]);
   const feedback = result?.feedback;
@@ -210,7 +210,9 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
             const questionId = s(question.id, `q${index + 1}`);
             return <fieldset key={questionId} className="rounded-2xl border border-white/10 p-4 sm:p-5">
               <legend className="px-2 text-base font-semibold leading-7 text-white">{index + 1}. {s(question.prompt)}</legend>
-              <div className="mt-3 space-y-3">{arr(question.options).map((option, optionIndex) => {
+              <div className="mt-3 space-y-3">{(/^s02-m(?:0[1-9]|1[0-5])$/.test(moduleId || '')
+                ? lessonOptionOrder(arr(question.options), `${lessonId}/${block.id}/${questionId}/exam`)
+                : arr(question.options)).map((option, optionIndex) => {
                 const optionId = s(option.id, String(optionIndex));
                 return <label key={optionId} className={`${choiceClass} flex cursor-pointer items-start gap-3 ${answers[questionId] === optionId ? 'border-red-400 bg-red-500/10' : ''}`}>
                   <input type="radio" name={`${block.id}-${questionId}`} value={optionId} checked={answers[questionId] === optionId} disabled={busy || completed} onChange={() => update({ answers: { ...answers, [questionId]: optionId } })} className="mt-1 h-4 w-4 shrink-0 accent-red-500" />

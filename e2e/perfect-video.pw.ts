@@ -103,3 +103,19 @@ test('mobile layout, feedback and changed-case transfer work without an account'
   expect(await noOverflow()).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('project-mobile-corrected.png'), fullPage: true });
 });
+
+test('audit copy describes the actual course and separates the project from automated exams', async ({ page }, testInfo) => {
+  await page.goto('/kurs/perfektnoto-video');
+  await expect(page.getByRole('heading', { name: 'Имаш идея за видео. Как да я превърнеш в готов файл?' })).toBeVisible();
+  await expect(page.getByText(/модул 09 — за монтаж, а модул 13 — за бриф/)).toBeVisible();
+  await page.getByRole('button', { name: 'Какво включва финалният проект?', exact: true }).click();
+  await expect(page.getByText(/автоматичното им преминаване не удостоверява качеството или авторството/)).toBeVisible();
+  const schema = await page.locator('#schema-perfektno-video-funnel').textContent();
+  const course = JSON.parse(schema!)['@graph'];
+  expect(course.find((entry: { '@type': string }) => entry['@type'] === 'Course')).not.toHaveProperty('timeRequired');
+  expect(schema).toContain('автоматичното им преминаване не удостоверява');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.setViewportSize({ width: 375, height: 812 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath('audit-course-mobile.png'), fullPage: true });
+});

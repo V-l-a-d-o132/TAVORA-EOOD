@@ -347,3 +347,65 @@ describe('updated Silk Road lessons', () => {
     expect(screen.queryByLabelText('0 XP')).toBeNull();
   });
 });
+
+describe('video audit choice presentation and prerequisite guides', () => {
+  it('shuffles video exam options independently and resumes the same answer IDs', async () => {
+    const block = { ...createBlock('course_exam', 0), id: 'video-exam-block', content: {
+      minimumPercent: 80,
+      questions: Array.from({ length: 12 }, (_, i) => ({ id: `q${i}`, prompt: `Казус ${i}`,
+        options: ['a','b','c'].map(id => ({ id, label: `${i}-${id}` })),
+      })),
+    } };
+    const answers = Object.fromEntries(Array.from({ length: 12 }, (_, i) => [`q${i}`, ['a','b','c'][i % 3]]));
+    const submit = vi.fn(async () => result);
+    const state = { answers };
+    const props = { block,moduleId:'s02-m15',lessonId:'pv15-13',initialState:state,completed:false,onStateChange:vi.fn(),onSubmit:submit };
+    const { rerender } = render(<LessonBlockRenderer {...props} />);
+    const orders = () => screen.getAllByRole('group').map(group => [...group.querySelectorAll<HTMLInputElement>('input')].map(input => input.value));
+    const first = orders();
+    expect(first.some(order => order.join('') !== 'abc')).toBe(true);
+    const rightPositions = first.map((order,i) => order.indexOf(answers[`q${i}`]));
+    expect(new Set(rightPositions).size).toBe(3);
+    expect(screen.getAllByRole('radio').filter(r => (r as HTMLInputElement).checked)).toHaveLength(12);
+    rerender(<LessonBlockRenderer {...props} initialState={{ answers:{ ...answers } }} />);
+    expect(orders()).toEqual(first);
+    fireEvent.click(screen.getByRole('button',{name:'Предай целия изпит'}));
+    await waitFor(() => expect(submit).toHaveBeenCalledWith({answers}));
+    // Other courses keep their current exam presentation.
+    rerender(<LessonBlockRenderer {...props} moduleId="s03-m20" />);
+    expect(orders().every(order => order.join('') === 'abc')).toBe(true);
+  });
+
+  it.each(['quiz','scenario'] as const)('keeps saved %s IDs valid after shuffling in modules 13–14', async type => {
+    const block = { ...createBlock(type,0),id:'video-choice',content:{question:'Кой ход?',prompt:'Кой ход?',options:[
+      {id:'a',label:'Проверка А'},{id:'b',label:'Проверка Б'},{id:'c',label:'Проверка В'},
+    ]} };
+    const field = type === 'quiz' ? 'answer' : 'selected';
+    const submit = vi.fn(async () => result);
+    const props = {block,moduleId:'s02-m14',lessonId:'pv14-01',initialState:{[field]:'b'},completed:false,onStateChange:vi.fn(),onSubmit:submit};
+    const {rerender}=render(<LessonBlockRenderer {...props} />);
+    const saved=screen.getByRole('button',{name:/Проверка Б/});
+    expect(saved.className).toContain('border-red');
+    const before=screen.getAllByRole('button').map(b=>b.textContent);
+    rerender(<LessonBlockRenderer {...props} initialState={{[field]:'b'}} />);
+    expect(screen.getAllByRole('button').map(b=>b.textContent)).toEqual(before);
+    fireEvent.click(saved);
+    await waitFor(()=>expect(submit).toHaveBeenCalledWith({[field]:'b'}));
+  });
+
+  it('shows a compact editing bridge, an early channel decision and honest exam scope without adding graded steps', () => {
+    const block=createBlock('concept',0);
+    const props={lessonOverride:lesson([block])};
+    const {rerender}=render(<LessonEngineV2 {...props} moduleId="s02-m04" />);
+    const summary=screen.getByText('Преди първата монтажна задача');
+    expect(summary.closest('details')?.open).toBe(false);
+    expect(screen.getByText(/Проектът и готовият видеофайл са различни неща/)).toBeTruthy();
+    rerender(<LessonEngineV2 {...props} moduleId="s02-m10" />);
+    expect(screen.getByText('Първо избери къде ще се гледа видеото')).toBeTruthy();
+    rerender(<LessonEngineV2 {...props} moduleId="s02-m15" />);
+    expect(screen.getByText(/не удостоверява авторството или качеството/)).toBeTruthy();
+    expect(screen.getAllByRole('heading',{name:block.title})).toHaveLength(1);
+    rerender(<LessonEngineV2 {...props} moduleId="s03-m01" />);
+    expect(screen.queryByText(/не удостоверява авторството/)).toBeNull();
+  });
+});
