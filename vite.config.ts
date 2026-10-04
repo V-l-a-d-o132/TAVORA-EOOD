@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
 import AutoImport from "unplugin-auto-import/vite";
+import { academyBuildManifest, privateAcademyRuntimeSource } from './scripts/lib/academy-build.mjs';
 
 const base = process.env.BASE_PATH || "/";
 const isPreview = process.env.IS_PREVIEW ? true : false;
@@ -19,12 +20,13 @@ export default defineConfig({
       name: 'academy-content-boundary',
       generateBundle(_options, bundle) {
         for (const output of Object.values(bundle)) {
-          if (output.type === 'chunk' && output.moduleIds.some(id => id.includes('/mocks/interactive-lesson-data') || id.includes('/mocks/quiz-questions'))) {
+          if (output.type === 'chunk' && output.moduleIds.some(privateAcademyRuntimeSource)) {
             this.error('Private academy content must not be bundled into the client.');
           }
         }
       },
     },
+    academyBuildManifest(),
     react(),
     AutoImport({
       imports: [
