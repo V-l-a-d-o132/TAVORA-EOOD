@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
+import { EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL, EDITORIAL_IMAGE_ALT } from '@/config/editorial-image';
 
 const FAQ_ITEMS = [
   {
@@ -45,7 +46,7 @@ const HOWTO_SCHEMA = {
   '@type': 'HowTo',
   name: 'Как да изберете дигитална маркетинг агенция във Велико Търново',
   description: 'Стъпка по стъпка ръководство за избор на правилната маркетинг агенция за вашия бизнес във Велико Търново.',
-  image: 'https://imashnujnoto.com/og-home.jpg',
+  image: EDITORIAL_IMAGE_URL,
   totalTime: 'PT2H',
   step: [
     {
@@ -146,12 +147,6 @@ const ORG_SCHEMA = {
     'https://www.youtube.com/@TavoraMarketingAgency',
     'https://share.google/sP3ydTe4iqEO44qua',
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    reviewCount: '21',
-    bestRating: '5',
-  },
 };
 
 const PAGE_SCHEMA = {
@@ -165,7 +160,7 @@ const PAGE_SCHEMA = {
       description:
         'Дигитален маркетинг Велико Търново — SEO оптимизация, рекламни кампании Meta и Google, видео продукция. ТАВОРА ЕООД. Реални #1 позиции в Google. Проверете сами.',
       inLanguage: 'bg',
-      dateModified: '2026-05-05',
+      dateModified: '2026-10-04',
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -403,6 +398,8 @@ export default function DigitalenMarketingVelikoTarnovoPage() {
             <i className="ri-arrow-right-s-line text-xs" />
             <span className="text-[#1C1C1E]/65">Дигитален маркетинг Велико Търново</span>
           </nav>
+
+          <img src={EDITORIAL_IMAGE_SRC} alt={EDITORIAL_IMAGE_ALT} width={2048} height={1154} loading="lazy" decoding="async" className="w-full aspect-video object-cover rounded-2xl mb-8" />
 
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-[1px] bg-[#1C1C1E]/20 shrink-0" />

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
@@ -59,7 +60,7 @@ export function buildArticleSchema({
           logo: { '@type': 'ImageObject', url: LOGO_URL },
         },
         datePublished,
-        dateModified: new Date().toISOString().split('T')[0],
+        dateModified: '2026-10-04',
         url,
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         inLanguage: 'bg',
@@ -216,8 +217,8 @@ export default function BlogArticleLayout({
 
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src={heroImage}
+            <img loading="lazy" width={2048} height={1154}
+              src={heroImage === EDITORIAL_IMAGE_URL ? EDITORIAL_IMAGE_SRC : heroImage}
               alt={heroAlt}
               className="w-full h-full object-cover object-top"
               decoding="async"
@@ -242,7 +243,7 @@ export default function BlogArticleLayout({
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

@@ -167,7 +167,7 @@ export default function MessagesTab() {
                 <div className="shrink-0 flex items-start gap-3 sm:w-48">
                   <div className="w-9 h-9 rounded-full bg-[#0A2540]/8 flex items-center justify-center shrink-0">
                     {msg.avatar_url ? (
-                      <img src={msg.avatar_url} alt="" className="w-9 h-9 rounded-full object-cover" />
+                      <img loading="lazy" decoding="async" width={128} height={128} src={msg.avatar_url} alt="" className="w-9 h-9 rounded-full object-cover" />
                     ) : (
                       <i className="ri-user-line text-[#0A2540]/65 text-sm" />
                     )}

@@ -1,9 +1,10 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -21,7 +22,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/blog/google-business-vt',
       wordCount: 1700,
       timeRequired: 'PT6M',
-      image: { '@type': 'ImageObject', url: 'https://readdy.ai/api/search-image?query=Google%20Business%20Profile%20local%20SEO%20map%20listing%20smartphone%20screen%20Veliko%20Tarnovo%20Bulgaria%20clean%20minimal%20white%20background%20professional%20business%20listing&width=1200&height=630&seq=blog-gbp-hero&orientation=landscape', width: 1200, height: 630 },
+      image: { '@type': 'ImageObject', url: EDITORIAL_IMAGE_URL, width: 2048, height: 1154 },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/google-business-vt' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -71,7 +72,7 @@ export default function GoogleBusinessVTPage() {
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Inter', sans-serif" }}>
       <SharedNav />
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden relative">
-        <img src="https://readdy.ai/api/search-image?query=Google%20Business%20Profile%20local%20SEO%20map%20listing%20smartphone%20screen%20Veliko%20Tarnovo%20Bulgaria%20clean%20minimal%20white%20background%20professional%20business%20listing&width=1200&height=630&seq=blog-gbp-hero&orientation=landscape" alt="Google Business Profile за бизнеси в Търново" title="Google Business Profile Велико Търново" className="w-full h-full object-cover object-top" loading="lazy" decoding="async" />
+        <img width={2048} height={1154} src={EDITORIAL_IMAGE_SRC} alt={EDITORIAL_IMAGE_ALT} title="Google Business Profile Велико Търново" className="w-full h-full object-cover object-top" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
         <div className="absolute bottom-6 left-4 md:left-16"><span className="text-xs text-white/60 tracking-widest uppercase">Блог · ТАВОРА ЕООД</span></div>
       </div>

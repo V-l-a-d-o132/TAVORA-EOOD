@@ -92,7 +92,7 @@ export default function LoginPage() {
               width="160"
               height="40"
               className="h-9 w-auto object-contain"
-              loading="eager"
+              loading="lazy"
               decoding="async"
             />
           </Link>

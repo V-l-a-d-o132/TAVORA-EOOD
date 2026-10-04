@@ -74,7 +74,7 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
       </section>
 
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async" width={1400} height={420}
           src="https://readdy.ai/api/search-image?query=professional%20video%20production%20behind%20the%20scenes%20camera%20setup%20on%20tripod%20with%20soft%20cinematic%20lighting%20clean%20minimalist%20studio%20environment%20warm%20amber%20tones%20dramatic%20shadows%20creative%20filmmaking%20atmosphere%20editorial%20photography%20no%20text&width=1400&height=420&seq=perfektno-video-funnel-hero&orientation=landscape"
           alt="Перфектното Видео — програма за бизнес видео продукция с ясна стратегия, 15 модула от Академия TAVORA"
           className="w-full h-full object-cover object-top"

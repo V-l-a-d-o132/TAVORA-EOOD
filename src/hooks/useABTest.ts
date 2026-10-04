@@ -60,7 +60,7 @@ const KURS_VARIANTS: ABVariant[] = [
 
 function getVariant<T extends ABVariant>(variants: T[], pageId: string): T {
   if (typeof window === 'undefined') return variants[0];
-
+  try {
   const stored = localStorage.getItem(`ab_test_${pageId}`);
   if (stored) {
     const found = variants.find((v) => v.id === stored);
@@ -78,21 +78,25 @@ function getVariant<T extends ABVariant>(variants: T[], pageId: string): T {
 
   localStorage.setItem(`ab_test_${pageId}`, variant.id);
   return variant;
+  } catch {
+    return variants[0];
+  }
 }
 
 export function useABTest(page: 'agency' | 'home' | 'kurs') {
-  const [variant, setVariant] = useState<ABVariant | null>(null);
-  const [ready, setReady] = useState(false);
+  const [variant, setVariant] = useState<ABVariant>(() => getVariant(
+    page === 'agency' ? AGENCY_VARIANTS : page === 'home' ? HOME_VARIANTS : KURS_VARIANTS, page,
+  ));
 
   useEffect(() => {
     const variants = page === 'agency' ? AGENCY_VARIANTS : page === 'home' ? HOME_VARIANTS : KURS_VARIANTS;
     const v = getVariant(variants, page);
     setVariant(v);
-    setReady(true);
   }, [page]);
 
   const trackClick = useCallback((element: string) => {
     if (!variant || typeof window === 'undefined') return;
+    try {
     const interactions = JSON.parse(localStorage.getItem(`ab_interactions_${page}`) || '[]');
     interactions.push({
       variant: variant.id,
@@ -101,9 +105,10 @@ export function useABTest(page: 'agency' | 'home' | 'kurs') {
       path: window.location.pathname,
     });
     localStorage.setItem(`ab_interactions_${page}`, JSON.stringify(interactions.slice(-50)));
+    } catch { /* A CTA must work even when storage is disabled. */ }
   }, [variant, page]);
 
-  return { variant, ready, trackClick };
+  return { variant, ready: true, trackClick };
 }
 
 export function getABStats(page: 'agency' | 'home' | 'kurs') {

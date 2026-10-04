@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -48,7 +49,7 @@ const FAQ_SCHEMA = {
   })),
 };
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -86,9 +87,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=digital%20marketing%20agency%20price%20list%20transparent%20pricing%20table%20professional%20comparison%20chart%20clean%20minimal%20white%20background%20euro%20prices%20Bulgaria&width=1200&height=630&seq=pricing-tarnovo-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -364,9 +365,9 @@ export default function KolkoStruvaDigitalenMarketingTarnovoPage() {
 
         {/* HERO IMAGE */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=digital%20marketing%20agency%20transparent%20pricing%20comparison%20table%20professional%20clean%20minimal%20white%20background%20euro%20prices%20budget%20spreadsheet%20modern%20office%20Bulgaria%202026&width=1400&height=420&seq=ceni-hero-img&orientation=landscape"
-            alt="Колко струва дигитален маркетинг в Търново — прозрачни цени"
+          <img width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
             loading="lazy" decoding="async"
           />

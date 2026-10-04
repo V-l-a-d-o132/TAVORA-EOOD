@@ -1,9 +1,10 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -21,7 +22,7 @@ const ARTICLE_SCHEMA = {
       url: 'https://imashnujnoto.com/blog/marketing-nablyudeniya-masazhni-uslugi',
       wordCount: 2800,
       timeRequired: 'PT10M',
-      image: { '@type': 'ImageObject', url: 'https://readdy.ai/api/search-image?query=professional%20massage%20studio%20wellness%20spa%20interior%20warm%20ambient%20lighting%20peaceful%20atmosphere%20clean%20minimal%20decor%20natural%20tones%20soft%20textures%20Bulgaria&width=1200&height=630&seq=blog-masazhni-uslugi-hero&orientation=landscape', width: 1200, height: 630 },
+      image: { '@type': 'ImageObject', url: EDITORIAL_IMAGE_URL, width: 2048, height: 1154 },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/marketing-nablyudeniya-masazhni-uslugi' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -154,11 +155,11 @@ export default function MarketingNablyudeniyaMasazhniUslugiPage() {
 
       {/* HERO IMAGE */}
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
-          src="https://readdy.ai/api/search-image?query=professional%20massage%20studio%20wellness%20spa%20interior%20warm%20ambient%20lighting%20peaceful%20atmosphere%20clean%20minimal%20decor%20natural%20tones%20soft%20textures%20Bulgaria&width=1400&height=420&seq=blog-masazhni-uslugi-hero-img&orientation=landscape"
-          alt="Маркетингови наблюдения от работата с масажни и уелнес бизнеси"
+        <img decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           className="w-full h-full object-cover object-top"
-          loading="eager"
+          loading="lazy"
         />
       </div>
 

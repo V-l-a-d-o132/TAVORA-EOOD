@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import BlogArticleLayout, {
   ArticleSection,
   buildArticleSchema,
@@ -6,7 +7,7 @@ import BlogArticleLayout, {
 } from '@/pages/blog/components/BlogArticleLayout';
 
 const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=beauty%20salon%20owner%20reviewing%20booking%20calendar%20and%20revenue%20charts%20on%20a%20laptop%20in%20a%20bright%20modern%20salon%20warm%20daylight%20minimal%20professional%20photography%20high%20detail%20soft%20neutral%20tones&width=1200&height=630&seq=blog-onlain-grafik-prihodi-hero-01&orientation=landscape';
+  EDITORIAL_IMAGE_URL;
 
 const SCHEMA = buildArticleSchema({
   id: 'kak-onlain-grafikat-vdiga-prihodite-na-salona',
@@ -48,7 +49,7 @@ export default function KakOnlainGrafikatVdigaPrihoditeNaSalonaPage() {
       date="28 Сеп 2026"
       readTime="10 мин. четене"
       heroImage={HERO_IMAGE}
-      heroAlt="Собственик на салон преглежда онлайн график и приходи"
+      heroAlt={EDITORIAL_IMAGE_ALT}
       breadcrumbLabel="Онлайн график и приходи"
       title={
         <>

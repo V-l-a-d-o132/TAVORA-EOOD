@@ -188,12 +188,6 @@ const ORG_SCHEMA = {
       },
     ],
   },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    reviewCount: '21',
-    bestRating: '5',
-  },
 };
 
 const SPEAKABLE_SCHEMA = {

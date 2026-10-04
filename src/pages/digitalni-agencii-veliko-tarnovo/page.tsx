@@ -80,7 +80,6 @@ const PAGE_SCHEMA = {
         { '@type': 'Country', name: 'България' },
       ],
       founder: { '@type': 'Person', name: 'Владимир Веселинов Атанасов' },
-      aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '21', bestRating: '5' },
       serviceType: [
         'Дигитален маркетинг Велико Търново',
         'SEO оптимизация Велико Търново',

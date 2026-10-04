@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -69,9 +70,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=TikTok%20YouTube%20social%20media%20video%20marketing%20business%20smartphone%20filming%20content%20creator%20professional%20studio%20setup%20clean%20minimal%20white%20background%20Bulgaria&width=1200&height=630&seq=tiktok-youtube-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -256,9 +257,9 @@ export default function TikTokYouTubeReklamaTarnovoPage() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=TikTok%20YouTube%20social%20media%20video%20marketing%20business%20smartphone%20filming%20content%20creator%20professional%20studio%20setup%20clean%20minimal%20white%20background%20Bulgaria%20Tarnovo&width=1400&height=420&seq=tiktok-youtube-hero-img&orientation=landscape"
-            alt="TikTok и YouTube реклами за бизнес в Търново"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

@@ -73,7 +73,7 @@ export default function MarketingBasicsHero({ keyword }: MarketingBasicsHeroProp
       </section>
 
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async" width={1400} height={420}
           src="https://readdy.ai/api/search-image?query=modern%20marketing%20strategy%20planning%20clean%20whiteboard%20with%20structured%20funnel%20diagrams%20sticky%20notes%20organized%20into%20logical%20groups%20professional%20business%20growth%20concepts%20warm%20natural%20light%20minimalist%20workspace%20editorial%20photography%20no%20text&width=1400&height=420&seq=marketing-basics-funnel-hero&orientation=landscape"
           alt="Marketing Basics — програма за изграждане на маркетинг система, 20 модула от Академия TAVORA"
           className="w-full h-full object-cover object-top"

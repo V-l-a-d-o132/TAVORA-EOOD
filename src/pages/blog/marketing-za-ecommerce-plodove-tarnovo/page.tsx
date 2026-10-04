@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -19,7 +20,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/blog/marketing-za-ecommerce-plodove-tarnovo',
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/marketing-za-ecommerce-plodove-tarnovo' },
       inLanguage: 'bg',
-      image: 'https://readdy.ai/api/search-image?query=Hand%20picking%20wild%20blueberries%20in%20lush%20green%20Bulgarian%20mountain%20forest%20Stara%20Planina%20natural%20daylight%20close%20up%20authentic%20rustic%20editorial%20photography%20warm%20earth%20tones%20high%20detail%20organic%20harvesting&width=1200&height=630&seq=blog-marketing-plodove-hero-01&orientation=landscape',
+      image: EDITORIAL_IMAGE_URL,
       articleSection: 'Маркетинг',
       keywords: 'маркетинг плодове от гората, сезонен маркетинг, Viber маркетинг, дигитален маркетинг храна, Горски Боровинки',
     },
@@ -91,9 +92,9 @@ export default function MarketingZaEcommercePlodovePage() {
 
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src="https://readdy.ai/api/search-image?query=Hand%20picking%20wild%20blueberries%20in%20lush%20green%20Bulgarian%20mountain%20forest%20Stara%20Planina%20natural%20daylight%20close%20up%20authentic%20rustic%20editorial%20photography%20warm%20earth%20tones%20high%20detail%20organic%20harvesting&width=1200&height=630&seq=blog-marketing-plodove-hero-01&orientation=landscape"
-              alt="Маркетинг за плодове от гората — уроци от Горски Боровинки"
+            <img width={2048} height={1154}
+              src={EDITORIAL_IMAGE_SRC}
+              alt={EDITORIAL_IMAGE_ALT}
               className="w-full h-full object-cover object-top"
               loading="lazy" decoding="async"
             />
@@ -121,7 +122,7 @@ export default function MarketingZaEcommercePlodovePage() {
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

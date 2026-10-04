@@ -4,39 +4,46 @@ import { useABTest } from '@/hooks/useABTest';
 
 export default function AgencyHeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isDesktop, setIsDesktop] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia('(min-width: 768px)').matches);
   const { variant, ready, trackClick } = useABTest('agency');
 
   useEffect(() => {
-    setIsDesktop(typeof window !== 'undefined' && window.innerWidth >= 768);
+    const media = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
   }, []);
 
   useEffect(() => {
     // On mobile (<md / 768px), skip canvas particles entirely for performance
-    if (!isDesktop) return;
+    if (!isDesktop || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animId: number;
+    let animId = 0;
+    let width = 0;
+    let height = 0;
+    let inView = false;
+    let initialized = false;
     let particles: { x: number; y: number; r: number; dx: number; dy: number; alpha: number }[] = [];
 
     const initCanvas = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      ctx.scale(dpr, dpr);
-      canvas.style.width = rect.width + 'px';
-      canvas.style.height = rect.height + 'px';
+      width = rect.width;
+      height = rect.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       particles = [];
       for (let i = 0; i < 30; i++) {
         particles.push({
-          x: Math.random() * rect.width,
-          y: Math.random() * rect.height,
+          x: Math.random() * width,
+          y: Math.random() * height,
           r: Math.random() * 1.2 + 0.3,
           dx: (Math.random() - 0.5) * 0.25,
           dy: (Math.random() - 0.5) * 0.25,
@@ -45,32 +52,50 @@ export default function AgencyHeroSection() {
       }
     };
 
-    // Defer canvas init to avoid forced reflow during initial paint
-    const rIC = (window as any).requestIdleCallback || ((cb: () => void) => setTimeout(cb, 1));
-    const idleHandle = rIC(() => {
-      initCanvas();
-      const draw = () => {
-        const rect = canvas.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-        particles.forEach((p) => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(10, 37, 64, ${p.alpha})`;
-          ctx.fill();
-          p.x += p.dx;
-          p.y += p.dy;
-          if (p.x < 0 || p.x > rect.width) p.dx *= -1;
-          if (p.y < 0 || p.y > rect.height) p.dy *= -1;
-        });
-        animId = requestAnimationFrame(draw);
-      };
-      draw();
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(10, 37, 64, ${p.alpha})`;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      });
+      animId = requestAnimationFrame(draw);
+    };
+    const updateAnimation = () => {
+      if (initialized && inView && !document.hidden) {
+        if (!animId) animId = requestAnimationFrame(draw);
+      } else {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      }
+    };
+    const visibility = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      updateAnimation();
     });
+    visibility.observe(canvas);
+    const resize = new ResizeObserver(() => { if (initialized) initCanvas(); });
+    resize.observe(canvas);
+    document.addEventListener('visibilitychange', updateAnimation);
+
+    // Measure once after the first paint; subsequent frames use cached dimensions.
+    const initialize = () => { initCanvas(); initialized = true; updateAnimation(); };
+    const idleHandle = window.requestIdleCallback
+      ? window.requestIdleCallback(initialize, { timeout: 2000 })
+      : window.setTimeout(initialize, 200);
 
     return () => {
-      if (animId) cancelAnimationFrame(animId);
-      if ((window as any).cancelIdleCallback) {
-        (window as any).cancelIdleCallback(idleHandle);
+      cancelAnimationFrame(animId);
+      visibility.disconnect();
+      resize.disconnect();
+      document.removeEventListener('visibilitychange', updateAnimation);
+      if (window.cancelIdleCallback) {
+        window.cancelIdleCallback(idleHandle);
       } else {
         clearTimeout(idleHandle);
       }

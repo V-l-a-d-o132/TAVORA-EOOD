@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -19,7 +20,7 @@ const SEO_RESTORANTI_SCHEMA = {
       url: 'https://imashnujnoto.com/blog/seo-restoranti-veliko-tarnovo',
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/seo-restoranti-veliko-tarnovo' },
       inLanguage: 'bg',
-      image: 'https://readdy.ai/api/search-image?query=restaurant%20SEO%20marketing%20strategy%20local%20search%20Google%20Business%20Profile%20digital%20optimization%20table%20settings%20Bulgarian%20cuisine%20elegant%20warm%20lighting%20clean%20minimal&width=1200&height=630&seq=blog-seo-restoranti-vt-hero&orientation=landscape',
+      image: EDITORIAL_IMAGE_URL,
       articleSection: 'SEO',
       keywords: 'SEO ресторанти Велико Търново, ресторант SEO, локално SEO ресторант, Google Business Profile ресторант, ресторантьорски SEO, храна Търново SEO',
     },
@@ -132,9 +133,9 @@ export default function SeoRestorantiTarnovoPage() {
         {/* Hero */}
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src="https://readdy.ai/api/search-image?query=elegant%20Bulgarian%20restaurant%20interior%20warm%20lighting%20traditional%20cuisine%20table%20setting%20wooden%20furniture%20cozy%20atmosphere%20Veliko%20Tarnovo%20old%20town%20ambiance%20professional%20photography&width=1200&height=630&seq=blog-seo-restoranti-vt-hero&orientation=landscape"
-              alt="SEO за ресторанти в Велико Търново — локално SEO стратегия"
+            <img width={2048} height={1154}
+              src={EDITORIAL_IMAGE_SRC}
+              alt={EDITORIAL_IMAGE_ALT}
               className="w-full h-full object-cover object-top"
               loading="lazy" decoding="async"
             />
@@ -162,7 +163,7 @@ export default function SeoRestorantiTarnovoPage() {
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
+import { EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL, EDITORIAL_IMAGE_ALT } from '@/config/editorial-image';
 
 const FAQ_ITEMS = [
   {
@@ -40,7 +41,7 @@ const FAQ_SCHEMA = {
   })),
 };
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const PAGE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -51,6 +52,7 @@ const PAGE_SCHEMA = {
       headline: 'Как да правим Meta реклами за бизнес в Търново — реални примери и стратегии',
       description: 'Пълно ръководство за Meta реклами (Facebook + Instagram) за бизнеси от Велико Търново. Реални примери, таргетиране, бюджети и стратегии от ТАВОРА ЕООД.',
       url: 'https://imashnujnoto.com/blog/meta-reklami-tarnovo',
+      image: EDITORIAL_IMAGE_URL,
       inLanguage: 'bg',
       datePublished: '2026-05-05',
       dateModified: today,
@@ -203,6 +205,8 @@ export default function MetaReklamiTarnovoPage() {
             <i className="ri-arrow-right-s-line text-xs" />
             <span className="text-[#1C1C1E]/65">Meta реклами Търново</span>
           </nav>
+
+          <img src={EDITORIAL_IMAGE_SRC} alt={EDITORIAL_IMAGE_ALT} width={2048} height={1154} loading="lazy" decoding="async" className="w-full aspect-video object-cover rounded-2xl mb-8" />
 
           <div className="flex items-center gap-3 mb-5">
             <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#E67700]/10 text-[#E67700] font-medium tracking-wide">Реклами</span>

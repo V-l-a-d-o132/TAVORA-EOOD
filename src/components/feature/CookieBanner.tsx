@@ -1,32 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InlineIcon from '@/components/base/InlineIcon';
 
 export default function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(() => {
+    try { return !localStorage.getItem('cookie_consent'); }
+    catch { return true; }
+  });
   const [showDetails, setShowDetails] = useState(false);
   const [prefs, setPrefs] = useState({ functional: true, analytics: false, marketing: false });
 
-  useEffect(() => {
-    const consent = localStorage.getItem('cookie_consent');
-    if (!consent) {
-      setVisible(true);
-    }
-  }, []);
+  const saveConsent = (consent: typeof prefs) => {
+    try { localStorage.setItem('cookie_consent', JSON.stringify({ ...consent, date: new Date().toISOString() })); }
+    catch { /* The choice still closes the banner when storage is unavailable. */ }
+    setVisible(false);
+  };
 
   const acceptAll = () => {
-    localStorage.setItem('cookie_consent', JSON.stringify({ functional: true, analytics: true, marketing: true, date: new Date().toISOString() }));
-    setVisible(false);
+    saveConsent({ functional: true, analytics: true, marketing: true });
   };
 
   const acceptSelected = () => {
-    localStorage.setItem('cookie_consent', JSON.stringify({ ...prefs, date: new Date().toISOString() }));
-    setVisible(false);
+    saveConsent(prefs);
   };
 
   const rejectAll = () => {
-    localStorage.setItem('cookie_consent', JSON.stringify({ functional: false, analytics: false, marketing: false, date: new Date().toISOString() }));
-    setVisible(false);
+    saveConsent({ functional: true, analytics: false, marketing: false });
   };
 
   if (!visible) return null;

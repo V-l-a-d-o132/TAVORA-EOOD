@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -38,7 +39,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
@@ -86,9 +87,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=Google%20Business%20Profile%20vs%20website%20comparison%20smartphone%20and%20laptop%20side%20by%20side%20local%20SEO%20strategy%20clean%20minimal%20white%20background%20modern%20technology%20professional%20Bulgaria%202026&width=1200&height=630&seq=gbp-vs-sait-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -307,9 +308,9 @@ export default function GoogleBusinessVsSaitTarnovoPage() {
 
         {/* HERO IMAGE */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=Google%20Business%20Profile%20vs%20website%20comparison%20smartphone%20and%20laptop%20side%20by%20side%20local%20SEO%20strategy%20clean%20minimal%20white%20background%20modern%20technology%20professional%20Bulgaria%202026&width=1400&height=420&seq=gbp-vs-sait-hero-img&orientation=landscape"
-            alt="Google Business Profile vs уеб сайт за бизнес в Търново"
+          <img width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
             loading="lazy" decoding="async"
           />

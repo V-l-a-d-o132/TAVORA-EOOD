@@ -78,7 +78,7 @@ export default function AiBlueprintHero({ keyword }: AiBlueprintHeroProps) {
 
       {/* Hero Image */}
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async" width={1400} height={420}
           src="https://readdy.ai/api/search-image?query=minimalist%20abstract%20digital%20network%20visualization%20glowing%20interconnected%20nodes%20and%20pathways%20representing%20artificial%20intelligence%20business%20system%20floating%20geometric%20shapes%20warm%20amber%20and%20soft%20coral%20accents%20on%20deep%20charcoal%20background%20clean%20professional%20composition%20editorial%20quality%20no%20text&width=1400&height=420&seq=ai-blueprint-funnel-hero&orientation=landscape"
           alt="Пътят на коприната — програма за изграждане на дигитална услуга с AI, 11 модула от Академия TAVORA"
           className="w-full h-full object-cover object-top"

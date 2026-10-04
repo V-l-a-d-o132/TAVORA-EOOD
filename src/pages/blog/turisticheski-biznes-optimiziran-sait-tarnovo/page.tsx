@@ -1,9 +1,10 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-04';
 
 const ARTICLE_SCHEMA = {
   '@context': 'https://schema.org',
@@ -21,7 +22,7 @@ const ARTICLE_SCHEMA = {
       url: 'https://imashnujnoto.com/blog/turisticheski-biznes-optimiziran-sait-tarnovo',
       wordCount: 2400,
       timeRequired: 'PT9M',
-      image: { '@type': 'ImageObject', url: 'https://readdy.ai/api/search-image?query=modern%20optimized%20website%20design%20for%20local%20tourism%20business%20laptop%20screen%20showing%20photographer%20portfolio%20website%20Tsarevets%20Fortress%20Bulgaria%20professional%20clean%20layout%20responsive%20design%20warm%20ambient%20lighting&width=1200&height=630&seq=blog-turisticheski-sait-hero&orientation=landscape', width: 1200, height: 630 },
+      image: { '@type': 'ImageObject', url: EDITORIAL_IMAGE_URL, width: 2048, height: 1154 },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/turisticheski-biznes-optimiziran-sait-tarnovo' },
       breadcrumb: {
         '@type': 'BreadcrumbList',
@@ -154,11 +155,11 @@ export default function TuristicheskiBiznesOptimiziranSaitPage() {
 
       {/* HERO IMAGE */}
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img
-          src="https://readdy.ai/api/search-image?query=modern%20laptop%20showing%20beautiful%20photography%20portfolio%20website%20interface%20on%20screen%20Tsarevets%20Fortress%20Veliko%20Tarnovo%20background%20warm%20desk%20setup%20clean%20minimal%20workspace%20professional%20web%20design%20tourism%20business%20Bulgaria&width=1400&height=420&seq=blog-turisticheski-sait-hero-img&orientation=landscape"
-          alt="Оптимизиран сайт за туристически бизнес — примерът на Photo Tarnovo, Царевец, Велико Търново"
+        <img decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           className="w-full h-full object-cover object-top"
-          loading="eager"
+          loading="lazy"
         />
       </div>
 

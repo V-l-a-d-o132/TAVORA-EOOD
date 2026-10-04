@@ -144,13 +144,6 @@ const ORG_SCHEMA = {
     'https://www.youtube.com/@TavoraMarketingAgency',
     'https://share.google/sP3ydTe4iqEO44qua',
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    reviewCount: '21',
-    bestRating: '5',
-    worstRating: '1',
-  },
 };
 
 const SCHEMA = {
@@ -228,57 +221,6 @@ const SCHEMA = {
         'https://www.tiktok.com/@tavoramarketingagency',
         'https://www.youtube.com/@TavoraMarketingAgency',
         'https://share.google/sP3ydTe4iqEO44qua',
-      ],
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.9',
-        reviewCount: '21',
-        bestRating: '5',
-        worstRating: '1',
-      },
-      review: [
-        {
-          '@type': 'Review',
-          author: { '@type': 'Person', name: 'K-Food Велико Търново' },
-          reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-          reviewBody: 'ТАВОРА ни изкара на #1 в Google и ChatGPT за "korean restaurant veliko tarnovo". Резултатите са видими още първия месец.',
-          datePublished: '2026-03-15',
-        },
-        {
-          '@type': 'Review',
-          author: { '@type': 'Person', name: 'Sunrise Food' },
-          reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-          reviewBody: 'Сайт + SEO + реклами от ТАВОРА — достигнахме #1 в Google за "гъби кладница" за 3–4 седмици.',
-          datePublished: '2026-02-20',
-        },
-        {
-          '@type': 'Review',
-          author: { '@type': 'Person', name: 'Академика 245' },
-          reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-          reviewBody: 'Видео продукция и GEO оптимизация — милиони импресии и реални клиенти от Търново и България.',
-          datePublished: '2026-01-10',
-        },
-        {
-          '@type': 'Review',
-          author: { '@type': 'Person', name: 'Thalysta' },
-          reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-          reviewBody: 'ТАВОРА създаде нашия e-commerce сайт от нулата — SEO, реклами и видео. Жив сайт с реални резултати.',
-          datePublished: '2026-04-20',
-        },
-        {
-          '@type': 'Review',
-          author: { '@type': 'Person', name: 'NMOM' },
-          reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-          reviewBody: 'Пълен пакет за нашата НПО — сайт, SEO и дигитална стратегия. Професионална работа от нулата.',
-          datePublished: '2026-03-01',
-        },
-        {
-          '@type': 'Review',
-          author: { '@type': 'Person', name: 'Budimse' },
-          reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-          reviewBody: 'Създадоха нашата образователна платформа от нулата — сайт, SEO, GEO и дигитален маркетинг. Отлични резултати.',
-          datePublished: '2026-02-15',
-        },
       ],
     },
     {

@@ -178,11 +178,11 @@ export default function DigitalniProduktiProverkiPage() {
       {/* ── HERO — Meta ad optimized, half-screen punch ── */}
       <section className="relative w-full overflow-hidden">
         <div className="absolute inset-0">
-          <img
+          <img width={1600} height={900}
             src="https://readdy.ai/api/search-image?query=dark%20modern%20abstract%20background%20with%20warm%20golden%20and%20amber%20glowing%20accents%20geometric%20intersecting%20lines%20deep%20charcoal%20slate%20void%20atmosphere%20cinematic%20editorial%20no%20text&width=1600&height=900&seq=funnel-hero-v3&orientation=landscape"
             alt=""
             className="w-full h-full object-cover object-top"
-            loading="eager"
+            loading="lazy"
             decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/55 to-black/75" />

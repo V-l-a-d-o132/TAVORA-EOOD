@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -30,9 +31,9 @@ const ARTICLE_SCHEMA = {
       timeRequired: 'PT8M',
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=professional%20digital%20marketing%20agency%20office%20Veliko%20Tarnovo%20Bulgaria%20modern%20workspace%20with%20computers%20and%20screens%20showing%20analytics%20dashboards%20clean%20minimal%20aesthetic&width=1200&height=630&seq=blog-reklama-vt-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog-reklama-vt' },
       breadcrumb: {
@@ -209,9 +210,9 @@ export default function BlogReklamaVTPage() {
       <SharedNav />
 
       <div className="w-full h-[280px] md:h-[420px] overflow-hidden relative">
-        <img
-          src="https://readdy.ai/api/search-image?query=professional%20digital%20marketing%20agency%20office%20Veliko%20Tarnovo%20Bulgaria%20modern%20workspace%20with%20computers%20and%20screens%20showing%20analytics%20dashboards%20clean%20minimal%20aesthetic&width=1200&height=630&seq=blog-reklama-vt-hero&orientation=landscape"
-          alt="Реклама за бизнеси в Търново — ТАВОРА ЕООД"
+        <img loading="lazy" decoding="async" width={2048} height={1154}
+          src={EDITORIAL_IMAGE_SRC}
+          alt={EDITORIAL_IMAGE_ALT}
           title="Реклама Велико Търново"
           className="w-full h-full object-cover object-top"
         />

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -84,9 +85,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=SEO%20optimization%202026%20Veliko%20Tarnovo%20Bulgaria%20search%20engine%20ranking%20Google%20first%20page%20analytics%20dashboard%20professional%20clean%20minimal%20white%20background&width=1200&height=630&seq=seo-2026-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       about: [
@@ -357,9 +358,9 @@ export default function SeoOptimizaciyaTarnovo2026Page() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=SEO%20optimization%202026%20Veliko%20Tarnovo%20Bulgaria%20search%20engine%20ranking%20Google%20analytics%20dashboard%20professional%20workspace%20clean%20minimal%20white%20background%20charts%20data&width=1400&height=420&seq=seo-2026-hero-img&orientation=landscape"
-            alt="SEO оптимизация Велико Търново 2026"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

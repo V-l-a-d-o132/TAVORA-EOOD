@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { MARKETING_BASICS_PUBLIC_GROUPS } from '@/data/academy-public-programs';
@@ -91,9 +92,9 @@ const ARTICLE_SCHEMA = {
       },
       image: {
         '@type': 'ImageObject',
-        url: 'https://readdy.ai/api/search-image?query=modern%20marketing%20strategy%20dashboard%20analytics%20charts%20funnel%20diagrams%20data%20visualization%20clean%20minimalist%20white%20background%20professional%20business%20growth%20metrics%20conversion%20rates%20editorial%20photography&width=1200&height=630&seq=blog-marketing-basics-hero&orientation=landscape',
-        width: 1200,
-        height: 630,
+        url: EDITORIAL_IMAGE_URL,
+        width: 2048,
+        height: 1154,
       },
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
       about: [
@@ -323,9 +324,9 @@ export default function MarketingBasicsPage() {
 
         {/* ── HERO IMAGE ── */}
         <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-          <img
-            src="https://readdy.ai/api/search-image?query=modern%20marketing%20strategy%20planning%20whiteboard%20with%20diagrams%20funnel%20charts%20sticky%20notes%20professional%20team%20brainstorming%20clean%20minimalist%20office%20bright%20natural%20light%20analytical%20business%20growth%20concepts%20editorial%20photography%20no%20text&width=1400&height=420&seq=blog-marketing-hero-img&orientation=landscape"
-            alt="Marketing Basics — пълна маркетинг система за бизнес"
+          <img loading="lazy" decoding="async" width={2048} height={1154}
+            src={EDITORIAL_IMAGE_SRC}
+            alt={EDITORIAL_IMAGE_ALT}
             className="w-full h-full object-cover object-top"
           />
         </div>

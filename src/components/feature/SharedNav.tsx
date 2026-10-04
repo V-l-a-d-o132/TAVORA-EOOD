@@ -123,7 +123,7 @@ export default function SharedNav({ variant = 'default' }: SharedNavProps) {
               width="144"
               height="36"
               className="h-7 md:h-9 w-auto object-contain"
-              loading="eager"
+              loading="lazy"
               decoding="async"
               fetchPriority="high"
             />

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -19,7 +20,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/blog/gorski-borovinki-nomer-edno-google',
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/gorski-borovinki-nomer-edno-google' },
       inLanguage: 'bg',
-      image: 'https://readdy.ai/api/search-image?query=Fresh%20wild%20blueberries%20in%20rustic%20wooden%20basket%20forest%20background%20natural%20light%20soft%20focus%20purple%20berries%20organic%20produce%20editorial%20food%20photography%20warm%20tones%20high%20detail&width=1200&height=630&seq=blog-gorski-borovinki-hero-01&orientation=landscape',
+      image: EDITORIAL_IMAGE_URL,
       articleSection: 'SEO казус',
       keywords: 'SEO горски боровинки, gorskiborovinki.com, ChatGPT оптимизация, GEO оптимизация, е-commerce SEO, сезонни продукти',
     },
@@ -94,9 +95,9 @@ export default function GorskiBorovinkiNomerEdnoPage() {
         {/* Hero */}
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src="https://readdy.ai/api/search-image?query=Fresh%20wild%20blueberries%20in%20rustic%20wooden%20basket%20forest%20background%20natural%20light%20soft%20focus%20purple%20berries%20organic%20produce%20editorial%20food%20photography%20warm%20tones%20high%20detail&width=1200&height=630&seq=blog-gorski-borovinki-hero-01&orientation=landscape"
-              alt="Горски боровинки — SEO казус gorskiborovinki.com"
+            <img width={2048} height={1154}
+              src={EDITORIAL_IMAGE_SRC}
+              alt={EDITORIAL_IMAGE_ALT}
               className="w-full h-full object-cover object-top"
               loading="lazy" decoding="async"
             />
@@ -123,7 +124,7 @@ export default function GorskiBorovinkiNomerEdnoPage() {
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

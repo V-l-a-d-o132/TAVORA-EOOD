@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
@@ -19,7 +20,7 @@ const SCHEMA = {
       url: 'https://imashnujnoto.com/blog/optimiziran-sait-lokalna-usluga-leski-karuchka',
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://imashnujnoto.com/blog/optimiziran-sait-lokalna-usluga-leski-karuchka' },
       inLanguage: 'bg',
-      image: 'https://readdy.ai/api/search-image?query=Hand%20holding%20smartphone%20showing%20a%20clean%20local%20transport%20mobile%20app%20interface%20with%20map%20and%20live%20tracking%20soft%20natural%20light%20warm%20tones%20minimal%20editorial%20technology%20photography%20no%20text&width=1200&height=630&seq=blog-leski-karuchka-sait-hero-01&orientation=landscape',
+      image: EDITORIAL_IMAGE_URL,
       articleSection: 'Уеб дизайн',
       keywords: 'оптимизиран сайт, локална услуга, mobile-first дизайн, Schema.org, SEO, Лески Каручка, Левски',
     },
@@ -92,9 +93,9 @@ export default function OptimiziranSaitLokalnaUslugaPage() {
 
         <section className="mb-10">
           <div className="w-full h-[280px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
-            <img
-              src="https://readdy.ai/api/search-image?query=Hand%20holding%20smartphone%20showing%20a%20clean%20local%20transport%20mobile%20app%20interface%20with%20map%20and%20live%20tracking%20soft%20natural%20light%20warm%20tones%20minimal%20editorial%20technology%20photography%20no%20text&width=1200&height=630&seq=blog-leski-karuchka-sait-hero-01&orientation=landscape"
-              alt="Оптимизиран сайт за локална услуга — примерът на Лески Каручка"
+            <img loading="lazy" width={2048} height={1154}
+              src={EDITORIAL_IMAGE_SRC}
+              alt={EDITORIAL_IMAGE_ALT}
               className="w-full h-full object-cover object-top"
               decoding="async"
             />
@@ -121,7 +122,7 @@ export default function OptimiziranSaitLokalnaUslugaPage() {
 
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-full bg-[#F9F9F7] border border-[#1C1C1E]/8 overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src="https://static.readdy.ai/image/658b459fcf05a7723f8029c45615de2f/7ba027e5c67ece54f762f57dda00407f.png"
                 alt="Владимир Атанасов"
                 className="w-full h-full object-cover object-top"

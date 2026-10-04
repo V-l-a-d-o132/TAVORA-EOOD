@@ -105,7 +105,7 @@ export default function AdminPage() {
       summary: '',
       content: '',
       published: false,
-      image_url: '',
+      image_url: 'https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp',
     });
     setEditItem(null);
     setView('create');
@@ -195,7 +195,7 @@ export default function AdminPage() {
           <Link to="/" className="w-8 h-8 flex items-center justify-center text-[#1C1C1E]/65 hover:text-[#0A2540] transition-colors">
             <i className="ri-arrow-left-line text-sm" />
           </Link>
-          <img src="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/777dce2a-8731-4235-b0be-7837a840c3c9_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.png?v=f6135e7442d441feef102ad2f8425862" alt="ТАВОРА" className="h-6 w-auto object-contain" />
+          <img loading="lazy" decoding="async" src="https://storage.readdy-site.link/project_files/3f265d07-5825-4e88-a58a-44deb287b858/777dce2a-8731-4235-b0be-7837a840c3c9_TAVORA-MARKETING-AGENCY-VELIKO-TARNOVO.png?v=f6135e7442d441feef102ad2f8425862" alt="ТАВОРА" className="h-6 w-auto object-contain" />
           <div className="h-4 w-px bg-[#1C1C1E]/15" />
           <span className="text-sm font-medium text-[#1C1C1E]">Админ панел</span>
         </div>
@@ -292,7 +292,7 @@ export default function AdminPage() {
                       <div key={item.id} className="bg-white rounded-xl border border-[#1C1C1E]/8 p-4 flex flex-col sm:flex-row gap-4">
                         {item.image_url && (
                           <div className="w-full sm:w-24 h-16 rounded-lg overflow-hidden shrink-0">
-                            <img src={item.image_url} alt={item.title} className="w-full h-full object-cover object-top" />
+                            <img loading="lazy" decoding="async" src={item.image_url} alt={item.title} className="w-full h-full object-cover object-top" />
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
@@ -355,7 +355,7 @@ export default function AdminPage() {
                     <input type="text" value={form.image_url || ''} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." className="w-full px-4 py-3 text-sm bg-[#F7F6F3] border border-[#1C1C1E]/10 rounded-lg focus:outline-none focus:border-[#0A2540]/30 text-[#1C1C1E]" />
                     {form.image_url && (
                       <div className="mt-2 w-full h-32 rounded-lg overflow-hidden border border-[#1C1C1E]/8">
-                        <img src={form.image_url} alt="preview" className="w-full h-full object-cover object-top" />
+                        <img loading="lazy" decoding="async" src={form.image_url} alt="preview" className="w-full h-full object-cover object-top" />
                       </div>
                     )}
                   </div>
@@ -424,7 +424,7 @@ export default function AdminPage() {
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-[#0A2540]/8 flex items-center justify-center shrink-0">
                             {p.avatar_url ? (
-                              <img src={p.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" />
+                              <img loading="lazy" decoding="async" width={128} height={128} src={p.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" />
                             ) : (
                               <i className="ri-user-line text-[#0A2540]/65 text-sm" />
                             )}
