@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { SILK_ROAD_ARTICLES } from '../src/pages/blog/silk-road-articles';
+import { CONSUMER_RIGHTS_ARTICLES } from '../src/pages/blog/consumer-rights-articles';
+
+const editorialArticles = [...SILK_ROAD_ARTICLES, ...CONSUMER_RIGHTS_ARTICLES];
 
 test.beforeEach(async ({ page }) => {
   await page.route('**/*', route => route.request().url().startsWith('http://127.0.0.1:5180/') ? route.continue() : route.abort());
@@ -7,8 +10,8 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('public article HTML', () => {
   test.use({ javaScriptEnabled: false });
-  test('all eight articles expose complete text, authorship and metadata without JavaScript', async ({ page }) => {
-    for (const article of SILK_ROAD_ARTICLES) {
+  test('all curated articles expose complete text, authorship and metadata without JavaScript', async ({ page }) => {
+    for (const article of editorialArticles) {
       const path = `/blog/${article.id}`;
       const response = await page.goto(path);
       expect(response?.status(), path).toBe(200);
@@ -17,6 +20,7 @@ test.describe('public article HTML', () => {
       await expect(page.locator('main').getByText('Владимир Атанасов', { exact: true })).toBeVisible();
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://imashnujnoto.com${path}`);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /index,follow/);
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', article.description);
       await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
       expect(await page.locator('article table').count(), path).toBeGreaterThan(0);
       await expect(page.getByRole('heading', { name: 'Източници и проверка', exact: true })).toBeVisible();
@@ -35,13 +39,33 @@ test('new articles fit phones, tablets and desktop screens', async ({ page }) =>
   test.setTimeout(180000);
   for (const width of [375, 768, 1400]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const article of SILK_ROAD_ARTICLES) {
+    for (const article of editorialArticles) {
       await page.goto(`/blog/${article.id}`);
       await expect(page.getByRole('heading', { level: 1, name: article.title, exact: true })).toBeVisible();
       await expect(page.getByRole('link', { name: article.ctaPrimaryLabel, exact: true })).toHaveAttribute('href', article.ctaPrimaryTo);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${article.id} at ${width}px`).toBe(true);
       expect(await page.locator('img:not([loading="lazy"]), img:not([decoding="async"])').count()).toBe(0);
     }
+  }
+});
+
+test('consumer-rights articles are discoverable together and linked to each other', async ({ page }) => {
+  await page.goto('/blog');
+  await expect(page.locator('h1')).toBeVisible();
+  await page.getByRole('button', { name: 'Онлайн търговия', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Онлайн търговия', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  for (const article of CONSUMER_RIGHTS_ARTICLES) {
+    await expect(page.getByRole('link', { name: article.title, exact: true }).first()).toHaveAttribute('href', `/blog/${article.id}`);
+  }
+  await expect(page.getByTestId('blog-grid').getByRole('heading', { name: SILK_ROAD_ARTICLES[0].title, exact: true })).toHaveCount(0);
+  for (const article of CONSUMER_RIGHTS_ARTICLES) {
+    await page.goto(`/blog/${article.id}`);
+    await expect(page.getByRole('heading', { level: 1, name: article.title, exact: true })).toBeVisible();
+    for (const relatedId of article.related) {
+      const related = CONSUMER_RIGHTS_ARTICLES.find(item => item.id === relatedId)!;
+      await expect(page.getByRole('link', { name: related.title, exact: true })).toHaveAttribute('href', `/blog/${relatedId}`);
+    }
+    await expect(page.locator('article')).toContainText('5 октомври 2026');
   }
 });
 

@@ -75,4 +75,7 @@ export const PUBLIC_PATHS = [
   "/blog/ga4-realni-zapitvaniya-pokupki",
   "/blog/koga-avtomatizaciyata-si-struva",
   "/blog/cena-na-digitalna-usluga",
+  "/blog/buton-za-otkaz-ot-dogovor-zzp-2026",
+  "/blog/pravo-na-otkaz-online-kurs",
+  "/blog/buton-za-otkaz-formulyar-proverki",
 ] as const;
