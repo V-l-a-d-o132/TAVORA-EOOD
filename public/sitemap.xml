@@ -92,7 +92,7 @@
   <!-- Блог основна -->
   <url>
     <loc>https://imashnujnoto.com/blog</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
@@ -136,7 +136,7 @@
   </url>
   <url>
     <loc>https://imashnujnoto.com/blog/ai-business-blueprint-putyat-na-koprinata</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
     <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
@@ -463,4 +463,45 @@
     <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
   </url>
 
+  <!-- Пътят на коприната: първи осем практически статии -->
+  <url>
+    <loc>https://imashnujnoto.com/blog/ai-za-malak-biznes</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/sait-s-ai-kakvo-da-proverish</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/sait-poseshteniya-bez-zapitvaniya</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/seo-za-nachinaeshti</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/seo-geo-razlika</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/ga4-realni-zapitvaniya-pokupki</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/koga-avtomatizaciyata-si-struva</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://imashnujnoto.com/blog/cena-na-digitalna-usluga</loc>
+    <lastmod>2026-10-05</lastmod>
+    <image:image><image:loc>https://imashnujnoto.com/images/tavora-seo-geo-bulgaria-news.webp</image:loc></image:image>
+  </url>
 </urlset>

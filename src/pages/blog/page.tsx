@@ -1,6 +1,7 @@
+import { SILK_ROAD_ARTICLES } from './silk-road-articles';
 import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SharedNav from '@/components/feature/SharedNav';
 import SharedFooter from '@/components/feature/SharedFooter';
@@ -10,7 +11,7 @@ const BLOG_SCHEMA = {
   '@type': 'CollectionPage',
   '@id': 'https://imashnujnoto.com/blog#page',
   name: 'SEO Блог — Дигитален маркетинг Велико Търново | ТАВОРА ЕООД',
-  description: 'Практически статии за SEO, реклама и дигитален маркетинг за бизнеси от Велико Търново. Реални стратегии, реални резултати.',
+  description: 'Практически статии за AI, сайтове, SEO и GEO, измерване и дигитален маркетинг. Полезни примери за малък бизнес и начинаещи изпълнители.',
   url: 'https://imashnujnoto.com/blog',
   publisher: {
     '@type': 'Organization',
@@ -21,6 +22,12 @@ const BLOG_SCHEMA = {
 };
 
 const ARTICLES = [
+  ...SILK_ROAD_ARTICLES.map(article => ({
+    id: article.id, slug: `/blog/${article.id}`, category: article.category,
+    categoryColor: article.categoryColor, title: article.title, excerpt: article.description,
+    readTime: article.readTime, date: '5 Окт 2026', author: 'Владимир Атанасов',
+    image: EDITORIAL_IMAGE_URL, keywords: [...article.keywords], featured: false,
+  })),
   {
     id: 'kak-da-izberete-transportna-lenta',
     slug: '/blog/kak-da-izberete-transportna-lenta',
@@ -194,10 +201,10 @@ const ARTICLES = [
     slug: '/blog/ai-business-blueprint-putyat-na-koprinata',
     category: 'AI & Бизнес',
     categoryColor: 'bg-violet-50 text-violet-700',
-    title: 'AI Business Blueprint — Пътят на коприната: от AI промптиране до система за клиенти',
-    excerpt: `11 модула и ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} публикувани урока за изграждане на дигитална услуга с AI. Оферта, сайт, съдържание, клиенти и Revenue Blueprint.`,
-    readTime: '14 мин.',
-    date: '7 Юли 2026',
+    title: 'Пътят на коприната: AI, сайт и устойчива дигитална услуга',
+    excerpt: `11 модула и ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} публикувани урока: AI, сайт, SEO и GEO, съдържание, измерване и устойчива дигитална услуга. Безплатен първи модул и публичен учебен прототип.`,
+    readTime: '5 мин.',
+    date: '5 Окт 2026',
     author: 'Владимир Атанасов',
     image: EDITORIAL_IMAGE_URL,
     keywords: ['AI бизнес обучение България', 'как да правя пари с изкуствен интелект', 'AI маркетинг'],
@@ -597,9 +604,10 @@ const ARTICLES = [
   },
 ];
 
-const CATEGORIES = ['Всички', 'AI & Бизнес', 'Маркетинг', 'SEO', 'Реклама', 'Дигитален маркетинг', 'Видео', 'GEO & AI', 'Уеб дизайн', 'Локално SEO', 'Meta реклами', 'Маркетинг агенция', 'E-commerce', 'Цени', 'Локален бизнес', 'Уелнес индустрия', 'Локален маркетинг', 'SEO казус', 'Фотография', 'Индустрия', 'Поддръжка', 'Управление на салон', 'Резервации'];
+const CATEGORIES = ['Всички', ...new Set(ARTICLES.map(article => article.category))];
 
 export default function BlogPage() {
+  const [activeCategory, setActiveCategory] = useState('Всички');
   useEffect(() => {
     const id = 'schema-blog-page';
     let el = document.getElementById(id) as HTMLScriptElement | null;
@@ -614,7 +622,7 @@ export default function BlogPage() {
     document.title = 'SEO Блог — Дигитален маркетинг Велико Търново | ТАВОРА ЕООД';
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Практически статии за SEO, реклама и дигитален маркетинг за бизнеси от Велико Търново. Реални стратегии, реални резултати от ТАВОРА ЕООД.');
+      metaDesc.setAttribute('content', 'Практически статии за AI, сайтове, SEO и GEO, измерване и дигитален маркетинг. Полезни примери от Владимир Атанасов, ТАВОРА ЕООД.');
     }
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/blog');
@@ -625,8 +633,9 @@ export default function BlogPage() {
     };
   }, []);
 
-  const featured = ARTICLES.find((a) => a.featured);
-  const rest = ARTICLES.filter((a) => !a.featured);
+  const visibleArticles = activeCategory === 'Всички' ? ARTICLES : ARTICLES.filter(article => article.category === activeCategory);
+  const featured = visibleArticles.find((a) => a.featured);
+  const rest = visibleArticles.filter((a) => !a.featured);
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -648,7 +657,7 @@ export default function BlogPage() {
             <span className="italic text-[#0A2540]">Велико Търново</span>
           </h1>
           <p className="text-sm text-[#1C1C1E]/65 max-w-xl leading-relaxed">
-            Практически статии за SEO, реклама и дигитален маркетинг. Всяка статия е реален шанс за ранк в Google — за вас и за нас.
+            Практически статии за AI, сайтове, SEO и GEO, реклама и измерване. Примери, които помагат да изберете следващата стъпка за своя бизнес или проект.
           </p>
         </div>
       </section>
@@ -660,8 +669,11 @@ export default function BlogPage() {
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
+              type="button"
+              aria-pressed={cat === activeCategory}
+              onClick={() => setActiveCategory(cat)}
               className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-xs border transition-all cursor-pointer whitespace-nowrap ${
-                cat === 'Всички'
+                cat === activeCategory
                   ? 'bg-[#0A2540] text-white border-[#0A2540]'
                   : 'border-[#1C1C1E]/12 text-[#1C1C1E]/65 hover:border-[#0A2540]/30 hover:text-[#0A2540]'
               }`}
@@ -715,7 +727,7 @@ export default function BlogPage() {
         )}
 
         {/* Articles grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div data-testid="blog-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {rest.map((article) => (
             <Link
               key={article.id}

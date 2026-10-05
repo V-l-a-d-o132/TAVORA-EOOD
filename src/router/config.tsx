@@ -98,7 +98,25 @@ const AiBusinessBlueprintFunnelPage = lazyWithReload(() => import("../pages/kurs
 const PerfektnotoVideoFunnelPage = lazyWithReload(() => import("../pages/kurs/perfektnoto-video/page"));
 const MarketingBasicsFunnelPage = lazyWithReload(() => import("../pages/kurs/marketing-basics/page"));
 
+const SilkBlog0Page = lazyWithReload(() => import("../pages/blog/ai-za-malak-biznes/page"));
+const SilkBlog1Page = lazyWithReload(() => import("../pages/blog/sait-s-ai-kakvo-da-proverish/page"));
+const SilkBlog2Page = lazyWithReload(() => import("../pages/blog/sait-poseshteniya-bez-zapitvaniya/page"));
+const SilkBlog3Page = lazyWithReload(() => import("../pages/blog/seo-za-nachinaeshti/page"));
+const SilkBlog4Page = lazyWithReload(() => import("../pages/blog/seo-geo-razlika/page"));
+const SilkBlog5Page = lazyWithReload(() => import("../pages/blog/ga4-realni-zapitvaniya-pokupki/page"));
+const SilkBlog6Page = lazyWithReload(() => import("../pages/blog/koga-avtomatizaciyata-si-struva/page"));
+const SilkBlog7Page = lazyWithReload(() => import("../pages/blog/cena-na-digitalna-usluga/page"));
+
 const routes: RouteObject[] = [
+  { path: "/blog/ai-za-malak-biznes", element: <SilkBlog0Page /> },
+  { path: "/blog/sait-s-ai-kakvo-da-proverish", element: <SilkBlog1Page /> },
+  { path: "/blog/sait-poseshteniya-bez-zapitvaniya", element: <SilkBlog2Page /> },
+  { path: "/blog/seo-za-nachinaeshti", element: <SilkBlog3Page /> },
+  { path: "/blog/seo-geo-razlika", element: <SilkBlog4Page /> },
+  { path: "/blog/ga4-realni-zapitvaniya-pokupki", element: <SilkBlog5Page /> },
+  { path: "/blog/koga-avtomatizaciyata-si-struva", element: <SilkBlog6Page /> },
+  { path: "/blog/cena-na-digitalna-usluga", element: <SilkBlog7Page /> },
+
   { path: '/academy-labs/silk-road/start', element: <SilkRoadStartPage /> },
   { path: '/academy-labs/perfect-video/start', element: <PerfectVideoStartPage /> },
   { path: '/reset-password', element: <ResetPasswordPage /> },
