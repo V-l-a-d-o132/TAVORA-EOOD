@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { seedVideo711Lessons, video711BaseSource } from "./helpers/perfect-video-711-db";
 import { video456BaseSource } from "./helpers/perfect-video-456-db";
+import { marketingMigration, seedMarketingLessons } from "./helpers/marketing-basics-db";
 
 const A = "00000000-0000-4000-8000-000000000001";
 const B = "00000000-0000-4000-8000-000000000002";
@@ -105,6 +106,15 @@ beforeAll(async () => {
       await seedVideo711Lessons(db, video711BaseSource().filter(
         (lesson) => ["s02-m07", "s02-m08", "s02-m09"].includes(lesson.module_id),
       ));
+    }
+    if (f.endsWith("marketing_basics_modules_1_5_clear_practice.sql")) {
+      // The old full-schema fixture only contains module 1. Reconstruct all 41
+      // researched lessons with fictional CI keys and retain the strict source
+      // guard. Actual production mappings are verified outside the repository.
+      await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id IN ('s03-m01','s03-m02','s03-m03','s03-m04','s03-m05'); DELETE FROM academy_lessons WHERE module_id IN ('s03-m01','s03-m02','s03-m03','s03-m04','s03-m05')");
+      await seedMarketingLessons(db);
+      await db.exec(await marketingMigration(db));
+      continue;
     }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
   }
