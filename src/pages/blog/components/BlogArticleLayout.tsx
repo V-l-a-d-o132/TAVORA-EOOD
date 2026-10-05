@@ -26,6 +26,7 @@ export interface BuildArticleSchemaOptions {
   section: string;
   keywords: string;
   datePublished: string;
+  dateModified?: string;
   breadcrumbLabel: string;
 }
 
@@ -38,6 +39,7 @@ export function buildArticleSchema({
   section,
   keywords,
   datePublished,
+  dateModified = '2026-10-04',
   breadcrumbLabel,
 }: BuildArticleSchemaOptions) {
   const url = `https://imashnujnoto.com/blog/${id}`;
@@ -60,7 +62,7 @@ export function buildArticleSchema({
           logo: { '@type': 'ImageObject', url: LOGO_URL },
         },
         datePublished,
-        dateModified: '2026-10-04',
+        dateModified,
         url,
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         inLanguage: 'bg',
@@ -276,7 +278,7 @@ export default function BlogArticleLayout({
           {children}
 
           <section className="mb-12 p-7 md:p-10 rounded-2xl bg-[#0F1F35] text-white">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div>
                 <div className="text-xs text-white/75 tracking-widest uppercase mb-2">{ctaEyebrow}</div>
                 <div

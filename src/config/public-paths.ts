@@ -66,5 +66,13 @@ export const PUBLIC_PATHS = [
   "/blog/transportni-lenti-zarnoprerabotka-reciklirane",
   "/blog/kak-da-namalim-neyavaniyata-no-shows-salon",
   "/blog/online-rezervacii-vs-telefonni-rezervacii",
-  "/blog/kak-onlain-grafikat-vdiga-prihodite-na-salona"
+  "/blog/kak-onlain-grafikat-vdiga-prihodite-na-salona",
+  "/blog/ai-za-malak-biznes",
+  "/blog/sait-s-ai-kakvo-da-proverish",
+  "/blog/sait-poseshteniya-bez-zapitvaniya",
+  "/blog/seo-za-nachinaeshti",
+  "/blog/seo-geo-razlika",
+  "/blog/ga4-realni-zapitvaniya-pokupki",
+  "/blog/koga-avtomatizaciyata-si-struva",
+  "/blog/cena-na-digitalna-usluga",
 ] as const;
