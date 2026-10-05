@@ -1,11 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { SILK_ROAD_ARTICLES } from '../src/pages/blog/silk-road-articles';
+import { CONSUMER_RIGHTS_ARTICLES } from '../src/pages/blog/consumer-rights-articles';
 
 const paths = [...readFileSync('public/sitemap.xml', 'utf8').matchAll(/<loc>https:\/\/imashnujnoto.com([^<]*)<\/loc>/g)].map(match => match[1]);
 const articlePaths = [
   ...[...readFileSync('src/pages/blog/page.tsx', 'utf8').matchAll(/slug: '([^']+)'/g)].map(match => match[1]),
   ...SILK_ROAD_ARTICLES.map(article => `/blog/${article.id}`),
+  ...CONSUMER_RIGHTS_ARTICLES.map(article => `/blog/${article.id}`),
 ];
 const cover = '/images/tavora-seo-geo-bulgaria-news.webp';
 

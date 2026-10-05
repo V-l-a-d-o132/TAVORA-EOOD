@@ -107,7 +107,14 @@ const SilkBlog5Page = lazyWithReload(() => import("../pages/blog/ga4-realni-zapi
 const SilkBlog6Page = lazyWithReload(() => import("../pages/blog/koga-avtomatizaciyata-si-struva/page"));
 const SilkBlog7Page = lazyWithReload(() => import("../pages/blog/cena-na-digitalna-usluga/page"));
 
+const WithdrawalLawBlogPage = lazyWithReload(() => import("../pages/blog/buton-za-otkaz-ot-dogovor-zzp-2026/page"));
+const OnlineCourseWithdrawalBlogPage = lazyWithReload(() => import("../pages/blog/pravo-na-otkaz-online-kurs/page"));
+const WithdrawalImplementationBlogPage = lazyWithReload(() => import("../pages/blog/buton-za-otkaz-formulyar-proverki/page"));
+
 const routes: RouteObject[] = [
+  { path: "/blog/buton-za-otkaz-ot-dogovor-zzp-2026", element: <WithdrawalLawBlogPage /> },
+  { path: "/blog/pravo-na-otkaz-online-kurs", element: <OnlineCourseWithdrawalBlogPage /> },
+  { path: "/blog/buton-za-otkaz-formulyar-proverki", element: <WithdrawalImplementationBlogPage /> },
   { path: "/blog/ai-za-malak-biznes", element: <SilkBlog0Page /> },
   { path: "/blog/sait-s-ai-kakvo-da-proverish", element: <SilkBlog1Page /> },
   { path: "/blog/sait-poseshteniya-bez-zapitvaniya", element: <SilkBlog2Page /> },

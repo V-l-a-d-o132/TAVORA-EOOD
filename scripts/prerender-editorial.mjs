@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { JSDOM } from 'jsdom';
 import { createServer } from 'vite';
 
-// Render only the eight public editorial pages. The build never starts an
+// Render only the curated public editorial pages. The build never starts an
 // authenticated session, reads student data or contacts a production service.
 const authStub = '\0editorial-anonymous-auth';
 const server = await createServer({
@@ -27,10 +27,12 @@ const server = await createServer({
 
 try {
   const { SILK_ROAD_ARTICLES } = await server.ssrLoadModule('/src/pages/blog/silk-road-articles.ts');
+  const { CONSUMER_RIGHTS_ARTICLES } = await server.ssrLoadModule('/src/pages/blog/consumer-rights-articles.ts');
+  const articles = [...SILK_ROAD_ARTICLES, ...CONSUMER_RIGHTS_ARTICLES];
   const { buildArticleSchema } = await server.ssrLoadModule('/src/pages/blog/components/BlogArticleLayout.tsx');
   const { EDITORIAL_IMAGE_URL, EDITORIAL_IMAGE_ALT } = await server.ssrLoadModule('/src/config/editorial-image.ts');
   const template = await readFile(resolve('out/index.html'), 'utf8');
-  for (const article of SILK_ROAD_ARTICLES) {
+  for (const article of articles) {
     const path = `/blog/${article.id}`;
     const canonical = `https://imashnujnoto.com${path}`;
     const { default: Page } = await server.ssrLoadModule(`/src/pages/blog/${article.id}/page.tsx`);
@@ -87,7 +89,7 @@ try {
     // index; directory index files support hosts using /slug/ resolution.
     await writeFile(resolve(`out/blog/${article.id}.html`), html);
   }
-  console.log(`Prerendered ${SILK_ROAD_ARTICLES.length} public articles with complete text, links and metadata.`);
+  console.log(`Prerendered ${articles.length} public articles with complete text, links and metadata.`);
 } finally {
   await server.close();
 }

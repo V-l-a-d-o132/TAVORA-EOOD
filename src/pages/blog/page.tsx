@@ -1,4 +1,5 @@
 import { SILK_ROAD_ARTICLES } from './silk-road-articles';
+import { CONSUMER_RIGHTS_ARTICLES } from './consumer-rights-articles';
 import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_SRC, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { useEffect, useState } from 'react';
@@ -11,7 +12,7 @@ const BLOG_SCHEMA = {
   '@type': 'CollectionPage',
   '@id': 'https://imashnujnoto.com/blog#page',
   name: 'SEO Блог — Дигитален маркетинг Велико Търново | ТАВОРА ЕООД',
-  description: 'Практически статии за AI, сайтове, SEO и GEO, измерване и дигитален маркетинг. Полезни примери за малък бизнес и начинаещи изпълнители.',
+  description: 'Практически статии за AI, сайтове, SEO и GEO, онлайн търговия и измерване. Полезни примери за малък бизнес и начинаещи изпълнители.',
   url: 'https://imashnujnoto.com/blog',
   publisher: {
     '@type': 'Organization',
@@ -22,6 +23,12 @@ const BLOG_SCHEMA = {
 };
 
 const ARTICLES = [
+  ...CONSUMER_RIGHTS_ARTICLES.map(article => ({
+    id: article.id, slug: `/blog/${article.id}`, category: article.category,
+    categoryColor: article.categoryColor, title: article.title, excerpt: article.description,
+    readTime: article.readTime, date: '5 Окт 2026', author: 'Владимир Атанасов',
+    image: EDITORIAL_IMAGE_URL, keywords: [...article.keywords], featured: article.id === CONSUMER_RIGHTS_ARTICLES[0].id,
+  })),
   ...SILK_ROAD_ARTICLES.map(article => ({
     id: article.id, slug: `/blog/${article.id}`, category: article.category,
     categoryColor: article.categoryColor, title: article.title, excerpt: article.description,
@@ -208,7 +215,7 @@ const ARTICLES = [
     author: 'Владимир Атанасов',
     image: EDITORIAL_IMAGE_URL,
     keywords: ['AI бизнес обучение България', 'как да правя пари с изкуствен интелект', 'AI маркетинг'],
-    featured: true,
+    featured: false,
   },
   {
     id: 'perfektnoto-video',
@@ -622,7 +629,7 @@ export default function BlogPage() {
     document.title = 'SEO Блог — Дигитален маркетинг Велико Търново | ТАВОРА ЕООД';
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Практически статии за AI, сайтове, SEO и GEO, измерване и дигитален маркетинг. Полезни примери от Владимир Атанасов, ТАВОРА ЕООД.');
+      metaDesc.setAttribute('content', 'Практически статии за AI, сайтове, SEO и GEO, онлайн търговия и измерване. Полезни примери от Владимир Атанасов, ТАВОРА ЕООД.');
     }
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/blog');
@@ -657,7 +664,7 @@ export default function BlogPage() {
             <span className="italic text-[#0A2540]">Велико Търново</span>
           </h1>
           <p className="text-sm text-[#1C1C1E]/65 max-w-xl leading-relaxed">
-            Практически статии за AI, сайтове, SEO и GEO, реклама и измерване. Примери, които помагат да изберете следващата стъпка за своя бизнес или проект.
+            Практически статии за AI, сайтове, SEO и GEO, онлайн търговия и измерване. Примери, които помагат да изберете следващата стъпка за своя бизнес или проект.
           </p>
         </div>
       </section>
