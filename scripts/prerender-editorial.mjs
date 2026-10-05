@@ -81,7 +81,11 @@ try {
     root.innerHTML = markup;
     const directory = resolve(`out/blog/${article.id}`);
     await mkdir(directory, { recursive: true });
-    await writeFile(resolve(directory, 'index.html'), `<!DOCTYPE html>\n${document.documentElement.outerHTML}\n`);
+    const html = `<!DOCTYPE html>\n${document.documentElement.outerHTML}\n`;
+    await writeFile(resolve(directory, 'index.html'), html);
+    // Vite's extensionless HTML fallback checks /slug.html before the SPA
+    // index; directory index files support hosts using /slug/ resolution.
+    await writeFile(resolve(`out/blog/${article.id}.html`), html);
   }
   console.log(`Prerendered ${SILK_ROAD_ARTICLES.length} public articles with complete text, links and metadata.`);
 } finally {
