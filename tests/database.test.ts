@@ -4,6 +4,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { seedVideo711Lessons, video711BaseSource } from "./helpers/perfect-video-711-db";
 import { video456BaseSource } from "./helpers/perfect-video-456-db";
 import { marketingMigration, seedMarketingLessons } from "./helpers/marketing-basics-db";
+import { marketing610Migration, seedMarketing610Lessons } from "./helpers/marketing-basics-610-db";
+import { marketing1115Migration, seedMarketing1115Lessons } from "./helpers/marketing-basics-1115-db";
 
 const A = "00000000-0000-4000-8000-000000000001";
 const B = "00000000-0000-4000-8000-000000000002";
@@ -114,6 +116,21 @@ beforeAll(async () => {
       await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id IN ('s03-m01','s03-m02','s03-m03','s03-m04','s03-m05'); DELETE FROM academy_lessons WHERE module_id IN ('s03-m01','s03-m02','s03-m03','s03-m04','s03-m05')");
       await seedMarketingLessons(db);
       await db.exec(await marketingMigration(db));
+      continue;
+    }
+    if (f.endsWith("marketing_basics_modules_6_10_strategy_practice.sql")) {
+      // Use the current 103-lesson content fixture with synthetic private keys.
+      // This also tests a full schema reset with the strict 68-lesson release.
+      await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id IN ('s03-m01','s03-m02','s03-m03','s03-m04','s03-m05','s03-m06','s03-m07','s03-m08','s03-m09','s03-m10'); DELETE FROM academy_lessons WHERE module_id IN ('s03-m01','s03-m02','s03-m03','s03-m04','s03-m05','s03-m06','s03-m07','s03-m08','s03-m09','s03-m10')");
+      await seedMarketing610Lessons(db);
+      await db.exec(await marketing610Migration(db));
+      continue;
+    }
+    if (f.endsWith("marketing_basics_modules_11_15_ai_mcp_practice.sql")) {
+      // Full reset exercises the release with public content and fictional keys.
+      await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id IN ('s03-m11','s03-m12','s03-m13','s03-m14','s03-m15'); DELETE FROM academy_lessons WHERE module_id IN ('s03-m11','s03-m12','s03-m13','s03-m14','s03-m15')");
+      await seedMarketing1115Lessons(db);
+      await db.exec(await marketing1115Migration(db));
       continue;
     }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));

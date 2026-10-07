@@ -2,17 +2,15 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import type { PGlite } from '@electric-sql/pglite';
-import { createMarketingDatabase, marketingMigration, marketingFingerprintSQL } from './helpers/marketing-basics-db';
+import { createMarketing610Database, marketing610Migration, marketing610FingerprintSQL } from './helpers/marketing-basics-610-db';
 import { actor, learnerRecords, STUDENT, OTHER } from './helpers/silk-road-db';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
 
-const release = 'marketing_basics_modules_1_5_clear_practice_20261005';
+const release = 'marketing_basics_modules_6_10_strategy_practice_20261007';
 type Spec = { module: string; lesson: string; title: string; blocks: { key: string; type: string; title: string; content: Record<string, unknown>; feedback?: { explanation: string } }[] };
-const specs = JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-1-5-20261005.json', 'utf8')) as Spec[];
-// The newer release verifies current metadata for its six targeted additions.
-const superseded = new Set((JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-6-10-20261007.json','utf8')) as Spec[]).map(s=>s.lesson));
+const specs = JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-6-10-20261007.json', 'utf8')) as Spec[];
 let db: PGlite;
 let sql: string;
 let learners: Awaited<ReturnType<typeof learnerRecords>>;
@@ -23,20 +21,20 @@ let warnings: Record<string, unknown>[];
 const allContent = 'SELECT to_jsonb(v) version,to_jsonb(b) block,to_jsonb(k) key FROM academy_lessons l JOIN academy_lesson_versions v ON v.id=l.published_version_id JOIN academy_lesson_blocks b ON b.version_id=v.id LEFT JOIN academy_private.lesson_block_keys k ON k.block_id=b.id';
 
 beforeAll(async () => {
-  db = await createMarketingDatabase();
-  sql = await marketingMigration(db);
+  db = await createMarketing610Database();
+  sql = await marketing610Migration(db);
   await db.query(`INSERT INTO academy_lesson_progress(user_id,academy_lesson_id,version_id,current_block_key,block_state,completed_block_keys,xp,mastery_status)
-    SELECT $1,l.id,l.published_version_id,'decision','{"decision":{"selected":"a"}}',ARRAY['outcome','scene','uncomfortable_truth'],4,'learning'
-    FROM academy_lessons l WHERE l.lesson_id='lm01-01'`, [STUDENT]);
+    SELECT $1,l.id,l.published_version_id,'check_2','{"check_2":{"selected":"a"}}',ARRAY['objective','principle','case'],4,'learning'
+    FROM academy_lessons l WHERE l.lesson_id='lm06-01'`, [STUDENT]);
   await db.query(`INSERT INTO academy_lesson_progress(user_id,academy_lesson_id,version_id,current_block_key,block_state,completed_block_keys,xp,score_percent,mastery_status,completed_at)
-    SELECT $1,l.id,l.published_version_id,'handoff','{"repair":{"selected":"c"}}',array_agg(b.block_key ORDER BY b.position),sum(b.points),100,'mastered','2026-10-04'
-    FROM academy_lessons l JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id WHERE l.lesson_id='lm05-08' GROUP BY l.id`, [STUDENT]);
+    SELECT $1,l.id,l.published_version_id,'summary','{"check_2":{"selected":"c"}}',array_agg(b.block_key ORDER BY b.position),sum(b.points),100,'mastered','2026-10-04'
+    FROM academy_lessons l JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id WHERE l.lesson_id='lm10-12' GROUP BY l.id`, [STUDENT]);
   await db.query(`INSERT INTO academy_lesson_attempts_v2(id,user_id,academy_lesson_id,version_id,block_id,payload,score,max_score,is_correct,feedback)
     SELECT gen_random_uuid(),$1,l.id,l.published_version_id,b.id,'{"selected":"a"}',0,2,false,'{"explanation":"Запазено старо обяснение."}'
-    FROM academy_lessons l JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id WHERE l.lesson_id='lm01-01' AND b.block_key='decision'`, [STUDENT]);
+    FROM academy_lessons l JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id WHERE l.lesson_id='lm06-01' AND b.block_key='check_2'`, [STUDENT]);
   await db.query(`INSERT INTO academy_private.lesson_progress_history(user_id,academy_lesson_id,version_id,snapshot,reason)
     SELECT user_id,academy_lesson_id,version_id,to_jsonb(p),'preserved-marketing-history' FROM academy_lesson_progress p WHERE user_id=$1`, [STUDENT]);
-  await db.query("INSERT INTO pdf_progress(user_id,module_id,lesson_id,page_number,total_pages,completed) VALUES($1,'s03-m05','lm05-08',1,1,true)", [STUDENT]);
+  await db.query("INSERT INTO pdf_progress(user_id,module_id,lesson_id,page_number,total_pages,completed) VALUES($1,'s03-m10','lm10-12',1,1,true)", [STUDENT]);
   await db.query("INSERT INTO profiles(id,full_name,last_opened_lesson) VALUES($1,'Test Student','{\"moduleId\":\"s03-m01\",\"lessonId\":\"lm01-01\"}') ON CONFLICT(id) DO UPDATE SET last_opened_lesson=EXCLUDED.last_opened_lesson", [STUDENT]);
   await db.query("INSERT INTO academy_user_badges(user_id,badge_key,evidence) VALUES($1,'first-practice','{\"preserved\":true}') ON CONFLICT DO NOTHING", [STUDENT]);
   learners = await learnerRecords(db);
@@ -48,8 +46,8 @@ beforeAll(async () => {
 }, 60000);
 afterAll(async () => { await db?.close(); });
 
-describe('Marketing Basics researched modules 1–5', () => {
-  it('ships public content, independent tasks and worked solutions for all 41 lessons', () => {
+describe('Marketing Basics researched modules 6–10 and strategy additions', () => {
+  it('ships public content, independent tasks and worked solutions for all 68 lessons', () => {
     const check = (value: unknown) => {
       if (Array.isArray(value)) value.forEach(check);
       else if (value && typeof value === 'object') for (const [key, part] of Object.entries(value)) {
@@ -58,26 +56,31 @@ describe('Marketing Basics researched modules 1–5', () => {
       }
     };
     check(specs);
-    check(JSON.parse(readFileSync('tests/fixtures/marketing-basics-1-5-before.json','utf8')));
-    expect(specs).toHaveLength(41);
-    expect(specs.reduce((sum, s) => sum + s.blocks.length, 0)).toBe(426);
+    check(JSON.parse(readFileSync('tests/fixtures/marketing-basics-6-10-before.json','utf8')));
+    expect(specs).toHaveLength(68);
+    expect(specs.reduce((sum, s) => sum + s.blocks.length, 0)).toBe(667);
     for (const spec of specs) {
-      const outcome = spec.blocks.find(b => b.key === 'outcome')!.content;
+      const outcome = spec.blocks.find(b => b.type === 'objective')!.content;
       expect(outcome.outcomes).toHaveLength(3);
       expect(outcome.deliverable).toBeTruthy();
       expect(outcome.check).toBeTruthy();
-      expect(spec.blocks.find(b => b.key === 'method')!.content.body).toContain('Критерии за самопроверка:');
-      expect(spec.blocks.find(b => b.key === 'case')!.content.body).toContain('Показано решение на новата задача');
+      if (Number(spec.module.slice(-2)) >= 6) {
+        expect(spec.blocks.find(b => b.key === 'practice_brief')!.content.body).toContain('Критерии за самопроверка:');
+        expect(spec.blocks.find(b => b.key === 'practice_brief')!.content.body).toContain('Първа подсказка');
+        expect(spec.blocks.find(b => b.key === 'practice_brief')!.content.body).toContain('безплатен');
+        expect(spec.blocks.find(b => b.key === 'model_solution')!.content.cards).toHaveLength(1);
+        expect(spec.blocks.find(b => b.key === 'case')!.content.body).toContain('учебни');
+      }
       for (const b of spec.blocks.filter(b => ['quiz','scenario'].includes(b.type))) {
         const lengths = (b.content.options as {label:string}[]).map(option => option.label.length);
         expect(Math.max(...lengths) / Math.min(...lengths), `${spec.lesson}/${b.key}`).toBeLessThan(2);
       }
       expect(spec.blocks.some(b => ['practical_response','submission','homework'].includes(b.type))).toBe(false);
-      if (!superseded.has(spec.lesson)) expect(LEARNING_SECTIONS[2].modules.find(m => m.id === spec.module)!.lessons.find(l => l.id === spec.lesson)!.title).toBe(spec.title);
+      expect(LEARNING_SECTIONS[2].modules.find(m => m.id === spec.module)!.lessons.find(l => l.id === spec.lesson)!.title).toBe(spec.title);
     }
   });
 
-  it('preserves all seven populated learner tables, IDs, XP, grading and content outside the 41 lessons', async () => {
+  it('preserves all seven populated learner tables, IDs, XP, grading and content outside the 68 lessons', async () => {
     for (const rows of Object.values(learners)) expect(rows.length).toBeGreaterThan(0);
     expect(await learnerRecords(db)).toEqual(learners);
     expect((await db.query('SELECT l.*,v.version_number,v.subtitle,v.duration,v.estimated_minutes FROM academy_lessons l JOIN academy_lesson_versions v ON v.id=l.published_version_id ORDER BY l.id')).rows).toEqual(identities);
@@ -94,20 +97,20 @@ describe('Marketing Basics researched modules 1–5', () => {
     expect((await db.query(`${allContent} WHERE NOT(l.lesson_id=ANY($1)) ORDER BY b.id`, [specs.map(s => s.lesson)])).rows).toEqual(outside);
     expect((await db.query("SELECT lesson_id,academy_private.lesson_validation(published_version_id)->'warnings' warnings FROM academy_lessons ORDER BY lesson_id")).rows).toEqual(warnings);
     const receipt = (await db.query<{ receipt: Record<string, unknown> }>("SELECT details->'publication_receipt' receipt FROM academy_lesson_audit WHERE details->>'release'=$1 AND details?'publication_receipt'", [release])).rows[0].receipt;
-    expect(receipt).toMatchObject({ published_lessons:41,archived_blocks:637,changed_blocks:426,learner_records_unchanged:true,lesson_identity_unchanged:true,grading_identity_unchanged:true,outside_content_unchanged:true });
+    expect(receipt).toMatchObject({ published_lessons:68,archived_blocks:921,changed_blocks:667,learner_records_unchanged:true,lesson_identity_unchanged:true,grading_identity_unchanged:true,outside_content_unchanged:true });
   });
 
   it('resumes partial and completed lessons without resets and keeps archives and keys protected', async () => {
     await actor(db, 'authenticated', STUDENT);
     type Lesson = { versionChanged: boolean; progress: Record<string, unknown>; blocks: { key: string; type: string }[] };
     const get = async (module: string, lesson: string) => (await db.query<{ lesson: Lesson }>('SELECT academy_get_lesson_v2($1,$2) lesson',[module,lesson])).rows[0].lesson;
-    const partial = await get('s03-m01','lm01-01');
-    const completed = await get('s03-m05','lm05-08');
+    const partial = await get('s03-m06','lm06-01');
+    const completed = await get('s03-m10','lm10-12');
     expect(partial.versionChanged).toBe(false);
-    expect(partial.progress).toMatchObject({ current_block_key:'decision',block_state:{decision:{selected:'a'}},completed_block_keys:['outcome','scene','uncomfortable_truth'] });
+    expect(partial.progress).toMatchObject({ current_block_key:'check_2',block_state:{check_2:{selected:'a'}},completed_block_keys:['objective','principle','case'] });
     expect(completed.versionChanged).toBe(false);
     expect(completed.progress).toMatchObject({ score_percent:100,mastery_status:'mastered' });
-    expect(partial.blocks.some(b => b.key === 'work')).toBe(false);
+    expect(partial.blocks.some(b => b.key === 'notes')).toBe(false);
     expect(JSON.stringify(partial.blocks)).not.toMatch(/"(?:answer_key|evaluation|scoring)":/);
     expect((await db.query('SELECT details FROM academy_lesson_audit')).rows).toEqual([]);
     await expect(db.query('SELECT answer_key FROM academy_private.lesson_block_keys')).rejects.toThrow('permission denied');
@@ -115,23 +118,26 @@ describe('Marketing Basics researched modules 1–5', () => {
   });
 
   it('grades a wrong and right submission through the real RPC for every retained check', async () => {
-    type Check = { module_id:string;lesson_id:string;version_id:string;block_key:string;block_type:string;content:{options?:{id:string;label:string}[]};answer_key:{correct?:string;order?:string[]} };
+    type Check = { module_id:string;lesson_id:string;version_id:string;block_key:string;block_type:string;content:{options?:{id:string;label:string}[]};answer_key:{correct?:string;order?:string[];value?:number;min?:number;max?:number} };
     const checks = (await db.query<Check>("SELECT l.module_id,l.lesson_id,b.version_id,b.block_key,b.block_type,b.content,k.answer_key FROM academy_lessons l JOIN academy_lesson_blocks b ON b.version_id=l.published_version_id JOIN academy_private.lesson_block_keys k ON k.block_id=b.id WHERE l.module_id LIKE 's03-%' ORDER BY l.lesson_id,b.position")).rows;
-    expect(checks).toHaveLength(205);
+    expect(checks).toHaveLength(397);
     await actor(db,'authenticated',OTHER);
     const first = checks[0];
     await expect(db.query('SELECT academy_complete_lesson_block($1,$2,$3,$4,$5,$6)',[first.module_id,first.lesson_id,first.version_id,first.block_key,{selected:first.answer_key.correct},crypto.randomUUID()])).rejects.toThrow('Access denied');
     await actor(db,'authenticated',STUDENT);
     for (const c of checks) {
-      const submit = async (payload: unknown) => (await db.query<{ result:{correct:boolean;feedback:{explanation:string}} }>('SELECT academy_complete_lesson_block($1,$2,$3,$4,$5,$6) result',[c.module_id,c.lesson_id,c.version_id,c.block_key,payload,crypto.randomUUID()])).rows[0].result;
+      const submit = async (payload: unknown) => (await db.query<{ result:{correct:boolean;feedback:{explanation:string;complete:boolean}} }>('SELECT academy_complete_lesson_block($1,$2,$3,$4,$5,$6) result',[c.module_id,c.lesson_id,c.version_id,c.block_key,payload,crypto.randomUUID()])).rows[0].result;
       const field = c.block_type === 'quiz' ? 'answer' : 'selected';
-      const right = c.block_type === 'sequence_sort' ? { order:c.answer_key.order } : { [field]:c.answer_key.correct };
-      const wrong = c.block_type === 'sequence_sort' ? { order:[...c.answer_key.order!].reverse() } : { [field]:c.content.options!.find(o => o.id !== c.answer_key.correct)!.id };
-      expect((await submit(wrong)).correct,`${c.lesson_id}/${c.block_key}`).toBe(false);
+      const right = c.block_type === 'calculator' ? {value:c.answer_key.value ?? c.answer_key.min} : c.block_type === 'sequence_sort' ? {order:c.answer_key.order} : {[field]:c.answer_key.correct};
+      const wrong = c.block_type === 'calculator' ? {value:Number(c.answer_key.max ?? c.answer_key.value)+100} : c.block_type === 'sequence_sort' ? {order:[...c.answer_key.order!].reverse()} : {[field]:c.content.options!.find(o => o.id !== c.answer_key.correct)!.id};
+      const rejected = await submit(wrong);
+      expect(rejected.correct,`${c.lesson_id}/${c.block_key}`).toBe(false);
+      expect(rejected.feedback.complete,`${c.lesson_id}/${c.block_key}`).toBe(false);
       const result = await submit(right);
       expect(result.correct,`${c.lesson_id}/${c.block_key}`).toBe(true);
+      expect(result.feedback.complete,`${c.lesson_id}/${c.block_key}`).toBe(true);
       expect(result.feedback.explanation).toBeTruthy();
-      if (process.env.MARKETING_BASICS_SOURCE_SNAPSHOT && c.block_type !== 'sequence_sort') {
+      if (process.env.MARKETING_BASICS_610_SOURCE_SNAPSHOT && ['quiz','scenario'].includes(c.block_type)) {
         const label = c.content.options!.find(o => o.id === c.answer_key.correct)!.label;
         expect(result.feedback.explanation).toContain(label);
       }
@@ -147,33 +153,33 @@ describe('Marketing Basics researched modules 1–5', () => {
       expect(lesson.title).toBe(spec.title);
       for (const patch of spec.blocks) expect(lesson.blocks.find(b => b.key === patch.key)?.content).toEqual(patch.content);
       counts[`${spec.module}/${spec.lesson}`] = countVisibleLessonWords(lesson);
-      if (!process.env.MARKETING_BASICS_COUNTS_OUTPUT && !superseded.has(spec.lesson)) expect(counts[`${spec.module}/${spec.lesson}`], spec.lesson).toBe(ACADEMY_READING_WORDS[`${spec.module}/${spec.lesson}`]);
+      if (!process.env.MARKETING_BASICS_610_COUNTS_OUTPUT) expect(counts[`${spec.module}/${spec.lesson}`], spec.lesson).toBe(ACADEMY_READING_WORDS[`${spec.module}/${spec.lesson}`]);
     }
-    if (process.env.MARKETING_BASICS_COUNTS_OUTPUT) writeFileSync(process.env.MARKETING_BASICS_COUNTS_OUTPUT,JSON.stringify(counts,null,2));
+    if (process.env.MARKETING_BASICS_610_COUNTS_OUTPUT) writeFileSync(process.env.MARKETING_BASICS_610_COUNTS_OUTPUT,JSON.stringify(counts,null,2));
     await actor(db);
-    if (process.env.MARKETING_BASICS_VERIFY_OUTPUT) writeFileSync(process.env.MARKETING_BASICS_VERIFY_OUTPUT,JSON.stringify((await db.query(marketingFingerprintSQL)).rows,null,2));
+    if (process.env.MARKETING_BASICS_610_VERIFY_OUTPUT) writeFileSync(process.env.MARKETING_BASICS_610_VERIFY_OUTPUT,JSON.stringify((await db.query(marketing610FingerprintSQL)).rows,null,2));
     const before = (await db.query("SELECT details FROM academy_lesson_audit WHERE details->>'release'=$1 ORDER BY id",[release])).rows;
-    expect(before).toHaveLength(41);
+    expect(before).toHaveLength(68);
     await db.exec(sql);
     expect((await db.query("SELECT details FROM academy_lesson_audit WHERE details->>'release'=$1 ORDER BY id",[release])).rows).toEqual(before);
   });
 
   it('rolls back the entire publication if the last lesson changed after research', async () => {
-    const fresh = await createMarketingDatabase();
+    const fresh = await createMarketing610Database();
     try {
-      const migration = await marketingMigration(fresh);
-      await fresh.exec("UPDATE academy_lesson_blocks SET content=content||'{\"drift\":true}' WHERE version_id=(SELECT published_version_id FROM academy_lessons WHERE lesson_id='lm05-08') AND block_key='uncomfortable_truth'");
+      const migration = await marketing610Migration(fresh);
+      await fresh.exec("UPDATE academy_lesson_blocks SET content=content||'{\"drift\":true}' WHERE version_id=(SELECT published_version_id FROM academy_lessons WHERE lesson_id='lm10-12') AND block_key='principle'");
       const before = (await fresh.query(`${allContent} ORDER BY b.id`)).rows;
-      await expect(fresh.exec(migration)).rejects.toThrow('Marketing source drift for lm05-08');
+      await expect(fresh.exec(migration)).rejects.toThrow('Marketing source drift for lm10-12');
       expect((await fresh.query(`${allContent} ORDER BY b.id`)).rows).toEqual(before);
       expect((await fresh.query("SELECT id FROM academy_lesson_audit WHERE details->>'release'=$1",[release])).rows).toEqual([]);
     } finally { await fresh.close(); }
   },60000);
 
   it('rejects corrupted staged delivery before any lesson is changed', async () => {
-    const fresh = await createMarketingDatabase();
+    const fresh = await createMarketing610Database();
     try {
-      const delivery = JSON.parse(execFileSync('python3',['scripts/marketing-basics/build_1_5_delivery.py','--json'],{encoding:'utf8',maxBuffer:2_000_000})) as {stages:string[];apply:string};
+      const delivery = JSON.parse(execFileSync('python3',['scripts/marketing-basics/build_6_10_delivery.py','--json'],{encoding:'utf8',maxBuffer:2_000_000})) as {stages:string[];apply:string};
       for (const stage of delivery.stages) await fresh.exec(stage);
       await fresh.exec("UPDATE academy_lesson_audit SET details=details||jsonb_build_object('payload_text',details->>'payload_text'||' ') WHERE details->>'delivery_part'='1'");
       const before = (await fresh.query(`${allContent} ORDER BY b.id`)).rows;

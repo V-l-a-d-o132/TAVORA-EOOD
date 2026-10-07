@@ -26,6 +26,8 @@ import {
 } from '../src/lib/lesson-engine-v2';
 import LessonBlockRenderer from '../src/pages/module/components/lesson-v2/LessonBlockRenderer';
 import LessonEngineV2 from '../src/pages/module/components/lesson-v2/LessonEngineV2';
+import { readFileSync } from 'node:fs';
+import LessonOutcomes from '../src/pages/module/components/lesson-v2/LessonOutcomes';
 
 const result = {
   attemptId: 'attempt', correct: null, score: 0, maxScore: 0,
@@ -60,6 +62,39 @@ afterEach(() => {
 });
 
 describe('Lesson Engine V2 block registry', () => {
+  it('renders all 53 AI and MCP Marketing Basics opening pages with three skills, deliverable and check', () => {
+    const specs = JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-11-15-20261007.json','utf8')) as {
+      blocks:{type:string;content:JsonObject}[];
+    }[];
+    expect(specs).toHaveLength(53);
+    for (const spec of specs) {
+      const content = spec.blocks.find(b=>b.type==='objective')!.content;
+      const page = render(<LessonOutcomes content={content} />);
+      expect(page.container.textContent).toContain(content.body);
+      expect(page.getAllByRole('listitem')).toHaveLength(3);
+      expect(page.getByRole('heading',{name:'Практически резултат'})).toBeTruthy();
+      expect(page.container.textContent).toContain(content.deliverable);
+      expect(page.container.textContent).toContain(content.check);
+      page.unmount();
+    }
+  });
+  it('renders all 62 Marketing Basics opening pages with skills, a practical result and a check', () => {
+    const specs = JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-6-10-20261007.json','utf8')) as {
+      module:string; blocks:{type:string;content:JsonObject}[];
+    }[];
+    const lessons = specs.filter(s=>Number(s.module.slice(-2))>=6);
+    expect(lessons).toHaveLength(62);
+    for (const spec of lessons) {
+      const content = spec.blocks.find(b=>b.type==='objective')!.content;
+      const page = render(<LessonOutcomes content={content} />);
+      expect(page.container.textContent).toContain(content.body);
+      expect(page.getAllByRole('listitem')).toHaveLength(3);
+      expect(page.getByRole('heading',{name:'Практически резултат'})).toBeTruthy();
+      expect(page.container.textContent).toContain(content.deliverable);
+      expect(page.container.textContent).toContain(content.check);
+      page.unmount();
+    }
+  });
   it('shows the opening once with practical outcomes and a check, including legacy paragraphs', () => {
     const block = { ...createBlock('objective', 0), key: 'objective', title: 'Какво ще можеш след урока', content: {
       body: 'Разбираш каква е задачата.\n\nПроверяваш действителния резултат.',
