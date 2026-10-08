@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 
-test('Marketing practice works on mobile, exports an offline HTML and applies stops',async({page,browser})=>{
+test('Marketing practice works on mobile, exports an offline HTML and applies stops',async({page,browser},testInfo)=>{
   await page.setViewportSize({width:320,height:800});
   await page.goto('/academy/marketing-basics-practice.html');
   await expect(page.getByRole('heading',{name:'Направи. Провери. Запази версия 2.'})).toBeVisible();
@@ -25,8 +26,14 @@ test('Marketing practice works on mobile, exports an offline HTML and applies st
   const csvWait=page.waitForEvent('download');await page.getByRole('button',{name:'Изтегли CRM журнала · CSV'}).click();
   const csv=await csvWait;const csvText=await readFile((await csv.path())!,'utf8');expect(csvText).toContain('"R01","contact_stopped"');
   const htmlWait=page.waitForEvent('download');await page.getByRole('button',{name:'Изтегли работещия HTML'}).click();
-  const artifact=await htmlWait;const offline=await browser.newContext({offline:true});const offlinePage=await offline.newPage();
-  await offlinePage.goto('file://'+(await artifact.path())!);
+  const artifact=await htmlWait;
+  expect(artifact.suggestedFilename()).toBe('marketing-basics-practice.html');
+  // Chromium treats Playwright's extensionless temporary download as plain text.
+  // Open the saved HTML under the name the learner actually receives.
+  const portablePath=testInfo.outputPath(artifact.suggestedFilename());
+  await artifact.saveAs(portablePath);
+  const offline=await browser.newContext({offline:true});const offlinePage=await offline.newPage();
+  await offlinePage.goto(pathToFileURL(portablePath).href);
   await expect(offlinePage.locator('#crm-cases tr')).toHaveCount(20);
   await offlinePage.getByLabel('Лийд към клиент p, %').fill('25');await offlinePage.getByRole('button',{name:'Изчисли',exact:true}).click();
   await expect(offlinePage.locator('#cpl-result')).toContainText('15,00');
