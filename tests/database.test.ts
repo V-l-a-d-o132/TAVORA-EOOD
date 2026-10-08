@@ -6,6 +6,7 @@ import { video456BaseSource } from "./helpers/perfect-video-456-db";
 import { marketingMigration, seedMarketingLessons } from "./helpers/marketing-basics-db";
 import { marketing610Migration, seedMarketing610Lessons } from "./helpers/marketing-basics-610-db";
 import { marketing1115Migration, seedMarketing1115Lessons } from "./helpers/marketing-basics-1115-db";
+import { marketing1620Migration, seedMarketing1620Lessons } from "./helpers/marketing-basics-1620-db";
 
 const A = "00000000-0000-4000-8000-000000000001";
 const B = "00000000-0000-4000-8000-000000000002";
@@ -131,6 +132,12 @@ beforeAll(async () => {
       await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id IN ('s03-m11','s03-m12','s03-m13','s03-m14','s03-m15'); DELETE FROM academy_lessons WHERE module_id IN ('s03-m11','s03-m12','s03-m13','s03-m14','s03-m15')");
       await seedMarketing1115Lessons(db);
       await db.exec(await marketing1115Migration(db));
+      continue;
+    }
+    if (f.endsWith("marketing_basics_modules_16_20_complete_practice.sql")) {
+      await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id IN ('s03-m16','s03-m17','s03-m18','s03-m19','s03-m20'); DELETE FROM academy_lessons WHERE module_id IN ('s03-m16','s03-m17','s03-m18','s03-m19','s03-m20')");
+      await seedMarketing1620Lessons(db);
+      await db.exec(await marketing1620Migration(db));
       continue;
     }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
@@ -865,6 +872,8 @@ describe("Perfect Video final exam", () => {
 async function marketingExamFixture() {
   await actor();
   await db.exec("BEGIN");
+  // Replace the seeded published module only inside this rollback-only fixture.
+  await db.exec("UPDATE academy_lessons SET published_version_id=NULL,draft_version_id=NULL WHERE module_id='s03-m20'; DELETE FROM academy_lessons WHERE module_id='s03-m20'");
   await db.exec(`DO $fixture$
     DECLARE i integer; lid uuid; vid uuid; bid uuid; questions jsonb; keys jsonb;
       lo integer; hi integer; per_module integer;

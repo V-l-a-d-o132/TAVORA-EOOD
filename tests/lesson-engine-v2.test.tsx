@@ -62,6 +62,18 @@ afterEach(() => {
 });
 
 describe('Lesson Engine V2 block registry', () => {
+  it('renders the final 53 Marketing Basics opening pages with three skills, a result and a check', () => {
+    const specs=JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-16-20-20261007.json','utf8')) as {blocks:{type:string;content:JsonObject}[]}[];
+    expect(specs).toHaveLength(53);
+    for(const spec of specs) {
+      const content=spec.blocks.find(b=>b.type==='objective')!.content;
+      const page=render(<LessonOutcomes content={content}/>);
+      expect(page.getAllByRole('listitem')).toHaveLength(3);
+      expect(page.container.textContent).toContain(content.deliverable);
+      expect(page.container.textContent).toContain(content.check);
+      page.unmount();
+    }
+  });
   it('renders all 53 AI and MCP Marketing Basics opening pages with three skills, deliverable and check', () => {
     const specs = JSON.parse(readFileSync('scripts/marketing-basics/releases/modules-11-15-20261007.json','utf8')) as {
       blocks:{type:string;content:JsonObject}[];

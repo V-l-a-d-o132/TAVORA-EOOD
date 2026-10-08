@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing Basics · Учебна лаборатория</title>
+<meta name="description" content="Безплатна локална учебна лаборатория: CPL калкулатор, 20 CRM случая и 10 имейл проверки.">
+<style>
+:root{font-family:system-ui,sans-serif;color:#16382f;background:#f7f8f3;line-height:1.55;color-scheme:light}*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:auto;padding:32px 20px 70px}h1{font-size:clamp(1.8rem,5vw,3.1rem);line-height:1.15;max-width:850px}h2{font-size:1.6rem;margin-top:0}h3{font-size:1.1rem}p{max-width:85ch}a{color:#116448}nav{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}nav a,.tag{border:1px solid #b6c8bd;border-radius:20px;padding:6px 12px}section{background:white;border:1px solid #d9e1d7;border-radius:18px;padding:24px;margin:24px 0;scroll-margin-top:20px}.note{background:#e9f3e7;padding:16px;border-radius:12px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}label{display:block;font-weight:650}input{width:100%;margin:8px 0;padding:12px;border:1px solid #799b88;border-radius:8px;font:inherit;color:inherit;background:white}button{border:1px solid #176449;background:#176449;color:white;border-radius:8px;padding:10px 15px;font:inherit;cursor:pointer;max-width:100%}button.secondary{background:white;color:#176449}.actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #b15e14;outline-offset:3px}output{display:block;font-size:1.35rem;font-weight:650;background:#f1f6ee;padding:14px;border-radius:8px;min-height:60px}.table-wrap{max-width:100%;overflow:auto;border:1px solid #d9e1d7;border-radius:8px}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:10px;border-bottom:1px solid #d9e1d7;vertical-align:top}th{background:#edf4e9}td small{display:block}details{margin:14px 0}summary{cursor:pointer;font-weight:650;padding:6px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7f1;padding:12px;border-radius:8px}footer{font-size:.9rem;color:#436456}#crm-result,#email-result,#cpl-tests-result{min-height:30px}#cpl-error{color:#89381a;font-weight:650}@media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:20px 12px 50px}section{padding:18px 14px}h1{font-size:2rem}button{font-size:.95rem}}
+</style>
+</head>
+<body><main>
+<span class="tag">Marketing Basics · Модули 17–20</span>
+<h1>Направи. Провери. Запази версия 2.</h1>
+<p>Три упражнения за проверим маркетингов процес: сметка с ясни допускания, CRM действия без дублиране и имейл поредица, която спира навреме.</p>
+<div class="note"><strong>Учебна локална симулация.</strong> Всички записи са фиктивни. Страницата не е свързана с CRM, MCP или имейл доставчик и не изпраща писма. Въведеното остава само в тази отворена страница; презареждането го изчиства. Изтегли журнала, за да запазиш работата. Не въвеждай лични данни или ключове.</div>
+<nav aria-label="Упражнения"><a href="#cpl">1. Калкулатор</a><a href="#crm">2. CRM</a><a href="#email">3. Имейл</a><a href="#project">4. Финален проект</a></nav>
+<section id="cpl"><h2>1. Допустим CPL по модела</h2>
+<p>Формула: <strong>(C − R) × p / 100</strong>. C е приносът на клиент преди придобиване, след включените променливи разходи; R е желаният остатък; p е процентът лийд → клиент. Еднакъв период и основа са задължителни. Това е сценарий, не реална рекламна цена или гаранция за печалба.</p>
+<form id="cpl-form" novalidate><div class="grid">
+<div><label for="contribution">Принос на клиент C, €</label><input id="contribution" name="contribution" inputmode="decimal" value="100" aria-describedby="cpl-hint cpl-error"></div>
+<div><label for="remainder">Желан остатък R, €</label><input id="remainder" name="remainder" inputmode="decimal" value="40" aria-describedby="cpl-hint cpl-error"></div>
+<div><label for="close-rate">Лийд към клиент p, %</label><input id="close-rate" name="close-rate" inputmode="decimal" value="25" aria-describedby="cpl-hint cpl-error"></div></div>
+<p id="cpl-hint">Запетая и точка са допустими. C и R са поне 0; p е от 0 до 100. Празен вход не се приема за нула.</p>
+<div class="actions"><button type="submit">Изчисли</button><button type="button" class="secondary" id="cpl-tests">Провери 7 гранични случая</button></div>
+<p id="cpl-error" role="alert"></p><output id="cpl-result" aria-live="polite">Въведи данните и изчисли.</output></form>
+<div class="actions"><button class="secondary" id="cpl-csv">Изтегли CPL журнала · CSV</button><button class="secondary" id="download-html">Изтегли работещия HTML</button></div>
+<p id="cpl-tests-result" role="status"></p><div class="table-wrap"><table><caption>Журнал на изпълнените сметки</caption><thead><tr><th>C</th><th>R</th><th>p</th><th>Статус</th><th>Резултат, €</th></tr></thead><tbody id="cpl-log"></tbody></table></div>
+</section>
+<section id="crm"><h2>2. Двадесет CRM случая</h2>
+<p>Първо прочети входа и предвиди резултата. Изпълнението променя локални записи и задачи; прочитът обратно показва действителното текущо състояние. Повтори стандартен случай и провери, че няма втора задача. „Предадено“ не значи „решено“; конфликтът не е потвърден час.</p>
+<div class="actions"><button id="crm-all">Изпълни 20 случая</button><button class="secondary" id="crm-reset">Нов чист опит</button><button class="secondary" id="crm-csv">Изтегли CRM журнала · CSV</button></div>
+<p id="crm-result" role="status">Още няма изпълнен случай.</p>
+<div class="table-wrap"><table><caption>Предоставени CRM входове и очаквания</caption><thead><tr><th>ID</th><th>Вход</th><th>Очаквано</th><th>Действие</th></tr></thead><tbody id="crm-cases"></tbody></table></div>
+<details><summary>Отвори журнала и прочита обратно</summary><div class="table-wrap"><table><thead><tr><th>Случай</th><th>Статус</th><th>Запис</th><th>Задача</th><th>Нов ефект</th><th>Прочит обратно</th></tr></thead><tbody id="crm-log"></tbody></table></div></details>
+</section>
+<section id="email"><h2>3. Поредицата трябва да спира</h2>
+<p>Предвиди изхода на десетте случая. Локалният модел създава чернови и проверява условия; <strong>draft_ready не означава изпратено или доставено</strong>. При късен отказ има нова проверка след черновата. W1 като поискан материал е отделна цел от маркетинговите W2/W3/R1.</p>
+<div class="actions"><button id="email-all">Изпълни 10 имейл случая</button><button class="secondary" id="email-reset">Нов чист опит</button><button class="secondary" id="email-csv">Изтегли имейл журнала · CSV</button><button class="secondary" id="email-templates">Изтегли 7 чернови · TXT</button></div>
+<p id="email-result" role="status">Още няма изпълнен случай.</p>
+<div class="table-wrap"><table><caption>Предоставени имейл условия и очаквания</caption><thead><tr><th>ID</th><th>Вход</th><th>Очаквано</th><th>Действие</th></tr></thead><tbody id="email-cases"></tbody></table></div>
+<details><summary>Отвори имейл журнала</summary><div class="table-wrap"><table><thead><tr><th>Случай</th><th>Статус</th><th>Чернова</th><th>Поздрав</th><th>Причина</th></tr></thead><tbody id="email-log"></tbody></table></div></details>
+<details><summary>Прочети седемте пълни учебни писма</summary><pre id="templates"></pre></details>
+<p>В истински процес допълнително се проверяват продуктови права, SPF/DKIM/DMARC, alignment, отказ, действителният доставчик и неговата диагностика. Нито тази симулация, нито ИИ чернова доказват настройка на реален домейн.</p>
+</section>
+<section id="project"><h2>4. Нов случай: по-малък бюджет и капацитет</h2>
+<p>Изтегли входните данни. Създай диагноза, оферта, бюджет, журнал и версия 2. Числата са учебни; не ги представяй като свои продажби.</p>
+<p>Нов ресурс: €1000 маркетинг, 76 работни часа, 38 потвърдени поръчки. A: нетна цена €150, променлив разход €60, 2 часа; B: €125, €70, 1.5 часа; C: €190, €90, 3 часа. Търсенето на B/C е неизвестно.</p>
+<div class="actions"><button class="secondary" id="project-csv">Изтегли 12 наблюдения и данните · CSV</button></div>
+<p>Саморубрика: диагноза, клиент/оферта, изпълнимост, измерване, икономика, доказателства/итерация по 0–2. Цел: поне 10/12, без нула в измерване или икономика. Поправи критичните грешки първо. Това е проверка за редакция на собствения проект, не автоматична експертна оценка.</p>
+</section>
+<footer>Издание 7 октомври 2026 · <a href="/learning-platform">Обратно към Академията</a> · Запази входовете, ограниченията и поправката.</footer>
+</main>
+<script id="lab-core">
+'use strict';
+(() => {
+  function number(raw) {
+    if (raw == null || String(raw).trim() === '') return {status:'missing'};
+    const s = String(raw).trim().replace(',', '.');
+    if (!/^-?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s)) return {status:'invalid'};
+    const value = Number(s);
+    return Number.isFinite(value) ? {status:'ok',value} : {status:'invalid'};
+  }
+  function calculate(C,R,p) {
+    const values=[C,R,p].map(number);
+    if(values.some(x=>x.status==='missing'))return {status:'missing',value:null,message:'Въведи и трите стойности; празно не означава нула.'};
+    if(values.some(x=>x.status==='invalid'))return {status:'invalid',value:null,message:'Въведи числови стойности с една точка или запетая.'};
+    const [c,r,rate]=values.map(x=>x.value);
+    if(c<0||r<0||rate<0||rate>100)return {status:'invalid',value:null,message:'C и R са поне 0; p трябва да е между 0 и 100.'};
+    if(r>c)return {status:'no_positive_budget',value:null,message:'Няма положителен бюджет при R > C. Прегледай допусканията.'};
+    const value=(c-r)*rate/100;
+    return {status:'ok',value,message:value===0?'€0 по модела; това не доказва изпълнимо придобиване.':'Допустим CPL по модела; не е реална цена или гаранция.'};
+  }
+  const cplCases=[{input:[100,40,25],status:'ok',value:15},{input:[100,40,0],status:'ok',value:0},{input:[100,40,100],status:'ok',value:60},{input:[100,120,25],status:'no_positive_budget',value:null},{input:[100,40,''],status:'missing',value:null},{input:[-1,40,25],status:'invalid',value:null},{input:[100,100,25],status:'ok',value:0}];
+  const crmCases=[
+    ...Array.from({length:7},(_,i)=>({id:`S0${i+1}`,client:`L0${i+1}`,event:`request-L0${i+1}`,kind:'standard',input:'Подходяща заявка; нужни са размери.',expected:'Един запис и една задача за уточняване.'})),
+    ...Array.from({length:4},(_,i)=>({id:`D0${i+1}`,client:`L0${i+1}`,event:`request-L0${i+1}`,kind:'standard',input:`Повторение на S0${i+1} със същия ключ.`,expected:'Същият запис и задача; без втори ефект.'})),
+    ...Array.from({length:3},(_,i)=>({id:`A0${i+1}`,client:`A0${i+1}`,event:`area-${i+1}`,kind:'area',input:'Адресът е извън предоставения район.',expected:'Неподходящ район, без обещание за услуга.'})),
+    ...Array.from({length:2},(_,i)=>({id:`C0${i+1}`,client:`C0${i+1}`,event:`complaint-${i+1}`,kind:'complaint',input:'Активна жалба; собственик още не е приел.',expected:'Предадена задача, без статус решено.'})),
+    ...Array.from({length:2},(_,i)=>({id:`N0${i+1}`,client:`N0${i+1}`,event:`night-${i+1}`,kind:'night',input:'Заявка в 22:00, извън 09:00–17:00.',expected:'Чака работния прозорец; без обещание 24/7.'})),
+    {id:'B01',client:'B01',event:'book-B01',kind:'conflict',input:'Слотът е зает; операцията връща conflict.',expected:'Непотвърдена резервация.'},
+    {id:'R01',client:'L07',event:'refusal-L07',kind:'refusal',input:'L07 отказва последващ контакт след S07.',expected:'Контактът спира; задачата е отменена.'}
+  ];
+  const newCRM=()=>({records:{},tasks:{},events:{},log:[]});
+  function runCRM(state,c) {
+    let effect=false;
+    if(!state.events[c.event]) {
+      let record=state.records[c.client]||{id:c.client,status:'new',stop:false};
+      if(c.kind==='refusal') {
+        record.stop=true;record.status='contact_stopped';
+        if(state.tasks[c.client])state.tasks[c.client].status='cancelled';
+      } else if(!record.stop) {
+        record.status={standard:'needs_dimensions',area:'out_of_area',complaint:'handoff_pending',night:'queued_business_hours',conflict:'booking_unconfirmed'}[c.kind];
+        if(['standard','complaint','night'].includes(c.kind))state.tasks[c.client] ||= {id:`T-${c.client}`,status:c.kind==='complaint'?'awaiting_acceptance':c.kind==='night'?'queued':'active'};
+      }
+      state.records[c.client]=record;state.events[c.event]=true;effect=true;
+    }
+    const record=state.records[c.client],task=state.tasks[c.client];
+    const result={case:c.id,status:record.status,recordId:record.id,taskId:task?.id||'',newEffect:effect,readback:task?.status||'no_task'};
+    state.log.push(result);return result;
+  }
+  const emailCases=[
+    {id:'E01',key:'W2-U01',kind:'normal',input:'Допустим абонат, нов trigger W2.',expected:'Една чернова; няма изпращане.'},
+    {id:'E02',key:'F1-U02',kind:'purchase',input:'Покупката е преди follow-up.',expected:'Офертното напомняне е потиснато.'},
+    {id:'E03',key:'R1-U03',kind:'unsubscribe',input:'Отказът е преди реактивацията.',expected:'Няма маркетингова чернова.'},
+    {id:'E04',key:'W2-U01',kind:'normal',input:'Повторен trigger на E01.',expected:'Няма втора чернова.'},
+    {id:'E05',key:'W2-U05',kind:'missing_name',input:'Допустим абонат, име липсва.',expected:'Чернова с „Здравей!“, без измислено име.'},
+    {id:'E06',key:'W2-U06',kind:'hard_bounce',input:'Адресът има hard bounce.',expected:'Потискане и проверка на адреса.'},
+    {id:'E07',key:'W2-U07',kind:'complaint',input:'Активна жалба по поръчката.',expected:'Приоритет на обслужването, без upsell.'},
+    {id:'E08',key:'R1-U08',kind:'frequency',input:'W2 вече е използвал дневния лимит.',expected:'Вторият маркетингов поток се отлага.'},
+    {id:'E09',key:'W2-U09',kind:'late_unsubscribe',input:'Отказ след чернова, преди действие.',expected:'Новата проверка потиска готовата чернова.'},
+    {id:'E10',key:'W2-U10',kind:'no_permission',input:'Поискан материал; маркетинговият статус е неизвестен.',expected:'Не се активират W2/W3/R1.'}
+  ];
+  const newEmail=()=>({drafts:{},log:[]});
+  function runEmail(state,c) {
+    let status,reason,draftId='';
+    const blocked={purchase:'purchase_stop',unsubscribe:'global_marketing_stop',hard_bounce:'address_suppressed',complaint:'service_priority',frequency:'frequency_deferred',no_permission:'marketing_not_authorized'};
+    if(c.kind==='late_unsubscribe') {
+      state.drafts[c.key] ||= {id:`draft-${c.key}`,status:'draft_ready'};
+      state.drafts[c.key].status='suppressed_after_recheck';draftId=state.drafts[c.key].id;
+      status='suppressed_after_recheck';reason='Актуален отказ след черновата; действие не се изпълнява.';
+    } else if(blocked[c.kind]) {status=blocked[c.kind];reason=c.expected;}
+    else if(state.drafts[c.key]) {status='duplicate_no_effect';draftId=state.drafts[c.key].id;reason='Същият ключ, същата чернова.';}
+    else {state.drafts[c.key]={id:`draft-${c.key}`,status:'draft_ready'};status='draft_ready';draftId=state.drafts[c.key].id;reason='Локална чернова; не е изпратено писмо.';}
+    const result={case:c.id,status,draftId,greeting:'Здравей!',reason};state.log.push(result);return result;
+  }
+  function csv(rows) {
+    return '\uFEFF'+rows.map(r=>r.map(v=>{
+      let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;
+      return '"'+s.replaceAll('"','""')+'"';
+    }).join(',')).join('\r\n');
+  }
+  const observations=['Идват гости','Трябва ми преди събирането','Какво влиза в цената?','Другата оферта включва ли същото?','Може ли да се махне старото петно?','Имате ли действителен пример за този плат?','Не знам размерите','Как да ги измеря?','Чаках отговор цял ден','Кога ще потвърдите възможност?','Търся почистване на автомобил','Можете ли да ремонтирате дивана?'];
+  globalThis.TavoraMarketingLab={calculate,cplCases,crmCases,emailCases,newCRM,runCRM,newEmail,runEmail,csv,observations};
+})();
+</script>
+<script id="lab-ui">
+'use strict';
+(() => {
+  const portableHTML='<!doctype html>\n'+document.documentElement.outerHTML;
+  const lab=globalThis.TavoraMarketingLab,$=id=>document.getElementById(id);
+  let crm=lab.newCRM(),email=lab.newEmail();const cplLog=[];
+  function row(target,cells) {const tr=document.createElement('tr');for(const cell of cells){const td=document.createElement('td');td.textContent=String(cell??'');tr.append(td);}$(target).append(tr);return tr;}
+  function download(name,text,type='text/plain;charset=utf-8') {const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function calc(input,show) {
+    const r=lab.calculate(...input);cplLog.push([...input,r.status,r.value??'']);row('cpl-log',[...input,r.status,r.value==null?'':r.value.toFixed(2)]);
+    if(show){$('cpl-error').textContent=['missing','invalid'].includes(r.status)?r.message:'';$('cpl-result').textContent=r.value==null?r.message:r.value.toLocaleString('bg-BG',{style:'currency',currency:'EUR'})+' · '+r.message;}
+    return r;
+  }
+  $('cpl-form').addEventListener('submit',e=>{e.preventDefault();calc([$ ('contribution').value,$('remainder').value,$('close-rate').value],true);});
+  $('cpl-tests').onclick=()=>{let passed=0;for(const c of lab.cplCases){const r=calc(c.input,false);if(r.status===c.status&&r.value===c.value)passed++;}$('cpl-tests-result').textContent=`${passed}/7 моделни проверки. Прегледай входовете и статуса в журнала.`;};
+  $('cpl-csv').onclick=()=>download('marketing-cpl-log.csv',lab.csv([['C','R','p','status','value'],...cplLog]),'text/csv;charset=utf-8');
+  $('download-html').onclick=()=>download('marketing-basics-practice.html',portableHTML,'text/html;charset=utf-8');
+  function crmRun(c) {const r=lab.runCRM(crm,c);row('crm-log',[r.case,r.status,r.recordId,r.taskId,r.newEffect?'да':'не',r.readback]);$('crm-result').textContent=`${crm.log.length} изпълнения · ${Object.keys(crm.records).length} записа · ${Object.keys(crm.tasks).length} задачи. Последен статус: ${r.status}.`;}
+  function emailRun(c) {const r=lab.runEmail(email,c);row('email-log',[r.case,r.status,r.draftId,r.greeting,r.reason]);$('email-result').textContent=`${email.log.length} изпълнения · ${Object.keys(email.drafts).length} уникални чернови · 0 изпратени писма. Последен статус: ${r.status}.`;}
+  for(const [cases,target,run] of [[lab.crmCases,'crm-cases',crmRun],[lab.emailCases,'email-cases',emailRun]])for(const c of cases){const tr=row(target,[c.id,c.input,c.expected]);const td=document.createElement('td'),button=document.createElement('button');button.textContent='Изпълни '+c.id;button.className='secondary';button.onclick=()=>run(c);td.append(button);tr.append(td);}
+  $('crm-all').onclick=()=>lab.crmCases.forEach(crmRun);$('email-all').onclick=()=>lab.emailCases.forEach(emailRun);
+  $('crm-reset').onclick=()=>{crm=lab.newCRM();$('crm-log').replaceChildren();$('crm-result').textContent='Нов чист опит; старият локален журнал е изчистен.';};
+  $('email-reset').onclick=()=>{email=lab.newEmail();$('email-log').replaceChildren();$('email-result').textContent='Нов чист опит; старият локален журнал е изчистен.';};
+  $('crm-csv').onclick=()=>download('marketing-crm-log.csv',lab.csv([['case','status','record','task','new_effect','readback'],...crm.log.map(r=>[r.case,r.status,r.recordId,r.taskId,r.newEffect,r.readback])]),'text/csv;charset=utf-8');
+  $('email-csv').onclick=()=>download('marketing-email-log.csv',lab.csv([['case','status','draft','greeting','reason'],...email.log.map(r=>[r.case,r.status,r.draftId,r.greeting,r.reason])]),'text/csv;charset=utf-8');
+  const templates="W1, веднага, поискан материал: тема „Списъкът за размери е тук“. „Здравей! Ето поисканите пет размера за кухненски шкаф. Запиши мерните единици и кое още не знаеш. Самият списък не е крайна оферта. Ако искаш уточнение, отговори на това писмо. Работилницата.“\nW2, след 2 работни дни, само допустим маркетинг: тема „Какво влиза в офертата“. „Здравей! Сравнявай еднакъв обхват: размери, материал и включени дейности. Срокът се потвърждава отделно. Ако искаш, изпрати открития въпрос; не е нужно да купуваш. Работилницата. Отказ: [учебен бутон за отказ].“\nW3, след още 3 работни дни, ако няма отговор/решение: тема „Искаш ли да уточним следващата стъпка?“. „Здравей! Ако проектът още е актуален, можем да уточним обхвата по твоите размери. Нямаме потвърден срок само от това писмо. При отговор преминаваме към твоя въпрос; без отговор тази серия приключва. Работилницата. Отказ: [учебен бутон за отказ].“\n\nF1, на договорения момент: тема „Уточнение по офертата за шкафа“. „Здравей! В разговора остана въпросът за включеното. В учебната оферта материалът и изработката са описани; монтажът още се уточнява. Можеш да отговориш кой детайл остава неясен. Не е потвърден час за монтаж. Работилницата.“\nF2, след 3 работни дни, само при допустим контакт и без решение: тема „Да оставим ли заявката отворена?“. „Здравей! Ако проектът още е актуален, можеш да изпратиш уточнение. Ако не е, приключваме заявката; няма да продължим тази серия без причина. Покупка, отказ или отговор прекратяват напомнянията. Работилницата. Отказ от маркетинг: [учебен бутон за отказ].“\n\nR1, само допустима неактивна група: тема „Още ли са ти полезни съветите за шкафове?“. „Здравей! Имаме кратък списък за сравнение на обхват, ако темата още те интересува. Можеш да избереш предпочитания или да прекратиш писмата. Не приемаме липсата на отваряне за сигурна липса на интерес. Работилницата. Отказ: [учебен бутон за отказ].“\nR2, след 7 дни без отговор/действие: тема „Приключваме тази поредица“. „Здравей! Това е последното съобщение от тази учебна поредица. Без ново допустимо действие приключваме реактивацията. Ако по-късно имаш въпрос, можеш сам да се свържеш с нас. Работилницата. Отказ: [учебен бутон за отказ].“";
+  $('templates').textContent=templates;
+  $('email-templates').onclick=()=>download('marketing-email-templates.txt',templates);
+  $('project-csv').onclick=()=>download('marketing-project-data.csv',lab.csv([['id','data','value'],...lab.observations.map((text,i)=>['N'+String(i+1).padStart(2,'0'),'наблюдение',text]),['week1','valid/qualified/booked/paid/spend','56/32/20/15/750'],['week2','valid/qualified/booked/paid/spend','64/38/26/20/750'],['new_budget','EUR',1000],['new_hours','hours',76],['confirmed_capacity','orders',38],['offer_A','net/variable/hours','150/60/2'],['offer_B','net/variable/hours','125/70/1.5'],['offer_C','net/variable/hours','190/90/3']]),'text/csv;charset=utf-8');
+})();
+</script>
+</body></html>

@@ -1,0 +1,34 @@
+import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+
+test('Marketing practice works on mobile, exports an offline HTML and applies stops',async({page,browser})=>{
+  await page.setViewportSize({width:320,height:800});
+  await page.goto('/academy/marketing-basics-practice.html');
+  await expect(page.getByRole('heading',{name:'Направи. Провери. Запази версия 2.'})).toBeVisible();
+  await page.getByLabel('Лийд към клиент p, %').fill('');
+  await page.getByRole('button',{name:'Изчисли',exact:true}).click();
+  await expect(page.getByRole('alert')).toContainText('празно не означава нула');
+  await page.getByLabel('Лийд към клиент p, %').fill('25,5');
+  await page.getByLabel('Лийд към клиент p, %').press('Enter');
+  await expect(page.locator('#cpl-result')).toContainText('15,30');
+  await page.getByRole('button',{name:'Провери 7 гранични случая'}).click();
+  await expect(page.locator('#cpl-tests-result')).toContainText('7/7');
+  await page.getByRole('button',{name:'Изпълни 20 случая',exact:true}).click();
+  await expect(page.locator('#crm-result')).toContainText('15 записа · 11 задачи');
+  await page.getByRole('button',{name:'Изпълни S01',exact:true}).click();
+  await expect(page.locator('#crm-result')).toContainText('15 записа · 11 задачи');
+  await page.getByRole('button',{name:'Изпълни 10 имейл случая',exact:true}).click();
+  await expect(page.locator('#email-result')).toContainText('3 уникални чернови · 0 изпратени писма');
+  await page.getByText('Отвори имейл журнала', {exact:true}).click();
+  await expect(page.locator('#email-log')).toContainText('suppressed_after_recheck');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  const csvWait=page.waitForEvent('download');await page.getByRole('button',{name:'Изтегли CRM журнала · CSV'}).click();
+  const csv=await csvWait;const csvText=await readFile((await csv.path())!,'utf8');expect(csvText).toContain('"R01","contact_stopped"');
+  const htmlWait=page.waitForEvent('download');await page.getByRole('button',{name:'Изтегли работещия HTML'}).click();
+  const artifact=await htmlWait;const offline=await browser.newContext({offline:true});const offlinePage=await offline.newPage();
+  await offlinePage.goto('file://'+(await artifact.path())!);
+  await expect(offlinePage.locator('#crm-cases tr')).toHaveCount(20);
+  await offlinePage.getByLabel('Лийд към клиент p, %').fill('25');await offlinePage.getByRole('button',{name:'Изчисли',exact:true}).click();
+  await expect(offlinePage.locator('#cpl-result')).toContainText('15,00');
+  await offline.close();
+});
