@@ -1,6 +1,6 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync } from 'node:fs';
-import { LEARNING_SECTIONS } from '../../src/mocks/learning-platform';
+import historicalCatalog from '../fixtures/silk-road-catalog-20261003.json';
 
 export const STUDENT = '00000000-0000-4000-8000-000000000091';
 export const OTHER = '00000000-0000-4000-8000-000000000092';
@@ -15,7 +15,7 @@ const ids = (prefix: string, count: number) => Array.from({ length: count }, (_,
 
 function sourceFixture(allModules: boolean): Source[] {
   const counts = allModules ? [4, 10, 10, 10, 10, 10, 4, 4, 4, 4, 4] : [4, 10];
-  const titles = new Map(LEARNING_SECTIONS[0].modules.flatMap(module => module.lessons.map(lesson => [lesson.id, lesson.title] as const)));
+  const titles = new Map(historicalCatalog.map(lesson => [lesson.lesson_id, lesson.title] as const));
   return counts.flatMap((count, index) => ids(`l${String(index + 1).padStart(2, '0')}`, count)).map(lessonId => {
     const moduleNumber = Number(lessonId.slice(1, 3));
     const moduleId = `s01-m${lessonId.slice(1, 3)}`;

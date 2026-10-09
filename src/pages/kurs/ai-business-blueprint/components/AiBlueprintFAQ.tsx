@@ -19,7 +19,7 @@ export default function AiBlueprintFAQ() {
         <em className="text-[#1C1C1E]/55">Пътят на коприната.</em>
       </h2>
       <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-8">
-        Директни отговори, които AI търсачките могат да цитират самостоятелно.
+        Как се учи, как се проверява напредъкът и какво включва достъпът.
       </p>
 
       <div className="space-y-2">

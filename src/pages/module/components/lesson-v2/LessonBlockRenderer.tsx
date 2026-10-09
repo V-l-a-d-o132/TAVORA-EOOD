@@ -137,7 +137,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       case 'matching': {
         const left = arr(block.content.left);
         const candidates = arr(block.content.right);
-        const right = ['s02-m01', 's02-m02', 's02-m03'].includes(moduleId || '') && block.key.startsWith('checkpoint_video_')
+        const right = moduleId?.startsWith('s01-') || (['s02-m01', 's02-m02', 's02-m03'].includes(moduleId || '') && block.key.startsWith('checkpoint_video_'))
           ? lessonOptionOrder(candidates, `${lessonId}/${block.id}/matching`) : candidates;
         const matches = obj(state.matches);
         return <>{body && <p className="mb-5 whitespace-pre-line text-base leading-7 text-zinc-200">{body}</p>}<div className="space-y-4">{left.map((item, index) => {
@@ -210,7 +210,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
             const questionId = s(question.id, `q${index + 1}`);
             return <fieldset key={questionId} className="rounded-2xl border border-white/10 p-4 sm:p-5">
               <legend className="px-2 text-base font-semibold leading-7 text-white">{index + 1}. {s(question.prompt)}</legend>
-              <div className="mt-3 space-y-3">{(/^s02-m(?:0[1-9]|1[0-5])$/.test(moduleId || '')
+              <div className="mt-3 space-y-3">{(usesShuffledChoices(moduleId)
                 ? lessonOptionOrder(arr(question.options), `${lessonId}/${block.id}/${questionId}/exam`)
                 : arr(question.options)).map((option, optionIndex) => {
                 const optionId = s(option.id, String(optionIndex));
@@ -229,6 +229,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
                 <span className="block font-medium">{s(group.label)}</span>
                 <span>{n(group.correctCount)}/{n(group.totalQuestions)} · {n(group.scorePercent)}% · {group.passed === true ? 'покрит минимум' : `нужни са поне ${n(group.minimumPercent)}%`}</span>
               </li>)}</ul>}
+            {feedback?.criticalPassed === false && <p className="mt-4 text-amber-200">Има непокрито критично решение за плащане, достъп или публикуване. Прегледай посочените теми, дори общият процент да е достатъчен.</p>}
             {weakModules.length > 0 && <div className="mt-4"><p className="font-medium">Теми за повторение:</p><ul className="mt-2 space-y-2">{weakModules.map((moduleId) =>
               <li key={moduleId}><a href={`/module/${moduleId}`} className="underline underline-offset-4 hover:text-white">Модул {moduleId.slice(-2)}{s(reviewMap[moduleId]) ? ` · ${s(reviewMap[moduleId])}` : ''}</a></li>)}</ul></div>}
           </div>}
@@ -253,7 +254,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         return <div><p className="mb-4 leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><label className="mb-4 block"><span className="mb-2 block text-sm font-medium text-zinc-200">Линк към задачата</span><input type="url" value={s(state.kind) === 'link' ? s(state.value) : ''} onChange={(event) => update({ kind: 'link', value: event.target.value })} className={fieldClass} placeholder="https://…" /></label><label className="flex cursor-pointer items-center justify-center gap-3 rounded-xl border border-dashed border-white/20 p-5 text-sm text-zinc-300 hover:border-red-400"><i className="ri-upload-cloud-2-line text-xl" /><span>{s(state.fileName, 'Качи PDF, DOCX или изображение')}</span><input type="file" className="sr-only" accept=".pdf,.docx,.png,.jpg,.jpeg,.txt" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file); }} /></label><button type="button" disabled={busy || !s(state.value)} onClick={() => void submit({ kind: s(state.kind), value: s(state.value) })} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Предай задачата</button></div>;
       }
       case 'summary':
-        return <><ul className="space-y-3">{strArr(block.content.takeaways).map((takeaway) => <li key={takeaway} className="flex gap-3 leading-7 text-zinc-200"><i className="ri-check-line mt-1 text-emerald-400" />{takeaway}</li>)}</ul><div className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-5"><span className="text-xs font-bold uppercase tracking-widest text-red-300">Следваща стъпка</span><p className="mt-2 leading-7 text-white">{s(block.content.nextStep, body)}</p></div>{acknowledgement}</>;
+        return <><ul className="space-y-3">{strArr(block.content.takeaways).map((takeaway) => <li key={takeaway} className="flex gap-3 leading-7 text-zinc-200"><i className="ri-check-line mt-1 text-emerald-400" />{takeaway}</li>)}</ul>{(!moduleId?.startsWith('s01-') || s(block.content.nextStep, body)) && <div className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-5"><span className="text-xs font-bold uppercase tracking-widest text-red-300">Следваща стъпка</span><p className="mt-2 leading-7 text-white">{s(block.content.nextStep, body)}</p></div>}{acknowledgement}</>;
       default:
         return <><p className="leading-7 text-zinc-200">{body}</p>{acknowledgement}</>;
     }

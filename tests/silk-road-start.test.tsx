@@ -18,7 +18,7 @@ const prototype = (plan: SilkPagePlan) => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('a beginner works with facts and an executable artifact', () => {
-  it('checks the actual generated form and keeps the downloaded prototype self-contained', async () => {
+  it('checks the actual generated form and keeps the prototype self-contained', async () => {
     const { dom, api } = prototype(valid());
     expect((await exerciseSilkPrototype(dom.window.document, api)).every(item => item.passed)).toBe(true);
     const html = buildSilkPrototype(SILK_PRACTICE_CASES[0], valid());
@@ -62,13 +62,13 @@ describe('a beginner works with facts and an executable artifact', () => {
 });
 
 describe('beginner route and isolated form', () => {
-  it('offers four material formats, useful diagnosis and a second case after verification', () => {
+  it('offers on-page sources, closed choices and a second case after verification', () => {
     render(<MemoryRouter><SilkRoadStartPage /></MemoryRouter>);
     expect(screen.getByRole('heading', { name: 'Започни с една полезна задача' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'PDF: утвърдени условия' }).getAttribute('download')).toBe('approved-conditions.pdf');
-    expect(screen.getByRole('link', { name: 'CSV: осем учебни запитвания' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Изображение: старата обява' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Аудио: въпрос от посетител' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Осем учебни запитвания' })).toBeTruthy();
+    expect(screen.getByAltText(/Стара учебна обява/)).toBeTruthy();
+    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
+    expect(document.querySelector('input[type="file"]')).toBeNull();
     expect(screen.getByTitle('Твоят учебен прототип').getAttribute('sandbox')).toBe('allow-scripts');
     expect((screen.getByRole('button', { name: 'Приложи наученото към пекарната' }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Виж откъде да продължиш' }));
@@ -83,7 +83,7 @@ describe('beginner route and isolated form', () => {
 
   it('unlocks the next case only after a matching form check and invalidates a changed plan', () => {
     render(<MemoryRouter><SilkRoadStartPage /></MemoryRouter>);
-    fireEvent.change(screen.getByRole('textbox', { name: 'Каква цена ще покажеш в евро?' }), { target: { value: '25' } });
+    fireEvent.change(screen.getByRole('combobox', { name: 'Каква цена ще покажеш в евро?' }), { target: { value: '25' } });
     fireEvent.change(screen.getByRole('combobox', { name: 'На кой източник стъпва цената?' }), { target: { value: 'current' } });
     fireEvent.change(screen.getByRole('combobox', { name: 'Какво обещава бутонът?' }), { target: { value: 'request' } });
     fireEvent.change(screen.getByRole('combobox', { name: 'При повторение на една заявка' }), { target: { value: 'same-id' } });
@@ -99,7 +99,7 @@ describe('beginner route and isolated form', () => {
     fireEvent(window, new MessageEvent('message', { source: frame.contentWindow, data: { type: 'tavora-silk-check-result', requestId: request.requestId, results } }));
     expect(next().disabled).toBe(false);
     expect(screen.getByText(/Проверени предоставени случаи в тази сесия/).textContent).toContain('1/2');
-    fireEvent.change(screen.getByRole('textbox', { name: 'Каква цена ще покажеш в евро?' }), { target: { value: '20' } });
+    fireEvent.change(screen.getByRole('combobox', { name: 'Каква цена ще покажеш в евро?' }), { target: { value: '20' } });
     expect(next().disabled).toBe(true);
     expect(screen.getByText(/Проверени предоставени случаи в тази сесия/).textContent).toContain('0/2');
   });

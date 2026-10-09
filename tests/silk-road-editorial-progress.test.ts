@@ -1,7 +1,7 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
+import historicalCatalog from './fixtures/silk-road-catalog-20261003.json';
 import { actor, createSilkDatabase, learnerRecords, OTHER, STUDENT } from './helpers/silk-road-db';
 
 const release = readFileSync('supabase/migrations/20261003130823_silk_road_m01_m02_editorial_refresh.sql', 'utf8');
@@ -74,8 +74,8 @@ describe('M01/M02 editorial continuation', () => {
     expect((await db.query(`SELECT count(*)::int n FROM academy_lesson_audit WHERE details->>'release'='silk_road_editorial_20261003' AND details ? 'before'`)).rows).toEqual([{ n: 14 }]);
   });
 
-  it('keeps the catalogue titles aligned with all 14 updated published lessons', async () => {
-    const expected = LEARNING_SECTIONS[0].modules.slice(0, 2).flatMap(m => m.lessons.map(l => ({ module_id: m.id, lesson_id: l.id, title: l.title })));
+  it('keeps all 14 historical titles aligned with the October 3 snapshot', async () => {
+    const expected = historicalCatalog.filter(l => ['s01-m01', 's01-m02'].includes(l.module_id));
     const current = (await db.query(`SELECT l.module_id,l.lesson_id,v.title FROM academy_lessons l
       JOIN academy_lesson_versions v ON v.id=l.published_version_id ORDER BY l.module_id,l.lesson_id`)).rows;
     expect(current).toEqual(expected);

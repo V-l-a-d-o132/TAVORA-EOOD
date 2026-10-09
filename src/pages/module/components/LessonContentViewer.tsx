@@ -99,7 +99,7 @@ export default function LessonContentViewer({
 
   return (
     <main className={`min-w-0 space-y-5 ${isInteractiveCourse && allCompleted ? 'pb-28 md:pb-0' : ''}`}>
-      {isInteractiveCourse && modHomeworkPrompt && <details className="rounded-2xl border border-white/10 bg-[#111] p-4 text-zinc-300">
+      {isInteractiveCourse && !moduleId.startsWith('s01-') && modHomeworkPrompt && <details className="rounded-2xl border border-white/10 bg-[#111] p-4 text-zinc-300">
         <summary className="cursor-pointer text-sm font-semibold text-white">Практически резултат от модул {modNumber}</summary>
         <p className="mt-3 whitespace-pre-line text-sm leading-7">{modHomeworkPrompt}</p>
       </details>}

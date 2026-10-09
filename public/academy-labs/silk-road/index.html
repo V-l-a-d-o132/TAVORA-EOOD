@@ -30,10 +30,10 @@
     <section class="card" aria-labelledby="form-title">
       <h2 id="form-title">Изпрати учебно запитване</h2>
       <form id="request-form" novalidate>
-        <label for="name">Учебно име</label><input id="name" name="name" maxlength="80" value="Учебен посетител" autocomplete="off">
-        <label for="contact">Учебен имейл или телефон</label><input id="contact" name="contact" maxlength="120" value="test@example.invalid" autocomplete="off" aria-describedby="contact-help">
-        <p id="contact-help" class="small">Остави примерния адрес. За проверка на грешка изтрий контакта или въведи невалиден формат.</p>
-        <label for="date">Предпочитана дата</label><input id="date" name="preferredDate" type="date">
+        <label for="name">Учебно име</label><select id="name"><option value="Учебен посетител">Учебен посетител</option><option value="Друг учебен посетител">Друг учебен посетител</option></select>
+        <label for="contact">Учебен имейл или телефон</label><select id="contact"><option value="test@example.invalid">test@example.invalid — валиден</option><option value="">Липсва контакт</option><option value="invalid">Невалиден формат</option></select>
+        <p id="contact-help" class="small">Избери валиден, липсващ или невалиден учебен контакт от списъка.</p>
+        <label for="date">Предпочитана дата</label><select id="date"><option value="">Неуточнена</option><option value="2026-10-12">12 октомври — учебен избор</option><option value="2026-10-13">13 октомври — нова заявка</option></select>
         <label for="mode">Учебен случай</label>
         <select id="mode" name="mode"><option value="success">Нормално изпращане</option><option value="error">Неуспешно изпращане</option><option value="slow">Забавено изпращане</option></select>
         <button id="send" type="submit">Изпрати учебна заявка</button>
@@ -47,11 +47,11 @@
       <ol>
         <li>Изпрати валидното запитване. Провери съобщението, идентификатора и един получен запис.</li>
         <li>Повтори същата заявка. Идентификаторът и броят записи трябва да останат същите.</li>
-        <li>Изтрий контакта и изпрати. Полето трябва да има обяснение; нов запис няма.</li>
+        <li>Избери „Липсва контакт“ и изпрати. Полето трябва да има обяснение; нов запис няма.</li>
         <li>Избери грешка с валиден контакт. Данните остават и успех не се показва.</li>
         <li>Избери забавяне. Преди приемане трябва да се вижда „Изпращане…“.</li>
       </ol>
-      <p>За ново запитване промени датата или друго поле. За повторение използвай отделния бутон. Отчетът отдолу проверява само учебната логика. За собствен сайт изпълни тези случаи и провери действителния получател.</p>
+      <p>За ново запитване избери друга учебна дата. За повторение използвай отделния бутон. Отчетът отдолу проверява само учебната логика. За собствен сайт изпълни тези случаи и провери действителния получател.</p>
     </section>
   </div>
   <section class="card" aria-labelledby="records-title">

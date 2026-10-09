@@ -52,11 +52,11 @@ describe('Standalone request laboratory', () => {
     expect(document.getElementById('record-count')?.textContent).toBe('0');
     await vi.advanceTimersByTimeAsync(1200);
     expect(document.getElementById('record-count')?.textContent).toBe('1');
-    (document.getElementById('name') as HTMLInputElement).value = 'Нов учебен посетител';
+    (document.getElementById('name') as HTMLInputElement).value = 'Друг учебен посетител';
     mode.value = 'error'; form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     await vi.advanceTimersByTimeAsync(0);
     expect(document.getElementById('status')?.textContent).toContain('не успя');
-    expect((document.getElementById('name') as HTMLInputElement).value).toBe('Нов учебен посетител');
+    expect((document.getElementById('name') as HTMLInputElement).value).toBe('Друг учебен посетител');
     expect(document.getElementById('record-count')?.textContent).toBe('1');
     document.getElementById('clear')!.click();
     expect(document.getElementById('record-count')?.textContent).toBe('0');

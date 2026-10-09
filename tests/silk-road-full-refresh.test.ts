@@ -1,7 +1,7 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
+import historicalCatalog from './fixtures/silk-road-catalog-20261003.json';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 import { actor, createSilkDatabase, learnerRecords, OTHER, STUDENT } from './helpers/silk-road-db';
 
@@ -102,9 +102,9 @@ describe('all 74 Silk Road lessons continue without resetting students', () => {
     expect((await db.query(`SELECT count(*)::int n FROM academy_lesson_progress WHERE 'practice_20261003'=ANY(completed_block_keys)`)).rows).toEqual([{ n: 0 }]);
   });
 
-  it('aligns every published lesson title with the student catalogue', async () => {
+  it('aligns the historical release with its October 3 catalogue', async () => {
     await actor(db);
-    const expected = LEARNING_SECTIONS[0].modules.flatMap(m => m.lessons.map(l => ({ module_id: m.id, lesson_id: l.id, title: l.title })));
+    const expected = historicalCatalog;
     expect((await db.query(`SELECT l.module_id,l.lesson_id,v.title FROM academy_lessons l
       JOIN academy_lesson_versions v ON v.id=l.published_version_id ORDER BY l.module_id,l.lesson_id`)).rows).toEqual(expected);
   });

@@ -140,6 +140,13 @@ beforeAll(async () => {
       await db.exec(await marketing1620Migration(db));
       continue;
     }
+    if (f.endsWith("silk_road_publish_closed_curriculum.sql")) {
+      // This omnibus schema fixture has extra test lessons and no private staging.
+      // Exercise scoped RPCs here; strict 74-lesson publication, rollback and real
+      // private candidate coverage run in the dedicated closed-release tests.
+      await db.exec(readFileSync("supabase/migrations/" + f, "utf8").split('-- PUBLISH_CLOSED_CURRICULUM')[0]);
+      continue;
+    }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
   }
   await db.exec(

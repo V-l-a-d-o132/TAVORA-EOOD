@@ -16,9 +16,9 @@
   }
 
   async function processRequest(request, mode, store, delay = wait) {
-    if (!request.name.trim()) return { state: 'invalid', field: 'name', message: 'Въведи учебно име. Нов запис няма.' };
+    if (!request.name.trim()) return { state: 'invalid', field: 'name', message: 'Избери учебно име. Нов запис няма.' };
     const validContact = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(request.contact) || /^\+?[0-9 ()-]{7,20}$/.test(request.contact);
-    if (!validContact) return { state: 'invalid', field: 'contact', message: 'Въведи валиден учебен контакт. Нов запис няма.' };
+    if (!validContact) return { state: 'invalid', field: 'contact', message: 'Избери валиден учебен контакт. Нов запис няма.' };
     if (mode === 'slow') await delay(1200);
     if (mode === 'error') return { state: 'error', message: 'Учебното изпращане не успя. Данните са запазени във формата. Можеш да повториш същата заявка.' };
     const previous = store.all().find((record) => record.id === request.id);
