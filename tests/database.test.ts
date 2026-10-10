@@ -147,6 +147,12 @@ beforeAll(async () => {
       await db.exec(readFileSync("supabase/migrations/" + f, "utf8").split('-- PUBLISH_CLOSED_CURRICULUM')[0]);
       continue;
     }
+    if (f.endsWith("silk_road_market_ready_publication.sql")) {
+      // The complete guarded data release is tested against both a synthetic
+      // 74-lesson fixture and the protected production candidate separately.
+      await db.exec(readFileSync("supabase/migrations/" + f, "utf8").split('-- PUBLISH_MARKET_CURRICULUM')[0]);
+      continue;
+    }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
   }
   await db.exec(

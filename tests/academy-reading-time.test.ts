@@ -27,4 +27,13 @@ describe('reading-only estimates for published academy lessons', () => {
     expect(countVisibleLessonWords(lesson)).toBe(13);
     expect(lessonReadingDuration('s01-m01', 'l01-01', 1151)).toBe('≈6–10 мин четене');
   });
+
+  it('counts Silk Road fallback representations once and retains other-course counting', () => {
+    const lesson = { moduleId: 's01-m03', title: '', subtitle: '', objective: '', blocks: [{ title: '', content: {
+      body: 'Повторено представяне на таблицата', tableFallback: true, tableIntro: 'Учебни числа',
+      columns: ['Случай', 'Резултат'], table: [{ cells: ['Първи', 'Един запис'] }],
+    } }] };
+    expect(countVisibleLessonWords(lesson)).toBe(7);
+    expect(countVisibleLessonWords({ ...lesson, moduleId: 's03-m01' })).toBe(11);
+  });
 });

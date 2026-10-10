@@ -7,6 +7,23 @@ import LessonRichText from '../src/pages/module/components/lesson-v2/LessonRichT
 
 afterEach(cleanup);
 
+test('code remains escaped, keeps a fallback, and tables keep their introductory condition', () => {
+  const source = '<script>window.unsafe=true</script>';
+  const content = { body: `Пояснение.\n\n${source}`, codeFallback: true, code: { language: 'HTML', source } };
+  const { container, rerender } = render(<LessonRichText content={content} allowCode />);
+  expect(container.querySelector('script')).toBeNull();
+  expect(container.querySelector('code')?.textContent).toBe(source);
+  expect(container.textContent?.split(source)).toHaveLength(2);
+  rerender(<LessonRichText content={content} />);
+  expect(container.querySelector('pre')).toBeNull();
+  expect(container.textContent).toContain(source);
+  rerender(<LessonRichText content={{ body: 'Повторено таблично представяне', tableFallback: true,
+    tableIntro: 'Само учебни числа.', columns: ['Случай', 'Резултат'], table: [{ cells: ['Първи', 'Един запис'] }] }} />);
+  expect(container.textContent).toContain('Само учебни числа.');
+  expect(container.textContent).not.toContain('Повторено таблично представяне');
+  expect(screen.getByRole('table')).toBeTruthy();
+});
+
 test('payment simulation distinguishes redirect, unpaid and a verified single fulfillment', () => {
   for (const scenario of ['redirect', 'unpaid']) {
     expect(act(act(startWorkflow('checkout', scenario), 'verify'), 'execute').effects).toBe(0);

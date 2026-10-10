@@ -88,7 +88,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         return <><blockquote className="border-l-4 border-red-500 pl-5 text-lg leading-relaxed text-zinc-200">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
       case 'rich_text':
-        return <><LessonRichText content={block.content} />{acknowledgement}</>;
+        return <><LessonRichText content={block.content} allowCode={moduleId?.startsWith('s01-')} />{acknowledgement}</>;
       case 'before_after': {
         const before = obj(block.content.before);
         const after = obj(block.content.after);
@@ -159,7 +159,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         })}</div></div>;
       case 'case_study':
       case 'example':
-        return <><div className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-5"><p className="whitespace-pre-line leading-7 text-zinc-200">{body || s(block.content.case)}</p>{s(block.content.solution) && <div className="mt-5 border-t border-white/10 pt-4"><span className="text-xs font-bold uppercase tracking-widest text-amber-300">Решение</span><p className="mt-2 leading-7 text-zinc-300">{s(block.content.solution)}</p></div>}</div>{acknowledgement}</>;
+        return <><div className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-5"><p className="whitespace-pre-line leading-7 text-zinc-200">{body || s(block.content.case)}</p>{s(block.content.solution) && <div className="mt-5 border-t border-white/10 pt-4"><span className="text-xs font-bold uppercase tracking-widest text-amber-300">Решение</span><p className={`mt-2 leading-7 text-zinc-300${moduleId?.startsWith('s01-') ? ' whitespace-pre-line' : ''}`}>{s(block.content.solution)}</p></div>}</div>{acknowledgement}</>;
       case 'calculator':
         return <form onSubmit={(event) => { event.preventDefault(); const value = usesIndependentPractice(moduleId) ? s(state.value).trim().replace(',', '.') : s(state.value); void submit({ value }); }}><p className="mb-4 leading-7 text-zinc-200">{s(block.content.prompt, body)}</p><div className="flex items-center gap-3"><input inputMode="decimal" aria-label={s(block.content.label, 'Стойност')} value={s(state.value)} onChange={(event) => update({ value: event.target.value })} className={fieldClass} placeholder={s(block.content.placeholder, '0')} /><span className="text-sm text-zinc-400">{s(block.content.unit)}</span></div><button disabled={busy || !s(state.value)} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Изчисли и провери</button></form>;
       case 'prompt_builder': {

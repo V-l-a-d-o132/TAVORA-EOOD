@@ -42,11 +42,13 @@ export function moduleReadingDuration(moduleId: string, lessonIds: readonly stri
 
 /** Current lesson text is authoritative if a published version changes after the snapshot. */
 export function countVisibleLessonWords(lesson: {
+  moduleId?: string;
   title: string;
   subtitle: string;
   objective: string;
   blocks: readonly { title: string; content: unknown }[];
 }): number {
+  const silkRoad = lesson.moduleId?.startsWith('s01-') === true;
   const hiddenKeys = new Set([
     'id', 'key', 'url', 'imageUrl', 'sources', 'correct', 'correctAnswer',
     'answerKey', 'evaluation', 'scoring', 'feedback', 'version',
@@ -58,7 +60,13 @@ export function countVisibleLessonWords(lesson: {
     }
     if (Array.isArray(value)) return value.reduce<number>((total, part) => total + count(part), 0);
     if (value && typeof value === 'object') {
-      return Object.entries(value).reduce((total, [key, part]) => total + (hiddenKeys.has(key) ? 0 : count(part)), 0);
+      const fallback = 'codeFallback' in value && value.codeFallback === true;
+      const tableFallback = silkRoad && 'tableFallback' in value && value.tableFallback === true;
+      const sourceFallback = silkRoad && 'sourceFallback' in value && value.sourceFallback === true;
+      return Object.entries(value).reduce((total, [key, part]) => {
+        if (hiddenKeys.has(key) || (fallback && key === 'code') || (tableFallback && key === 'body')) return total;
+        return total + count(sourceFallback && key === 'body' && typeof part === 'string' ? part.split('\n\n')[0] : part);
+      }, 0);
     }
     return 0;
   };

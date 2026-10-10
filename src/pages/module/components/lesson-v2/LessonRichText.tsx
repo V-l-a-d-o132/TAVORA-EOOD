@@ -18,7 +18,7 @@ function httpsUrl(value: unknown): string | null {
 }
 
 /** Optional tables and references; existing rich-text content keeps its rendering. */
-export default function LessonRichText({ content }: { content: JsonObject }) {
+export default function LessonRichText({ content, allowCode = false }: { content: JsonObject; allowCode?: boolean }) {
   const columns = strings(content.columns);
   const rows = objects(content.table).map(row => strings(row.cells));
   const hasTable = columns.length > 0 && rows.length > 0 && rows.every(row => row.length === columns.length);
@@ -27,14 +27,25 @@ export default function LessonRichText({ content }: { content: JsonObject }) {
     return url && text(source.label) ? [{ url, label: text(source.label) }] : [];
   });
   let body = text(content.body);
-  if (hasTable && content.tableFallback === true) body = '';
+  if (hasTable && content.tableFallback === true) body = text(content.tableIntro);
   if (sources.length && content.sourceFallback === true) body = body.split('\n\n')[0];
   const figure = content.figure && typeof content.figure === 'object' && !Array.isArray(content.figure) ? content.figure as JsonObject : {};
   const figureSrc = text(figure.src);
   const showFigure = /^\/academy-labs\/silk-road\/closed\/[a-z-]+\.svg$/.test(figureSrc) && !!text(figure.alt);
   const simulation = content.simulation;
+  const code = content.code && typeof content.code === 'object' && !Array.isArray(content.code) ? content.code as JsonObject : {};
+  // Older hosted builds still display the complete example from body.
+  // The enhanced renderer shows that exact suffix only once, as escaped text.
+  if (allowCode && content.codeFallback === true && text(code.source)
+    && body.endsWith(`\n\n${text(code.source)}`)) {
+    body = body.slice(0, -text(code.source).length).trimEnd();
+  }
   return <>
     {body && <p className="whitespace-pre-line break-words text-base leading-7 text-zinc-200">{body}</p>}
+    {allowCode && text(code.source) && <figure className="mt-5 overflow-hidden rounded-xl border border-white/15">
+      <figcaption className="border-b border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-zinc-300">Учебен пример · {text(code.language) || 'код'}</figcaption>
+      <pre tabIndex={0} aria-label="Учебен код за преглед" className="overflow-x-auto bg-black/30 p-4 text-sm leading-6 text-zinc-100"><code>{text(code.source)}</code></pre>
+    </figure>}
     {showFigure && <figure className="mt-6">
       <div className="overflow-x-auto rounded-xl border border-white/15" tabIndex={0} role="region" aria-label="Учебна схема">
         <img src={figureSrc} alt={text(figure.alt)} loading="lazy" className="h-auto w-full min-w-[38rem] bg-[#f8fafc]" />
