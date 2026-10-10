@@ -1135,5 +1135,17 @@
       "newTransferChecks": 1,
       "publicContentSha256": "c016551f6eb8c3366e465d5d1acd92b550528cb7c0cd329364004506f640c85c"
     }
-  ]
+  ],
+  "publication": {
+    "date": "2026-10-10",
+    "codeCommit": "5e4573734ac9b6c6330dfce926b0b3adedf40fba",
+    "remoteMigration": "20261010044715",
+    "publishedLessons": 74,
+    "validationErrors": 0,
+    "preservedOrigins": 74,
+    "carriedProgressRows": 3,
+    "attemptsPreserved": 1455,
+    "otherCourseContentPreserved": true,
+    "frontendHosting": "Readdy; owner Pull from main then Update; deployment not yet verified"
+  }
 }
