@@ -1,0 +1,94 @@
+{
+  "checked_at": "2026-10-11 17:33:59.109708+00",
+  "published_lessons": 240,
+  "blocks": 2897,
+  "graded_blocks": 706,
+  "exams": 5,
+  "exam_questions": 78,
+  "validation_failures": 0,
+  "unexpected_block_types": 0,
+  "other_courses": [
+    {
+      "blocks": 1108,
+      "course": "s01",
+      "lessons": 74,
+      "fingerprint": "a7e88bfecf12539d03690c95cba98b06"
+    },
+    {
+      "blocks": 2914,
+      "course": "s03",
+      "lessons": 209,
+      "fingerprint": "278541e709ffd397aaf83e42bfeb4c08"
+    }
+  ],
+  "attempts": {
+    "hash": "da413a6d961977393fffc2a14f017079",
+    "count": 1455
+  },
+  "carried_progress": 14,
+  "preserved_old_versions": 240,
+  "progress_rows": 29,
+  "reconstructed_original_progress": {
+    "hash": "9441dfa0e674cd28b9f30fe6cacb1b8b",
+    "count": 29
+  },
+  "current_source_archives": 14,
+  "anon_can_read_stage": false,
+  "authenticated_can_read_stage": false,
+  "authenticated_can_call_private_exam": false,
+  "block_grader_hash": "f39ca65ae072b6ea09a80a1ece49be65",
+  "exam_dispatch_hash": "24b2ac4abdda783eac65b97d8c043d3e",
+  "published_exams": [
+    {
+      "lesson": "pv15-09",
+      "points": 80,
+      "questions": 12,
+      "minimumPercent": 80,
+      "criticalQuestions": 0,
+      "minimumGroupPercent": 50
+    },
+    {
+      "lesson": "pv15-10",
+      "points": 80,
+      "questions": 12,
+      "minimumPercent": 80,
+      "criticalQuestions": 0,
+      "minimumGroupPercent": 50
+    },
+    {
+      "lesson": "pv15-11",
+      "points": 80,
+      "questions": 12,
+      "minimumPercent": 80,
+      "criticalQuestions": 0,
+      "minimumGroupPercent": 50
+    },
+    {
+      "lesson": "pv15-12",
+      "points": 80,
+      "questions": 12,
+      "minimumPercent": 80,
+      "criticalQuestions": 0,
+      "minimumGroupPercent": 50
+    },
+    {
+      "lesson": "pv15-13",
+      "points": 100,
+      "questions": 30,
+      "minimumPercent": 80,
+      "criticalQuestions": 3,
+      "minimumGroupPercent": 50
+    }
+  ],
+  "publicationCommit": "7979d90576b559990931388125d839c10f10053f",
+  "frontendStatus": "Readdy build not verified; public academy-build.json returned HTTP 404. Owner Pull from main then Update required.",
+  "securityAdvisoriesUnchanged": true,
+  "tests": {
+    "unit": 371,
+    "skipped": 1,
+    "actualCandidateAndSharedDatabase": 42,
+    "browser": 3,
+    "renderedBlocks": 5794,
+    "pageErrors": 0
+  }
+}
