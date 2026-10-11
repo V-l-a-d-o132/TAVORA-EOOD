@@ -1,121 +1,66 @@
-import { expect, test, type Page } from '@playwright/test';
-import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
-
-async function fillPlan(page: Page, secondCase = false) {
-  await page.getByLabel('Колко броя показваш?', { exact: true }).fill(secondCase ? '4' : '6');
-  await page.getByLabel('Каква цена показваш в евро?', { exact: true }).fill(secondCase ? '24,00' : '9');
-  for (const [label, value] of [
-    ['Източник на цената', 'current'], ['Начало на клипа', 'question'],
-    ['Условие за получаване', secondCase ? 'clarify' : 'pickup'], ['Последно действие', 'ask'],
-  ]) await page.getByRole('combobox', { name: label, exact: true }).selectOption(value, { timeout: 10000 });
-}
+import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  // The test opens only the built local app. No production database, analytics,
-  // AI service, student account, camera or microphone is used.
-  await page.route('**/*', route => {
-    const url = route.request().url();
-    return url.startsWith('http://127.0.0.1:5180/') ? route.continue() : route.abort();
-  });
+  await page.route('**/*', route => route.request().url().startsWith('http://127.0.0.1:5180/') ? route.continue() : route.abort());
   await page.goto('/academy-labs/perfect-video/start');
-  await expect(page.getByRole('heading', { name: 'От една идея до проверен файл', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Само задължителни', exact: true }).click();
+  const consent=page.getByRole('button', { name: 'Само задължителни', exact: true });
+  if(await consent.isVisible())await consent.click();
 });
 
-test('records, downloads and independently reads a real 25-second video', async ({ page }, testInfo) => {
-  await fillPlan(page);
-  await page.getByRole('button', { name: 'Провери моята версия', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Приложи наученото към ателието', exact: true })).toBeEnabled();
-  await page.getByRole('button', { name: 'Запиши графичната версия като видео', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Прекрати записа', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Прекрати записа', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText('Записът е прекратен');
-  await expect(page.getByRole('button', { name: 'Запиши графичната версия като видео', exact: true })).toBeEnabled();
-
-  await page.getByRole('button', { name: 'Запиши графичната версия като видео', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Действително полученият видеофайл', exact: true })).toBeVisible({ timeout: 45000 });
-  await expect(page.getByRole('alert')).toHaveCount(0);
-  const pendingDownload = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Изтегли видеофайла', exact: true }).click();
-  const download = await pendingDownload;
-  const clipPath = testInfo.outputPath(download.suggestedFilename());
-  await download.saveAs(clipPath);
-  const probe = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_packets', '-show_format', '-show_streams', '-of', 'json', clipPath], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
-  const video = probe.streams.find((stream: { codec_type: string }) => stream.codec_type === 'video');
-  expect(video.width).toBe(1080); expect(video.height).toBe(1920);
-  const packets = probe.packets.filter((packet: { stream_index: number }) => packet.stream_index === video.index);
-  const start = Math.min(...packets.map((packet: { pts_time: string }) => Number(packet.pts_time)));
-  const end = Math.max(...packets.map((packet: { pts_time: string; duration_time?: string }) => Number(packet.pts_time) + (Number(packet.duration_time) || 0)));
-  const duration = Number.isFinite(Number(probe.format.duration)) ? Number(probe.format.duration) : end - start;
-  expect(duration).toBeGreaterThanOrEqual(24); expect(duration).toBeLessThanOrEqual(26);
-  expect(probe.streams.some((stream: { codec_type: string }) => stream.codec_type === 'audio')).toBe(false);
-  expect(readFileSync(clipPath).length).toBeGreaterThan(10000);
-  writeFileSync(testInfo.outputPath('ffprobe.json'), JSON.stringify(probe, null, 2));
-  execFileSync('ffmpeg', ['-y', '-ss', '4', '-i', clipPath, '-frames:v', '1', testInfo.outputPath('video-content-frame.png')]);
-  execFileSync('ffmpeg', ['-y', '-ss', '11', '-i', clipPath, '-frames:v', '1', testInfo.outputPath('video-price-frame.png')]);
-  await page.getByRole('button', { name: 'Провери получения файл', exact: true }).click();
-  await expect(page.getByText('Преминато: Файлът е вертикален 9:16', { exact: true })).toBeVisible();
-  await expect(page.getByRole('alert')).toHaveCount(0);
-  const player = page.locator('video[aria-label="Твоята записана графична версия"]');
-  await expect.poll(() => player.evaluate((video: HTMLVideoElement) => video.videoWidth)).toBe(1080);
-  await player.evaluate(async (video: HTMLVideoElement) => { video.muted = true; await video.play(); });
-  await expect.poll(() => player.evaluate((video: HTMLVideoElement) => video.currentTime)).toBeGreaterThan(0);
-  await player.evaluate((video: HTMLVideoElement) => video.pause());
-  // Some MediaRecorder outputs do not expose a finite duration to HTMLVideoElement.
-  // The learner must see an explicit unknown, never a fabricated passing result.
-  const browserMetadata = await page.getByText(/^Отчетени свойства на /).innerText();
-  if (browserMetadata.includes('времето не е отчетено')) {
-    await expect(page.getByText('Нужна е поправка: Отчетеното време е около 25 секунди', { exact: true })).toBeVisible();
-  } else {
-    await expect(page.getByText('Преминато: Отчетеното време е около 25 секунди', { exact: true })).toBeVisible();
+test('all eleven demonstrations work on a narrow screen without text or file inputs', async ({ page }, info) => {
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.setViewportSize({width:375,height:812});
+  const navigation=page.getByRole('navigation',{name:'Избери демонстрация'});
+  await expect(navigation.getByRole('button')).toHaveCount(11);
+  for(let i=0;i<11;i++){
+    await navigation.getByRole('button').nth(i).click();
+    const group=page.getByRole('group',{name:'Вариант на демонстрацията'});
+    const choices=group.getByRole('button');
+    for(let n=0;n<await choices.count();n++){
+      await choices.nth(n).click();
+      await expect(choices.nth(n)).toHaveAttribute('aria-pressed','true');
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+    }
   }
-  await page.screenshot({ path: testInfo.outputPath('recorded-project-desktop.png'), fullPage: true });
+  await expect(page.locator('textarea,input[type=text],input[type=file]')).toHaveCount(0);
+  await navigation.getByRole('button').first().click();
+  await page.getByRole('button',{name:'Следващ момент',exact:true}).click();
+  await expect(page.getByText('Подготовката',{exact:true})).toBeVisible();
+  await page.screenshot({path:info.outputPath('story-mobile.png'),fullPage:true});
+  expect(errors).toEqual([]);
 });
 
-test('mobile layout, feedback and changed-case transfer work without an account', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 375, height: 812 });
-  await page.screenshot({ path: testInfo.outputPath('project-mobile-opening.png'), fullPage: true });
-  const noOverflow = () => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
-  expect(await noOverflow()).toBe(true);
-  await page.getByText('Учебен отчет: повече гледания не означава повече поръчки', { exact: true }).click();
-  expect(await noOverflow()).toBe(true);
-  await fillPlan(page);
-  await page.getByLabel('Каква цена показваш в евро?', { exact: true }).fill('8');
-  await page.getByRole('button', { name: 'Провери моята версия', exact: true }).click();
-  await expect(page.getByText('Нужна е поправка: Цената е от актуалния източник', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Приложи наученото към ателието', exact: true })).toBeDisabled();
-  await page.getByLabel('Каква цена показваш в евро?', { exact: true }).fill('9');
-  await page.getByRole('button', { name: 'Провери моята версия', exact: true }).click();
-  await page.getByRole('button', { name: 'Приложи наученото към ателието', exact: true }).click();
-  await fillPlan(page, true);
-  await page.getByRole('button', { name: 'Провери моята версия', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('успешен план не удостоверява успешен запис');
-  await expect(page.getByText(/Проверени учебни планове в тази сесия/)).toContainText('2/2');
-  const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Изтегли сценария като CSV', exact: true }).click();
-  const download = await downloadPromise;
-  const path = testInfo.outputPath('ceramics-storyboard.csv');
-  await download.saveAs(path);
-  const csv = readFileSync(path, 'utf8');
-  expect(csv).toContain('4 керамични чаши'); expect(csv).toContain('24,00 €'); expect(csv).toContain('Получаването се уточнява');
-  expect(csv).not.toContain('Вземане от обекта');
-  expect(await noOverflow()).toBe(true);
-  await page.screenshot({ path: testInfo.outputPath('project-mobile-corrected.png'), fullPage: true });
+test('six audio assets decode and sound leads the image in the J-cut example',async({page},info)=>{
+  await page.getByRole('navigation',{name:'Избери демонстрация'}).getByRole('button').nth(9).click();
+  for(const label of ['Референтен сигнал','Добавени отражения','Добавен шум','Ограничени върхове']){
+    await page.getByRole('button',{name:label,exact:true}).click();
+    const audio=page.locator('audio');
+    await audio.evaluate(async(el:HTMLAudioElement)=>{el.muted=true;await el.play();});
+    await expect.poll(()=>audio.evaluate((el:HTMLAudioElement)=>el.currentTime)).toBeGreaterThan(.1);
+    expect(await audio.evaluate((el:HTMLAudioElement)=>el.duration)).toBeGreaterThan(6);
+    await audio.evaluate((el:HTMLAudioElement)=>el.pause());
+  }
+  await page.getByRole('navigation',{name:'Избери демонстрация'}).getByRole('button').nth(10).click();
+  for(const label of ['Звук и картина заедно','Първо следващият звук']){
+    await page.getByRole('button',{name:label,exact:true}).click();
+    const audio=page.locator('audio');await audio.evaluate(async(el:HTMLAudioElement)=>{el.muted=true;await el.play();});
+    await expect.poll(()=>audio.evaluate((el:HTMLAudioElement)=>el.duration)).toBeGreaterThan(9);
+    await audio.evaluate((el:HTMLAudioElement)=>{el.pause();el.currentTime=2.5;el.dispatchEvent(new Event('timeupdate'));});
+    await expect(page.getByText('Пред вратата',{exact:true})).toBeVisible();
+    await audio.evaluate((el:HTMLAudioElement)=>{el.currentTime=3.2;el.dispatchEvent(new Event('timeupdate'));});
+    await expect(page.getByText('В работилницата',{exact:true})).toBeVisible();
+  }
+  await page.screenshot({path:info.outputPath('sound-cut-desktop.png'),fullPage:true});
 });
 
-test('audit copy describes the actual course and separates the project from automated exams', async ({ page }, testInfo) => {
+test('public promise and schema describe the closed course and show a working sample',async({page},info)=>{
   await page.goto('/kurs/perfektnoto-video');
-  await expect(page.getByRole('heading', { name: 'Имаш идея за видео. Как да я превърнеш в готов файл?' })).toBeVisible();
-  await expect(page.getByText(/модул 09 — за монтаж, а модул 13 — за бриф/)).toBeVisible();
-  await page.getByRole('button', { name: 'Какво включва финалният проект?', exact: true }).click();
-  await expect(page.getByText(/автоматичното им преминаване не удостоверява качеството или авторството/)).toBeVisible();
-  const schema = await page.locator('#schema-perfektno-video-funnel').textContent();
-  const course = JSON.parse(schema!)['@graph'];
-  expect(course.find((entry: { '@type': string }) => entry['@type'] === 'Course')).not.toHaveProperty('timeRequired');
-  expect(schema).toContain('автоматичното им преминаване не удостоверява');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.setViewportSize({ width: 375, height: 812 });
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: testInfo.outputPath('audit-course-mobile.png'), fullPage: true });
+  await expect(page.getByRole('heading',{name:/История, която се разбира/})).toBeVisible();
+  await expect(page.getByRole('region',{name:'Какво свързва кадрите?'})).toBeVisible();
+  await page.getByRole('button',{name:'Трябва ли да качвам файлове или да пиша домашни?',exact:true}).click();
+  await expect(page.getByText(/Няма свободни писмени отговори/)).toBeVisible();
+  const schema=await page.locator('#schema-perfektno-video-funnel').textContent();
+  expect(schema).toContain('предишните 239 урока');expect(schema).not.toContain('собствен проект');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.screenshot({path:info.outputPath('course-desktop.png'),fullPage:true});
 });

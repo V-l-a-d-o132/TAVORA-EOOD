@@ -11,7 +11,7 @@ export default function PerfektnoVideoForWho() {
         <em className="text-[#1C1C1E]/60">и за кого НЕ е.</em>
       </h2>
       <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-10 max-w-xl">
-        Видеото продава — но не всеки има нужда от пълна видео система. Ето честно за кого работи тази програма.
+        Програмата е за хора, които искат да разбират как решенията при снимане и монтаж влияят на историята.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -24,12 +24,12 @@ export default function PerfektnoVideoForWho() {
           </div>
           <ul className="space-y-3">
             {[
-              'Собственици на бизнес, които знаят че видеото продава, но не знаят откъде да започнат',
+              'Собственици на бизнес, които искат да показват продукта или услугата си ясно',
               'Маркетолози, които искат да добавят видео продукция към услугите си',
               'Фрийлансъри, които искат да предлагат видео като платена услуга',
               'Хора, които са пробвали да снимат видеа, но не са доволни от резултатите',
               'Предприемачи с ограничен бюджет, които искат да започнат само с телефон',
-              'Всеки, който иска система за видео — не просто "гледай YouTube и пробвай"',
+              'Хора, които искат обяснен работен ред и обратна връзка по решенията',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <div className="w-4 h-4 flex items-center justify-center rounded-full shrink-0 mt-0.5 bg-[#22c55e]/15">
@@ -46,15 +46,13 @@ export default function PerfektnoVideoForWho() {
             <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#e53e3e]/15 shrink-0">
               <i className="ri-close-line text-sm text-[#dc2626]" />
             </div>
-            <span className="text-sm font-medium text-[#1C1C1E]">За кого НЕ Е:</span>
+            <span className="text-sm font-medium text-[#1C1C1E]">Кога е нужен друг формат:</span>
           </div>
           <ul className="space-y-3">
             {[
-              'Хора, които очакват да станат оператори за 3 дни — видео продукцията изисква практика',
-              'Хора, които нямат търпение да минат през подготвителните модули (стратегия, послание)',
-              'Хора, които искат да снимат само за TikTok и нищо друго — системата е по-широка',
-              'Хора, които очакват тестовете да заместят снимането и монтажа',
-              'Хора, които смятат че AI ще им направи видеата вместо тях — AI помага, но не замества продукцията',
+              'Искаш преподавател да прегледа и оцени твой заснет клип',
+              'Търсиш обучение само за бутоните на един конкретен редактор',
+              'Нужни са ти присъствени снимки с екип и обратна връзка на място',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <div className="w-4 h-4 flex items-center justify-center rounded-full shrink-0 mt-0.5 bg-[#e53e3e]/15">

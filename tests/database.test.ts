@@ -153,6 +153,13 @@ beforeAll(async () => {
       await db.exec(readFileSync("supabase/migrations/" + f, "utf8").split('-- PUBLISH_MARKET_CURRICULUM')[0]);
       continue;
     }
+    if (f.endsWith("perfect_video_story_first_publication.sql")) {
+      // Private content staging is absent in this schema fixture. The dedicated
+      // 240-lesson release suite exercises the full guarded publication and
+      // grading; keep the shared RPC regression checks here.
+      await db.exec(readFileSync("supabase/migrations/" + f, "utf8").split('-- PUBLISH_VIDEO_STORY_CURRICULUM')[0]);
+      continue;
+    }
     await db.exec(readFileSync("supabase/migrations/" + f, "utf8"));
   }
   await db.exec(

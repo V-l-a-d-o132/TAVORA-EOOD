@@ -1,3 +1,4 @@
+import VideoDecisionLab from '@/components/academy/VideoDecisionLab';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 
@@ -28,13 +29,13 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
             className="text-3xl md:text-5xl lg:text-6xl font-light text-[#1C1C1E] leading-tight mb-5"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            Създавай видео съдържание с ясна стратегия,
+            История, която се разбира.
             <br />
-            <em className="text-[#e53e3e]">а не на случаен принцип</em>
+            <em className="text-[#e53e3e]">С техниката, която имаш.</em>
           </h1>
 
           <p className="text-sm md:text-base text-[#1C1C1E]/65 max-w-2xl leading-relaxed mb-4">
-            Практическа програма от идеята и сценария до заснемането, монтажа, публикуването и анализа на резултатите.
+            Научи се да избираш какво да покажеш, как да го заснемеш и как да свържеш кадрите. Започваме с причината, действието и резултата; камерата и монтажът им помагат да станат ясни.
           </p>
           <p className="text-xs text-[#1C1C1E]/45 mb-8 max-w-2xl">
             {keyword}
@@ -64,23 +65,18 @@ export default function PerfektnoVideoHero({ keyword }: PerfektnoVideoHeroProps)
               <span className="text-xs font-medium text-[#1C1C1E]">Накратко</span>
             </div>
             <p className="text-sm text-[#1C1C1E]/65 leading-relaxed">
-              <strong className="text-[#1C1C1E]">Перфектното Видео</strong> е 15-модулната видео продукционна
-              система на Академия TAVORA — от диагностика и стратегия до професионална продукция,
-              собствен проект и изпити по FRAME. Програмата покрива както нискобюджетно заснемане само с телефон, така и работа с
-              професионален екип и техника. Перфектното Видео се отключва с покупка или предоставен достъп.
+              <strong className="text-[#1C1C1E]">Перфектното Видео</strong> включва 15 модула, готови визуални и звукови демонстрации,
+              решения по учебни казуси и пет изпита. Учиш принципите за работа с телефон и камера,
+              монтаж, разпространение и клиентска услуга. Задачите са с готови варианти, без качване на файлове. Перфектното Видео се отключва с покупка или предоставен достъп.
             </p>
           </div>
         </div>
       </section>
 
-      <div className="w-full h-[280px] md:h-[420px] overflow-hidden">
-        <img loading="lazy" decoding="async" width={1400} height={420}
-          src="https://readdy.ai/api/search-image?query=professional%20video%20production%20behind%20the%20scenes%20camera%20setup%20on%20tripod%20with%20soft%20cinematic%20lighting%20clean%20minimalist%20studio%20environment%20warm%20amber%20tones%20dramatic%20shadows%20creative%20filmmaking%20atmosphere%20editorial%20photography%20no%20text&width=1400&height=420&seq=perfektno-video-funnel-hero&orientation=landscape"
-          alt="Перфектното Видео — програма за бизнес видео продукция с ясна стратегия, 15 модула от Академия TAVORA"
-          className="w-full h-full object-cover object-top"
-          title="Перфектното Видео — видео съдържание с ясна стратегия"
-        />
-      </div>
+      <div id="video-demo" className="bg-[#090f0d] px-5 py-8"><div className="mx-auto max-w-3xl">
+        <p className="text-sm leading-6 text-zinc-300">Опитай част от първия урок. Смени реда и проследи историята.</p>
+        <VideoDecisionLab kind="story" />
+      </div></div>
     </>
   );
 }

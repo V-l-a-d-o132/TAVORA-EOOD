@@ -35,6 +35,7 @@ type Lesson = {
 };
 const lessons = JSON.parse(match[1]) as Lesson[];
 const auditTitles = new Map((JSON.parse(readFileSync('scripts/perfect-video/releases/audit-repairs-20261004.json', 'utf8')) as { lesson: string; title: string }[]).map(s => [s.lesson, s.title]));
+const storyTitles = new Map((JSON.parse(readFileSync('scripts/perfect-video/releases/story-first-manifest-20261011.json', 'utf8')).lessons as { lesson: string; title: string }[]).map(s => [s.lesson, s.title]));
 const section = LEARNING_SECTIONS.find((entry) => entry.id === "perfektno-video");
 
 describe("Perfect Video 10–12 first publication", () => {
@@ -54,7 +55,7 @@ describe("Perfect Video 10–12 first publication", () => {
       );
       for (const lesson of published) {
         const listing = catalog?.lessons.find((entry) => entry.id === lesson.lesson_id);
-        expect(auditTitles.get(lesson.lesson_id) ?? lesson.title).toBe(listing?.title);
+        expect(storyTitles.get(lesson.lesson_id) ?? auditTitles.get(lesson.lesson_id) ?? lesson.title).toBe(listing?.title);
         expect(listing?.duration).toBe(lessonReadingDuration(moduleId, lesson.lesson_id));
       }
     }

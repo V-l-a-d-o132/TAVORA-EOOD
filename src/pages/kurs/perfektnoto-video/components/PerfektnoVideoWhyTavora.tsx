@@ -1,72 +1,12 @@
 export default function PerfektnoVideoWhyTavora() {
-  return (
-    <section id="zashto-tavora" className="max-w-4xl mx-auto px-4 md:px-16 py-14 md:py-20">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-[1px] bg-[#1C1C1E]/20 shrink-0" />
-        <span className="text-xs text-[#1C1C1E]/60 tracking-wide">Защо Академия TAVORA?</span>
-      </div>
-
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-[#1C1C1E] mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-        Първо го правим.{' '}
-        <em className="text-[#1C1C1E]/55">После го преподаваме.</em>
-      </h2>
-      <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-10 max-w-xl">
-        ТАВОРА ЕООД работи по видео продукция и маркетинг.
-        В програмата свързваме този работен процес с учебни казуси и задачи, които можеш да изпълниш сам.
-      </p>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-        {[
-          {
-            icon: 'ri-camera-lens-line',
-            title: 'Реална продукция, не теория',
-            desc: 'Продуцирали сме видеа за K-Food (+280% трафик чрез видео), Академика 245 (милиони импресии, национално медийно покритие) и Амалипе. Техниките в модулите не са от YouTube — те са от сетове, на които сме били.',
-          },
-          {
-            icon: 'ri-smartphone-line',
-            title: 'Работи за всеки бюджет',
-            desc: 'Модул 07 е за телефон и оборудване според задачата, модул 09 — за монтаж, а модул 13 — за бриф, бюджет и клиентска работа. Започваш с наличното и проверяваш нуждата от екип или техника по конкретен проект.',
-          },
-          {
-            icon: 'ri-shield-check-line',
-            title: 'Доживотен достъп и обновления',
-            desc: 'Плащаш веднъж и имаш достъп завинаги, включително бъдещи обновления на модулите. Без абонамент и без скрити такси.',
-          },
-        ].map((item) => (
-          <div key={item.title} className="p-6 rounded-2xl border border-[#1C1C1E]/8 bg-white flex flex-col items-start">
-            <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#0A2540]/8 mb-4">
-              <i className={`${item.icon} text-lg text-[#0A2540]`} />
-            </div>
-            <h4 className="text-sm font-medium text-[#1C1C1E] mb-2">{item.title}</h4>
-            <p className="text-xs text-[#1C1C1E]/65 leading-relaxed">{item.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="p-6 md:p-8 rounded-2xl bg-[#0F1F35] text-white">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h3 className="text-lg md:text-xl font-light mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-              Видео проекти с милиони импресии.
-            </h3>
-            <div className="space-y-2 text-sm text-white/75 leading-relaxed">
-              <p>
-                <strong className="text-white">K-Food Велико Търново</strong> — +280% органичен трафик чрез къси видеа за TikTok и Reels.
-              </p>
-              <p>
-                <strong className="text-white">Академика 245</strong> — документален разказ с национално медийно покритие (bTV, Nova, БНТ).
-              </p>
-              <p>
-                <strong className="text-white">Амалипе</strong> — видео кампания за образователна интеграция с милиони импресии.
-              </p>
-            </div>
-          </div>
-          <div className="text-center shrink-0">
-            <div className="text-4xl md:text-5xl font-light text-white mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>3+</div>
-            <div className="text-xs text-white/65">клиентски видео проекта</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <section id="zashto-tavora" className="mx-auto max-w-4xl px-4 py-14 md:px-16 md:py-20">
+    <p className="mb-5 text-xs tracking-wide text-[#1C1C1E]/60">Как преподаваме в TAVORA</p>
+    <h2 className="mb-4 text-3xl font-light text-[#1C1C1E] md:text-4xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Покажи действието. Обясни избора. Провери резултата.</h2>
+    <p className="mb-8 text-sm leading-7 text-[#1C1C1E]/70">Това е нашият целенасочен подход. След обяснението трябва да можеш да разпознаеш проблем и да избереш какво да промениш.</p>
+    <div className="grid gap-5 md:grid-cols-3">{[
+      { title: 'Видим и чут пример', body: 'Променяш кадриране, фокус, светлина или ред на сцените. При звука слушаш една и съща реплика с различни дефекти.' },
+      { title: 'Решение с условия', body: 'Телефон, камера, време и бюджет са част от случая. Избираш действие според конкретния проблем и получаваш причина за отговора.' },
+      { title: 'История през целия процес', body: 'Сценарият, кадрите, звукът и монтажът отговарят на един въпрос: разбира ли зрителят какво се случва и защо?' },
+    ].map(item => <div key={item.title} className="rounded-2xl border border-[#1C1C1E]/10 p-6"><h3 className="mb-3 text-base font-medium text-[#1C1C1E]">{item.title}</h3><p className="text-sm leading-7 text-[#1C1C1E]/70">{item.body}</p></div>)}</div>
+  </section>;
 }

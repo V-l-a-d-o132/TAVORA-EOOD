@@ -58,19 +58,17 @@ describe('first video project checks the artifact that is rendered and recorded'
 });
 
 describe('a beginner can correct a project without an account or grader', () => {
-  it('offers three routes, terms and a gated second case; editing invalidates the check', () => {
+  it('uses only closed choices and visibly changes the story', () => {
     render(<MemoryRouter><PerfectVideoStartPage /></MemoryRouter>);
-    expect(screen.getByRole('heading', { name: 'От една идея до проверен файл' })).toBeTruthy();
-    const next = () => screen.getByRole('button', { name: 'Приложи наученото към ателието' }) as HTMLButtonElement;
-    expect(next().disabled).toBe(true);
-    fireEvent.change(screen.getByRole('textbox', { name: 'Колко броя показваш?' }), { target: { value: '6' } });
-    fireEvent.change(screen.getByRole('textbox', { name: 'Каква цена показваш в евро?' }), { target: { value: '9' } });
-    for (const [label, value] of [['Източник на цената', 'current'], ['Начало на клипа', 'question'], ['Условие за получаване', 'pickup'], ['Последно действие', 'ask']]) fireEvent.change(screen.getByRole('combobox', { name: label }), { target: { value } });
-    fireEvent.click(screen.getByRole('button', { name: 'Провери моята версия' }));
-    expect(next().disabled).toBe(false); expect(screen.getByRole('status').textContent).toContain('успешен план не удостоверява успешен запис');
-    fireEvent.change(screen.getByRole('textbox', { name: 'Каква цена показваш в евро?' }), { target: { value: '8' } });
-    expect(next().disabled).toBe(true);
-    expect(screen.getByText(/Проверени учебни планове в тази сесия/).textContent).toContain('0/2');
+    expect(screen.getByRole('heading', { name: /Първо историята/ })).toBeTruthy();
+    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
+    expect(document.querySelector('input[type=file]')).toBeNull();
+    expect(screen.getByText('Празната чаша')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Следващ момент' }));
+    expect(screen.getByText('Подготовката')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Първо резултатът' }));
+    expect(screen.getByText('Човекът отпива')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Първо резултатът' }).getAttribute('aria-pressed')).toBe('true');
   });
   it('adds a public route and scopes the runtime change to only the three video modules and the existing Silk route', () => {
     expect(readFileSync('src/router/config.tsx', 'utf8')).toContain("path: '/academy-labs/perfect-video/start'");

@@ -88,7 +88,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         return <><blockquote className="border-l-4 border-red-500 pl-5 text-lg leading-relaxed text-zinc-200">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
       case 'rich_text':
-        return <><LessonRichText content={block.content} allowCode={moduleId?.startsWith('s01-')} />{acknowledgement}</>;
+        return <><LessonRichText content={block.content} allowCode={moduleId?.startsWith('s01-')} allowVideoLab={moduleId?.startsWith('s02-')} />{acknowledgement}</>;
       case 'before_after': {
         const before = obj(block.content.before);
         const after = obj(block.content.after);
@@ -229,7 +229,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
                 <span className="block font-medium">{s(group.label)}</span>
                 <span>{n(group.correctCount)}/{n(group.totalQuestions)} · {n(group.scorePercent)}% · {group.passed === true ? 'покрит минимум' : `нужни са поне ${n(group.minimumPercent)}%`}</span>
               </li>)}</ul>}
-            {feedback?.criticalPassed === false && <p className="mt-4 text-amber-200">Има непокрито критично решение за плащане, достъп или публикуване. Прегледай посочените теми, дори общият процент да е достатъчен.</p>}
+            {feedback?.criticalPassed === false && <p className="mt-4 text-amber-200">{moduleId === 's02-m15' ? 'Има непокрито критично решение за звук, достоверност или права.' : 'Има непокрито критично решение за плащане, достъп или публикуване.'} Прегледай посочените теми, дори общият процент да е достатъчен.</p>}
             {weakModules.length > 0 && <div className="mt-4"><p className="font-medium">Теми за повторение:</p><ul className="mt-2 space-y-2">{weakModules.map((moduleId) =>
               <li key={moduleId}><a href={`/module/${moduleId}`} className="underline underline-offset-4 hover:text-white">Модул {moduleId.slice(-2)}{s(reviewMap[moduleId]) ? ` · ${s(reviewMap[moduleId])}` : ''}</a></li>)}</ul></div>}
           </div>}

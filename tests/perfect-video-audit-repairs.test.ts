@@ -4,7 +4,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createVideoAuditDatabase } from './helpers/perfect-video-audit-db';
 import { actor, learnerRecords, STUDENT, OTHER } from './helpers/silk-road-db';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
-import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
+// Preserve the historical release snapshot; the new candidate suite checks current counts.
+const AUDIT_READING_WORDS = JSON.parse(readFileSync('tests/helpers/perfect-video-audit-reading-20261004.json', 'utf8'));
 
 const migration = readFileSync('supabase/migrations/20261004131422_perfect_video_audit_repairs.sql', 'utf8');
 const release = 'perfect_video_audit_repairs_20261004';
@@ -113,7 +114,7 @@ describe('narrow video audit repairs', () => {
     for (const spec of specs) {
       const lesson = (await db.query<{ lesson: Parameters<typeof countVisibleLessonWords>[0] }>('SELECT academy_get_lesson_v2($1,$2) lesson',[spec.module,spec.lesson])).rows[0].lesson;
       expect(lesson.title).toBe(spec.title);
-      expect(countVisibleLessonWords(lesson),spec.lesson).toBe(ACADEMY_READING_WORDS[`${spec.module}/${spec.lesson}`]);
+      expect(countVisibleLessonWords(lesson),spec.lesson).toBe(AUDIT_READING_WORDS[`${spec.module}/${spec.lesson}`]);
       if(spec.lesson==='pv11-13') expect(JSON.stringify(lesson)).toMatch(/60%.*30%/);
     }
     await actor(db);

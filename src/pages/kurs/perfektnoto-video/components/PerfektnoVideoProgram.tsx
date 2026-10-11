@@ -16,14 +16,14 @@ export default function PerfektnoVideoProgram() {
       </div>
 
       <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-[#1C1C1E] mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-        FRAME системата —{' '}
+        От първата история до цял проект —{' '}
         <em className="text-[#1C1C1E]/55">15-те модула.</em>
       </h2>
       <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-2">
-        Всеки модул е самостоятелна стъпка в системата Focus → Record → Assemble → Measure → Evolve. Първият модул е диагностика и стратегия. Програмата се отключва с покупка или предоставен достъп.
+        Първият урок показва цяла кратка история. След това разглеждаме как всеки избор — от сценарий до звук и монтаж — променя разбирането. Програмата се отключва с покупка или предоставен достъп.
       </p>
       <p className="text-xs text-[#1C1C1E]/50 mb-8">
-        {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока с практически задачи. Диапазоните са само ориентир за четене; снимките, монтажът и упражненията са със собствено темпо.
+        {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока с обяснения, примери и затворени проверки. Времената са ориентири за четене; решенията, повторенията и личното упражняване са със собствено темпо.
       </p>
 
       <div className="space-y-3">

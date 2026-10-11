@@ -440,19 +440,20 @@ describe('video audit choice presentation and prerequisite guides', () => {
     await waitFor(()=>expect(submit).toHaveBeenCalledWith({[field]:'b'}));
   });
 
-  it('shows a compact editing bridge, an early channel decision and honest exam scope without adding graded steps', () => {
+  it('shows closed practice guidance and honest exam scope only for the video course', () => {
     const block=createBlock('concept',0);
     const props={lessonOverride:lesson([block])};
     const {rerender}=render(<LessonEngineV2 {...props} moduleId="s02-m04" />);
-    const summary=screen.getByText('Преди първата монтажна задача');
+    const summary=screen.getByText('Как тези решения се прилагат в редактор');
     expect(summary.closest('details')?.open).toBe(false);
-    expect(screen.getByText(/Проектът и готовият видеофайл са различни неща/)).toBeTruthy();
+    expect(screen.getByText(/Проектът пази решенията за монтаж/)).toBeTruthy();
+    expect(screen.getByRole('link',{name:'в учебната работна маса'}).getAttribute('href')).toBe('/academy-labs/perfect-video/start');
     rerender(<LessonEngineV2 {...props} moduleId="s02-m10" />);
-    expect(screen.getByText('Първо избери къде ще се гледа видеото')).toBeTruthy();
+    expect(screen.queryByText('Как тези решения се прилагат в редактор')).toBeNull();
     rerender(<LessonEngineV2 {...props} moduleId="s02-m15" />);
-    expect(screen.getByText(/не удостоверява авторството или качеството/)).toBeTruthy();
+    expect(screen.getByText(/не оценяват собствен заснет клип/)).toBeTruthy();
     expect(screen.getAllByRole('heading',{name:block.title})).toHaveLength(1);
     rerender(<LessonEngineV2 {...props} moduleId="s03-m01" />);
-    expect(screen.queryByText(/не удостоверява авторството/)).toBeNull();
+    expect(screen.queryByText(/не оценяват собствен заснет клип/)).toBeNull();
   });
 });

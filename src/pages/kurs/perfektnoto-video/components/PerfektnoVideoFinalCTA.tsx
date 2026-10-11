@@ -42,7 +42,7 @@ export default function PerfektnoVideoFinalCTA() {
           <div className="hidden sm:block w-1 h-1 rounded-full bg-white/20" />
           <div className="flex items-center gap-2">
             <i className="ri-film-line text-white/60" />
-            <span>Реални проекти с милиони импресии</span>
+            <span>Казуси, демонстрации и обратна връзка</span>
           </div>
           <div className="hidden sm:block w-1 h-1 rounded-full bg-white/20" />
           <div className="flex items-center gap-2">

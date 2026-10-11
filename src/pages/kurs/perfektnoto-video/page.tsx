@@ -49,7 +49,7 @@ const SCHEMA = {
       '@type': 'Course',
       '@id': 'https://imashnujnoto.com/kurs/perfektnoto-video#course',
       name: 'Перфектното Видео',
-      description: `15-модулна FRAME система за бизнес видео продукция. Покрива диагностика, послание и психология, камера и композиция, осветление и цвят, звук, снимачен ден, мобилна видеография, batch filming, монтаж, публикуване, аналитика, AI, професионална продукция и финален практичен проект с изпити. ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока.`,
+      description: `15 модула за разказване с видео, камера и телефон, светлина, звук, снимачен ден, организация, монтаж, разпространение, измерване, ИИ и клиентска работа. Готови демонстрации и затворени казуси без качване; финален учебен проект и пет изпита. ${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока.`,
       url: 'https://imashnujnoto.com/kurs/perfektnoto-video',
       provider: {
         '@type': 'Organization',
@@ -120,7 +120,7 @@ export default function PerfektnotoVideoFunnelPage() {
     };
   }, []);
 
-  const keyword = 'FRAME система за бизнес видео продукция';
+  const keyword = 'История, заснемане и монтаж с наличната техника';
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Inter', sans-serif" }}>
