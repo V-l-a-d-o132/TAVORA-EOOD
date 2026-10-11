@@ -1,7 +1,7 @@
 -- Authorized s02-only release. Private answers remain in owner-only staging.
 DO $check$ BEGIN
  IF (SELECT md5(prosrc) FROM pg_proc WHERE oid='academy_private.complete_lesson_block(text,text,uuid,text,jsonb,uuid)'::regprocedure) NOT IN ('31004056f18b88c85a832cd44dd463f4','f39ca65ae072b6ea09a80a1ece49be65') THEN RAISE EXCEPTION 'Shared grader changed since audit: complete_lesson_block'; END IF;
- IF (SELECT md5(prosrc) FROM pg_proc WHERE oid='academy_private.submit_course_exam(text,text,uuid,text,jsonb,uuid)'::regprocedure) NOT IN ('d53f2e6c29f05ab7512219393ccc83b3','039169e285a499cd56b44a82c4df44fd') THEN RAISE EXCEPTION 'Shared grader changed since audit: submit_course_exam'; END IF;
+ IF (SELECT md5(prosrc) FROM pg_proc WHERE oid='academy_private.submit_course_exam(text,text,uuid,text,jsonb,uuid)'::regprocedure) NOT IN ('d53f2e6c29f05ab7512219393ccc83b3','24b2ac4abdda783eac65b97d8c043d3e') THEN RAISE EXCEPTION 'Shared grader changed since audit: submit_course_exam'; END IF;
 END $check$;
 
 CREATE OR REPLACE FUNCTION academy_private.complete_lesson_block(p_module text, p_lesson text, p_version uuid, p_block_key text, p_payload jsonb, p_attempt uuid)
@@ -477,9 +477,23 @@ BEGIN
  RETURN NEW;
 END $guard$;
 REVOKE ALL ON FUNCTION academy_private.guard_perfect_video_story_progress() FROM PUBLIC,anon,authenticated,service_role;
-DROP TRIGGER IF EXISTS guard_perfect_video_story_progress ON public.academy_lesson_progress;
-CREATE TRIGGER guard_perfect_video_story_progress BEFORE INSERT OR UPDATE ON public.academy_lesson_progress
-FOR EACH ROW EXECUTE FUNCTION academy_private.guard_perfect_video_story_progress();
+-- Retain any matching installed guard; never remove an existing trigger.
+DO $install_guard$
+BEGIN
+ IF EXISTS(SELECT 1 FROM pg_trigger
+   WHERE tgrelid='public.academy_lesson_progress'::regclass
+     AND tgname='guard_perfect_video_story_progress'
+     AND (tgfoid<>'academy_private.guard_perfect_video_story_progress()'::regprocedure
+       OR tgtype<>23 OR tgenabled<>'O' OR tgnargs<>0)) THEN
+  RAISE EXCEPTION 'Unexpected existing video progress guard';
+ END IF;
+ IF NOT EXISTS(SELECT 1 FROM pg_trigger
+   WHERE tgrelid='public.academy_lesson_progress'::regclass
+     AND tgname='guard_perfect_video_story_progress') THEN
+  CREATE TRIGGER guard_perfect_video_story_progress BEFORE INSERT OR UPDATE ON public.academy_lesson_progress
+  FOR EACH ROW EXECUTE FUNCTION academy_private.guard_perfect_video_story_progress();
+ END IF;
+END $install_guard$;
 
 
 -- PUBLISH_VIDEO_STORY_CURRICULUM

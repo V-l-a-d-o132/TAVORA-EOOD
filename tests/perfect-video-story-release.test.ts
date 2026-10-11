@@ -110,6 +110,8 @@ test('all 240 publish, historical attempts survive and only identical work carri
   const progress=(await db.query<any>('SELECT * FROM academy_lesson_progress WHERE user_id=$1',[STUDENT])).rows[0];
   expect(progress.version_id===oldVersion).toBe(false); expect(progress.completed_at).toBeNull();
   if (!candidateDir) expect(progress.completed_block_keys).toEqual(['objective','quiz_1']);
+  await db.exec(functions);
+  expect((await db.query("SELECT count(*)::int n FROM pg_trigger WHERE tgname='guard_perfect_video_story_progress'")).rows[0].n).toBe(1);
   await db.exec(publication);
   expect((await db.query('SELECT count(*)::int n FROM academy_lesson_versions WHERE change_note=$1',[RELEASE])).rows[0].n).toBe(240);
   await expect(db.query('UPDATE academy_lesson_progress SET version_id=$1 WHERE user_id=$2',[oldVersion,STUDENT])).rejects.toThrow(/version changed/);
