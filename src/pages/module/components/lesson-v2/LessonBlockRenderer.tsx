@@ -201,6 +201,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         const answered = questions.filter((question) => typeof answers[s(question.id)] === 'string').length;
         const weakModules = strArr(feedback?.weakModules).filter((moduleId) => /^s\d{2}-m\d{2}$/.test(moduleId));
         const reviewMap = obj(block.content.reviewMap);
+        const reviewNumbers = obj(block.content.reviewNumbers);
         const groupResults = arr(feedback?.groupResults);
         const minimumGroupPercent = n(block.content.minimumGroupPercent);
         return <div>
@@ -231,7 +232,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
               </li>)}</ul>}
             {feedback?.criticalPassed === false && <p className="mt-4 text-amber-200">{moduleId === 's02-m15' ? 'Има непокрито критично решение за звук, достоверност или права.' : 'Има непокрито критично решение за плащане, достъп или публикуване.'} Прегледай посочените теми, дори общият процент да е достатъчен.</p>}
             {weakModules.length > 0 && <div className="mt-4"><p className="font-medium">Теми за повторение:</p><ul className="mt-2 space-y-2">{weakModules.map((moduleId) =>
-              <li key={moduleId}><a href={`/module/${moduleId}`} className="underline underline-offset-4 hover:text-white">Модул {moduleId.slice(-2)}{s(reviewMap[moduleId]) ? ` · ${s(reviewMap[moduleId])}` : ''}</a></li>)}</ul></div>}
+              <li key={moduleId}><a href={`/module/${moduleId}`} className="underline underline-offset-4 hover:text-white">Модул {String(n(reviewNumbers[moduleId], Number(moduleId.slice(-2)))).padStart(2, '0')}{s(reviewMap[moduleId]) ? ` · ${s(reviewMap[moduleId])}` : ''}</a></li>)}</ul></div>}
           </div>}
         </div>;
       }

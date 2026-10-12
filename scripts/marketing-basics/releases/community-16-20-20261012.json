@@ -1,0 +1,913 @@
+{
+  "edition": "marketing_basics_community_final_stage4_20261012",
+  "modules": [
+    {
+      "number": 16,
+      "source_module_id": "s03-m14",
+      "title": "Данните: какво знаем за избора и какво само предполагаме",
+      "subtitle": "Цел, събитие, единица, неизвестно и допустим извод"
+    },
+    {
+      "number": 17,
+      "source_module_id": "s03-m17",
+      "title": "CRM и обслужване: обещанието след първия контакт",
+      "subtitle": "Нужда, роли, следващо действие и проверено изпълнение"
+    },
+    {
+      "number": 18,
+      "source_module_id": "s03-m18",
+      "title": "Полезен инструмент, който човек разбира и препраща",
+      "subtitle": "Полезна задача, прозрачна логика, достъп и граници"
+    },
+    {
+      "number": 19,
+      "source_module_id": "s03-m19",
+      "title": "Имейлът като полезно продължение на разговора",
+      "subtitle": "Очакване, допустимост, полезно писмо и актуален статус"
+    },
+    {
+      "number": 20,
+      "source_module_id": "s03-m20",
+      "title": "Финал: от разбиране на общността до изпълнимо предложение",
+      "subtitle": "Хора, стойност, послание, изпълнение и проверим резултат"
+    }
+  ],
+  "totals": {
+    "before": {
+      "rendered": {
+        "words": 65163,
+        "lines": 5780
+      },
+      "payload": {
+        "words": 69334,
+        "lines": 6170
+      }
+    },
+    "after": {
+      "rendered": {
+        "words": 86918,
+        "lines": 7045
+      },
+      "payload": {
+        "words": 90021,
+        "lines": 7199
+      }
+    }
+  },
+  "measurement_method": "Unicode letter/number sequences; nonempty logical lines; actual renderer fields and revealed text; no URLs, private grading data, retired open blocks or UI labels; payload includes version objective and ignored text.",
+  "violations": [],
+  "exam_coverage": {
+    "original_questions": 100,
+    "retained": [
+      {
+        "source_question": "lm20-10/q01",
+        "source_module": "s03-m01",
+        "review_module": "s03-m01",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q01",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q02",
+        "source_module": "s03-m01",
+        "review_module": "s03-m09",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-1-q02",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q03",
+        "source_module": "s03-m01",
+        "review_module": "s03-m01",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q03",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q04",
+        "source_module": "s03-m02",
+        "review_module": "s03-m02",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q04",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q05",
+        "source_module": "s03-m02",
+        "review_module": "s03-m02",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q05",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q06",
+        "source_module": "s03-m02",
+        "review_module": "s03-m02",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q06",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q07",
+        "source_module": "s03-m03",
+        "review_module": "s03-m03",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q07",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q08",
+        "source_module": "s03-m03",
+        "review_module": "s03-m03",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q08",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q09",
+        "source_module": "s03-m03",
+        "review_module": "s03-m03",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-1-q09",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q10",
+        "source_module": "s03-m04",
+        "review_module": "s03-m04",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-1-q10",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q11",
+        "source_module": "s03-m04",
+        "review_module": "s03-m04",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-1-q11",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-10/q12",
+        "source_module": "s03-m04",
+        "review_module": "s03-m04",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-1-q12",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q01",
+        "source_module": "s03-m05",
+        "review_module": "s03-m05",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-2-q01",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q02",
+        "source_module": "s03-m05",
+        "review_module": "s03-m05",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-2-q02",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q03",
+        "source_module": "s03-m05",
+        "review_module": "s03-m05",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-2-q03",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q04",
+        "source_module": "s03-m06",
+        "review_module": "s03-m06",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q04",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q05",
+        "source_module": "s03-m06",
+        "review_module": "s03-m06",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q05",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q06",
+        "source_module": "s03-m06",
+        "review_module": "s03-m06",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q06",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q07",
+        "source_module": "s03-m07",
+        "review_module": "s03-m07",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-2-q07",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q08",
+        "source_module": "s03-m07",
+        "review_module": "s03-m07",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-2-q08",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q09",
+        "source_module": "s03-m07",
+        "review_module": "s03-m07",
+        "new_lesson": "lm20-10",
+        "new_question": "retained-2-q09",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q10",
+        "source_module": "s03-m08",
+        "review_module": "s03-m08",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q10",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q11",
+        "source_module": "s03-m08",
+        "review_module": "s03-m08",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q11",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q12",
+        "source_module": "s03-m08",
+        "review_module": "s03-m08",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q12",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q13",
+        "source_module": "s03-m09",
+        "review_module": "s03-m09",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q13",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q14",
+        "source_module": "s03-m09",
+        "review_module": "s03-m09",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q14",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q15",
+        "source_module": "s03-m09",
+        "review_module": "s03-m09",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q15",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q16",
+        "source_module": "s03-m10",
+        "review_module": "s03-m10",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q16",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q17",
+        "source_module": "s03-m10",
+        "review_module": "s03-m10",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q17",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-11/q18",
+        "source_module": "s03-m10",
+        "review_module": "s03-m10",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-2-q18",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q01",
+        "source_module": "s03-m11",
+        "review_module": "s03-m11",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-3-q01",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q02",
+        "source_module": "s03-m11",
+        "review_module": "s03-m11",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-3-q02",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q03",
+        "source_module": "s03-m11",
+        "review_module": "s03-m11",
+        "new_lesson": "lm20-11",
+        "new_question": "retained-3-q03",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q04",
+        "source_module": "s03-m12",
+        "review_module": "s03-m12",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q04",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q05",
+        "source_module": "s03-m12",
+        "review_module": "s03-m12",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q05",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q06",
+        "source_module": "s03-m12",
+        "review_module": "s03-m12",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q06",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q07",
+        "source_module": "s03-m13",
+        "review_module": "s03-m13",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q07",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q08",
+        "source_module": "s03-m13",
+        "review_module": "s03-m13",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q08",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q09",
+        "source_module": "s03-m13",
+        "review_module": "s03-m13",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q09",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q10",
+        "source_module": "s03-m14",
+        "review_module": "s03-m14",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-3-q10",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q11",
+        "source_module": "s03-m14",
+        "review_module": "s03-m14",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-3-q11",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q12",
+        "source_module": "s03-m14",
+        "review_module": "s03-m14",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-3-q12",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q13",
+        "source_module": "s03-m15",
+        "review_module": "s03-m15",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q13",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q14",
+        "source_module": "s03-m15",
+        "review_module": "s03-m15",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q14",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q15",
+        "source_module": "s03-m15",
+        "review_module": "s03-m15",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q15",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q16",
+        "source_module": "s03-m16",
+        "review_module": "s03-m16",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q16",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q17",
+        "source_module": "s03-m16",
+        "review_module": "s03-m16",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q17",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-12/q18",
+        "source_module": "s03-m16",
+        "review_module": "s03-m16",
+        "new_lesson": "lm20-12",
+        "new_question": "retained-3-q18",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q01",
+        "source_module": "s03-m17",
+        "review_module": "s03-m17",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q01",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q02",
+        "source_module": "s03-m17",
+        "review_module": "s03-m17",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q02",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q03",
+        "source_module": "s03-m17",
+        "review_module": "s03-m17",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q03",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q04",
+        "source_module": "s03-m18",
+        "review_module": "s03-m18",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q04",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q05",
+        "source_module": "s03-m18",
+        "review_module": "s03-m18",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q05",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q06",
+        "source_module": "s03-m18",
+        "review_module": "s03-m18",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q06",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q07",
+        "source_module": "s03-m19",
+        "review_module": "s03-m19",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q07",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q08",
+        "source_module": "s03-m19",
+        "review_module": "s03-m19",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q08",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q09",
+        "source_module": "s03-m19",
+        "review_module": "s03-m19",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q09",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q10",
+        "source_module": "s03-m20",
+        "review_module": "s03-m20",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q10",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q11",
+        "source_module": "s03-m20",
+        "review_module": "s03-m20",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q11",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-13/q12",
+        "source_module": "s03-m20",
+        "review_module": "s03-m20",
+        "new_lesson": "lm20-13",
+        "new_question": "retained-4-q12",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q01",
+        "source_module": "s03-m01",
+        "review_module": "s03-m01",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q01",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q02",
+        "source_module": "s03-m01",
+        "review_module": "s03-m01",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q02",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q03",
+        "source_module": "s03-m02",
+        "review_module": "s03-m02",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q03",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q04",
+        "source_module": "s03-m02",
+        "review_module": "s03-m02",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q04",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q05",
+        "source_module": "s03-m03",
+        "review_module": "s03-m03",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q05",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q06",
+        "source_module": "s03-m03",
+        "review_module": "s03-m03",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q06",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q07",
+        "source_module": "s03-m04",
+        "review_module": "s03-m04",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q07",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q08",
+        "source_module": "s03-m04",
+        "review_module": "s03-m04",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q08",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q09",
+        "source_module": "s03-m05",
+        "review_module": "s03-m05",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q09",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q10",
+        "source_module": "s03-m05",
+        "review_module": "s03-m05",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q10",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q11",
+        "source_module": "s03-m06",
+        "review_module": "s03-m06",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q11",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q12",
+        "source_module": "s03-m06",
+        "review_module": "s03-m06",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q12",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q13",
+        "source_module": "s03-m07",
+        "review_module": "s03-m07",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q13",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q14",
+        "source_module": "s03-m07",
+        "review_module": "s03-m07",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q14",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q15",
+        "source_module": "s03-m08",
+        "review_module": "s03-m08",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q15",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q16",
+        "source_module": "s03-m08",
+        "review_module": "s03-m08",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q16",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q17",
+        "source_module": "s03-m09",
+        "review_module": "s03-m09",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q17",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q18",
+        "source_module": "s03-m09",
+        "review_module": "s03-m09",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q18",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q19",
+        "source_module": "s03-m10",
+        "review_module": "s03-m10",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q19",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q20",
+        "source_module": "s03-m10",
+        "review_module": "s03-m10",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q20",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q21",
+        "source_module": "s03-m11",
+        "review_module": "s03-m11",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q21",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q22",
+        "source_module": "s03-m11",
+        "review_module": "s03-m11",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q22",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q23",
+        "source_module": "s03-m12",
+        "review_module": "s03-m12",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q23",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q24",
+        "source_module": "s03-m12",
+        "review_module": "s03-m12",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q24",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q25",
+        "source_module": "s03-m13",
+        "review_module": "s03-m13",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q25",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q26",
+        "source_module": "s03-m13",
+        "review_module": "s03-m13",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q26",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q27",
+        "source_module": "s03-m14",
+        "review_module": "s03-m14",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q27",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q28",
+        "source_module": "s03-m14",
+        "review_module": "s03-m14",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q28",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q29",
+        "source_module": "s03-m15",
+        "review_module": "s03-m15",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q29",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q30",
+        "source_module": "s03-m15",
+        "review_module": "s03-m15",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q30",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q31",
+        "source_module": "s03-m16",
+        "review_module": "s03-m16",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q31",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q32",
+        "source_module": "s03-m16",
+        "review_module": "s03-m16",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q32",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q33",
+        "source_module": "s03-m17",
+        "review_module": "s03-m17",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q33",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q34",
+        "source_module": "s03-m17",
+        "review_module": "s03-m17",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q34",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q35",
+        "source_module": "s03-m18",
+        "review_module": "s03-m18",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q35",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q36",
+        "source_module": "s03-m18",
+        "review_module": "s03-m18",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q36",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q37",
+        "source_module": "s03-m19",
+        "review_module": "s03-m19",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q37",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q38",
+        "source_module": "s03-m19",
+        "review_module": "s03-m19",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q38",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q39",
+        "source_module": "s03-m20",
+        "review_module": "s03-m20",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q39",
+        "status": "retained_with_current_review_map"
+      },
+      {
+        "source_question": "lm20-14/q40",
+        "source_module": "s03-m20",
+        "review_module": "s03-m20",
+        "new_lesson": "lm20-14",
+        "new_question": "retained-5-q40",
+        "status": "retained_with_current_review_map"
+      }
+    ],
+    "added": 20,
+    "bank_counts": [
+      14,
+      16,
+      15,
+      15,
+      60
+    ],
+    "module_numbers": {
+      "s03-m01": 1,
+      "s03-m02": 2,
+      "s03-m05": 3,
+      "s03-m03": 4,
+      "s03-m07": 5,
+      "s03-m10": 6,
+      "s03-m11": 7,
+      "s03-m08": 8,
+      "s03-m06": 9,
+      "s03-m09": 10,
+      "s03-m04": 11,
+      "s03-m16": 12,
+      "s03-m15": 13,
+      "s03-m12": 14,
+      "s03-m13": 15,
+      "s03-m14": 16,
+      "s03-m17": 17,
+      "s03-m18": 18,
+      "s03-m19": 19,
+      "s03-m20": 20
+    }
+  },
+  "publication": {
+    "status": "published_in_supabase",
+    "lessons": 55,
+    "blocks": 894,
+    "graded_blocks": 273,
+    "exam_questions": 120,
+    "validation_errors": 0,
+    "validation_warnings": 0,
+    "published_at": "2026-10-12",
+    "old_versions_retained": 55
+  },
+  "lesson_files": [
+    "community-16-20-20261012/module-16.json",
+    "community-16-20-20261012/module-17.json",
+    "community-16-20-20261012/module-18.json",
+    "community-16-20-20261012/module-19.json",
+    "community-16-20-20261012/module-20-part-1.json",
+    "community-16-20-20261012/module-20-part-2.json"
+  ]
+}
