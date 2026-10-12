@@ -1,0 +1,81 @@
+{
+  "course": "Marketing Basics",
+  "edition": "marketing_basics_community_second_stage2_20261012",
+  "status": "published",
+  "approved_plan": "Plan_Marketing_Basics_20_Modula_2026-10-11.md",
+  "first_page_structure": "objective first; body, outcomes, deliverable, check; existing renderer unchanged",
+  "modules": [
+    {
+      "number": 6,
+      "source_module_id": "s03-m10",
+      "title": "Полезно съдържание, което си струва да препратиш",
+      "subtitle": "Въпрос, факти, готов отговор и подходящ формат"
+    },
+    {
+      "number": 7,
+      "source_module_id": "s03-m11",
+      "title": "Социални мрежи и разговори в общности",
+      "subtitle": "Фирмен канал, група, личен разговор и реално обслужване"
+    },
+    {
+      "number": 8,
+      "source_module_id": "s03-m08",
+      "title": "Сайтът като проверка на обещанието",
+      "subtitle": "Страница, форма, получаване и изпълнимо следващо действие"
+    },
+    {
+      "number": 9,
+      "source_module_id": "s03-m06",
+      "title": "Google профилът: как хората проверяват местния бизнес",
+      "subtitle": "Истински данни, достъп, актуален процес и работещ контакт"
+    },
+    {
+      "number": 10,
+      "source_module_id": "s03-m09",
+      "title": "Търсене, SEO и ИИ: от съвета до проверката",
+      "subtitle": "Намерение, точен отговор, техническа допустимост и честен отчет"
+    }
+  ],
+  "assessment_note": "Задължителни затворени решения, проверки и подреждане; без свободни отговори, файлове или външни акаунти. Ключовете се пазят отделно в защитената база.",
+  "author_observations": "Наблюденията за България са авторски хипотези, не цитирана пазарна статистика.",
+  "measurement_method": "Unicode letter/number sequences; nonempty logical lines; actual renderer fields; all revealed text included; URLs, private keys, feedback, retired open blocks and UI labels excluded; payload includes metadata objective and ignored text.",
+  "totals": {
+    "before": {
+      "rendered": {
+        "words": 55772,
+        "lines": 4420
+      },
+      "payload": {
+        "words": 57305,
+        "lines": 4527
+      }
+    },
+    "after": {
+      "rendered": {
+        "words": 79858,
+        "lines": 6286
+      },
+      "payload": {
+        "words": 84575,
+        "lines": 6513
+      }
+    }
+  },
+  "published_at": "2026-10-12T09:13:20.605614+00:00",
+  "publication": {
+    "lessons": 63,
+    "blocks": 988,
+    "graded_blocks": 323,
+    "validation_errors": 0,
+    "validation_warnings": 0,
+    "old_versions_retained": 63,
+    "outside_and_learner_data_unchanged": true
+  },
+  "lesson_files": [
+    "community-6-10-20261012/module-06.json",
+    "community-6-10-20261012/module-07.json",
+    "community-6-10-20261012/module-08.json",
+    "community-6-10-20261012/module-09.json",
+    "community-6-10-20261012/module-10.json"
+  ]
+}

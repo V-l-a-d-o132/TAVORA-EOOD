@@ -11,7 +11,7 @@ const strings = (value: unknown): string[] =>
 /** Count what the Marketing renderer shows, including revealed examples.
  * URLs, metadata-only objectives and ignored content fields are excluded.
  */
-export function marketingVisibleWords(lesson: Lesson): number {
+export function marketingVisibleFragments(lesson: Lesson): string[] {
   const fragments: string[] = [];
   const put = (value: unknown) => { if (typeof value === 'string' && value.trim()) fragments.push(value); };
   put(lesson.title);
@@ -59,6 +59,9 @@ export function marketingVisibleWords(lesson: Lesson): number {
         break;
     }
   }
-  return (fragments.join('\n').match(/[\p{L}\p{N}]+/gu) || []).length;
+  return fragments;
 }
 
+export function marketingVisibleWords(lesson: Lesson): number {
+  return (marketingVisibleFragments(lesson).join('\n').match(/[\p{L}\p{N}]+/gu) || []).length;
+}
