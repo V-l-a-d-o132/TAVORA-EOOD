@@ -1,0 +1,81 @@
+{
+  "course": "Маркетинг Бейсикс",
+  "edition": "marketing_basics_community_third_stage3_20261012",
+  "status": "published",
+  "approved_plan": "Plan_Marketing_Basics_20_Modula_2026-10-11.md",
+  "first_page_structure": "objective first; body, outcomes, deliverable, check; existing renderer unchanged",
+  "modules": [
+    {
+      "number": 11,
+      "source_module_id": "s03-m04",
+      "title": "Права, данни и инструменти, които пазят доверието",
+      "subtitle": "Избор, данни, ограничени права и проверено изпълнение"
+    },
+    {
+      "number": 12,
+      "source_module_id": "s03-m16",
+      "title": "Партньорства и препоръки с ясни интереси",
+      "subtitle": "Обща полза, открити интереси, права и качество"
+    },
+    {
+      "number": 13,
+      "source_module_id": "s03-m15",
+      "title": "Кампании и промоции, които могат да се изпълнят",
+      "subtitle": "Нужда, принос, капацитет и еднакви условия"
+    },
+    {
+      "number": 14,
+      "source_module_id": "s03-m12",
+      "title": "Meta реклами: достигаш до хора с вярно обещание",
+      "subtitle": "Послание, надежден сигнал и реален резултат след клика"
+    },
+    {
+      "number": 15,
+      "source_module_id": "s03-m13",
+      "title": "Google реклами: намерение, сравнение и цена на резултата",
+      "subtitle": "Намерение, дестинация, контрол и цена на резултата"
+    }
+  ],
+  "assessment_note": "Задължителни затворени решения, основания, подреждане и свързване. Без свободен текст, файлове или задължителни външни акаунти. Частните ключове са отделни.",
+  "author_observations": "Наблюденията за България са авторски хипотези, не пазарна статистика.",
+  "totals": {
+    "before": {
+      "rendered": {
+        "words": 49469,
+        "lines": 4019
+      },
+      "payload": {
+        "words": 51078,
+        "lines": 4143
+      }
+    },
+    "after": {
+      "rendered": {
+        "words": 75429,
+        "lines": 5256
+      },
+      "payload": {
+        "words": 85071,
+        "lines": 5580
+      }
+    }
+  },
+  "measurement_method": "Unicode letter/number sequences; nonempty logical lines; actual renderer fields and revealed text; no URLs, private grading data, retired open blocks or UI labels; payload includes version objective and ignored text.",
+  "published_at": "2026-10-12T13:32:59.800166+00:00",
+  "publication": {
+    "lessons": 51,
+    "blocks": 837,
+    "graded_blocks": 271,
+    "validation_errors": 0,
+    "validation_warnings": 0,
+    "old_versions_retained": 51,
+    "outside_and_learner_data_unchanged": true
+  },
+  "lesson_files": [
+    "community-11-15-20261012/module-11.json",
+    "community-11-15-20261012/module-12.json",
+    "community-11-15-20261012/module-13.json",
+    "community-11-15-20261012/module-14.json",
+    "community-11-15-20261012/module-15.json"
+  ]
+}
