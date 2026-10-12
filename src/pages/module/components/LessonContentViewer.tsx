@@ -13,9 +13,9 @@ interface LessonContentViewerProps {
   modNumber: string | number;
   modTitle: string;
   modHomeworkPrompt: string;
-  lessons: Array<{ id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string }>;
+  lessons: Array<{ id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string; sourceModuleId?: string }>;
   activeLessonIndex: number;
-  activeLesson: { id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string };
+  activeLesson: { id: string; title: string; duration: string; hasQuiz?: boolean; pdfPath?: string; sourceModuleId?: string };
   isModule1: boolean;
   user: { id: string } | null;
   hasFullAccess: boolean;
@@ -108,7 +108,7 @@ export default function LessonContentViewer({
         {isInteractiveCourse ? (
           <div className="min-h-[480px]">
             <InteractiveLesson
-              moduleId={moduleId}
+              moduleId={activeLesson.sourceModuleId || moduleId}
               lessonId={lessons[activeLessonIndex]?.id}
               userId={user?.id}
               onComplete={() => markLessonComplete(activeLesson.id)}

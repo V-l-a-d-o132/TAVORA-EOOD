@@ -1,9 +1,11 @@
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { MARKETING_BASICS_OCT2026_MODULES } from '@/data/marketing-basics-oct2026';
+import { marketingCommunityModules } from '@/data/marketing-basics-community';
 import { lessonReadingDuration, moduleReadingDuration } from '@/lib/academy-reading-time';
 
 export interface Lesson {
   id: string;
+  sourceModuleId?: string;
   title: string;
   duration: string;
   hasQuiz: boolean;
@@ -649,9 +651,9 @@ const SECTION_DEFINITIONS: SourceSection[] = [
     id: 'marketing-basics',
     number: '03',
     title: 'Marketing Basics',
-    subtitle: 'Пълната маркетинг система за 2026',
+    subtitle: 'Как хората избират и как полезните послания се предават',
     description:
-      `20 модула по програма. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока в 20 модула, практически проект и финален изпит. Практическо издание за октомври 2026: оферта, видимост, реклама, CRM и измерване.`,
+      `20 модула и ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока за нужди, стойност, честно предложение и изпълнение. Разглеждаш решения с близки, колеги и общности, съставяш послания чрез готови части и проверяваш избора по конкретни случаи. Запазени са каналите, ИИ, данните и бизнес сметките.`,
     totalModules: 20,
     totalLessons: ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount,
     icon: 'ri-bar-chart-grouped-line',
@@ -754,16 +756,22 @@ const SECTION_DEFINITIONS: SourceSection[] = [
   },
 ];
 
+// Only legacy indexed Marketing links use this original order.
+export const PREVIOUS_MARKETING_LESSONS = Object.fromEntries(
+  SECTION_DEFINITIONS.find(section => section.id === 'marketing-basics')!.modules
+    .map(module => [module.id, module.lessons.map(({ id, title }) => ({ id, title }))]),
+);
+
 // Durations are generated from the published text snapshot, not hand-entered
 // practice budgets. The learner's actual work time remains individual.
 export const LEARNING_SECTIONS: Section[] = SECTION_DEFINITIONS.map((section) => ({
   ...section,
-  modules: section.modules.map((module) => ({
+  modules: (section.id === 'marketing-basics' ? marketingCommunityModules(section.modules) : section.modules).map((module) => ({
     ...module,
-    duration: moduleReadingDuration(module.id, module.lessons.map((lesson) => lesson.id)),
+    duration: moduleReadingDuration(module.id, module.lessons.map((lesson) => lesson.id), module.lessons.map(lesson => lesson.sourceModuleId || module.id)),
     lessons: module.lessons.map((lesson) => ({
       ...lesson,
-      duration: lessonReadingDuration(module.id, lesson.id),
+      duration: lessonReadingDuration(lesson.sourceModuleId || module.id, lesson.id),
     })),
   })),
 }));

@@ -29,7 +29,7 @@ describe('Public catalogue against the published Supabase snapshot', () => {
   });
 
   it('uses the same module order in the public programmes and marks only the actual free module', () => {
-    expect(MARKETING_BASICS_PUBLIC_GROUPS.map(group => group.modules.length)).toEqual([4, 6, 6, 4]);
+    expect(MARKETING_BASICS_PUBLIC_GROUPS.map(group => group.modules.length)).toEqual([5, 5, 5, 5]);
     expect(MARKETING_BASICS_PUBLIC_GROUPS.flatMap(group => group.modules.map(module => module.num))).toEqual(LEARNING_SECTIONS[2].modules.map(module => module.number));
     expect(ACADEMY_FREE_MODULE_ID).toBe(published.freeModuleId);
     expect(LEARNING_SECTIONS.flatMap(section => section.modules).filter(module => !module.isLocked).map(module => module.id)).toEqual([published.freeModuleId]);

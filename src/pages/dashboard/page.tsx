@@ -1,3 +1,4 @@
+import { resumeTargetRoute } from '@/lib/learning-resume';
 import { useMemo, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -239,7 +240,7 @@ export default function DashboardPage() {
         {/* ─── Continue / Resume banner ─── */}
         {resumeTarget && !isLoading && (
           <div
-            onClick={() => navigate(`/module/${resumeTarget.moduleId}?lesson=${resumeTarget.lessonIndex}`)}
+            onClick={() => navigate(resumeTargetRoute(resumeTarget))}
             className="relative overflow-hidden p-5 mb-6 cursor-pointer group"
             style={{ background: C.accentDim, border: `1px solid ${C.accent}` }}
           >

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LEARNING_SECTIONS } from '@/mocks/learning-platform';
+import { lessonRoute } from '@/lib/academy-lesson-location';
 
 interface SearchResult {
   id: string;
@@ -33,7 +34,7 @@ LEARNING_SECTIONS.forEach((section) => {
         label: lesson.title,
         subtitle: `Модул ${mod.number}: ${mod.title}`,
         sectionTitle: section.title,
-        route: `/module/${mod.id}`,
+        route: lessonRoute(mod.id, lesson.id, li),
         type: 'lesson',
         moduleId: mod.id,
         lessonIndex: li,

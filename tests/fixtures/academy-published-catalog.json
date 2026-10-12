@@ -1,5 +1,5 @@
 {
-  "verifiedOn": "2026-10-01",
+  "verifiedOn": "2026-10-12",
   "modules": [
     {
       "id": "s01-m01",
@@ -114,32 +114,16 @@
       "lessons": 8
     },
     {
-      "id": "s03-m03",
-      "lessons": 8
-    },
-    {
-      "id": "s03-m04",
-      "lessons": 10
-    },
-    {
       "id": "s03-m05",
       "lessons": 8
     },
     {
-      "id": "s03-m06",
-      "lessons": 12
+      "id": "s03-m03",
+      "lessons": 8
     },
     {
       "id": "s03-m07",
       "lessons": 10
-    },
-    {
-      "id": "s03-m08",
-      "lessons": 14
-    },
-    {
-      "id": "s03-m09",
-      "lessons": 14
     },
     {
       "id": "s03-m10",
@@ -148,6 +132,30 @@
     {
       "id": "s03-m11",
       "lessons": 10
+    },
+    {
+      "id": "s03-m08",
+      "lessons": 14
+    },
+    {
+      "id": "s03-m06",
+      "lessons": 12
+    },
+    {
+      "id": "s03-m09",
+      "lessons": 15
+    },
+    {
+      "id": "s03-m04",
+      "lessons": 10
+    },
+    {
+      "id": "s03-m16",
+      "lessons": 8
+    },
+    {
+      "id": "s03-m15",
+      "lessons": 9
     },
     {
       "id": "s03-m12",
@@ -160,14 +168,6 @@
     {
       "id": "s03-m14",
       "lessons": 10
-    },
-    {
-      "id": "s03-m15",
-      "lessons": 9
-    },
-    {
-      "id": "s03-m16",
-      "lessons": 8
     },
     {
       "id": "s03-m17",

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import DashboardNav from '@/pages/dashboard/components/DashboardNav';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,11 +13,15 @@ import ModuleSidebar from '@/pages/module/components/ModuleSidebar';
 import MobileLessonSheet from '@/pages/module/components/MobileLessonSheet';
 import LessonContentViewer from '@/pages/module/components/LessonContentViewer';
 import { newestBookmark, readLocalBookmark, type LessonBookmark } from '@/lib/learning-resume';
+import { legacyMarketingRoute, lessonRoute, requestedLessonIndex } from '@/lib/academy-lesson-location';
 
 /* ─── Module Page (Orchestrator) ─── */
 export default function ModulePage() {
   const { moduleId } = useParams<{ moduleId: string }>();
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const redirect = legacyMarketingRoute(moduleId, searchParams.get('lesson'));
+  if (redirect) return <Navigate to={redirect} replace />;
   return <ModuleView key={`${moduleId}:${user?.id || 'anonymous'}`} moduleId={moduleId} />;
 }
 
@@ -34,8 +38,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   const section = found?.section || null;
   const mod = found?.mod || null;
   const lessonParam = searchParams.get('lesson');
-  const requestedLesson = lessonParam !== null && /^\d+$/.test(lessonParam) ? Number(lessonParam) : 0;
-  const activeLessonIndex = requestedLesson < (mod?.lessons.length || 0) ? requestedLesson : 0;
+  const activeLessonIndex = requestedLessonIndex(mod, lessonParam);
 
   /* ─── State ─── */
   const checkoutRequest = useRef(crypto.randomUUID());
@@ -92,11 +95,17 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     (async () => {
       try {
         const lessonIds = mod.lessons.map((l) => l.id).filter(Boolean);
-        const [{ data, error }, profile] = await Promise.all([
-          supabase.rpc('academy_get_module_progress', { p_module: mod.id }),
+        const sourceModules = [...new Set([mod.id, ...mod.lessons.map(lesson => lesson.sourceModuleId || mod.id)])];
+        const [responses, profile] = await Promise.all([
+          Promise.all(sourceModules.map(async sourceModuleId => ({
+            sourceModuleId,
+            ...await supabase.rpc('academy_get_module_progress', { p_module: sourceModuleId }),
+          }))),
           supabase.from('profiles').select('last_opened_lesson').eq('id', user.id).maybeSingle(),
         ]);
-        if (error) throw error;
+        const primary = responses.find(response => response.sourceModuleId === mod.id);
+        if (primary?.error) throw primary.error;
+        const data = responses.flatMap(response => !response.error && Array.isArray(response.data) ? response.data : []);
 
         if (cancelled) return;
 
@@ -106,7 +115,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
         });
         if (data && Array.isArray(data)) {
           data.forEach((row) => {
-            if (row && typeof row === 'object' && typeof row.lessonId === 'string') {
+            if (row && typeof row === 'object' && typeof row.lessonId === 'string' && lessonIds.includes(row.lessonId)) {
               map[row.lessonId] = {
                 completed: row.completed === true,
                 pageNumber: 1,
@@ -152,7 +161,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     const target = bookmarkedIndex >= 0 ? bookmarkedIndex : latestLesson ? mod.lessons.indexOf(latestLesson) : Math.max(0, firstIncomplete);
     hasAutoResumed.current = true;
     if (target !== activeLessonIndex) {
-      navigate(`/module/${moduleId}?lesson=${target}`, { replace: true });
+      navigate(lessonRoute(mod.id, mod.lessons[target].id, target), { replace: true });
       return;
     }
     setResumeReady(true);
@@ -205,7 +214,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     let cancelled = false;
     setPrefetchLoading(true);
 
-    loadQuizQuestions(String(mod.id), lesson.id)
+    loadQuizQuestions(lesson.sourceModuleId || String(mod.id), lesson.id)
       .then((qs) => {
         if (!cancelled) {
           setPrefetchedQuestions(qs);
@@ -283,11 +292,11 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
     if (idx === activeLessonIndex && lessonParam !== null) return;
 
     // Use React Router navigate instead of raw history.replaceState
-    navigate(`/module/${moduleId}?lesson=${idx}`);
+    navigate(lessonRoute(mod.id, mod.lessons[idx].id, idx));
 
     setShowQuiz(false);
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [activeLessonIndex, lessonParam, mod, moduleId, navigate]);
+  }, [activeLessonIndex, lessonParam, mod, navigate]);
 
   const goNext = useCallback(() => {
     if (!mod || !Array.isArray(mod.lessons)) return;

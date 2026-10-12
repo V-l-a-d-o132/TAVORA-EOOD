@@ -34,6 +34,16 @@ beforeEach(() => { localStorage.clear(); fixture.legacy = []; fixture.current = 
 afterEach(cleanup);
 
 describe('Unified academy dashboard progress', () => {
+  it('attributes the moved Marketing AI lesson to its display module without double-counting stored progress', async () => {
+    fixture.current = [{ module_id: 's03-m01', lesson_id: 'lm01-01', completed: true, quiz_score: 100, xp: 45, updated_at: '2026-10-11T19:00:00Z' }];
+    const { result } = renderHook(() => useLearningProgress('moved-ai-student'));
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.completedLessons).toBe(1);
+    expect(result.current.totalPoints).toBe(45);
+    expect(result.current.modProgressMap['s03-m01'].completedLessonIds).not.toContain('lm01-01');
+    expect(result.current.modProgressMap['s03-m09'].completedLessonIds).toEqual(['lm01-01']);
+    expect(result.current.resumeTarget?.moduleId).toBe('s03-m09');
+  });
   it('uses current results, actual XP and the first unfinished lesson, including out-of-order completion', async () => {
     fixture.legacy = [{ module_id: 's01-m01', lesson_id: 'l01-01', completed: true, quiz_score: 100 }];
     fixture.current = [

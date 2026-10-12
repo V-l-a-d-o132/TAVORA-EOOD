@@ -1,4 +1,5 @@
 import { ACADEMY_READING_WORDS } from '@/data/academy-reading-words';
+import { marketingVisibleWords } from '@/lib/marketing-reading-count';
 
 // A planning range, not a promise about how fast any student reads.
 // Practice, research, filming and assessment are deliberately outside it.
@@ -31,8 +32,8 @@ export function lessonReadingDuration(moduleId: string, lessonId: string, liveWo
   return range ? rangeLabel(range.low, range.high) : 'Четене със собствено темпо';
 }
 
-export function moduleReadingDuration(moduleId: string, lessonIds: readonly string[]): string {
-  const ranges = lessonIds.map((lessonId) => readingRange(ACADEMY_READING_WORDS[`${moduleId}/${lessonId}`]));
+export function moduleReadingDuration(moduleId: string, lessonIds: readonly string[], sourceModuleIds?: readonly string[]): string {
+  const ranges = lessonIds.map((lessonId, index) => readingRange(ACADEMY_READING_WORDS[`${sourceModuleIds?.[index] || moduleId}/${lessonId}`]));
   if (!ranges.length || ranges.some((range) => range === null)) return 'Четене със собствено темпо';
   return rangeLabel(
     ranges.reduce((sum, range) => sum + range!.low, 0),
@@ -46,8 +47,11 @@ export function countVisibleLessonWords(lesson: {
   title: string;
   subtitle: string;
   objective: string;
-  blocks: readonly { title: string; content: unknown }[];
+  blocks: readonly { title: string; content: unknown; type?: string }[];
 }): number {
+  if (lesson.moduleId?.startsWith('s03-') && lesson.blocks.every(block => typeof block.type === 'string')) {
+    return marketingVisibleWords({ ...lesson, blocks: lesson.blocks as readonly { title: string; content: unknown; type: string }[] });
+  }
   const silkRoad = lesson.moduleId?.startsWith('s01-') === true;
   const hiddenKeys = new Set([
     'id', 'key', 'url', 'imageUrl', 'sources', 'correct', 'correctAnswer',

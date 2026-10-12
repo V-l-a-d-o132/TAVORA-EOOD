@@ -92,6 +92,17 @@ export default [
       'no-undef': 'error',
     },
   },
+  // These existing lab metadata helpers are also consumed by the editor/renderer.
+  // Keep the exception local; it does not relax component exports elsewhere.
+  {
+    files: ['src/components/academy/VideoDecisionLab.tsx'],
+    rules: {
+      'react-refresh/only-export-components': ['warn', {
+        allowConstantExport: true,
+        allowExportNames: ['isVideoLabKind', 'videoLabTitle'],
+      }],
+    },
+  },
   // Only enforce this rule for the router config file to avoid false positives elsewhere.
   {
     files: ['src/router/config.tsx'],

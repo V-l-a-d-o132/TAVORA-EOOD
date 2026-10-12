@@ -1,5 +1,6 @@
-import { LEARNING_SECTIONS } from '@/mocks/learning-platform';
+import { LEARNING_SECTIONS, PREVIOUS_MARKETING_LESSONS } from '@/mocks/learning-platform';
 import { supabase } from '@/lib/supabase';
+import { lessonRoute, locateLesson } from '@/lib/academy-lesson-location';
 
 export const LEARNING_PROGRESS_CHANGED = 'tavora:learning-progress-changed';
 export const bookmarkStorageKey = (userId: string) => `tavora:last-lesson:${userId}`;
@@ -29,12 +30,16 @@ export function parseBookmark(value: unknown): LessonBookmark | null {
   if (!mod) return null;
   // Legacy profile bookmarks used an array index. Require the matching title
   // so an old index cannot silently point to different, rearranged content.
-  const lesson = typeof raw.lessonId === 'string'
-    ? mod.lessons.find(item => item.id === raw.lessonId)
-    : Number.isInteger(raw.lessonIndex) && typeof raw.lessonTitle === 'string'
-      ? mod.lessons[raw.lessonIndex as number] : undefined;
-  if (!lesson || (typeof raw.lessonId !== 'string' && lesson.title !== raw.lessonTitle)) return null;
-  return { moduleId: mod.id, lessonId: lesson.id, timestamp: raw.timestamp };
+  const stableId = typeof raw.lessonId === 'string' ? raw.lessonId : null;
+  const previous = !stableId && Number.isInteger(raw.lessonIndex) && typeof raw.lessonTitle === 'string'
+    ? (mod.id.startsWith('s03-') ? PREVIOUS_MARKETING_LESSONS[mod.id] : mod.lessons)?.[raw.lessonIndex as number] : undefined;
+  if (!stableId && (!previous || previous.title !== raw.lessonTitle)) return null;
+  const lessonId = stableId || previous?.id;
+  if (!lessonId) return null;
+  const lesson = mod.lessons.find(item => item.id === lessonId);
+  const moved = !lesson ? locateLesson(mod.id, lessonId) : null;
+  if (!lesson && !moved) return null;
+  return { moduleId: moved?.module.id || mod.id, lessonId, timestamp: raw.timestamp };
 }
 
 export function readLocalBookmark(userId: string): LessonBookmark | null {
@@ -60,11 +65,18 @@ export function bookmarkTarget(bookmark: LessonBookmark, hasFullAccess: boolean,
 
 let visitQueue: Promise<unknown> = Promise.resolve();
 
+export function resumeTargetRoute(target: ResumeTarget): string {
+  const module = LEARNING_SECTIONS.flatMap(section => section.modules).find(item => item.id === target.moduleId);
+  const lesson = module?.lessons[target.lessonIndex];
+  return lesson ? lessonRoute(target.moduleId, lesson.id, target.lessonIndex) : `/module/${target.moduleId}`;
+}
+
 export function recordLessonVisit(userId: string, moduleId: string, lessonId: string): Promise<void> {
   const bookmark = { moduleId, lessonId, timestamp: new Date().toISOString() };
+  const displayedBookmark = parseBookmark(bookmark) || bookmark;
   const key = bookmarkStorageKey(userId);
   // Namespaced by user; the old shared localStorage key is intentionally ignored.
-  try { localStorage.setItem(key, JSON.stringify(bookmark)); } catch { /* Storage can be disabled. */ }
+  try { localStorage.setItem(key, JSON.stringify(displayedBookmark)); } catch { /* Storage can be disabled. */ }
   notifyLearningProgressChanged(userId);
   // Rapid navigation must not let an older, slower response replace a new visit.
   const request = visitQueue.catch(() => {}).then(async () => {
@@ -75,7 +87,7 @@ export function recordLessonVisit(userId: string, moduleId: string, lessonId: st
     const saved = parseBookmark(data);
     try {
       const current = readLocalBookmark(userId);
-      if (saved && current?.timestamp === bookmark.timestamp && current.lessonId === lessonId && current.moduleId === moduleId) {
+      if (saved && current?.timestamp === bookmark.timestamp && current.lessonId === lessonId && current.moduleId === displayedBookmark.moduleId) {
         localStorage.setItem(key, JSON.stringify(saved));
       }
     } catch { /* Remote bookmark is still saved. */ }

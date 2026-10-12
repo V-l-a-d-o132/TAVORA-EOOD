@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { LEARNING_SECTIONS } from '@/mocks/learning-platform';
 import { bookmarkStorageKey, bookmarkTarget, LEARNING_PROGRESS_CHANGED, parseBookmark, readLocalBookmark, type ResumeTarget } from '@/lib/learning-resume';
+import { locateLesson } from '@/lib/academy-lesson-location';
 
 export type { ResumeTarget } from '@/lib/learning-resume';
 
@@ -116,11 +117,12 @@ export function useLearningProgress(userId: string | undefined): LearningProgres
   const rows: ProgressRow[] = [];
   const seen = new Set<string>();
   for (const row of data?.rows || []) {
-    const mod = ALL_MODULES.find(item => item.moduleId === row.module_id);
+    const location = locateLesson(row.module_id, row.lesson_id);
+    const mod = location ? ALL_MODULES.find(item => item.moduleId === location.module.id) : undefined;
     const key = row.module_id + ':' + row.lesson_id;
     if (!mod?.lessonIds.includes(row.lesson_id) || seen.has(key)) continue;
     seen.add(key);
-    rows.push(row);
+    rows.push({ ...row, module_id: mod.moduleId });
     const entry = modProgressMap[mod.moduleId];
     if (row.completed) entry.completedLessonIds.push(row.lesson_id);
     if (typeof row.quiz_score === 'number') entry.quizCount++;

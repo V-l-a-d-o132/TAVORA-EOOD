@@ -7,6 +7,7 @@ import { actor, learnerRecords, STUDENT, OTHER } from './helpers/silk-road-db';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
+import { MARKETING_COMMUNITY_LESSON_IDS } from '../src/data/marketing-basics-community';
 
 const release = 'marketing_basics_modules_1_5_clear_practice_20261005';
 type Spec = { module: string; lesson: string; title: string; blocks: { key: string; type: string; title: string; content: Record<string, unknown>; feedback?: { explanation: string } }[] };
@@ -73,7 +74,7 @@ describe('Marketing Basics researched modules 1–5', () => {
         expect(Math.max(...lengths) / Math.min(...lengths), `${spec.lesson}/${b.key}`).toBeLessThan(2);
       }
       expect(spec.blocks.some(b => ['practical_response','submission','homework'].includes(b.type))).toBe(false);
-      if (!superseded.has(spec.lesson)) expect(LEARNING_SECTIONS[2].modules.find(m => m.id === spec.module)!.lessons.find(l => l.id === spec.lesson)!.title).toBe(spec.title);
+      if (!superseded.has(spec.lesson) && !MARKETING_COMMUNITY_LESSON_IDS.has(spec.lesson)) expect(LEARNING_SECTIONS[2].modules.find(m => m.id === spec.module)!.lessons.find(l => l.id === spec.lesson)!.title).toBe(spec.title);
     }
   });
 
@@ -147,7 +148,7 @@ describe('Marketing Basics researched modules 1–5', () => {
       expect(lesson.title).toBe(spec.title);
       for (const patch of spec.blocks) expect(lesson.blocks.find(b => b.key === patch.key)?.content).toEqual(patch.content);
       counts[`${spec.module}/${spec.lesson}`] = countVisibleLessonWords(lesson);
-      if (!process.env.MARKETING_BASICS_COUNTS_OUTPUT && !superseded.has(spec.lesson)) expect(counts[`${spec.module}/${spec.lesson}`], spec.lesson).toBe(ACADEMY_READING_WORDS[`${spec.module}/${spec.lesson}`]);
+      if (!process.env.MARKETING_BASICS_COUNTS_OUTPUT && !superseded.has(spec.lesson) && !MARKETING_COMMUNITY_LESSON_IDS.has(spec.lesson)) expect(counts[`${spec.module}/${spec.lesson}`], spec.lesson).toBe(ACADEMY_READING_WORDS[`${spec.module}/${spec.lesson}`]);
     }
     if (process.env.MARKETING_BASICS_COUNTS_OUTPUT) writeFileSync(process.env.MARKETING_BASICS_COUNTS_OUTPUT,JSON.stringify(counts,null,2));
     await actor(db);
