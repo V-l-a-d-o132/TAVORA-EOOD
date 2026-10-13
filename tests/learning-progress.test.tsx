@@ -14,6 +14,7 @@ const fixture = vi.hoisted(() => ({
 vi.mock('../src/lib/supabase', () => ({ supabase: {
   rpc: async (name: string) => { fixture.calls.push(name); return { data: fixture.current, error: fixture.error }; },
   from: (table: string) => {
+    fixture.calls.push(table);
     const response = { data: table === 'profiles' ? { last_opened_lesson: fixture.bookmark } : table === 'pdf_progress' ? fixture.legacy : [], count: fixture.homeworkCount, error: null };
     const query = {
       select: () => query,
@@ -35,11 +36,16 @@ afterEach(cleanup);
 
 describe('Unified academy dashboard progress', () => {
   it('attributes the moved Marketing AI lesson to its display module without double-counting stored progress', async () => {
-    fixture.current = [{ module_id: 's03-m01', lesson_id: 'lm01-01', completed: true, quiz_score: 100, xp: 45, updated_at: '2026-10-11T19:00:00Z' }];
+    fixture.current = [
+      { module_id: 's03-m01', lesson_id: 'lm01-01', completed: false, quiz_score: 0, xp: 5, updated_at: '2026-10-10T19:00:00Z' },
+      { module_id: 's03-m09', lesson_id: 'lm01-01', completed: true, quiz_score: 100, xp: 45, quiz_count: 3, practice_count: 2, updated_at: '2026-10-11T19:00:00Z' },
+    ];
     const { result } = renderHook(() => useLearningProgress('moved-ai-student'));
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.completedLessons).toBe(1);
     expect(result.current.totalPoints).toBe(45);
+    expect(result.current.totalQuizCount).toBe(3);
+    expect(result.current.totalPracticeCount).toBe(2);
     expect(result.current.modProgressMap['s03-m01'].completedLessonIds).not.toContain('lm01-01');
     expect(result.current.modProgressMap['s03-m09'].completedLessonIds).toEqual(['lm01-01']);
     expect(result.current.resumeTarget?.moduleId).toBe('s03-m09');
@@ -79,7 +85,23 @@ describe('Unified academy dashboard progress', () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.totalPoints).toBe(111);
     expect(result.current.completedLessons).toBe(2);
-    expect(result.current.homeworkCount).toBe(4);
+    expect(result.current.totalPracticeCount).toBe(0);
+    expect(fixture.calls).not.toContain('homework');
+  });
+
+  it('counts server-verified unique checks and practice, not a numeric grade or a recent visit', async () => {
+    fixture.current = [
+      { module_id: 's01-m01', lesson_id: 'l01-01', completed: false, quiz_score: 0, xp: 5, quiz_count: 0, practice_count: 0, updated_at: '2026-10-13T12:00:00Z', activity_dates: ['2026-10-11', '2026-10-12'] },
+      { module_id: 's01-m01', lesson_id: 'l01-02', completed: false, quiz_score: 60, xp: 30, quiz_count: 2, practice_count: 3, activity_dates: ['2026-10-12'] },
+      { module_id: 's01-m01', lesson_id: 'l01-03', completed: false, quiz_score: 100, xp: 0, quiz_count: -1, practice_count: NaN, activity_dates: [] },
+    ];
+    const { result } = renderHook(() => useLearningProgress('verified-counts'));
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.totalQuizCount).toBe(2);
+    expect(result.current.totalPracticeCount).toBe(3);
+    expect(result.current.completedLessons).toBe(0);
+    expect(result.current.allDates.sort()).toEqual(['2026-10-11', '2026-10-12']);
+    expect(fixture.calls).toEqual(['academy_get_learning_progress', 'profiles']);
   });
 
   it('resumes the server bookmark on another device even with earlier gaps and zero completed lessons', async () => {

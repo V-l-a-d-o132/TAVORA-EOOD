@@ -52,6 +52,7 @@
     "type-check": "tsc --noEmit --project tsconfig.app.json",
     "test": "vitest run",
     "test:browser": "playwright test --config playwright.video.config.ts",
+    "test:dashboard-browser": "playwright test --config playwright.dashboard.config.ts",
     "check:academy-distribution": "node scripts/check-academy-distribution.mjs",
     "verify:academy-deployment": "node scripts/verify-academy-deployment.mjs",
     "typecheck": "tsc --noEmit --project tsconfig.app.json",

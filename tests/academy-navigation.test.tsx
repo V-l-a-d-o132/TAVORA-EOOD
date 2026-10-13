@@ -32,7 +32,7 @@ vi.mock('../src/lib/metaPixel', () => ({ academyPixel: { viewContent: vi.fn() } 
 vi.mock('../src/pages/module/components/PdfPresentationViewer', () => ({ default: () => null }));
 vi.mock('../src/hooks/useLearningProgress', () => ({ useLearningProgress: () => ({
   completedLessons: 0, completedModules: 0, totalLessons: 74, totalModules: 11,
-  totalPoints: 0, totalQuizCount: 0, homeworkCount: 0, allDates: [], resumeTarget: null,
+  totalPoints: 0, totalQuizCount: 0, totalPracticeCount: 0, allDates: [], resumeTarget: null,
   isLoading: false, error: false, refetch: vi.fn(),
 }) }));
 

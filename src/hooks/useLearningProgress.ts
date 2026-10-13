@@ -15,12 +15,13 @@ export interface FlatModule {
 
 export interface ModuleProgressData {
   completedLessons: number; completedLessonIds: string[];
-  quizCount: number; points: number; lastActivity: string | null;
+  quizCount: number; practiceCount: number; points: number; lastActivity: string | null;
 }
 
 interface ProgressRow {
   module_id: string; lesson_id: string; completed: boolean;
   quiz_score: number | null; xp: number; updated_at: string | null;
+  quiz_count?: number; practice_count?: number; activity_dates?: string[];
 }
 
 export interface LearningProgress {
@@ -30,7 +31,7 @@ export interface LearningProgress {
   allModules: FlatModule[]; allLessonIds: string[];
   completedLessons: number; completedModules: number; totalLessons: number;
   totalModules: number; totalPoints: number; totalQuizCount: number;
-  homeworkCount: number; overallPercent: number; allDates: string[];
+  totalPracticeCount: number; overallPercent: number; allDates: string[];
   hasFullAccess: boolean; unlockedModules: string[];
   resumeTarget: ResumeTarget | null;
   isLoading: boolean; error: boolean; refetch: () => void;
@@ -60,7 +61,7 @@ export function useLearningProgress(userId: string | undefined): LearningProgres
   const { hasFullAccess, unlockedModules } = useAuth();
   const accessKey = JSON.stringify([hasFullAccess, unlockedModules]);
   const [snapshot, setSnapshot] = useState<{
-    userId: string; rows: ProgressRow[]; bookmark: unknown; homeworkCount: number;
+    userId: string; rows: ProgressRow[]; bookmark: unknown;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -95,13 +96,12 @@ export function useLearningProgress(userId: string | undefined): LearningProgres
     setError(false);
     void (async () => {
       try {
-        const [progress, homework, profile] = await Promise.all([
+        const [progress, profile] = await Promise.all([
           supabase.rpc('academy_get_learning_progress'),
-          supabase.from('homework').select('id', { count: 'exact', head: true }).eq('user_id', userId),
           supabase.from('profiles').select('last_opened_lesson').eq('id', userId).maybeSingle(),
         ]);
-        if (progress.error || homework.error || profile.error || !Array.isArray(progress.data)) throw new Error('Progress unavailable');
-        if (!cancelled) setSnapshot({ userId, rows: progress.data, bookmark: profile.data?.last_opened_lesson, homeworkCount: homework.count ?? 0 });
+        if (progress.error || profile.error || !Array.isArray(progress.data)) throw new Error('Progress unavailable');
+        if (!cancelled) setSnapshot({ userId, rows: progress.data, bookmark: profile.data?.last_opened_lesson });
       } catch { if (!cancelled) setError(true); }
       finally { if (!cancelled) setIsLoading(false); }
     })();
@@ -112,20 +112,25 @@ export function useLearningProgress(userId: string | undefined): LearningProgres
   const data = snapshot?.userId === userId ? snapshot : null;
   const modProgressMap: Record<string, ModuleProgressData> = {};
   for (const mod of ALL_MODULES) modProgressMap[mod.moduleId] = {
-    completedLessons: 0, completedLessonIds: [], quizCount: 0, points: 0, lastActivity: null,
+    completedLessons: 0, completedLessonIds: [], quizCount: 0, practiceCount: 0, points: 0, lastActivity: null,
   };
   const rows: ProgressRow[] = [];
   const seen = new Set<string>();
-  for (const row of data?.rows || []) {
+  // Stored and displayed module identifiers can refer to the same moved lesson.
+  // Prefer its newest record, then deduplicate by the resolved location.
+  const latestRows = [...(data?.rows || [])].sort((a, b) =>
+    (Date.parse(b.updated_at || '') || 0) - (Date.parse(a.updated_at || '') || 0));
+  for (const row of latestRows) {
     const location = locateLesson(row.module_id, row.lesson_id);
-    const mod = location ? ALL_MODULES.find(item => item.moduleId === location.module.id) : undefined;
-    const key = row.module_id + ':' + row.lesson_id;
+    const mod = ALL_MODULES.find(item => item.moduleId === (location?.module.id || row.module_id));
+    const key = mod?.moduleId + ':' + row.lesson_id;
     if (!mod?.lessonIds.includes(row.lesson_id) || seen.has(key)) continue;
     seen.add(key);
     rows.push({ ...row, module_id: mod.moduleId });
     const entry = modProgressMap[mod.moduleId];
     if (row.completed) entry.completedLessonIds.push(row.lesson_id);
-    if (typeof row.quiz_score === 'number') entry.quizCount++;
+    if (typeof row.quiz_count === 'number' && Number.isFinite(row.quiz_count)) entry.quizCount += Math.max(0, Math.floor(row.quiz_count));
+    if (typeof row.practice_count === 'number' && Number.isFinite(row.practice_count)) entry.practiceCount += Math.max(0, Math.floor(row.practice_count));
     if (typeof row.xp === 'number' && Number.isFinite(row.xp)) entry.points += Math.max(0, row.xp);
     if (row.updated_at && (!entry.lastActivity || Date.parse(row.updated_at) > Date.parse(entry.lastActivity))) entry.lastActivity = row.updated_at;
     entry.completedLessons = entry.completedLessonIds.length;
@@ -168,9 +173,9 @@ export function useLearningProgress(userId: string | undefined): LearningProgres
     totalLessons, totalModules: ALL_MODULES.length,
     totalPoints: Object.values(modProgressMap).reduce((sum, item) => sum + item.points, 0),
     totalQuizCount: Object.values(modProgressMap).reduce((sum, item) => sum + item.quizCount, 0),
-    homeworkCount: data?.homeworkCount ?? 0,
+    totalPracticeCount: Object.values(modProgressMap).reduce((sum, item) => sum + item.practiceCount, 0),
     overallPercent: totalLessons ? Math.round(100 * completedLessons / totalLessons) : 0,
-    allDates: rows.flatMap(row => row.updated_at ? [row.updated_at] : []),
+    allDates: [...new Set(rows.flatMap(row => Array.isArray(row.activity_dates) ? row.activity_dates.filter(day => typeof day === 'string') : []))],
     hasFullAccess, unlockedModules, resumeTarget,
     isLoading: isLoading || (!!userId && !data && !error), error, refetch,
   };
