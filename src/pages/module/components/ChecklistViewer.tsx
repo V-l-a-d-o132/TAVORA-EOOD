@@ -129,7 +129,7 @@ export default function ChecklistViewer({ moduleId, userId }: ChecklistViewerPro
           <div className="absolute inset-0 bg-background-50/80" />
           <div className="relative text-center animate-bounce">
             <div className="w-28 h-28 mx-auto rounded-3xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-2xl">
-              <i className="ri-trophy-line text-white text-5xl" />
+              <i className="ri-trophy-line academy-text text-5xl" />
             </div>
             <p className="mt-6 text-3xl font-bold text-foreground-900">100/100</p>
             <p className="text-lg text-foreground-600 mt-2">Ти си машина! Чеклистът е завършен!</p>
@@ -215,7 +215,7 @@ export default function ChecklistViewer({ moduleId, userId }: ChecklistViewerPro
                 <div
                   className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
                     isFullyDone
-                      ? 'bg-primary-500 text-white'
+                      ? 'bg-primary-500 academy-text'
                       : topicCompleted > 0
                       ? 'bg-primary-100 text-primary-600 border-2 border-primary-300'
                       : 'bg-background-100 text-foreground-400 border-2 border-background-300'
@@ -281,7 +281,7 @@ export default function ChecklistViewer({ moduleId, userId }: ChecklistViewerPro
                         <div
                           className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 ${
                             isDone
-                              ? 'bg-primary-500 text-white scale-100'
+                              ? 'bg-primary-500 academy-text scale-100'
                               : 'bg-background-200 text-transparent scale-90 group-hover:scale-100 group-hover:bg-background-300'
                           }`}
                           style={!isDone ? {} : {}}

@@ -374,7 +374,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: C.bg }}>
         <div className="text-center">
           <p className="text-base mb-2" style={{ color: C.textMuted }}>Модулът не е намерен</p>
-          <Link to="/kurs" className="text-sm transition-colors" style={{ color: C.accent }}>Обратно към платформата</Link>
+          <Link to="/kurs" className="text-sm transition-colors" style={{ color: C.accentText }}>Обратно към платформата</Link>
         </div>
       </div>
     );
@@ -383,9 +383,9 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   if (!isModule1 && (!serverAccess || serverAccess.failed)) {
     return <div className="min-h-screen" style={{ background: C.bg }}>
       <DashboardNav />
-      <div className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center gap-4 p-6 text-center text-zinc-300">
+      <div className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center gap-4 p-6 text-center academy-body">
         <p role="status">{serverAccess?.failed ? 'Не успяхме да проверим достъпа ти. Опитай отново.' : 'Зареждане на модула…'}</p>
-        {serverAccess?.failed && <button type="button" onClick={handleRefreshAccess} className="rounded-xl border border-white/20 px-5 py-3">Опитай отново</button>}
+        {serverAccess?.failed && <button type="button" onClick={handleRefreshAccess} className="rounded-xl border academy-border-strong px-5 py-3">Опитай отново</button>}
       </div>
     </div>;
   }
@@ -412,7 +412,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: C.bg }}>
         <div className="text-center">
           <p className="text-base mb-2" style={{ color: C.textMuted }}>Урокът не е намерен</p>
-          <Link to="/kurs" className="text-sm transition-colors" style={{ color: C.accent }}>Обратно към платформата</Link>
+          <Link to="/kurs" className="text-sm transition-colors" style={{ color: C.accentText }}>Обратно към платформата</Link>
         </div>
       </div>
     );
@@ -435,7 +435,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
 
       {/* Error Banner */}
       {errorMsg && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 text-sm" style={{ background: C.accentDim, border: `1px solid ${C.accent}`, color: C.accent }}>
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 text-sm" style={{ background: C.accentDim, border: `1px solid ${C.accent}`, color: C.accentText }}>
           {errorMsg}
           <button onClick={() => setErrorMsg('')} className="ml-3 font-bold">×</button>
         </div>
@@ -458,13 +458,13 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
       <div className="mx-auto max-w-[1520px] px-4 py-4 md:px-6 md:py-6 xl:px-8">
         <div className="flex items-center justify-between gap-3 mb-3 md:mb-5">
           <nav aria-label="Място в курса" className="flex min-w-0 items-center gap-2 text-xs md:text-sm" style={{ color: C.textMuted }}>
-            <Link to="/kurs" className="shrink-0 py-2 hover:text-white">Всички модули</Link>
+            <Link to="/kurs" className="shrink-0 py-2 hover:academy-text">Всички модули</Link>
             <i className="ri-arrow-right-s-line shrink-0" aria-hidden />
             <span className="truncate">{mod.title} · М{mod.number}</span>
           </nav>
           <div className="flex items-center gap-2 shrink-0">
             <span className="flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1.5 text-xs md:text-sm font-medium whitespace-nowrap" style={{ background: C.surface, border: `1px solid ${C.border}`, color: C.text }}>
-              <i className="ri-award-line" style={{ color: C.accent }} />{totalPoints} XP в модула
+              <i className="ri-award-line" style={{ color: C.accentText }} />{totalPoints} XP в модула
             </span>
             {saveStatus === 'saving' && <span className="text-xs flex items-center gap-1 hidden md:flex" style={{ color: C.textDim }}><i className="ri-loader-4-line animate-spin" style={{ fontSize: '10px' }} />Запис...</span>}
             {saveStatus === 'saved' && <span className="text-xs flex items-center gap-1 hidden md:flex font-medium" style={{ color: C.success }}><i className="ri-check-line" style={{ fontSize: '10px' }} />Запазено</span>}
@@ -547,8 +547,8 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
           />
 
           {/* Main Content */}
-          {!resumeReady ? <div className="p-8 text-zinc-300" role="status">
-            {errorMsg ? <><p>Не успяхме да възстановим позицията ти.</p><button type="button" onClick={handleRefreshAccess} className="mt-4 rounded-xl border border-white/20 px-5 py-3">Опитай отново</button></> : 'Възстановяваме последния ти урок…'}
+          {!resumeReady ? <div className="p-8 academy-body" role="status">
+            {errorMsg ? <><p>Не успяхме да възстановим позицията ти.</p><button type="button" onClick={handleRefreshAccess} className="mt-4 rounded-xl border academy-border-strong px-5 py-3">Опитай отново</button></> : 'Възстановяваме последния ти урок…'}
           </div> : <LessonContentViewer
             moduleId={mod.id}
             modNumber={mod.number}

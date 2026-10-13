@@ -10,18 +10,18 @@ export default function LessonOutcomes({ content }: { content: JsonObject }) {
   const deliverable = text(content.deliverable);
   const check = text(content.check);
 
-  return <div className="space-y-4 text-base leading-7 text-zinc-200">
+  return <div className="space-y-4 text-base leading-7 academy-body">
     {paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
     {outcomes.length > 0 && <ul className="space-y-2.5" aria-label="Умения в този урок">
       {outcomes.map((outcome, index) => <li key={index} className="flex gap-3">
-        <span aria-hidden="true" className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
+        <span aria-hidden="true" className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full academy-primary" />
         <span>{outcome}</span>
       </li>)}
     </ul>}
-    {deliverable && <div className="border-t border-white/10 pt-4">
-      <h3 className="text-sm font-semibold text-white">Практически резултат</h3>
+    {deliverable && <div className="border-t academy-border pt-4">
+      <h3 className="text-sm font-semibold academy-text">Практически резултат</h3>
       <p className="mt-1">{deliverable}</p>
     </div>}
-    {check && <p className="text-sm leading-6 text-zinc-400"><span className="font-medium text-zinc-300">Как ще провериш: </span>{check}</p>}
+    {check && <p className="text-sm leading-6 academy-muted"><span className="font-medium academy-body">Как ще провериш: </span>{check}</p>}
   </div>;
 }

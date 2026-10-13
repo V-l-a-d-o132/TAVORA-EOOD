@@ -1,18 +1,8 @@
+import { ACADEMY_COLORS } from '@/lib/academy-theme';
 import { useState, useEffect, useCallback } from 'react';
 
 /* ─── Brand ─── */
-const C = {
-  bg: '#0a0a0a',
-  surface: '#111111',
-  border: '#1a1a1a',
-  accent: '#e53e3e',
-  accentHover: '#ff5555',
-  accentDim: '#331111',
-  text: '#ffffff',
-  textMuted: '#a0a0a0',
-  textDim: '#666666',
-  success: '#22c55e',
-};
+const C = ACADEMY_COLORS;
 
 interface LevelUpEvent {
   level: number;
@@ -68,13 +58,13 @@ export default function LevelUpToast() {
           className="relative w-12 h-12 flex items-center justify-center shrink-0"
           style={{ background: C.accentDim, border: `2px solid ${C.accent}` }}
         >
-          <span className="text-xl font-bold" style={{ color: C.accent }}>{data.level}</span>
+          <span className="text-xl font-bold" style={{ color: C.accentText }}>{data.level}</span>
           {/* glow ring */}
           <div className="absolute inset-0 animate-ping" style={{ border: `2px solid ${C.accent}`, borderRadius: '2px', opacity: 0 }} />
         </div>
 
         <div>
-          <p className="text-xs uppercase tracking-[0.15em] font-bold mb-0.5" style={{ color: C.accent }}>
+          <p className="text-xs uppercase tracking-[0.15em] font-bold mb-0.5" style={{ color: C.accentText }}>
             Ново ниво!
           </p>
           <p className="text-sm font-semibold" style={{ color: C.text }}>
@@ -87,7 +77,7 @@ export default function LevelUpToast() {
 
         {/* Decorative icon */}
         <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: C.accentDim }}>
-          <i className="ri-arrow-up-circle-fill text-lg" style={{ color: C.accent }} />
+          <i className="ri-arrow-up-circle-fill text-lg" style={{ color: C.accentText }} />
         </div>
       </div>
     </div>

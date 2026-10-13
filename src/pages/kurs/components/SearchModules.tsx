@@ -1,3 +1,4 @@
+import { ACADEMY_COLORS } from '@/lib/academy-theme';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LEARNING_SECTIONS } from '@/mocks/learning-platform';
@@ -44,18 +45,7 @@ LEARNING_SECTIONS.forEach((section) => {
 });
 
 /* ─── Brand ─── */
-const B = {
-  bg: '#0a0a0a',
-  surface: '#111111',
-  surfaceHover: '#141414',
-  border: '#1a1a1a',
-  borderHover: '#2a2a2a',
-  accent: '#e53e3e',
-  accentDim: '#331111',
-  text: '#ffffff',
-  textMuted: '#a0a0a0',
-  textDim: '#666666',
-};
+const B = ACADEMY_COLORS;
 
 export default function SearchModules() {
   const navigate = useNavigate();

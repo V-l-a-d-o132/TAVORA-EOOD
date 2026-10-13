@@ -1,3 +1,5 @@
+import { ACADEMY_COLORS as C } from '@/lib/academy-theme';
+import { useAcademyTheme } from '@/contexts/academy-theme-state';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/lib/supabase';
@@ -7,6 +9,7 @@ interface MessageAdminProps {
 }
 
 export default function MessageAdmin({ userId }: MessageAdminProps) {
+  const { theme } = useAcademyTheme();
   const [open, setOpen] = useState(false);
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
@@ -55,15 +58,16 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
 
   const modal = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6"
+      data-academy-theme={theme}
+      className="academy-themed fixed inset-0 z-[100] flex items-center justify-center px-4 py-6"
       style={{ background: 'rgba(0,0,0,0.75)' }}
       onClick={handleClose}
     >
       <div
         className="w-full max-w-lg animate-[msgPopIn_0.3s_cubic-bezier(0.16,1,0.3,1)] overflow-hidden"
         style={{
-          background: '#e8e8e8',
-          border: '1px solid #d0d0d0',
+          background: C.surface,
+          border: `1px solid ${C.border}`,
           borderRadius: '14px',
           boxShadow: '0 25px 80px -12px rgba(0,0,0,0.6)',
         }}
@@ -74,16 +78,16 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
           <div className="px-8 py-12 md:py-14 text-center">
             <div
               className="w-16 h-16 flex items-center justify-center mx-auto mb-5 rounded-full"
-              style={{ background: '#dcfce7', border: '2px solid #22c55e' }}
+              style={{ background: C.successDim, border: `2px solid ${C.success}` }}
             >
-              <i className="ri-check-line text-2xl" style={{ color: '#22c55e' }} />
+              <i className="ri-check-line text-2xl" style={{ color: C.successText }} />
             </div>
-            <h3 className="text-lg font-bold mb-2 tracking-tight" style={{ color: '#1a1a1a' }}>
+            <h3 className="text-lg font-bold mb-2 tracking-tight" style={{ color: C.text }}>
               Съобщението е изпратено!
             </h3>
-            <p className="text-sm leading-relaxed max-w-xs mx-auto" style={{ color: '#555555' }}>
+            <p className="text-sm leading-relaxed max-w-xs mx-auto" style={{ color: C.textMuted }}>
               Ще получиш отговор в рамките на{' '}
-              <strong style={{ color: '#1a1a1a' }}>1 до 5 работни дни</strong>.
+              <strong style={{ color: C.text }}>1 до 5 работни дни</strong>.
             </p>
           </div>
         ) : (
@@ -91,22 +95,22 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
             {/* ─── Header ─── */}
             <div
               className="flex items-center justify-between px-6 py-5"
-              style={{ borderBottom: '1px solid #d0d0d0' }}
+              style={{ borderBottom: `1px solid ${C.border}` }}
             >
               <div>
-                <h2 className="text-base font-bold tracking-tight" style={{ color: '#1a1a1a' }}>
+                <h2 className="text-base font-bold tracking-tight" style={{ color: C.text }}>
                   Пиши на ментор
                 </h2>
-                <p className="text-sm mt-1" style={{ color: '#555555' }}>
+                <p className="text-sm mt-1" style={{ color: C.textMuted }}>
                   Имаш въпрос? Изпрати съобщение директно.
                 </p>
               </div>
               <button
                 onClick={handleClose}
                 className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors cursor-pointer"
-                style={{ color: '#888888' }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = '#1a1a1a'; e.currentTarget.style.background = '#d8d8d8'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = '#888888'; e.currentTarget.style.background = 'transparent'; }}
+                style={{ color: C.textDim }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = C.text; e.currentTarget.style.background = C.surfaceElevated; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = C.textDim; e.currentTarget.style.background = 'transparent'; }}
               >
                 <i className="ri-close-line text-lg" />
               </button>
@@ -118,7 +122,7 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
               {error && (
                 <div
                   className="p-3 rounded-lg text-sm leading-relaxed flex items-start gap-2.5"
-                  style={{ background: '#fee2e2', border: '1px solid #e53e3e', color: '#e53e3e' }}
+                  style={{ background: 'var(--academy-error-bg)', border: `1px solid ${C.accent}`, color: C.accentText }}
                 >
                   <i className="ri-error-warning-line text-base mt-0.5 shrink-0" />
                   {error}
@@ -128,19 +132,19 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
               {/* Info */}
               <div
                 className="p-3.5 rounded-lg text-sm leading-relaxed flex items-start gap-2.5"
-                style={{ background: '#f0f0f0', border: '1px solid #d8d8d8', color: '#555555' }}
+                style={{ background: C.surfaceElevated, border: `1px solid ${C.border}`, color: C.textMuted }}
               >
-                <i className="ri-information-line text-base mt-0.5 shrink-0" style={{ color: '#888888' }} />
+                <i className="ri-information-line text-base mt-0.5 shrink-0" style={{ color: C.textDim }} />
                 <span>
                   Отговорът може да отнеме от{' '}
-                  <strong style={{ color: '#1a1a1a' }}>1 до 5 работни дни</strong>.
+                  <strong style={{ color: C.text }}>1 до 5 работни дни</strong>.
                   Благодарим за търпението!
                 </span>
               </div>
 
               {/* Subject */}
               <div>
-                <label className="block text-sm font-semibold mb-2" style={{ color: '#333333' }}>
+                <label className="block text-sm font-semibold mb-2" style={{ color: C.text }}>
                   Тема
                 </label>
                 <input
@@ -150,19 +154,19 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
                   placeholder="Напр. Въпрос за Модул 3..."
                   className="w-full px-4 py-3 text-sm outline-none transition-colors placeholder:text-sm"
                   style={{
-                    background: '#ffffff',
-                    border: '1px solid #cccccc',
+                    background: C.surfaceElevated,
+                    border: `1px solid ${C.border}`,
                     borderRadius: '10px',
-                    color: '#1a1a1a',
+                    color: C.text,
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = '#e53e3e'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = '#cccccc'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = C.accent; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = C.border; }}
                 />
               </div>
 
               {/* Content */}
               <div>
-                <label className="block text-sm font-semibold mb-2" style={{ color: '#333333' }}>
+                <label className="block text-sm font-semibold mb-2" style={{ color: C.text }}>
                   Съобщение
                 </label>
                 <textarea
@@ -172,21 +176,21 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
                   rows={4}
                   className="w-full px-4 py-3 text-sm outline-none transition-colors resize-none placeholder:text-sm"
                   style={{
-                    background: '#ffffff',
-                    border: '1px solid #cccccc',
+                    background: C.surfaceElevated,
+                    border: `1px solid ${C.border}`,
                     borderRadius: '10px',
-                    color: '#1a1a1a',
+                    color: C.text,
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = '#e53e3e'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = '#cccccc'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = C.accent; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = C.border; }}
                 />
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-xs" style={{ color: '#888888' }}>
+                  <span className="text-xs" style={{ color: C.textDim }}>
                     До 500 символа
                   </span>
                   <span
                     className="text-xs font-semibold"
-                    style={{ color: content.length >= 500 ? '#e53e3e' : '#888888' }}
+                    style={{ color: content.length >= 500 ? C.accent : C.textDim }}
                   >
                     {content.length}/500
                   </span>
@@ -197,18 +201,18 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
             {/* ─── Footer / Submit ─── */}
             <div
               className="px-6 py-4 flex gap-3"
-              style={{ borderTop: '1px solid #d0d0d0' }}
+              style={{ borderTop: `1px solid ${C.border}` }}
             >
               <button
                 onClick={handleClose}
                 className="flex-1 py-2.5 text-sm font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap"
                 style={{
                   background: 'transparent',
-                  border: '1px solid #cccccc',
-                  color: '#555555',
+                  border: `1px solid ${C.border}`,
+                  color: C.textMuted,
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#888888'; e.currentTarget.style.color = '#1a1a1a'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cccccc'; e.currentTarget.style.color = '#555555'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.textDim; e.currentTarget.style.color = C.text; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textMuted; }}
               >
                 Отказ
               </button>
@@ -216,9 +220,9 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
                 onClick={handleSend}
                 disabled={!canSend}
                 className="flex-[2] py-2.5 text-sm font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                style={{ background: '#e53e3e', color: '#ffffff' }}
-                onMouseEnter={(e) => { if (canSend) e.currentTarget.style.background = '#ff5555'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#e53e3e'; }}
+                style={{ background: C.accent, color: '#ffffff' }}
+                onMouseEnter={(e) => { if (canSend) e.currentTarget.style.background = C.accentHover; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = C.accent; }}
               >
                 {sending ? (
                   <>
@@ -255,9 +259,9 @@ export default function MessageAdmin({ userId }: MessageAdminProps) {
       <button
         onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all cursor-pointer whitespace-nowrap shadow-sm"
-        style={{ background: '#e53e3e', color: '#ffffff' }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = '#ff5555'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = '#e53e3e'; }}
+        style={{ background: C.accent, color: '#ffffff' }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = C.accentHover; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = C.accent; }}
       >
         <i className="ri-message-3-line text-sm" />
         Пиши на ментор

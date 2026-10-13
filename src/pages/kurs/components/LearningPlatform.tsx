@@ -1,3 +1,4 @@
+import { ACADEMY_COLORS } from '@/lib/academy-theme';
 import { resumeTargetRoute } from '@/lib/learning-resume';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,20 +12,7 @@ import MessageAdmin from './MessageAdmin';
 import CourseIntroduction from './CourseIntroduction';
 
 /* ─── Brand ─── */
-const C = {
-  bg: '#0a0a0a',
-  surface: '#111111',
-  surfaceHover: '#141414',
-  border: '#1a1a1a',
-  borderHover: '#2a2a2a',
-  accent: '#e53e3e',
-  accentHover: '#ff5555',
-  accentDim: '#331111',
-  text: '#ffffff',
-  textMuted: '#a0a0a0',
-  textDim: '#666666',
-  success: '#22c55e',
-};
+const C = ACADEMY_COLORS;
 
 export default function LearningPlatform() {
   const { user } = useAuth();
@@ -131,7 +119,7 @@ export default function LearningPlatform() {
         <div className="mb-10 stagger-children">
           <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em]" style={{ background: C.accentDim, border: `1px solid ${C.accent}`, color: C.accent }}>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em]" style={{ background: C.accentDim, border: `1px solid ${C.accent}`, color: C.accentText }}>
                 Академия TAVORA
               </span>
               {completedLessons > 0 && (
@@ -163,10 +151,10 @@ export default function LearningPlatform() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110" style={{ background: 'rgba(229,62,62,0.2)', border: `1px solid ${C.accent}` }}>
-                  <i className="ri-play-fill text-lg" style={{ color: C.accent }} />
+                  <i className="ri-play-fill text-lg" style={{ color: C.accentText }} />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.accent }}>Продължи откъдето спря</p>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.accentText }}>Продължи откъдето спря</p>
                   <p className="text-sm font-bold" style={{ color: C.text }}>
                     {resumeTarget.sectionTitle} — {resumeTarget.lessonTitle}
                   </p>
@@ -211,7 +199,7 @@ export default function LearningPlatform() {
                 {completedModules} от {totalModules} модула · {completedLessons} от {totalLessons} урока
               </p>
             </div>
-            <span className="text-2xl font-bold tracking-tight" style={{ color: C.accent }}>
+            <span className="text-2xl font-bold tracking-tight" style={{ color: C.accentText }}>
               {overallPercent}%
             </span>
           </div>
@@ -301,7 +289,7 @@ export default function LearningPlatform() {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 flex items-center justify-center shrink-0" style={{ background: 'rgba(229,62,62,0.2)', border: `1px solid ${C.accent}` }}>
-                    <i className="ri-book-open-line text-xl" style={{ color: C.accent }} />
+                    <i className="ri-book-open-line text-xl" style={{ color: C.accentText }} />
                   </div>
                   <div>
                     <p className="text-sm font-bold" style={{ color: C.text }}>Започни от първия модул</p>
@@ -382,7 +370,7 @@ export default function LearningPlatform() {
               <div className="p-5 mb-6" style={{ background: C.accentDim, border: `2px solid ${C.accent}` }}>
                 <div className="flex items-start gap-4 mb-5">
                   <div className="w-10 h-10 flex items-center justify-center shrink-0" style={{ border: `1px solid ${C.accent}` }}>
-                    <i className="ri-lock-unlock-line" style={{ color: C.accent, fontSize: '18px' }} />
+                    <i className="ri-lock-unlock-line" style={{ color: C.accentText, fontSize: '18px' }} />
                   </div>
                   <div>
                     <p className="text-sm font-bold uppercase tracking-wider" style={{ color: C.text }}>ОГРАНИЧЕН ДОСТЪП</p>
@@ -408,7 +396,7 @@ export default function LearningPlatform() {
                     <button
                       onClick={() => handleUnlock('premium-all')}
                       className="flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium transition-colors whitespace-nowrap"
-                      style={{ border: `1px solid ${C.accent}`, color: C.accent, background: 'transparent' }}
+                      style={{ border: `1px solid ${C.accent}`, color: C.accentText, background: 'transparent' }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = C.accentDim; }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                     >
@@ -480,13 +468,13 @@ export default function LearningPlatform() {
                               {mod.title}
                             </h3>
                             {!unlocked && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ background: C.accentDim, border: `1px solid ${C.accent}`, color: C.accent }}>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ background: C.accentDim, border: `1px solid ${C.accent}`, color: C.accentText }}>
                                 <i className="ri-lock-line" />
                                 LOCKED
                               </span>
                             )}
                             {hasFreeTag && unlocked && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ background: '#0a1f0a', border: '1px solid #113311', color: C.success }}>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ background: '#0a1f0a', border: '1px solid #113311', color: C.successText }}>
                                 FREE
                               </span>
                             )}
