@@ -1,4 +1,5 @@
 import { ACADEMY_COLORS } from '@/lib/academy-theme';
+import { ACADEMY_FREE_MODULE_ID } from '@/config/academy-catalog';
 import { resumeTargetRoute } from '@/lib/learning-resume';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -410,7 +411,7 @@ export default function LearningPlatform() {
 
             {/* Full access badge */}
             {hasFullAccess && (
-              <div className="p-4 mb-6 flex items-center gap-3" style={{ background: '#0a1f0a', border: `1px solid #113311` }}>
+              <div className="p-4 mb-6 flex items-center gap-3" style={{ background: C.successDim, border: `1px solid ${C.successBorder}` }}>
                 <div className="w-9 h-9 flex items-center justify-center" style={{ background: C.success, color: '#fff' }}>
                   <i className="ri-vip-crown-line text-sm" />
                 </div>
@@ -428,18 +429,18 @@ export default function LearningPlatform() {
                 const modPercent = modProg.total > 0 ? Math.round((modProg.completed / modProg.total) * 100) : 0;
                 const isDone = modProg.completed >= modProg.total && modProg.total > 0;
                 const unlocked = isModuleUnlocked(mod);
-                const hasFreeTag = mod.tag === 'FREE';
+                const hasFreeTag = mod.id === ACADEMY_FREE_MODULE_ID;
 
                 return (
                   <div
                     key={mod.id}
+                    data-module-id={mod.id}
                     onClick={() => goToModule(mod)}
                     className="p-4 md:p-5 transition-all duration-200 group"
                     style={{
                       background: C.surface,
                       border: `1px solid ${C.border}`,
                       cursor: unlocked ? 'pointer' : 'not-allowed',
-                      opacity: unlocked ? 1 : 0.6,
                     }}
                     onMouseEnter={(e) => { if (unlocked) { e.currentTarget.style.borderColor = C.borderHover; e.currentTarget.style.background = C.surfaceHover; } }}
                     onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.background = C.surface; }}
@@ -474,7 +475,7 @@ export default function LearningPlatform() {
                               </span>
                             )}
                             {hasFreeTag && unlocked && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ background: '#0a1f0a', border: '1px solid #113311', color: C.successText }}>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ background: C.successDim, border: `1px solid ${C.successBorder}`, color: C.successText }}>
                                 FREE
                               </span>
                             )}

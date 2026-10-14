@@ -5,11 +5,12 @@ import { expect, type Locator, type Page } from '@playwright/test';
  * This supplements visual review; it is not a complete accessibility audit.
  */
 export async function assertLearningContrast(root: Locator) {
-  // A theme switch changes CSS variables immediately; existing hover transitions
-  // can still interpolate for a frame. Audit the rendered state once they finish.
+  // Audit settled colors after transitions and finite entrance animations.
   await root.evaluate(async root => {
     root.getBoundingClientRect();
-    await Promise.allSettled(root.getAnimations({ subtree: true }).filter(animation => animation instanceof CSSTransition).map(animation => animation.finished));
+    await Promise.allSettled(root.getAnimations({ subtree: true })
+      .filter(animation => animation.effect?.getComputedTiming().endTime !== Infinity)
+      .map(animation => animation.finished));
   });
   const failures = await root.evaluate(root => {
     const rgba = (value: string) => {

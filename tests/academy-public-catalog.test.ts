@@ -33,6 +33,7 @@ describe('Public catalogue against the published Supabase snapshot', () => {
     expect(MARKETING_BASICS_PUBLIC_GROUPS.flatMap(group => group.modules.map(module => module.num))).toEqual(LEARNING_SECTIONS[2].modules.map(module => module.number));
     expect(ACADEMY_FREE_MODULE_ID).toBe(published.freeModuleId);
     expect(LEARNING_SECTIONS.flatMap(section => section.modules).filter(module => !module.isLocked).map(module => module.id)).toEqual([published.freeModuleId]);
+    expect(LEARNING_SECTIONS.flatMap(section => section.modules).filter(module => module.tag === 'FREE').map(module => module.id)).toEqual([published.freeModuleId]);
     expect(SILK_ROAD_PUBLIC_MODULES.filter(module => module.tag === 'FREE').map(module => module.num)).toEqual(['01']);
     expect(PERFECT_VIDEO_PUBLIC_MODULES.some(module => module.tag === 'FREE')).toBe(false);
     expect(MARKETING_BASICS_PUBLIC_GROUPS.some(group => group.modules.some(module => module.tag === 'FREE'))).toBe(false);

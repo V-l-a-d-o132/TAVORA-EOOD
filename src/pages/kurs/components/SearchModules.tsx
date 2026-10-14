@@ -121,7 +121,7 @@ export default function SearchModules() {
           onFocus={() => { if (query.trim()) setOpen(true); }}
           onKeyDown={handleKeyDown}
           placeholder="Търси модул или урок..."
-          className="flex-1 bg-transparent text-sm outline-none border-none"
+          className="min-w-0 flex-1 bg-transparent text-sm outline-none border-none placeholder:academy-subtle"
           style={{ color: B.text }}
         />
         {query && (
@@ -155,14 +155,14 @@ export default function SearchModules() {
                 style={{
                   background: r.type === 'module' ? B.accentDim : 'transparent',
                   border: r.type === 'module' ? `1px solid ${B.accent}` : `1px solid ${B.border}`,
-                  color: r.type === 'module' ? B.accent : B.textDim,
+                  color: r.type === 'module' ? B.accentText : B.textMuted,
                 }}
               >
                 {r.type === 'module' ? 'Модул' : 'Урок'}
               </span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm truncate" style={{ color: B.text }}>{r.label}</p>
-                <p className="text-[11px] truncate" style={{ color: B.textDim }}>{r.subtitle} — {r.sectionTitle}</p>
+                <p className="text-[11px] truncate" style={{ color: B.textMuted }}>{r.subtitle} — {r.sectionTitle}</p>
               </div>
               <i className="ri-arrow-right-s-line shrink-0" style={{ color: B.textDim, fontSize: '14px' }} />
             </button>

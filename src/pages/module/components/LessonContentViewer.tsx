@@ -194,7 +194,7 @@ export default function LessonContentViewer({
             {/* Controls */}
             <div className="flex items-center gap-3 flex-wrap">
               {isLessonCompleted && (
-                <div className="flex items-center gap-2 px-5 py-3" style={{ background: C.successDim, border: `1px solid #113311` }}>
+                <div className="flex items-center gap-2 px-5 py-3" style={{ background: C.successDim, border: `1px solid ${C.successBorder}` }}>
                   <i className="ri-check-double-line" style={{ color: C.successText }} />
                   <span className="text-sm font-medium" style={{ color: C.successText }}>Завършен · +10 точки</span>
                 </div>

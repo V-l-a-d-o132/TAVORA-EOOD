@@ -9,9 +9,12 @@ const USER = { id: '00000000-0000-4000-8000-000000000091', email: 'student@examp
 const opening = openings.lessons[0];
 
 export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string };
+type ThemeAccessFixture = { hasFullAccess?: boolean; unlockedModules?: string[]; completedFreeModule?: boolean };
 
 /** Auth, saves and grading are all synthetic; no request reaches a live service. */
-export async function prepareAcademyTheme(page: Page, preference = 'dark', fixture?: ThemeLessonFixture) {
+export async function prepareAcademyTheme(page: Page, preference = 'dark', fixture?: ThemeLessonFixture, access: ThemeAccessFixture = {}) {
+  const hasFullAccess = access.hasFullAccess ?? true;
+  const unlockedModules = access.unlockedModules ?? [];
   const requests: Record<string, number> = {};
   let progress = { current_block_key: fixture?.blocks[0].key || opening.first_page.key, completed_block_keys: [] as string[], block_state: {} as Record<string, unknown>, xp: 0, score_percent: null, mastery_status: 'learning', completed_at: null, last_activity_at: '2026-10-13T12:00:00Z' };
   let bookmark = { moduleId: 's01-m01', lessonId: 'l01-01', timestamp: '2026-10-13T12:00:00Z' };
@@ -34,14 +37,16 @@ export async function prepareAcademyTheme(page: Page, preference = 'dark', fixtu
     const name = url.pathname.split('/').pop()!;
     requests[name] = (requests[name] || 0) + 1;
     const payload = route.request().postDataJSON() || {};
-    if (name === 'academy_get_learning_progress') return route.fulfill({ json: [{ module_id: 's01-m01', lesson_id: 'l01-01', completed: false, quiz_score: null, xp: 125, quiz_count: 3, practice_count: 2, updated_at: '2026-10-13T12:00:00Z', activity_dates: [] }] });
+    if (name === 'academy_get_learning_progress') return route.fulfill({ json: access.completedFreeModule
+      ? ['l01-01', 'l01-02', 'l01-03', 'l01-04'].map(lesson_id => ({ module_id: 's01-m01', lesson_id, completed: true, quiz_score: 100, xp: 5, quiz_count: 1, practice_count: 1, updated_at: '2026-10-14T07:00:00Z', activity_dates: [] }))
+      : [{ module_id: 's01-m01', lesson_id: 'l01-01', completed: false, quiz_score: null, xp: 125, quiz_count: 3, practice_count: 2, updated_at: '2026-10-13T12:00:00Z', activity_dates: [] }] });
     if (name === 'profiles' && route.request().method() === 'GET') {
-      const profile = { has_full_access: true, unlocked_modules: [], last_opened_lesson: bookmark };
+      const profile = { has_full_access: hasFullAccess, unlocked_modules: unlockedModules, last_opened_lesson: bookmark };
       return route.fulfill({ json: route.request().headers().accept?.includes('pgrst.object') ? profile : [profile] });
     }
     if (name === 'user') return route.fulfill({ json: USER });
     if (name === 'academy_get_module_progress') return route.fulfill({ json: [] });
-    if (name === 'academy_has_module_access') return route.fulfill({ json: true });
+    if (name === 'academy_has_module_access') return route.fulfill({ json: payload.p_module === 's01-m01' || hasFullAccess || unlockedModules.includes(payload.p_module) });
     if (name === 'academy_record_lesson_visit') {
       bookmark = { moduleId: payload.p_module, lessonId: payload.p_lesson, timestamp: new Date().toISOString() };
       return route.fulfill({ json: bookmark });

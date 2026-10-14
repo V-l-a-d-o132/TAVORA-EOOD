@@ -29,4 +29,5 @@ export const ACADEMY_COLORS = {
   primaryHover: 'var(--academy-primary-hover)', text: 'var(--academy-text)',
   textMuted: 'var(--academy-muted)', textDim: 'var(--academy-subtle)',
   success: 'var(--academy-success-fill)', successText: 'var(--academy-success)', successDim: 'var(--academy-success-bg)',
+  successBorder: 'var(--academy-success-border)',
 };

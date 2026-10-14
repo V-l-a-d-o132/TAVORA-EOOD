@@ -60,6 +60,7 @@ const SECTION_DEFINITIONS: SourceSection[] = [
       {
         id: 's01-m01',
         number: '01',
+        tag: 'FREE',
         title: 'AI според задачата',
         subtitle: 'Опиши проблема, постави ясна задача и провери резултата',
         lessons: [
@@ -287,7 +288,6 @@ const SECTION_DEFINITIONS: SourceSection[] = [
           { id: 'pv01-24', title: "Събери брифа и плана за производство", hasQuiz: true },
         ],
         homeworkPrompt: "Избираш обещание, доказващи кадри и следваща стъпка по готови случаи.",
-        tag: 'FREE',
       },
       {
         id: 's02-m02',
