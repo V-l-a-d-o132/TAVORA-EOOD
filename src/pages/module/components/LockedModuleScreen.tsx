@@ -57,8 +57,8 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
         {/* Status badge */}
         <div className="mb-8 flex items-center justify-center">
           <div className="inline-flex items-center gap-2 px-4 py-2" style={{ border: `1px solid ${C.accent}` }}>
-            <i className="ri-lock-line text-xs" style={{ color: C.accent }} />
-            <span className="text-xs font-bold uppercase tracking-[0.15em]" style={{ color: C.accent }}>
+            <i className="ri-lock-line text-xs" style={{ color: C.accentText }} />
+            <span className="text-xs font-bold uppercase tracking-[0.15em]" style={{ color: C.accentText }}>
               {isUpgrade ? 'Надгради достъпа' : 'Заключен модул'}
             </span>
           </div>
@@ -67,7 +67,7 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
         {/* Headline */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto flex items-center justify-center mb-6" style={{ border: `2px solid ${C.accent}` }}>
-            <i className="ri-lock-line" style={{ color: C.accent, fontSize: '28px' }} />
+            <i className="ri-lock-line" style={{ color: C.accentText, fontSize: '28px' }} />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-4 tracking-tight" style={{ color: C.text }}>
             {isUpgrade ? 'Надгради до пълната програма' : 'Продължи обучението си'}
@@ -85,7 +85,7 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
           <div className="space-y-3">
             {program?.includes.map((item) => (
               <div key={item} className="flex items-center gap-3 text-sm" style={{ color: C.textMuted }}>
-                <span style={{ color: C.accent, fontWeight: 700 }}>//</span>
+                <span style={{ color: C.accentText, fontWeight: 700 }}>//</span>
                 <span>{item}</span>
               </div>
             ))}
@@ -94,7 +94,7 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
 
         {/* Pricing */}
         <div className="text-center mb-6">
-          <span className="text-4xl font-bold tracking-tight" style={{ color: C.accent }}>{formatPrice(program?.price || 0)}</span>
+          <span className="text-4xl font-bold tracking-tight" style={{ color: C.accentText }}>{formatPrice(program?.price || 0)}</span>
           <p className="text-xs mt-2" style={{ color: C.textDim }}>Еднократно плащане · Доживотен достъп · 30-дневна доброволна гаранция за възстановяване на сумата</p>
         </div>
 
@@ -116,7 +116,7 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
               <Link
                 to={buildCheckoutUrl('fullAccess')}
                 className="block w-full px-6 py-3 text-sm font-medium text-center transition-colors mb-5"
-                style={{ background: 'transparent', border: `1px solid ${C.accent}`, color: C.accent }}
+                style={{ background: 'transparent', border: `1px solid ${C.accent}`, color: C.accentText }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = C.accentDim; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
               >
@@ -129,9 +129,9 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
             <button
               onClick={handleGoogleLogin}
               className="block w-full px-6 py-4 text-sm font-bold text-center transition-all"
-              style={{ background: C.success, color: '#0a0a0a' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#33e06e'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = C.success; }}
+              style={{ background: C.surfaceElevated, color: C.text }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = C.surfaceHover; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = C.surfaceElevated; }}
             >
               <i className="ri-google-fill mr-2" style={{ fontSize: '14px' }} />
               Влез, за да продължиш
@@ -170,7 +170,7 @@ export default function LockedModuleScreen({ moduleTitle, moduleId, onUnlock, on
         </Link>
 
         <div className="mt-5 flex items-center justify-center gap-2 text-xs" style={{ color: C.textDim }}>
-          <i className="ri-shield-check-line" style={{ color: C.success, fontSize: '12px' }} />
+          <i className="ri-shield-check-line" style={{ color: C.successText, fontSize: '12px' }} />
           <span>30-дневна доброволна гаранция за възстановяване на сумата</span>
         </div>
       </div>

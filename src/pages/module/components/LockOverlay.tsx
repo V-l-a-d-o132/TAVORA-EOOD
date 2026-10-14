@@ -1,19 +1,8 @@
+import { ACADEMY_COLORS } from '@/lib/academy-theme';
 import { Link } from 'react-router-dom';
 import { buildCheckoutUrl, formatPrice, getTierById } from '@/config/pricing';
 
-const B = {
-  bg: '#0a0a0a',
-  surface: '#111111',
-  border: '#1a1a1a',
-  accent: '#e53e3e',
-  accentHover: '#ff5555',
-  accentDim: '#331111',
-  text: '#ffffff',
-  textMuted: '#a0a0a0',
-  textDim: '#666666',
-  success: '#22c55e',
-  successDim: '#0a1f0a',
-};
+const B = ACADEMY_COLORS;
 
 interface LockOverlayProps {
   onReview: () => void;
@@ -28,7 +17,7 @@ export default function LockOverlay({ onReview }: LockOverlayProps) {
         {/* Headline */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto flex items-center justify-center mb-5" style={{ border: `2px solid ${B.accent}` }}>
-            <i className="ri-lock-unlock-line" style={{ color: B.accent, fontSize: '28px' }} />
+            <i className="ri-lock-unlock-line" style={{ color: B.accentText, fontSize: '28px' }} />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight" style={{ color: B.text }}>
             Готов си да продължиш.
@@ -47,7 +36,7 @@ export default function LockOverlay({ onReview }: LockOverlayProps) {
           <div className="space-y-3">
             {tier?.includes.map((item) => (
               <div key={item} className="flex items-center gap-2.5 text-sm" style={{ color: B.textMuted }}>
-                <span style={{ color: B.accent, fontWeight: 700 }}>//</span>
+                <span style={{ color: B.accentText, fontWeight: 700 }}>//</span>
                 <span>{item}</span>
               </div>
             ))}
@@ -56,7 +45,7 @@ export default function LockOverlay({ onReview }: LockOverlayProps) {
 
         {/* Price */}
         <div className="text-center mb-6">
-          <span className="text-4xl font-bold tracking-tight" style={{ color: B.accent }}>{formatPrice(tier?.price || 0)}</span>
+          <span className="text-4xl font-bold tracking-tight" style={{ color: B.accentText }}>{formatPrice(tier?.price || 0)}</span>
           <p className="text-xs mt-2" style={{ color: B.textDim }}>Еднократно плащане · Доживотен достъп · 30-дневна доброволна гаранция за възстановяване на сумата</p>
         </div>
 

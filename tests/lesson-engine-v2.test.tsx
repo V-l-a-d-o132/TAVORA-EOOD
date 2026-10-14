@@ -173,7 +173,7 @@ describe('compatible first video practice', () => {
     const order = screen.getAllByRole('button').map(button => button.textContent);
     rerender(<LessonBlockRenderer {...props} initialState={{ answer: 'b' }} />);
     expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual(order);
-    expect(screen.getByRole('button', { name: /Запазен избор/ }).className).toContain('border-red-400');
+    expect(screen.getByRole('button', { name: /Запазен избор/ }).getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: /Запазен избор/ }));
     await waitFor(() => expect(props.onSubmit).toHaveBeenCalledWith({ answer: 'b' }));
   });
@@ -432,7 +432,7 @@ describe('video audit choice presentation and prerequisite guides', () => {
     const props = {block,moduleId:'s02-m14',lessonId:'pv14-01',initialState:{[field]:'b'},completed:false,onStateChange:vi.fn(),onSubmit:submit};
     const {rerender}=render(<LessonBlockRenderer {...props} />);
     const saved=screen.getByRole('button',{name:/Проверка Б/});
-    expect(saved.className).toContain('border-red');
+    expect(saved.getAttribute('aria-pressed')).toBe('true');
     const before=screen.getAllByRole('button').map(b=>b.textContent);
     rerender(<LessonBlockRenderer {...props} initialState={{[field]:'b'}} />);
     expect(screen.getAllByRole('button').map(b=>b.textContent)).toEqual(before);

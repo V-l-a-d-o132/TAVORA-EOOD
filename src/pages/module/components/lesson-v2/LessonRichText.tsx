@@ -42,35 +42,35 @@ export default function LessonRichText({ content, allowCode = false, allowVideoL
     body = body.slice(0, -text(code.source).length).trimEnd();
   }
   return <>
-    {body && <p className="whitespace-pre-line break-words text-base leading-7 text-zinc-200">{body}</p>}
-    {allowCode && text(code.source) && <figure className="mt-5 overflow-hidden rounded-xl border border-white/15">
-      <figcaption className="border-b border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-zinc-300">Учебен пример · {text(code.language) || 'код'}</figcaption>
-      <pre tabIndex={0} aria-label="Учебен код за преглед" className="overflow-x-auto bg-black/30 p-4 text-sm leading-6 text-zinc-100"><code>{text(code.source)}</code></pre>
+    {body && <p className="whitespace-pre-line break-words text-base leading-7 academy-body">{body}</p>}
+    {allowCode && text(code.source) && <figure className="mt-5 overflow-hidden rounded-xl border academy-border-strong">
+      <figcaption className="border-b academy-border academy-tint px-4 py-2 text-sm academy-body">Учебен пример · {text(code.language) || 'код'}</figcaption>
+      <pre tabIndex={0} aria-label="Учебен код за преглед" className="overflow-x-auto academy-raised p-4 text-sm leading-6 academy-text"><code>{text(code.source)}</code></pre>
     </figure>}
     {showFigure && <figure className="mt-6">
-      <div className="overflow-x-auto rounded-xl border border-white/15" tabIndex={0} role="region" aria-label="Учебна схема">
+      <div className="overflow-x-auto rounded-xl border academy-border-strong" tabIndex={0} role="region" aria-label="Учебна схема">
         <img src={figureSrc} alt={text(figure.alt)} loading="lazy" className="h-auto w-full min-w-[38rem] bg-[#f8fafc]" />
       </div>
-      {text(figure.caption) && <figcaption className="mt-3 text-sm leading-6 text-zinc-400">{text(figure.caption)}</figcaption>}
+      {text(figure.caption) && <figcaption className="mt-3 text-sm leading-6 academy-muted">{text(figure.caption)}</figcaption>}
     </figure>}
     {(simulation === 'checkout' || simulation === 'publishing' || simulation === 'request') && <ClosedWorkflowLab key={simulation} kind={simulation} />}
     {allowVideoLab && isVideoLabKind(content.videoLab) && <VideoDecisionLab key={content.videoLab} kind={content.videoLab} />}
     {objects(content.points).length > 0 && <ul className="mt-5 space-y-3">
-      {objects(content.points).map((point, index) => <li key={text(point.id) || index} className="flex gap-3 text-zinc-200">
-        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-red-500" />{text(point.text)}
+      {objects(content.points).map((point, index) => <li key={text(point.id) || index} className="flex gap-3 academy-body">
+        <span className="mt-2 h-2 w-2 shrink-0 rounded-full academy-primary" />{text(point.text)}
       </li>)}
     </ul>}
-    {hasTable && <div className="mt-5 overflow-x-auto rounded-xl border border-white/15" role="region" aria-label="Работна таблица" tabIndex={0}>
+    {hasTable && <div className="mt-5 overflow-x-auto rounded-xl border academy-border-strong" role="region" aria-label="Работна таблица" tabIndex={0}>
       <table className="w-full min-w-[28rem] border-collapse text-left text-sm">
-        <thead className="bg-white/[0.08]"><tr>{columns.map((column, index) => <th key={index} scope="col" className="px-4 py-3 font-semibold text-white">{column}</th>)}</tr></thead>
-        <tbody>{rows.map((row, index) => <tr key={index} className="border-t border-white/10">
-          {row.map((cell, cellIndex) => <td key={cellIndex} className="px-4 py-3 align-top leading-6 text-zinc-200">{cell}</td>)}
+        <thead className="academy-tint-strong"><tr>{columns.map((column, index) => <th key={index} scope="col" className="px-4 py-3 font-semibold academy-text">{column}</th>)}</tr></thead>
+        <tbody>{rows.map((row, index) => <tr key={index} className="border-t academy-border">
+          {row.map((cell, cellIndex) => <td key={cellIndex} className="px-4 py-3 align-top leading-6 academy-body">{cell}</td>)}
         </tr>)}</tbody>
       </table>
     </div>}
     {sources.length > 0 && <ul className="mt-5 space-y-3" aria-label="Официални източници">
       {sources.map((source, index) => <li key={`${source.url}-${index}`}>
-        <a href={source.url} target="_blank" rel="noopener noreferrer" className="break-words text-sm leading-6 text-red-300 underline underline-offset-4 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-red-300">{source.label}</a>
+        <a href={source.url} target="_blank" rel="noopener noreferrer" className="break-words text-sm leading-6 academy-accent underline underline-offset-4 hover:academy-accent-hover focus:outline-none focus:ring-2 focus:ring-red-300">{source.label}</a>
       </li>)}
     </ul>}
   </>;

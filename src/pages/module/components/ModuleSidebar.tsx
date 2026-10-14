@@ -36,7 +36,7 @@ export default function ModuleSidebar({
 }: ModuleSidebarProps) {
   return (
     <aside className="hidden lg:block">
-      <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-hidden rounded-2xl shadow-2xl shadow-black/20" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
+      <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-hidden rounded-2xl shadow-2xl academy-shadow" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
 
         {/* Header */}
         <div className="px-5 py-5" style={{ borderBottom: `1px solid ${C.border}` }}>
@@ -80,7 +80,7 @@ export default function ModuleSidebar({
                   className="w-8 h-8 flex items-center justify-center shrink-0 text-xs font-semibold"
                   style={{
                     background: done ? C.success : isActive ? C.accent : C.border,
-                    color: '#fff',
+                    color: done || isActive ? '#fff' : C.textDim,
                   }}
                 >
                   {done ? <i className="ri-check-line" /> : <span>{idx + 1}</span>}
@@ -88,7 +88,7 @@ export default function ModuleSidebar({
                 <div className="flex-1 min-w-0">
                   <p
                     className="text-sm leading-5"
-                    style={{ color: isActive ? '#fff' : C.textMuted, fontWeight: isActive ? 600 : 400 }}
+                    style={{ color: isActive ? C.text : C.textMuted, fontWeight: isActive ? 600 : 400 }}
                   >
                     {lesson.title}
                   </p>

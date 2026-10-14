@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeSelector from '@/components/academy/ThemeSelector';
 import { buildLabDocument, labHtml, labScript } from './document';
 
 /** The same offline exercise also works on hosts that rewrite every URL to the SPA. */
@@ -26,16 +27,17 @@ export default function AcademyLabPage() {
     return () => window.removeEventListener('message', resize);
   }, []);
 
-  return <main className="min-h-screen bg-slate-50 text-slate-800">
+  return <main className="min-h-screen academy-bg academy-text">
     <nav aria-label="Учебно упражнение" className="mx-auto flex max-w-[960px] flex-wrap items-center gap-x-5 gap-y-2 px-5 pb-3 pt-6 text-sm">
-      <Link to="/kurs" className="text-blue-700 underline underline-offset-4">Обратно към Академията</Link>
+      <Link to="/kurs" className="academy-accent underline underline-offset-4">Обратно към Академията</Link>
       {downloads && <>
-        <a href={downloads.html} download="index.html" className="text-blue-700 underline underline-offset-4">Изтегли страницата</a>
-        <a href={downloads.script} download="request-lab.js" className="text-blue-700 underline underline-offset-4">Изтегли логиката</a>
+        <a href={downloads.html} download="index.html" className="academy-accent underline underline-offset-4">Изтегли страницата</a>
+        <a href={downloads.script} download="request-lab.js" className="academy-accent underline underline-offset-4">Изтегли логиката</a>
       </>}
+      <div className="ml-auto"><ThemeSelector /></div>
     </nav>
     <iframe ref={frame} title="Учебна форма: какво се случва след Изпрати" srcDoc={document}
-      sandbox="allow-scripts" className="block w-full border-0" style={{ height }} />
-    <p className="mx-auto max-w-[960px] px-5 pb-6 text-sm leading-6 text-slate-600">За упражнението тук записите се пазят само докато страницата е отворена. За работа извън Академията изтегли двата файла в една папка.</p>
+      sandbox="allow-scripts allow-forms" className="block w-full border-0" style={{ height }} />
+    <p className="mx-auto max-w-[960px] px-5 pb-6 text-sm leading-6 academy-muted">За упражнението тук записите се пазят само докато страницата е отворена. За работа извън Академията изтегли двата файла в една папка.</p>
   </main>;
 }

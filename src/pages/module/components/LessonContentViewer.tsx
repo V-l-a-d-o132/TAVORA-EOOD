@@ -99,8 +99,8 @@ export default function LessonContentViewer({
 
   return (
     <main className={`min-w-0 space-y-5 ${isInteractiveCourse && allCompleted ? 'pb-28 md:pb-0' : ''}`}>
-      {isInteractiveCourse && !moduleId.startsWith('s01-') && modHomeworkPrompt && <details className="rounded-2xl border border-white/10 bg-[#111] p-4 text-zinc-300">
-        <summary className="cursor-pointer text-sm font-semibold text-white">Практически резултат от модул {modNumber}</summary>
+      {isInteractiveCourse && !moduleId.startsWith('s01-') && modHomeworkPrompt && <details className="rounded-2xl border academy-border academy-surface p-4 academy-body">
+        <summary className="cursor-pointer text-sm font-semibold academy-text">Практически резултат от модул {modNumber}</summary>
         <p className="mt-3 whitespace-pre-line text-sm leading-7">{modHomeworkPrompt}</p>
       </details>}
       <div key={`${moduleId}:${activeLesson.id}`}>
@@ -195,8 +195,8 @@ export default function LessonContentViewer({
             <div className="flex items-center gap-3 flex-wrap">
               {isLessonCompleted && (
                 <div className="flex items-center gap-2 px-5 py-3" style={{ background: C.successDim, border: `1px solid #113311` }}>
-                  <i className="ri-check-double-line" style={{ color: C.success }} />
-                  <span className="text-sm font-medium" style={{ color: C.success }}>Завършен · +10 точки</span>
+                  <i className="ri-check-double-line" style={{ color: C.successText }} />
+                  <span className="text-sm font-medium" style={{ color: C.successText }}>Завършен · +10 точки</span>
                 </div>
               )}
               <button
@@ -256,7 +256,7 @@ export default function LessonContentViewer({
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     <div className="w-14 h-14 flex items-center justify-center shrink-0" style={{ background: 'rgba(229,62,62,0.2)' }}>
-                      <i className="ri-trophy-line text-2xl" style={{ color: C.accent }} />
+                      <i className="ri-trophy-line text-2xl" style={{ color: C.accentText }} />
                     </div>
                     <div className="min-w-0">
                       <p className="text-lg font-semibold" style={{ color: C.text }}>Модулът е завършен!</p>
@@ -264,7 +264,7 @@ export default function LessonContentViewer({
                     </div>
                   </div>
                   <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <span className="text-base font-bold px-5 py-2.5 shrink-0 whitespace-nowrap" style={{ background: 'rgba(229,62,62,0.2)', color: C.accent }}>+{totalPoints} точки</span>
+                    <span className="text-base font-bold px-5 py-2.5 shrink-0 whitespace-nowrap" style={{ background: 'rgba(229,62,62,0.2)', color: C.accentText }}>+{totalPoints} точки</span>
                     {nextModule && (
                       <Link
                         to={`/module/${nextModule.id}`}
@@ -310,10 +310,10 @@ export default function LessonContentViewer({
           </>
         )}
       </div>
-      {isInteractiveCourse && allCompleted && <section aria-label="Модулът е преминат" className="rounded-2xl border border-emerald-500/25 bg-emerald-500/5 p-5 text-white">
+      {isInteractiveCourse && allCompleted && <section aria-label="Модулът е преминат" className="rounded-2xl border academy-success-border academy-success-bg p-5 academy-text">
         <h2 className="text-lg font-semibold">Уроците в модула са преминати</h2>
-        {nextModuleInCourse ? <Link to={`/module/${nextModuleInCourse.id}`} className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold">Следващ модул: {nextModuleInCourse.title}</Link>
-          : <Link to="/dashboard" className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold">Към таблото с напредъка</Link>}
+        {nextModuleInCourse ? <Link to={`/module/${nextModuleInCourse.id}`} className="mt-4 inline-flex min-h-11 items-center rounded-xl academy-primary px-5 py-3 text-sm font-semibold">Следващ модул: {nextModuleInCourse.title}</Link>
+          : <Link to="/dashboard" className="mt-4 inline-flex min-h-11 items-center rounded-xl border academy-border-strong px-5 py-3 text-sm font-semibold">Към таблото с напредъка</Link>}
       </section>}
     </main>
   );

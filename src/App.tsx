@@ -7,6 +7,7 @@ import ScrollToTop from "./components/feature/ScrollToTop";
 import AutoPageView from "./components/feature/AutoPageView";
 import LevelUpToast from "./components/feature/LevelUpToast";
 import { AuthProvider } from "./contexts/AuthContext";
+import { AcademyThemeProvider, AcademyThemeScope } from './contexts/AcademyThemeContext';
 
 function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ function App() {
   return (
       <BrowserRouter basename={__BASE_PATH__}>
         <AuthProvider>
+          <AcademyThemeProvider><AcademyThemeScope>
           <PageMetadataSync />
           <AutoPageView />
           <ScrollToTop />
@@ -32,6 +34,7 @@ function App() {
           </div>
           <LevelUpToast />
           <CookieBanner />
+          </AcademyThemeScope></AcademyThemeProvider>
         </AuthProvider>
       </BrowserRouter>
   );

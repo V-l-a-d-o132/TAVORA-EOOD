@@ -110,57 +110,57 @@ export default function CourseIntroduction({ courseId, initiallyOpen, canStart, 
   const [selected, setSelected] = useState<number | null>(null);
   if (!intro) return null;
 
-  return <section aria-label="Въведение в курса" className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-[#111] text-white">
-    <button type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex w-full items-center justify-between gap-4 p-5 text-left hover:bg-white/[0.03] sm:p-7">
+  return <section aria-label="Въведение в курса" className="mb-8 overflow-hidden rounded-2xl border academy-border academy-surface academy-text">
+    <button type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex w-full items-center justify-between gap-4 p-5 text-left hover:academy-tint sm:p-7">
       <span>
-        <span className="text-xs font-bold uppercase tracking-[.15em] text-red-400">Въведение в курса</span>
+        <span className="text-xs font-bold uppercase tracking-[.15em] academy-accent">Въведение в курса</span>
         <span className="mt-2 block text-xl font-semibold leading-tight sm:text-2xl">{intro.title}</span>
-        {!open && <span className="mt-2 block text-sm text-zinc-400">Как ще учиш и откъде да започнеш</span>}
+        {!open && <span className="mt-2 block text-sm academy-muted">Как ще учиш и откъде да започнеш</span>}
       </span>
-      <i className={`${open ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'} shrink-0 text-xl text-zinc-400`} aria-hidden />
+      <i className={`${open ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'} shrink-0 text-xl academy-muted`} aria-hidden />
     </button>
 
-    {open && <div className="border-t border-white/10 px-5 pb-6 pt-5 sm:px-7 sm:pb-7">
-      <p className="max-w-3xl text-base leading-7 text-zinc-200">{intro.opening}</p>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-400">{intro.outcome}</p>
+    {open && <div className="border-t academy-border px-5 pb-6 pt-5 sm:px-7 sm:pb-7">
+      <p className="max-w-3xl text-base leading-7 academy-body">{intro.opening}</p>
+      <p className="mt-3 max-w-3xl text-sm leading-6 academy-muted">{intro.outcome}</p>
 
-      <div className="mt-7 rounded-xl border border-white/10 bg-black/20 p-5">
-        <h3 className="text-sm font-semibold text-white">Един случай, три стъпки</h3>
+      <div className="mt-7 rounded-xl border academy-border academy-raised p-5">
+        <h3 className="text-sm font-semibold academy-text">Един случай, три стъпки</h3>
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           {[
             { label: 'Ситуация', body: intro.example.situation },
             { label: 'Решение', body: intro.example.decision },
             { label: 'Защо', body: intro.example.reason },
           ].map(({ label, body }) => <div key={label}>
-            <p className="text-xs font-bold uppercase tracking-wider text-red-300">{label}</p>
-            <p className="mt-2 text-sm leading-6 text-zinc-300">{body}</p>
+            <p className="text-xs font-bold uppercase tracking-wider academy-accent">{label}</p>
+            <p className="mt-2 text-sm leading-6 academy-body">{body}</p>
           </div>)}
         </div>
       </div>
 
-      <h3 className="mt-7 text-sm font-semibold text-white">Пътят през курса</h3>
+      <h3 className="mt-7 text-sm font-semibold academy-text">Пътят през курса</h3>
       <ol className="mt-3 grid gap-3 sm:grid-cols-2">
-        {intro.path.map((step, index) => <li key={step.title} className="flex gap-3 rounded-lg border border-white/10 p-4">
-          <span className="text-sm font-bold text-red-300">{String(index + 1).padStart(2, '0')}</span>
-          <span><strong className="block text-sm text-white">{step.title}</strong><span className="mt-1 block text-sm leading-5 text-zinc-400">{step.detail}</span></span>
+        {intro.path.map((step, index) => <li key={step.title} className="flex gap-3 rounded-lg border academy-border p-4">
+          <span className="text-sm font-bold academy-accent">{String(index + 1).padStart(2, '0')}</span>
+          <span><strong className="block text-sm academy-text">{step.title}</strong><span className="mt-1 block text-sm leading-5 academy-muted">{step.detail}</span></span>
         </li>)}
       </ol>
 
       <div className="mt-7 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-lg border border-white/10 p-4"><h3 className="text-sm font-semibold">Ако нямаш бизнес</h3><p className="mt-2 text-sm leading-6 text-zinc-400">{intro.withoutBusiness}</p></div>
-        <div className="rounded-lg border border-white/10 p-4"><h3 className="text-sm font-semibold">Ако работиш по реален проект</h3><p className="mt-2 text-sm leading-6 text-zinc-400">{intro.withBusiness}</p></div>
+        <div className="rounded-lg border academy-border p-4"><h3 className="text-sm font-semibold">Ако нямаш бизнес</h3><p className="mt-2 text-sm leading-6 academy-muted">{intro.withoutBusiness}</p></div>
+        <div className="rounded-lg border academy-border p-4"><h3 className="text-sm font-semibold">Ако работиш по реален проект</h3><p className="mt-2 text-sm leading-6 academy-muted">{intro.withBusiness}</p></div>
       </div>
 
-      <div className="mt-7 rounded-xl border border-red-400/20 bg-red-400/[0.05] p-5">
-        <h3 className="text-sm font-semibold text-white">Провери дали си готов за първия урок</h3>
-        <p className="mt-2 text-sm leading-6 text-zinc-200">{intro.question}</p>
+      <div className="mt-7 rounded-xl border academy-accent-border academy-accent-bg p-5">
+        <h3 className="text-sm font-semibold academy-text">Провери дали си готов за първия урок</h3>
+        <p className="mt-2 text-sm leading-6 academy-body">{intro.question}</p>
         <div className="mt-4 grid gap-2">
-          {intro.choices.map((choice, index) => <button key={choice.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)} className={`rounded-lg border px-4 py-3 text-left text-sm leading-5 transition-colors ${selected === index ? choice.correct ? 'border-emerald-400/60 bg-emerald-400/10 text-white' : 'border-amber-400/60 bg-amber-400/10 text-white' : 'border-white/10 bg-black/20 text-zinc-300 hover:border-white/30'}`}>{choice.label}</button>)}
+          {intro.choices.map((choice, index) => <button key={choice.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)} className={`rounded-lg border px-4 py-3 text-left text-sm leading-5 transition-colors ${selected === index ? choice.correct ? 'academy-success-border academy-success-bg academy-text' : 'academy-warning-border academy-warning-bg academy-text' : 'academy-border academy-raised academy-body hover:academy-border-strong'}`}>{choice.label}</button>)}
         </div>
-        {selected !== null && <p role="status" className={`mt-3 text-sm leading-6 ${intro.choices[selected].correct ? 'text-emerald-300' : 'text-amber-200'}`}>{intro.choices[selected].feedback}</p>}
+        {selected !== null && <p role="status" className={`mt-3 text-sm leading-6 ${intro.choices[selected].correct ? 'academy-success' : 'academy-warning'}`}>{intro.choices[selected].feedback}</p>}
       </div>
 
-      <button type="button" onClick={canStart ? onStart : onUnlock} className="mt-7 inline-flex items-center gap-2 rounded-lg bg-red-500 px-5 py-3 text-sm font-bold text-white hover:bg-red-400">
+      <button type="button" onClick={canStart ? onStart : onUnlock} className="mt-7 inline-flex items-center gap-2 rounded-lg academy-primary px-5 py-3 text-sm font-bold text-white hover:academy-primary-hover">
         {canStart ? 'Към първия модул' : `Отключи курса за ${price}`}
         <i className="ri-arrow-right-line" aria-hidden />
       </button>
