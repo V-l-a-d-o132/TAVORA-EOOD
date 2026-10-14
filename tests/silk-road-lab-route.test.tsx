@@ -16,7 +16,8 @@ describe('educational lab on SPA hosting', () => {
     URL.revokeObjectURL = revoke;
     const view = render(<MemoryRouter><AcademyLabPage /></MemoryRouter>);
     const frame = screen.getByTitle('Учебна форма: какво се случва след Изпрати');
-    expect(frame.getAttribute('sandbox')).toBe('allow-scripts');
+    expect(frame.getAttribute('sandbox')).toBe('allow-scripts allow-forms');
+    expect(frame.getAttribute('sandbox')).not.toContain('allow-same-origin');
     expect(frame.getAttribute('srcdoc')).toContain('id="request-form"');
     expect(frame.getAttribute('srcdoc')).toContain('id="run-checks"');
     expect(frame.getAttribute('srcdoc')).not.toContain('<script src="request-lab.js">');

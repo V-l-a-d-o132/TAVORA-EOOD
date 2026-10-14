@@ -8,7 +8,7 @@ import advertUrl from '@/data/silk-road-packet/old-advert.svg?url';
 import voiceUrl from '@/data/silk-road-packet/voicemail.wav?url';
 import transcript from '@/data/silk-road-packet/voicemail-transcript.txt?raw';
 
-const fieldClass = 'mt-2 w-full rounded-xl border academy-border academy-raised px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-red-400';
+const fieldClass = 'mt-2 w-full rounded-xl border academy-border-strong academy-raised px-4 py-3 academy-text focus:outline-none focus:ring-2 focus:ring-red-400';
 const buttonClass = 'rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white hover:academy-primary-hover focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-default disabled:opacity-40';
 const linkClass = 'academy-accent underline underline-offset-4 hover:academy-accent';
 
@@ -89,7 +89,7 @@ export default function SilkRoadStartPage() {
         <div className="mt-7 space-y-6">{SILK_START_QUESTIONS.map(question => <fieldset key={question.id} className="rounded-2xl border academy-border p-5"><legend className="px-2 font-medium leading-7">{question.question}</legend><div className="space-y-3">{question.options.map(([value, label]) => <label key={value} className="flex gap-3 leading-7"><input className="mt-1.5 h-4 w-4 shrink-0 accent-red-500" type="radio" name={question.id} value={value} checked={answers[question.id] === value} onChange={() => { setAnswers(previous => ({ ...previous, [question.id]: value })); setDiagnosed(false); }} />{label}</label>)}</div>{diagnosed && <p className={`mt-4 text-sm leading-6 ${answers[question.id] === question.answer ? 'academy-success' : 'academy-warning'}`}>{answers[question.id] === question.answer ? 'Обоснован избор. ' : 'Прегледай принципа. '}{question.help}</p>}</fieldset>)}</div>
         <button className={`mt-5 ${buttonClass}`} type="button" onClick={() => setDiagnosed(true)}>Виж откъде да продължиш</button>
         {diagnosed && <div role="status" className="mt-5 rounded-xl border academy-accent-border p-5 leading-7"><p>{SILK_START_QUESTIONS.every(question => answers[question.id] === question.answer) ? 'Имаш добра начална ориентация. Продължи към материалите и прототипа.' : 'Започни с обясненията по-долу и модул 1. После повтори въпросите и продължи към задачата.'}</p><p className="mt-2 academy-body">{goal === 'content' ? 'След общата задача използвай модул 4 за съдържание и модул 6 за ясно предложение.' : goal === 'business' ? 'Използвай модули 6 и 9, за да провериш действието и измерването. Автоматизация добавяй след работещ ръчен процес.' : goal === 'team' ? 'Използвай модул 7 за обхват и предаване на работа. Пази източниците и резултатите от проверката.' : 'Продължи с модули 1 и 2; след това свържи действието с модули 6, 7 и 8.'}</p><Link className={`mt-3 inline-block ${linkClass}`} to="/module/s01-m01?lesson=0">Отвори първия урок</Link></div>}
-        <details className="mt-6 rounded-xl border academy-border p-5"><summary className="cursor-pointer font-semibold">Основните понятия с прости думи</summary><dl className="mt-5 grid gap-5 sm:grid-cols-2">{SILK_START_TERMS.map(([term, description]) => <div key={term}><dt className="font-semibold text-white">{term}</dt><dd className="mt-1 text-sm leading-7 academy-body">{description}</dd></div>)}</dl></details>
+        <details className="mt-6 rounded-xl border academy-border p-5"><summary className="cursor-pointer font-semibold">Основните понятия с прости думи</summary><dl className="mt-5 grid gap-5 sm:grid-cols-2">{SILK_START_TERMS.map(([term, description]) => <div key={term}><dt className="font-semibold academy-text">{term}</dt><dd className="mt-1 text-sm leading-7 academy-body">{description}</dd></div>)}</dl></details>
       </section>
 
       <section id="packet" className="mt-12 scroll-mt-6 border-t academy-border pt-8">
@@ -111,7 +111,7 @@ export default function SilkRoadStartPage() {
       </section>
 
       <section id="project" className="mt-12 scroll-mt-6 border-t academy-border pt-8">
-        <h2 className="text-2xl font-semibold">Подготви прототип</h2><p className="mt-3 leading-7 academy-body">Текущ случай: <strong className="text-white">{study.name}</strong>. {study.question}</p>
+        <h2 className="text-2xl font-semibold">Подготви прототип</h2><p className="mt-3 leading-7 academy-body">Текущ случай: <strong className="academy-text">{study.name}</strong>. {study.question}</p>
         <p className="mt-3 text-sm leading-7 academy-muted">Изборите ти променят страницата и поведението на формата. Първо направи собствен опит. След проверката ще видиш конкретната поправка.</p>
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <label>Каква цена ще покажеш в евро?<select value={plan.price} onChange={event => change('price', event.target.value)} className={fieldClass}><option value="">Избери цена от материалите</option>{[16,18,20,25].map(price => <option key={price} value={String(price)}>{price} €</option>)}</select></label>
@@ -120,7 +120,7 @@ export default function SilkRoadStartPage() {
           <label>При повторение на една заявка<select value={plan.duplicates} onChange={event => change('duplicates', event.target.value)} className={fieldClass}><option value="">Избери поведение</option><option value="new-record">Създаваме нов запис</option><option value="same-id">Връщаме същия резултат без втори запис</option></select></label>
           <label>Ако контактът липсва<select value={plan.missingContact} onChange={event => change('missingContact', event.target.value)} className={fieldClass}><option value="">Избери поведение</option><option value="guess">Добавяме предполагаем контакт</option><option value="ask">Искаме контакт и пазим полетата</option></select></label>
         </div>
-        <details className="mt-7 rounded-2xl border academy-border p-4" open><summary className="cursor-pointer font-semibold">Твоята страница: пробвай формата</summary><iframe ref={frame} title="Твоят учебен прототип" srcDoc={prototype} sandbox="allow-scripts" className="mt-4 block w-full rounded-xl border-0 bg-white" style={{ height }} /></details>
+        <details className="mt-7 rounded-2xl border academy-border p-4" open><summary className="cursor-pointer font-semibold">Твоята страница: пробвай формата</summary><iframe ref={frame} title="Твоят учебен прототип" srcDoc={prototype} sandbox="allow-scripts allow-forms" className="mt-4 block w-full rounded-xl border-0 bg-white" style={{ height }} /></details>
       </section>
 
       <section id="result" className="mt-12 scroll-mt-6 border-t academy-border pt-8">

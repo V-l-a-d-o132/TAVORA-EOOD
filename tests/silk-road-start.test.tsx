@@ -69,7 +69,8 @@ describe('beginner route and isolated form', () => {
     expect(screen.getByAltText(/Стара учебна обява/)).toBeTruthy();
     expect(screen.queryAllByRole('textbox')).toHaveLength(0);
     expect(document.querySelector('input[type="file"]')).toBeNull();
-    expect(screen.getByTitle('Твоят учебен прототип').getAttribute('sandbox')).toBe('allow-scripts');
+    expect(screen.getByTitle('Твоят учебен прототип').getAttribute('sandbox')).toBe('allow-scripts allow-forms');
+    expect(screen.getByTitle('Твоят учебен прототип').getAttribute('sandbox')).not.toContain('allow-same-origin');
     expect((screen.getByRole('button', { name: 'Приложи наученото към пекарната' }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Виж откъде да продължиш' }));
     expect(screen.getByRole('status').textContent).toContain('Започни с обясненията');
