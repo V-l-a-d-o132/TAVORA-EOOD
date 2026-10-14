@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { SILK_ROAD_ARTICLES } from '../src/pages/blog/silk-road-articles';
 import { CONSUMER_RIGHTS_ARTICLES } from '../src/pages/blog/consumer-rights-articles';
@@ -10,6 +10,16 @@ const articlePaths = [
   ...CONSUMER_RIGHTS_ARTICLES.map(article => `/blog/${article.id}`),
 ];
 const cover = '/images/tavora-seo-geo-bulgaria-news.webp';
+
+async function expectLoadedCover(page: Page) {
+  // React replaces the prerendered image during hydration. Re-resolve it on
+  // each attempt rather than waiting on a detached static HTML element.
+  await expect(async () => {
+    const image = page.locator(`img[src="${cover}"]`).first();
+    await image.scrollIntoViewIfNeeded({ timeout: 2500 });
+    expect(await image.evaluate((element: HTMLImageElement) => element.naturalWidth), page.url()).toBe(2048);
+  }).toPass({ timeout: 10000 });
+}
 
 test.beforeEach(async ({ page }) => {
   // Only the local production build is exercised: no production accounts,
@@ -35,9 +45,7 @@ test('every sitemap page renders with its own canonical and native lazy images',
     await expect(page.locator('meta[property="og:url"]'), path).toHaveAttribute('content', `https://imashnujnoto.com${path}`);
     expect(await page.locator('img:not([loading="lazy"]), img:not([decoding="async"])').count(), path).toBe(0);
     if (articlePaths.includes(path)) {
-      const image = page.locator(`img[src="${cover}"]`).first();
-      await image.scrollIntoViewIfNeeded();
-      await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth), { message: path }).toBe(2048);
+      await expectLoadedCover(page);
       await expect(page.locator('meta[property="og:image"]'), path).toHaveAttribute('content', `https://imashnujnoto.com${cover}`);
     }
   }
@@ -70,9 +78,7 @@ test('key public page types fit a phone screen and the shared cover loads', asyn
     await expect(page.locator('h1').first()).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), path).toBe(true);
     if (path.startsWith('/blog')) {
-      const image = page.locator(`img[src="${cover}"]`).first();
-      await image.scrollIntoViewIfNeeded();
-      await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBe(2048);
+      await expectLoadedCover(page);
     }
   }
 });
