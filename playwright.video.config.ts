@@ -3,6 +3,8 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   testMatch: '**/*.pw.ts',
+  // These suites build their own synthetic API environment on separate ports.
+  testIgnore: ['**/dashboard-progress.pw.ts', '**/academy-{themes,lab-themes}.pw.ts'],
   outputDir: 'test-results/video',
   timeout: 90000,
   expect: { timeout: 10000 },

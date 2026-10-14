@@ -25,7 +25,7 @@ jobs:
   browser-video:
     needs: verify
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,10 +38,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
       - run: npm run build
+        env:
+          VITE_PUBLIC_SUPABASE_URL: https://dashboard-fixture.supabase.co
+          VITE_PUBLIC_SUPABASE_ANON_KEY: dashboard-test-public-key
       - run: npm run test:browser
+      - run: npm run test:dashboard-browser
+      - run: npm run test:themes-browser
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: perfect-video-browser-checks
-          path: test-results/video/
+          name: academy-browser-checks
+          path: |
+            test-results/video/
+            test-results/dashboard/
+            test-results/themes/
           retention-days: 14
