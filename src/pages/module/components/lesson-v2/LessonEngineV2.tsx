@@ -14,6 +14,7 @@ import { LessonDraftQueue, type DraftSaveStatus } from '@/lib/lesson-draft-queue
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import { notifyLearningProgressChanged, recordLessonVisit } from '@/lib/learning-resume';
 import { countVisibleLessonWords, lessonReadingDuration } from '@/lib/academy-reading-time';
+import { closedLessonState } from '@/lib/closed-lesson-state';
 
 interface Props {
   moduleId: string;
@@ -99,7 +100,7 @@ export default function LessonEngineV2({
   useEffect(() => {
     if (!lesson) return;
     const progress = lesson.versionChanged ? null : lesson.progress;
-    const states = progress?.blockState || {};
+    const states = closedLessonState(lesson.blocks, progress?.blockState || {});
     const done = completedFromProgress(progress);
     const resumeIndex = Math.max(0, lesson.blocks.findIndex((block) => block.key === progress?.currentBlockKey));
     setBlockState(states);
@@ -116,7 +117,7 @@ export default function LessonEngineV2({
     if (!userId || !lesson || previewMode) return;
     const queue = new LessonDraftQueue(
       async (cursor, states) => {
-        const result = await autosaveLessonV2(moduleId, lesson.lessonId, lesson.versionId, cursor, states);
+        const result = await autosaveLessonV2(moduleId, lesson.lessonId, lesson.versionId, cursor, closedLessonState(lesson.blocks, states));
         notifyLearningProgressChanged(userId);
         return result;
       },

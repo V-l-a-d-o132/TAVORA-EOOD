@@ -64,6 +64,11 @@ export function countVisibleLessonWords(lesson: {
     }
     if (Array.isArray(value)) return value.reduce<number>((total, part) => total + count(part), 0);
     if (value && typeof value === 'object') {
+      if ('studio' in value && value.studio !== null && typeof value.studio === 'object') {
+        const configured = value as { studio: { title?: unknown; context?: unknown; task?: unknown; limit?: unknown }; left?: { text?: unknown }[]; right?: { text?: unknown }[] };
+        return count([configured.studio.title, configured.studio.context, configured.studio.task, configured.studio.limit])
+          + count(configured.left?.map(slot => slot.text)) + count(configured.right?.map(choice => choice.text));
+      }
       const fallback = 'codeFallback' in value && value.codeFallback === true;
       const tableFallback = silkRoad && 'tableFallback' in value && value.tableFallback === true;
       const sourceFallback = silkRoad && 'sourceFallback' in value && value.sourceFallback === true;

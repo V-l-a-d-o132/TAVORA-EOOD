@@ -1,0 +1,44 @@
+{
+  "curriculum": {
+    "bytes": 97069,
+    "sha256": "01232ddacfb3a9486fb39b3a9c38d8dc831bf3b82e522f65d415c889e587efef",
+    "parts": [
+      "curriculum.000.base64",
+      "curriculum.001.base64",
+      "curriculum.002.base64",
+      "curriculum.003.base64",
+      "curriculum.004.base64",
+      "curriculum.005.base64",
+      "curriculum.006.base64",
+      "curriculum.007.base64",
+      "curriculum.008.base64",
+      "curriculum.009.base64",
+      "curriculum.010.base64"
+    ],
+    "decodedSha256": "3d25e74fd18acf60e434f0374037da28e84de295fabc4cb5014e624f0749258d"
+  },
+  "video": {
+    "bytes": 159435,
+    "sha256": "06702d80c18724bc71bb83040657f90aec9dcced79762794f9928106e61e7a68",
+    "parts": [
+      "video.000.base64",
+      "video.001.base64",
+      "video.002.base64",
+      "video.003.base64",
+      "video.004.base64",
+      "video.005.base64",
+      "video.006.base64",
+      "video.007.base64",
+      "video.008.base64",
+      "video.009.base64",
+      "video.010.base64",
+      "video.011.base64",
+      "video.012.base64",
+      "video.013.base64",
+      "video.014.base64",
+      "video.015.base64",
+      "video.016.base64",
+      "video.017.base64"
+    ]
+  }
+}

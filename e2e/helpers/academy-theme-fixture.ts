@@ -8,7 +8,7 @@ const HOST = 'dashboard-fixture.supabase.co';
 const USER = { id: '00000000-0000-4000-8000-000000000091', email: 'student@example.invalid', user_metadata: { full_name: 'Ученик' }, app_metadata: {}, aud: 'authenticated', created_at: '2026-10-01T12:00:00Z' };
 const opening = openings.lessons[0];
 
-export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string };
+export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string; matchingExpected?: Record<string,string> };
 type ThemeAccessFixture = { hasFullAccess?: boolean; unlockedModules?: string[]; completedFreeModule?: boolean };
 
 /** Auth, saves and grading are all synthetic; no request reaches a live service. */
@@ -72,8 +72,11 @@ export async function prepareAcademyTheme(page: Page, preference = 'dark', fixtu
     if (name === 'academy_complete_lesson_block') {
       const block = fixture?.blocks.find(block => block.key === payload.p_block_key);
       const graded = block && ['quiz', 'scenario', 'matching', 'sequence_sort'].includes(block.type);
-      const correct = graded ? !Object.values(payload.p_payload).includes('wrong') : null;
+      const correct = graded ? block.type === 'matching' && fixture?.matchingExpected
+        ? JSON.stringify(Object.entries(payload.p_payload.matches || {}).sort()) === JSON.stringify(Object.entries(fixture.matchingExpected).sort())
+        : !Object.values(payload.p_payload).includes('wrong') : null;
       const complete = correct !== false;
+      progress = { ...progress, block_state: { ...progress.block_state, [payload.p_block_key]: payload.p_payload } };
       if (complete && !progress.completed_block_keys.includes(payload.p_block_key)) {
         progress = { ...progress, completed_block_keys: [...progress.completed_block_keys, payload.p_block_key], xp: progress.xp + 5 };
       }

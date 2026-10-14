@@ -148,3 +148,9 @@ export default function VideoDecisionLab({ kind = 'story' }: { kind?: VideoLabKi
 }
 
 export const videoLabTitle = (kind: VideoLabKind) => labs[kind].title;
+
+/** Controlled preview for a saved, graded studio choice; no second answer state. */
+export function VideoPracticeGraphic({ kind, variant }: { kind: VideoLabKind; variant: string }) {
+  const id = useId().replaceAll(':', '');
+  return <Graphic kind={kind} variant={variant} second={1} duration={6} id={id} />;
+}

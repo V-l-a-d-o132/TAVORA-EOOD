@@ -10,7 +10,7 @@ export const LESSON_BLOCK_TYPES = [
 
 export type LessonBlockType = (typeof LESSON_BLOCK_TYPES)[number];
 export const RETIRED_OPEN_ANSWER_TYPES: readonly LessonBlockType[] = [
-  'prompt_builder', 'practical_response', 'reflection', 'homework', 'submission',
+  'prompt_builder', 'practical_response', 'reflection', 'homework', 'submission', 'calculator',
 ];
 export const AUTHORABLE_LESSON_BLOCK_TYPES = LESSON_BLOCK_TYPES.filter(
   (type) => !RETIRED_OPEN_ANSWER_TYPES.includes(type),

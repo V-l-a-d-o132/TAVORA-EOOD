@@ -19,6 +19,7 @@ vi.mock('../src/lib/supabase', () => ({
 
 import {
   LESSON_BLOCK_TYPES,
+  RETIRED_OPEN_ANSWER_TYPES,
   createBlock,
   type JsonObject,
   type LessonBlockV2,
@@ -33,6 +34,12 @@ const result = {
   attemptId: 'attempt', correct: null, score: 0, maxScore: 0,
   feedback: { complete: true }, progress: null,
 };
+
+function closedMatch(position: number, required = true, points = 5) {
+  return { ...createBlock('matching', position), required, points, title: 'Съществуваща задача.', content: {
+    left: [{ id: 'slot', text: 'Условие' }], right: [{ id: 'a', text: 'Проверим избор' }, { id: 'b', text: 'Друг избор' }],
+  } };
+}
 
 function lesson(blocks: LessonBlockV2[], progress: LessonV2['progress'] = null): LessonV2 {
   return {
@@ -141,16 +148,14 @@ describe('Lesson Engine V2 block registry', () => {
     expect(screen.getByText('Критерият позволява проверка.')).toBeTruthy();
   });
 
-  it.each(['s01-m11', 's02-m01', 's02-m02', 's02-m03'])('accepts a Bulgarian decimal comma in %s without changing the resumed input', async (moduleId) => {
-    const block = { ...createBlock('calculator', 0), content: { label: 'Принос в евро', prompt: 'Изчисли приноса.' } };
-    const save = vi.fn();
-    const submit = vi.fn(async () => result);
-    render(<LessonBlockRenderer block={block} moduleId={moduleId} lessonId="l11-04" completed={false} onStateChange={save} onSubmit={submit} />);
-    fireEvent.change(screen.getByRole('textbox', { name: 'Принос в евро' }), { target: { value: '1320,00' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Изчисли и провери' }));
-    await waitFor(() => expect(submit).toHaveBeenCalledWith({ value: '1320.00' }));
-    expect(save).toHaveBeenCalledWith({ value: '1320,00' });
+  it.each(RETIRED_OPEN_ANSWER_TYPES)('never renders an open learner input for retired %s', (type) => {
+    const submit=vi.fn(async()=>result), save=vi.fn();
+    const page=render(<LessonBlockRenderer block={createBlock(type,0)} moduleId="s02-m01" lessonId="pv01-01" completed={false} onStateChange={save} onSubmit={submit}/>);
+    expect(page.container.querySelector('textarea,input[type=text],input[type=file],input[type=url],input[inputmode=decimal]')).toBeNull();
+    expect(screen.getByText(/Този стар тип задача е спрян/)).toBeTruthy();
+    expect(submit).not.toHaveBeenCalled(); expect(save).not.toHaveBeenCalled(); expect(api.upload).not.toHaveBeenCalled();
   });
+
 });
 
 describe('compatible first video practice', () => {
@@ -260,12 +265,12 @@ describe('Lesson Engine V2 learning flow', () => {
 
   it('flushes a pending answer when the page is hidden, without waiting for debounce', async () => {
     vi.useFakeTimers();
-    const note = { ...createBlock('reflection', 0), content: { prompt: 'Отговор', minLength: 3 } };
+    const note = closedMatch(0);
     render(<LessonEngineV2 moduleId="s01-m01" userId="student" lessonOverride={lesson([note])} />);
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Отговор преди излизане' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'a' } });
     await act(async () => { fireEvent(window, new Event('pagehide')); });
     expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({
-      p_current_block: note.key, p_state: { [note.key]: { text: 'Отговор преди излизане' } },
+      p_current_block: note.key, p_state: { [note.key]: { matches: { slot: 'a' } } },
     }));
   });
 
@@ -278,7 +283,7 @@ describe('Lesson Engine V2 learning flow', () => {
 
   it.each(['s01-m01', 's02-m01', 's03-m01'])('records reading and advances without claiming mastery in %s', async (moduleId) => {
     const reading = { ...createBlock('concept', 0), points: 0, content: { body: 'Съществуващ учебен текст.' } };
-    const task = { ...createBlock('practical_response', 1), content: { prompt: 'Съществуваща задача.', minLength: 60 } };
+    const task = closedMatch(1);
     const summary = createBlock('summary', 2);
     const data = { ...lesson([reading, task, summary]), moduleId };
     render(<LessonEngineV2 moduleId={moduleId} userId="student" lessonOverride={data} />);
@@ -293,33 +298,34 @@ describe('Lesson Engine V2 learning flow', () => {
     expect(screen.queryByText('Проверките на знанията в урока са преминати.')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Следваща' }));
     expect(screen.getByText('Съществуваща задача.')).toBeTruthy();
-    expect(screen.getByText('0 / минимум 60 знака')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Предай отговора' })).toBeTruthy();
+    expect(screen.getByRole('combobox')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Провери връзките' })).toBeTruthy();
+    expect(screen.queryByRole('textbox')).toBeNull();
     expect((screen.getByRole('button', { name: 'Следваща' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('resumes on the exact server-saved block', () => {
-    const blocks = [createBlock('objective', 0), createBlock('reflection', 1), createBlock('summary', 2)];
+    const blocks = [createBlock('objective', 0), closedMatch(1), createBlock('summary', 2)];
     const progress = {
-      currentBlockKey: blocks[1].key, blockState: { [blocks[1].key]: { text: 'Запазен отговор' } },
+      currentBlockKey: blocks[1].key, blockState: { [blocks[1].key]: { matches: { slot: 'b' } } },
       completedBlockKeys: [blocks[0].key], xp: 5, scorePercent: null, masteryStatus: 'learning' as const,
       completedAt: null, lastActivityAt: '2026-09-20T00:00:00Z',
     };
     render(<LessonEngineV2 moduleId="s01-m01" lessonId="l01-01" userId="student" lessonOverride={lesson(blocks, progress)} />);
     expect(screen.getByRole('heading', { name: blocks[1].title })).toBeTruthy();
-    expect(screen.getByDisplayValue('Запазен отговор')).toBeTruthy();
+    expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('b');
   });
 
   it('autosaves drafts and supports Alt+Arrow keyboard navigation after completion', async () => {
     vi.useFakeTimers();
-    const first = { ...createBlock('reflection', 0), content: { prompt: 'Отговор', minLength: 3 } };
+    const first = closedMatch(0);
     const second = createBlock('summary', 1);
     render(<LessonEngineV2 moduleId="s01-m01" lessonId="l01-01" userId="student" lessonOverride={lesson([first, second])} />);
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Достатъчно конкретен отговор' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'a' } });
     await vi.advanceTimersByTimeAsync(700);
     expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({ p_current_block: first.key }));
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Предай отговора' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Провери връзките' }));
       await vi.runAllTimersAsync();
     });
     fireEvent.keyDown(window, { key: 'ArrowRight', altKey: true });
@@ -366,13 +372,13 @@ describe('updated Silk Road lessons', () => {
     expect(screen.getByRole('heading', { name: blocks[0].title })).toBeTruthy();
   });
 
-  it.each(['s01-m01', 's02-m01', 's03-m01'])('saves a note in %s even when the learner immediately opens the next step', async (moduleId) => {
-    const note = { ...createBlock('practical_response', 0), required: false, points: 0 };
+  it.each(['s01-m01', 's02-m01', 's03-m01'])('saves finite choices in %s even when the learner immediately opens the next step', async (moduleId) => {
+    const note = closedMatch(0,false,0);
     const next = createBlock('summary', 1);
     render(<LessonEngineV2 moduleId={moduleId} userId="student" lessonOverride={{ ...lesson([note, next]), moduleId }} />);
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Решението ми остава запазено' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'b' } });
     fireEvent.click(screen.getByRole('button', { name: /Стъпка 2:/ }));
-    await waitFor(() => expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({ p_current_block: next.key, p_state: { [note.key]: { text: 'Решението ми остава запазено' } } })));
+    await waitFor(() => expect(api.rpc).toHaveBeenCalledWith('academy_autosave_lesson', expect.objectContaining({ p_current_block: next.key, p_state: { [note.key]: { matches: { slot: 'b' } } } })));
   });
 
   it('uses the same required-step denominator in the header and parent progress', () => {
@@ -385,11 +391,11 @@ describe('updated Silk Road lessons', () => {
     expect(report).toHaveBeenLastCalledWith(1, 1);
   });
 
-  it('shows optional notes and hides zero XP in module 11', () => {
-    const note = { ...createBlock('practical_response', 0), required: false, points: 0 };
+  it('shows finite optional practice and hides zero XP in module 11', () => {
+    const note = closedMatch(0,false,0);
     render(<LessonBlockRenderer block={note} moduleId="s01-m11" lessonId="l11-04" completed={false} onStateChange={vi.fn()} onSubmit={vi.fn(async () => result)} />);
-    expect(screen.getByRole('button', { name: 'Запази бележките' })).toBeTruthy();
-    expect(screen.getByText('0 знака · по избор')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Провери връзките' })).toBeTruthy();
+    expect(screen.queryByRole('textbox')).toBeNull();
     expect(screen.queryByText(/минимум/)).toBeNull();
     expect(screen.queryByLabelText('0 XP')).toBeNull();
   });

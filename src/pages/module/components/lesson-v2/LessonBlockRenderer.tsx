@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import type { BlockAttemptResult, JsonObject, LessonBlockV2 } from '@/lib/lesson-engine-v2';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import LessonRichText from './LessonRichText';
 import LessonGlossary from './LessonGlossary';
 import LessonOutcomes from './LessonOutcomes';
 import { visibleGlossaryText } from '@/lib/academy-glossary';
-import { lessonOptionOrder, usesIndependentPractice, usesShuffledChoices } from '@/lib/lesson-option-order';
+import { lessonOptionOrder, usesShuffledChoices } from '@/lib/lesson-option-order';
+import ClosedPracticeStudio from '@/components/academy/ClosedPracticeStudio';
+import { parseClosedStudio } from '@/lib/closed-practice-studio';
 
 interface Props {
   block: LessonBlockV2;
@@ -64,6 +65,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   };
 
   const body = s(block.content.body);
+  const closedStudio = useMemo(() => block.type === 'matching' ? parseClosedStudio(block.content) : null, [block.type, block.content]);
   const options = useMemo(() => {
     const choices = arr(block.content.options);
     return usesShuffledChoices(moduleId) && ['quiz', 'scenario'].includes(block.type)
@@ -135,6 +137,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         return <><ol className="space-y-3">{order.map((id, index) => <li key={id} className="flex items-center gap-3 rounded-xl border academy-border academy-tint p-3"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full academy-accent-bg text-sm font-bold academy-accent">{index + 1}</span><span className="min-w-0 flex-1 text-sm academy-body">{s(byId.get(id)?.text)}</span><button type="button" aria-label="Премести нагоре" disabled={index === 0} onClick={() => move(index, -1)} className="rounded-lg p-2 hover:academy-tint-strong disabled:opacity-25"><i className="ri-arrow-up-line" /></button><button type="button" aria-label="Премести надолу" disabled={index === order.length - 1} onClick={() => move(index, 1)} className="rounded-lg p-2 hover:academy-tint-strong disabled:opacity-25"><i className="ri-arrow-down-line" /></button></li>)}</ol><button type="button" onClick={() => void submit({ order })} disabled={busy} className="mt-5 rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:opacity-50">Провери подредбата</button></>;
       }
       case 'matching': {
+        if (closedStudio) return <ClosedPracticeStudio studio={closedStudio} state={state} busy={busy} completed={completed} onChange={update} onSubmit={payload => void submit(payload)} />;
         const left = arr(block.content.left);
         const candidates = arr(block.content.right);
         const right = moduleId?.startsWith('s01-') || (['s02-m01', 's02-m02', 's02-m03'].includes(moduleId || '') && block.key.startsWith('checkpoint_video_'))
@@ -160,20 +163,6 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       case 'case_study':
       case 'example':
         return <><div className="rounded-2xl border academy-warning-border academy-warning-bg p-5"><p className="whitespace-pre-line leading-7 academy-body">{body || s(block.content.case)}</p>{s(block.content.solution) && <div className="mt-5 border-t academy-border pt-4"><span className="text-xs font-bold uppercase tracking-widest academy-warning">Решение</span><p className={`mt-2 leading-7 academy-body${moduleId?.startsWith('s01-') ? ' whitespace-pre-line' : ''}`}>{s(block.content.solution)}</p></div>}</div>{acknowledgement}</>;
-      case 'calculator':
-        return <form onSubmit={(event) => { event.preventDefault(); const value = usesIndependentPractice(moduleId) ? s(state.value).trim().replace(',', '.') : s(state.value); void submit({ value }); }}><p className="mb-4 leading-7 academy-body">{s(block.content.prompt, body)}</p><div className="flex items-center gap-3"><input inputMode="decimal" aria-label={s(block.content.label, 'Стойност')} value={s(state.value)} onChange={(event) => update({ value: event.target.value })} className={fieldClass} placeholder={s(block.content.placeholder, '0')} /><span className="text-sm academy-muted">{s(block.content.unit)}</span></div><button disabled={busy || !s(state.value)} className="mt-5 rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Изчисли и провери</button></form>;
-      case 'prompt_builder': {
-        const fields = arr(block.content.fields);
-        const values = obj(state.fields);
-        return <form onSubmit={(event) => { event.preventDefault(); void submit({ fields: values }); }}><div className="space-y-4">{fields.map((field, index) => {
-          const id = s(field.id, String(index));
-          return <label key={id} className="block"><span className="mb-2 block text-sm font-medium academy-body">{s(field.label)}</span><textarea value={s(values[id])} onChange={(event) => update({ fields: { ...values, [id]: event.target.value } })} placeholder={s(field.placeholder)} rows={3} className={fieldClass} /></label>;
-        })}</div><div className="mt-5 rounded-xl border academy-border academy-raised p-4"><span className="text-xs uppercase tracking-widest academy-subtle">Твоят prompt</span><p className="mt-2 whitespace-pre-line text-sm leading-6 academy-body">{fields.map((field, index) => `${s(field.label)}: ${s(values[s(field.id, String(index))])}`).join('\n')}</p></div><button disabled={busy} className="mt-5 rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Запази prompt-а</button></form>;
-      }
-      case 'practical_response':
-      case 'reflection':
-      case 'homework':
-        return <form onSubmit={(event) => { event.preventDefault(); void submit({ text: s(state.text) }); }}><p className="mb-4 whitespace-pre-line leading-7 academy-body">{s(block.content.prompt, body)}</p><textarea value={s(state.text)} onChange={(event) => update({ text: event.target.value })} rows={6} className={fieldClass} placeholder={s(block.content.placeholder, 'Напиши конкретен отговор…')} /><div className="mt-2 flex flex-wrap justify-between gap-x-4 gap-y-1 text-xs academy-subtle"><span>Автоматично запазване</span><span>{!block.required ? `${s(state.text).length} знака · по избор` : `${s(state.text).length} / минимум ${n(block.content.minLength, 20)} знака`}</span></div><button disabled={busy} className="mt-5 rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">{!block.required ? 'Запази бележките' : 'Предай отговора'}</button></form>;
       case 'checklist': {
         const items = arr(block.content.items);
         const checked = strArr(state.checked);
@@ -236,24 +225,13 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
           </div>}
         </div>;
       }
-      case 'submission': {
-        const upload = async (file: File) => {
-          setBusy(true);
-          setError('');
-          try {
-            const { data: userData } = await supabase.auth.getUser();
-            if (!userData.user) throw new Error('Влез в профила си, за да качиш файл.');
-            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
-            const path = `${userData.user.id}/${lessonId}/${block.key}/${crypto.randomUUID()}-${safeName}`;
-            const { error: uploadError } = await supabase.storage.from('academy-submissions').upload(path, file, { upsert: false });
-            if (uploadError) throw uploadError;
-            update({ kind: 'file', value: path, fileName: file.name });
-          } catch (cause) {
-            setError(cause instanceof Error ? cause.message : 'Качването не успя.');
-          } finally { setBusy(false); }
-        };
-        return <div><p className="mb-4 leading-7 academy-body">{s(block.content.prompt, body)}</p><label className="mb-4 block"><span className="mb-2 block text-sm font-medium academy-body">Линк към задачата</span><input type="url" value={s(state.kind) === 'link' ? s(state.value) : ''} onChange={(event) => update({ kind: 'link', value: event.target.value })} className={fieldClass} placeholder="https://…" /></label><label className="flex cursor-pointer items-center justify-center gap-3 rounded-xl border border-dashed academy-border-strong p-5 text-sm academy-body hover:academy-accent-border"><i className="ri-upload-cloud-2-line text-xl" /><span>{s(state.fileName, 'Качи PDF, DOCX или изображение')}</span><input type="file" className="sr-only" accept=".pdf,.docx,.png,.jpg,.jpeg,.txt" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file); }} /></label><button type="button" disabled={busy || !s(state.value)} onClick={() => void submit({ kind: s(state.kind), value: s(state.value) })} className="mt-5 rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">Предай задачата</button></div>;
-      }
+      case 'calculator':
+      case 'prompt_builder':
+      case 'practical_response':
+      case 'reflection':
+      case 'homework':
+      case 'submission':
+        return <p className="leading-7 academy-body">Този стар тип задача е спрян. Използвай актуалната версия на урока с предоставени материали и затворени избори.</p>;
       case 'summary':
         return <><ul className="space-y-3">{strArr(block.content.takeaways).map((takeaway) => <li key={takeaway} className="flex gap-3 leading-7 academy-body"><i className="ri-check-line mt-1 academy-success" />{takeaway}</li>)}</ul>{(!moduleId?.startsWith('s01-') || s(block.content.nextStep, body)) && <div className="mt-6 rounded-2xl border academy-accent-border academy-accent-bg p-5"><span className="text-xs font-bold uppercase tracking-widest academy-accent">Следваща стъпка</span><p className="mt-2 leading-7 academy-text">{s(block.content.nextStep, body)}</p></div>}{acknowledgement}</>;
       default:

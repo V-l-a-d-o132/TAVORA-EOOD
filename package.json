@@ -45,6 +45,9 @@
   "name": "react",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/prepare-practical-video-assets.mjs",
+    "predev": "node scripts/prepare-practical-video-assets.mjs",
+    "pretest": "node scripts/prepare-practical-video-assets.mjs",
     "build": "vite build && node scripts/prerender-editorial.mjs",
     "dev": "vite",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
