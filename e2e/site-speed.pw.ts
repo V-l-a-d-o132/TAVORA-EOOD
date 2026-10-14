@@ -16,7 +16,9 @@ async function expectLoadedCover(page: Page) {
   // each attempt rather than waiting on a detached static HTML element.
   await expect(async () => {
     const image = page.locator(`img[src="${cover}"]`).first();
-    await image.scrollIntoViewIfNeeded({ timeout: 2500 });
+    // This is passive media, so scrolling need not wait for animation stability.
+    await image.evaluate(element => element.scrollIntoView({ behavior: 'instant', block: 'center' }));
+    await expect(image).toBeInViewport();
     expect(await image.evaluate((element: HTMLImageElement) => element.naturalWidth), page.url()).toBe(2048);
   }).toPass({ timeout: 10000 });
 }
