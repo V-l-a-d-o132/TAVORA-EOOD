@@ -1,0 +1,129 @@
+{
+  "release": "practical_video_11_15_20261015",
+  "recordedOn": "2026-10-15",
+  "implementationCommit": "a33c47f1309ffc38ad2f7f67aa8d8acc019fe78f",
+  "implementationTree": "67e3d8b9508c3c1aa314c9a4271de1fd54d504aa",
+  "databaseMigration": "20261015084105_practical_video_11_15_publication",
+  "publication": {
+    "release": "practical_video_11_15_20261015",
+    "published": 73,
+    "progressRowsCarried": 3
+  },
+  "verification": {
+    "release": "practical_video_11_15_20261015",
+    "examCount": 5,
+    "openVideoBlocks": 0,
+    "lessonsPerModule": {
+      "s02-m11": 16,
+      "s02-m12": 8,
+      "s02-m13": 18,
+      "s02-m14": 18,
+      "s02-m15": 13
+    },
+    "publishedLessons": 73,
+    "validationErrors": 0,
+    "wrongFamilyMarker": 0,
+    "requiredNewStudios": 73,
+    "videoStudioReleases": {
+      "practical_video_01_05_20261014": 90,
+      "practical_video_06_10_20261015": 77,
+      "practical_video_11_15_20261015": 73
+    },
+    "practiceNotBeforeExam": 0,
+    "allVideoRequiredStudios": 240,
+    "changedOriginalTeaching": 0,
+    "ownPracticeGateInstalled": true,
+    "changedOriginalOpeningBodies": 0,
+    "publisherExecutableByLearner": false,
+    "final239PrerequisitesRetained": true,
+    "privateStageReadableByLearner": false,
+    "practiceGateExecutableByLearner": false,
+    "reviewedPrivateGraderMismatches": 0,
+    "reviewedPublicContentMismatches": 0
+  },
+  "textCapacity": {
+    "wordsBefore": 60764,
+    "wordsAfter": 85578,
+    "originalOpeningBodiesChanged": 0,
+    "originalTeachingBlocksChanged": 0
+  },
+  "validation": {
+    "unitAndDatabase": {
+      "passed": 48,
+      "failed": 0,
+      "full240LessonClosedRpcProgression": true,
+      "finalExamGroupAndCriticalThresholdsRetained": true,
+      "new73StudiosVerifiedWithLocalPrivateGraderPackage": true
+    },
+    "browser": {
+      "passed": 25,
+      "failed": 0,
+      "flaky": 0,
+      "viewports": [
+        320,
+        1280
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "covers": [
+        "calculation and denominator",
+        "margin and markup",
+        "schematic storyboard",
+        "changed condition",
+        "wrong then correct",
+        "reload and theme persistence",
+        "local download",
+        "existing media and schedule regressions",
+        "unclipped lesson titles"
+      ]
+    },
+    "typecheck": true,
+    "lint": true,
+    "build": true,
+    "distributionCheck": true
+  },
+  "securityReview": {
+    "newPrivateTable": "owner-only with forced RLS and no learner grants; no-policy INFO is intentional",
+    "notACompleteSecurityAudit": true,
+    "lints": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 20
+      },
+      {
+        "name": "function_search_path_mutable",
+        "level": "WARN",
+        "count": 8
+      },
+      {
+        "name": "extension_in_public",
+        "level": "WARN",
+        "count": 1
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "level": "WARN",
+        "count": 1
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ]
+  },
+  "websiteDeployment": {
+    "githubMainVerified": true,
+    "supabasePublished": true,
+    "readdyDeploymentVerified": false,
+    "userAction": "Pull main and publish in Readdy to deploy the new interface."
+  },
+  "limitations": [
+    "Closed exercises assess decisions on supplied material, not independently observed filming or real client results.",
+    "The 240-lesson integration replay uses synthetic original blocks and exam fixtures; the new 73 practice graders use the real local-only authored package.",
+    "Real authored footage or personal client cases require owner-provided material and permissions."
+  ]
+}
