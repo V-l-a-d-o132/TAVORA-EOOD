@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { studioMatches, studioPlaylist, type ClosedStudio } from '@/lib/closed-practice-studio';
+import { studioMatches, studioPlaylist, studioPlanText, type ClosedStudio } from '@/lib/closed-practice-studio';
 import type { JsonObject } from '@/lib/lesson-engine-v2';
 import { VideoPracticeGraphic } from '@/components/academy/VideoDecisionLab';
+import { CaptionPreview, SchedulePreview, SpeedPreview, TransitionPreview } from '@/components/academy/ProductionPracticePreviews';
 
 interface Props { studio: ClosedStudio; state: JsonObject; busy: boolean; completed: boolean; onChange: (state: JsonObject) => void; onSubmit: (state: JsonObject) => void }
 const asset = '/academy-labs/perfect-video/practical/coffee-machine.mp4';
@@ -17,7 +18,14 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
   const [activeClip, setActiveClip] = useState(0);
   const [mediaError, setMediaError] = useState('');
   const complete = studio.slots.every(slot => !!matches[slot.id]);
-  const preview = playlist[0];
+  const baseComplete = studio.slots.filter(slot => slot.phase !== 'change').every(slot => !!matches[slot.id]);
+  const preview = ['transition', 'speed'].includes(studio.kind) ? playlist.at(-1) : playlist[0];
+  const download = () => {
+    const url = URL.createObjectURL(new Blob([studioPlanText(studio, matches)], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a'); link.href = url; link.download = 'ucheben-plan.txt';
+    document.body.append(link); link.click(); link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
 
   useEffect(() => {
     playing.current = false; clipIndex.current = 0;
@@ -43,19 +51,22 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
   return <div data-testid="closed-practice-studio" className="space-y-5">
     <div className="space-y-3 text-base leading-7 academy-body"><p>{studio.context}</p><p className="font-medium academy-text">{studio.task}</p></div>
     <div className="grid min-w-0 gap-5 lg:grid-cols-2">
-      <div className="min-w-0 space-y-4">{studio.slots.map(slot => <label key={slot.id} className="block rounded-xl border academy-border p-4">
+      <div className="min-w-0 space-y-4">{studio.slots.map(slot => slot.phase === 'change' && !baseComplete ? <p key={slot.id} className="rounded-xl border academy-border p-4 text-sm leading-6 academy-muted">След първите решения ще получиш промяна в задачата.</p> : <div key={slot.id}>
+        {slot.phase === 'change' && studio.change && <div className="mb-3 rounded-xl border academy-border-strong academy-tint p-4 text-sm leading-6 academy-body"><h4 className="mb-1 font-semibold academy-text">Промяна в задачата</h4><p>{studio.change}</p></div>}
+        <label className="block rounded-xl border academy-border p-4">
         <span className="mb-2 block text-sm font-semibold academy-text">{slot.text}</span>
         <select aria-label={slot.text} value={matches[slot.id] || ''} disabled={busy} onChange={event => {
           const next = { ...matches }; if (event.target.value) next[slot.id] = event.target.value; else delete next[slot.id]; onChange({ matches: next });
         }} className="w-full min-w-0 rounded-lg border academy-border-strong academy-raised px-3 py-3 text-sm academy-text focus:outline-none focus:ring-2 focus:ring-red-300">
           <option value="">Избери вариант</option>{slot.choices.map(id => <option key={id} value={id}>{studio.choices.find(choice => choice.id === id)?.text}</option>)}
         </select>
-      </label>)}</div>
+      </label></div>)}</div>
       <section aria-label="Резултат от изборите" className="min-w-0 rounded-2xl border academy-border academy-tint p-4">
         <h3 className="mb-4 text-base font-semibold academy-text">{studio.title || 'Резултат от изборите'}</h3>
         {studio.kind === 'cut' && <>
-          <video ref={video} src={asset} poster={poster} preload="metadata" playsInline muted onTimeUpdate={advance} onEnded={advance}
+          <div className="relative"><video ref={video} src={asset} poster={poster} preload="metadata" playsInline muted onTimeUpdate={advance} onEnded={advance}
             onError={() => setMediaError('Записът не се зареди. Описанията на фрагментите остават достъпни.')} aria-label="Преглед на подредената сцена" className="aspect-video w-full rounded-xl bg-black" />
+          {playlist[activeClip]?.text.startsWith('Преди това:') && <span className="absolute left-3 top-3 rounded bg-black px-2 py-1 text-sm font-semibold text-white">Преди това</span>}</div>
           <button type="button" onClick={() => void play()} disabled={!playlist.length} className="mt-3 rounded-lg border academy-border-strong px-4 py-2 text-sm font-medium academy-text disabled:opacity-40">Прегледай подредбата</button>
           <button type="button" onClick={() => { playing.current = false; video.current?.pause(); }} className="ml-2 mt-3 rounded-lg border academy-border px-4 py-2 text-sm academy-body">Пауза</button>
           <ol aria-label="Избрани фрагменти" className="mt-4 space-y-2 text-sm leading-6 academy-body">{playlist.map((choice, index) => <li key={`${index}/${choice.id}`} aria-current={activeClip === index ? 'step' : undefined} className={activeClip === index ? 'font-semibold academy-text' : ''}>{index + 1}. {choice.text} {choice.clip && `(${choice.clip[1] - choice.clip[0]} сек.)`}</li>)}</ol>
@@ -68,17 +79,22 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
         </>}
         {studio.kind === 'sound' && <>{preview?.audio ? <audio key={preview.audio} src={preview.audio} controls preload="metadata" aria-label="Избран звуков вариант" className="w-full max-w-full" /> : <p className="text-sm academy-muted">Избери запис, за да го чуеш. Започни с ниска сила на устройството.</p>}<p className="mt-3 text-sm leading-6 academy-body">{preview?.text}</p></>}
         {studio.kind === 'diagram' && <>{preview?.diagram ? <VideoPracticeGraphic kind={preview.diagram.kind} variant={preview.diagram.variant} /> : <p className="text-sm academy-muted">Избери вариант и сравни схемата.</p>}<p className="mt-3 text-sm leading-6 academy-body">{preview?.text}</p></>}
+        {studio.kind === 'schedule' && <SchedulePreview studio={studio} matches={matches} />}
+        {studio.kind === 'caption' && <CaptionPreview studio={studio} choice={preview} />}
+        {studio.kind === 'speed' && <SpeedPreview choice={preview} />}
+        {studio.kind === 'transition' && <TransitionPreview choice={preview} />}
         <dl className="mt-4 space-y-4">{studio.slots.filter(slot => !slot.preview || studio.kind === 'decision').map(slot => <div key={slot.id}>
           <dt className="text-xs font-semibold uppercase tracking-wider academy-subtle">{slot.text}</dt><dd className="mt-1 text-sm leading-6 academy-body">{studio.choices.find(choice => choice.id === matches[slot.id])?.text || 'Още няма избор.'}</dd>
         </div>)}</dl>
         {mediaError && <p role="alert" className="mt-3 text-sm academy-warning">{mediaError}</p>}
         <p className="mt-5 border-t academy-border pt-4 text-xs leading-5 academy-muted">{studio.limit}</p>
-        {studio.kind !== 'decision' && <a href={studio.kind === 'sound' ? '/academy-labs/perfect-video/closed/SOURCES.md' : '/academy-labs/perfect-video/practical/SOURCES.md'} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs underline academy-muted">Произход на учебния материал</a>}
+        {studio.kind !== 'decision' && <a href={['sound', 'transition'].includes(studio.kind) ? '/academy-labs/perfect-video/closed/SOURCES.md' : studio.kind === 'schedule' ? '/academy-labs/perfect-video/practical/PRODUCTION-SOURCES.md' : '/academy-labs/perfect-video/practical/SOURCES.md'} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs underline academy-muted">Произход на учебния материал</a>}
       </section>
     </div>
     <div className="flex flex-wrap items-center gap-3">
       <button type="button" disabled={busy || completed || !complete} onClick={() => onSubmit({ matches })} className="rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:opacity-40">{completed ? 'Практиката е премината' : busy ? 'Проверка…' : 'Провери решенията'}</button>
       <button type="button" disabled={busy} onClick={() => onChange({ matches: {} })} className="rounded-xl border academy-border-strong px-4 py-3 text-sm academy-body">Започни сравняването отначало</button>
+      <button type="button" disabled={!complete || busy} onClick={download} className="rounded-xl border academy-border-strong px-4 py-3 text-sm academy-body disabled:opacity-40">Изтегли избраните решения</button>
     </div>
   </div>;
 }

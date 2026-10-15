@@ -3,6 +3,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
+import { prepareProductionVideoAssets } from './prepare-production-video-assets.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const assetRoot = resolve(root, 'course-assets/perfect-video/practical-20261014');
@@ -32,6 +33,7 @@ export function preparePracticalVideoAssets() {
   writeFileSync(resolve(target, 'coffee-machine.mp4'), decode('video'));
   const releasePath = resolve(root, 'scripts/perfect-video/releases/practical-01-05-20261014.json');
   writeFileSync(releasePath, `${JSON.stringify(loadPracticalCandidates(), null, 2)}\n`);
+  prepareProductionVideoAssets();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

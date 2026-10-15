@@ -8,7 +8,7 @@ const HOST = 'dashboard-fixture.supabase.co';
 const USER = { id: '00000000-0000-4000-8000-000000000091', email: 'student@example.invalid', user_metadata: { full_name: 'Ученик' }, app_metadata: {}, aud: 'authenticated', created_at: '2026-10-01T12:00:00Z' };
 const opening = openings.lessons[0];
 
-export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string; matchingExpected?: Record<string,string> };
+export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string; objective?: string; matchingExpected?: Record<string,string> };
 type ThemeAccessFixture = { hasFullAccess?: boolean; unlockedModules?: string[]; completedFreeModule?: boolean };
 
 /** Auth, saves and grading are all synthetic; no request reaches a live service. */
@@ -55,7 +55,7 @@ export async function prepareAcademyTheme(page: Page, preference = 'dark', fixtu
       id: '00000000-0000-4000-8000-000000000081', moduleId: payload.p_module, lessonId: payload.p_lesson,
       status: 'published', versionId: '00000000-0000-4000-8000-000000000082', version: 1,
       title: fixture?.title || opening.lesson_title, subtitle: 'Преглед на темата · пробен профил', duration: '15 мин',
-      objective: opening.first_page.content.body, hook: '', estimatedMinutes: 15, sourceKind: 'editor',
+      objective: fixture?.objective || opening.first_page.content.body, hook: '', estimatedMinutes: 15, sourceKind: 'editor',
       validation: { errors: [], warnings: [] }, versionChanged: false, progress,
       blocks: fixture?.blocks || [
         { ...opening.first_page, id: '00000000-0000-4000-8000-000000000083' },

@@ -65,8 +65,8 @@ export function countVisibleLessonWords(lesson: {
     if (Array.isArray(value)) return value.reduce<number>((total, part) => total + count(part), 0);
     if (value && typeof value === 'object') {
       if ('studio' in value && value.studio !== null && typeof value.studio === 'object') {
-        const configured = value as { studio: { title?: unknown; context?: unknown; task?: unknown; limit?: unknown }; left?: { text?: unknown }[]; right?: { text?: unknown }[] };
-        return count([configured.studio.title, configured.studio.context, configured.studio.task, configured.studio.limit])
+        const configured = value as { studio: { title?: unknown; initialContext?: unknown; context?: unknown; task?: unknown; limit?: unknown; change?: unknown }; left?: { text?: unknown }[]; right?: { text?: unknown }[] };
+        return count([configured.studio.title, configured.studio.initialContext || configured.studio.context, configured.studio.task, configured.studio.limit, configured.studio.change])
           + count(configured.left?.map(slot => slot.text)) + count(configured.right?.map(choice => choice.text));
       }
       const fallback = 'codeFallback' in value && value.codeFallback === true;

@@ -1,0 +1,20 @@
+{
+  "release": "practical_video_06_10_20261015",
+  "bytes": 98908,
+  "sha256": "465d2dba8d9f19f09cf659fdedb09083a49ad92711de0604f8ba5b96a5e6b53c",
+  "decodedBytes": 782233,
+  "decodedSha256": "430cf049bda76817f25ff54705deb8de1a876aa7db123b202f184d8ab0bd8027",
+  "parts": [
+    "curriculum.000.base64",
+    "curriculum.001.base64",
+    "curriculum.002.base64",
+    "curriculum.003.base64",
+    "curriculum.004.base64",
+    "curriculum.005.base64",
+    "curriculum.006.base64",
+    "curriculum.007.base64",
+    "curriculum.008.base64",
+    "curriculum.009.base64",
+    "curriculum.010.base64"
+  ]
+}
