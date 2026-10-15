@@ -1,4 +1,15 @@
-import { studioMessage, studioPlaylist, type ClosedStudio, type StudioRole, type StudioRoleName } from '@/lib/closed-practice-studio';
+import { studioMessage, studioPlaylist, studioWorkflow, type ClosedStudio, type StudioRole, type StudioRoleName } from '@/lib/closed-practice-studio';
+
+export function MarketingWorkflowPreview({ studio, matches }: { studio: ClosedStudio; matches: Record<string, string> }) {
+  const steps = studioWorkflow(studio, matches);
+  return <div className="space-y-4 text-sm leading-6 academy-body">
+    <ol aria-label="Схема на избрания работен процес" className="space-y-3">{steps.map((step, index) => <li key={step.part} className="rounded-xl border academy-border academy-raised p-4">
+      <h4 className="break-words font-semibold academy-text">{index + 1}. {step.title}</h4><p className="mt-2 break-words">{step.detail}</p>
+    </li>)}</ol>
+    {!steps.length && <p>Избери първата стъпка. Тук ще проследиш какво предвижда твоят план от началния въпрос до отговора.</p>}
+    <p className="text-xs leading-5 academy-muted">Схемата показва твоите избори. Не е изпълнена заявка, публикация или плащане. При промяна в условията съответната стъпка се заменя; останалите се запазват. Провери решението с бутона под задачата.</p>
+  </div>;
+}
 
 export function MessagePreview({ studio, matches }: { studio: ClosedStudio; matches: Record<string, string> }) {
   const parts = studioMessage(studio, matches);

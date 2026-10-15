@@ -1,6 +1,6 @@
 import type { JsonObject } from '@/lib/lesson-engine-v2';
 
-export type StudioKind = 'cut' | 'frame' | 'colour' | 'sound' | 'diagram' | 'decision' | 'schedule' | 'caption' | 'speed' | 'transition' | 'metrics' | 'budget' | 'storyboard' | 'message' | 'roles';
+export type StudioKind = 'cut' | 'frame' | 'colour' | 'sound' | 'diagram' | 'decision' | 'schedule' | 'caption' | 'speed' | 'transition' | 'metrics' | 'budget' | 'storyboard' | 'message' | 'roles' | 'workflow';
 export type StudioDiagram = { kind: 'light' | 'focus' | 'white-balance' | 'exposure' | 'motion' | 'continuity'; variant: string };
 export type StudioSchedule = { start: number; duration: number; label: string };
 export type StudioCaption = { text: string; position: 'top' | 'middle' | 'bottom'; size: 'small' | 'normal' | 'large' };
@@ -11,14 +11,15 @@ export type StudioReport = { title: string; points: { at: number; value: number 
 export type StudioCopy = { part: 'headline' | 'benefit' | 'proof' | 'terms' | 'action' | 'relationship'; text: string };
 export type StudioRoleName = 'seeker' | 'user' | 'payer' | 'approver' | 'adviser';
 export type StudioRole = { person: string; roles: StudioRoleName[]; detail: string };
-export type StudioChoice = { id: string; text: string; clip?: [number, number]; audio?: string; diagram?: StudioDiagram; look?: 'source' | 'warm' | 'cool' | 'dark'; crop?: 'wide' | 'action' | 'edge'; schedule?: StudioSchedule; caption?: StudioCaption; rate?: number; transition?: 'early' | 'sync' | 'tail'; calculation?: StudioCalculation; budget?: StudioBudget; board?: StudioBoard; focus?: [number, number]; copy?: StudioCopy; role?: StudioRole };
+export type StudioFlow = { part: 'entry' | 'record' | 'owner' | 'reply' | 'review' | 'outcome'; title: string; detail: string };
+export type StudioChoice = { id: string; text: string; clip?: [number, number]; audio?: string; diagram?: StudioDiagram; look?: 'source' | 'warm' | 'cool' | 'dark'; crop?: 'wide' | 'action' | 'edge'; schedule?: StudioSchedule; caption?: StudioCaption; rate?: number; transition?: 'early' | 'sync' | 'tail'; calculation?: StudioCalculation; budget?: StudioBudget; board?: StudioBoard; focus?: [number, number]; copy?: StudioCopy; role?: StudioRole; flow?: StudioFlow };
 export type StudioSlot = { id: string; text: string; choices: string[]; preview: boolean; phase: 'base' | 'change' };
 export type ClosedStudio = { kind: StudioKind; title: string; context: string; task: string; limit: string; change: string; startHour: number; surface: 'video' | 'poster'; domain: 'video' | 'marketing'; report?: StudioReport; slots: StudioSlot[]; choices: StudioChoice[] };
 
 const record = (value: unknown): JsonObject => value !== null && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {};
 const text = (value: unknown) => typeof value === 'string' ? value : '';
 const records = (value: unknown) => Array.isArray(value) ? value.map(record) : [];
-const kinds: StudioKind[] = ['cut', 'frame', 'colour', 'sound', 'diagram', 'decision', 'schedule', 'caption', 'speed', 'transition', 'metrics', 'budget', 'storyboard', 'message', 'roles'];
+const kinds: StudioKind[] = ['cut', 'frame', 'colour', 'sound', 'diagram', 'decision', 'schedule', 'caption', 'speed', 'transition', 'metrics', 'budget', 'storyboard', 'message', 'roles', 'workflow'];
 const diagramVariants: Record<string, string[]> = { light: ['back', 'side', 'front'], focus: ['back', 'front'], 'white-balance': ['cool', 'neutral', 'warm'], exposure: ['dark', 'balanced', 'clipped'], motion: ['short', 'long'], continuity: ['same', 'cross'] };
 const audioPaths = new Set([...['clean', 'room', 'noise', 'clipped'].map(id => `/academy-labs/perfect-video/closed/voice-${id}.mp3`), ...['early', 'sync'].map(id => `/academy-labs/perfect-video/closed/cut-${id}.mp3`)]);
 const finite = (n: unknown, min: number, max: number): n is number => typeof n === 'number' && Number.isFinite(n) && n >= min && n <= max;
@@ -34,7 +35,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
     const timing = record(preview.schedule);
     const caption = record(preview.caption);
     const calculation = record(preview.calculation), budget = record(preview.budget), board = record(preview.board);
-    const copy = record(preview.copy), role = record(preview.role);
+    const copy = record(preview.copy), role = record(preview.role), flow = record(preview.flow);
     const focus = Array.isArray(preview.focus) && preview.focus.length === 2 && preview.focus.every(n => finite(n, 0, 3600)) && preview.focus[0] < preview.focus[1] ? preview.focus as [number, number] : undefined;
     const clip = Array.isArray(preview.clip) && preview.clip.length === 2 && preview.clip.every(n => typeof n === 'number' && Number.isFinite(n))
       && preview.clip[0] >= 0 && preview.clip[1] <= 32 && preview.clip[0] < preview.clip[1] ? preview.clip as [number, number] : undefined;
@@ -50,6 +51,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
       budget: finite(budget.hours, 0, 10000) && finite(budget.hourly, 0, 100000) && finite(budget.external, 0, 1e8) && finite(budget.reservePercent, 0, 100) && (budget.price === undefined || finite(budget.price, 0, 1e9)) ? budget as StudioBudget : undefined,
       board: ['choice', 'order', 'packing', 'handover', 'pickup', 'crop', 'missing'].includes(text(board.scene)) && text(board.caption).length <= 120 && finite(board.seconds, 1, 60) ? board as StudioBoard : undefined, focus,
       copy: ['headline', 'benefit', 'proof', 'terms', 'action', 'relationship'].includes(text(copy.part)) && text(copy.text).length > 0 && text(copy.text).length <= 500 ? copy as StudioCopy : undefined,
+      flow: ['entry', 'record', 'owner', 'reply', 'review', 'outcome'].includes(text(flow.part)) && text(flow.title).length > 0 && text(flow.title).length <= 120 && text(flow.detail).length > 0 && text(flow.detail).length <= 500 ? flow as StudioFlow : undefined,
       role: Array.isArray(role.roles) && role.roles.length > 0 && role.roles.length <= 5 && new Set(role.roles).size === role.roles.length && role.roles.every(r => ['seeker', 'user', 'payer', 'approver', 'adviser'].includes(text(r))) && text(role.person).length > 0 && text(role.person).length <= 80 && text(role.detail).length <= 240 ? role as StudioRole : undefined };
   });
   const ids = new Set(choices.map(choice => choice.id));
@@ -97,6 +99,12 @@ export function studioMessage(studio: ClosedStudio, matches: Record<string, stri
   const chosen = new Map<StudioCopy['part'], StudioCopy>();
   for (const choice of studioPlaylist(studio, matches)) if (choice.copy) chosen.set(choice.copy.part, choice.copy);
   return (['headline', 'relationship', 'benefit', 'proof', 'terms', 'action'] as const).flatMap(part => chosen.has(part) ? [chosen.get(part)!] : []);
+}
+
+export function studioWorkflow(studio: ClosedStudio, matches: Record<string, string>) {
+  const chosen = new Map<StudioFlow['part'], StudioFlow>();
+  for (const choice of studioPlaylist(studio, matches)) if (choice.flow) chosen.set(choice.flow.part, choice.flow);
+  return (['entry', 'record', 'owner', 'reply', 'review', 'outcome'] as const).flatMap(part => chosen.has(part) ? [chosen.get(part)!] : []);
 }
 
 /** Times are supplied by the case. These checks expose the selected schedule,

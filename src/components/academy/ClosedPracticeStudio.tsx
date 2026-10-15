@@ -4,7 +4,7 @@ import type { JsonObject } from '@/lib/lesson-engine-v2';
 import { VideoPracticeGraphic } from '@/components/academy/VideoDecisionLab';
 import { CaptionPreview, SchedulePreview, SpeedPreview, TransitionPreview } from '@/components/academy/ProductionPracticePreviews';
 import { BudgetPreview, MetricsPreview, StoryboardPreview } from '@/components/academy/FinalPracticePreviews';
-import { MessagePreview, RolesPreview } from '@/components/academy/MarketingPracticePreviews';
+import { MarketingWorkflowPreview, MessagePreview, RolesPreview } from '@/components/academy/MarketingPracticePreviews';
 
 interface Props { studio: ClosedStudio; state: JsonObject; busy: boolean; completed: boolean; onChange: (state: JsonObject) => void; onSubmit: (state: JsonObject) => void }
 const asset = '/academy-labs/perfect-video/practical/coffee-machine.mp4';
@@ -95,6 +95,7 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
         {studio.kind === 'storyboard' && <StoryboardPreview studio={studio} matches={matches} />}
         {studio.kind === 'message' && <MessagePreview studio={studio} matches={matches} />}
         {studio.kind === 'roles' && <RolesPreview studio={studio} matches={matches} />}
+        {studio.kind === 'workflow' && <MarketingWorkflowPreview studio={studio} matches={matches} />}
         <dl className="mt-4 space-y-4">{studio.slots.filter(slot => (slot.phase !== 'change' || baseComplete) && (!slot.preview || studio.kind === 'decision')).map(slot => <div key={slot.id}>
           <dt className="text-xs font-semibold uppercase tracking-wider academy-subtle">{slot.text}</dt><dd className="mt-1 text-sm leading-6 academy-body">{studio.choices.find(choice => choice.id === matches[slot.id])?.text || 'Още няма избор.'}</dd>
         </div>)}</dl>
