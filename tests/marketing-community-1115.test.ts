@@ -8,6 +8,7 @@ import { locateLesson } from '../src/lib/academy-lesson-location';
 import { actor, createSilkDatabase, learnerRecords, STUDENT, OTHER } from './helpers/silk-road-db';
 import { seedVideo711Lessons } from './helpers/perfect-video-711-db';
 import { stageCommunityLessons, publishCommunityLessons, versionFingerprint } from '../scripts/marketing-basics/community-release-1115.mjs';
+import { loadThirdPracticalMarketingCandidates } from '../scripts/prepare-third-practical-marketing-assets.mjs';
 
 type Block = { key:string;type:string;title:string;content:Record<string,unknown>;required:boolean;points:number;position:number;evaluation?:{correct?:string;order?:string[];matches?:Record<string,string>};feedback?:Record<string,unknown>;scoring?:Record<string,unknown> };
 type Lesson = { academy_lesson_id:string;lesson_id:string;source_module_id:string;title:string;subtitle:string;objective:string;hook:string;estimated_minutes:number;duration:string;origin_version_id:string;previous_draft_version_id:string;source_fingerprint?:string;change_note:string;blocks:Block[] };
@@ -15,6 +16,7 @@ type Metric = {id:string;rendered:{words:number;lines:number};payload:{words:num
 const release=JSON.parse(readFileSync('scripts/marketing-basics/releases/community-11-15-20261012.json','utf8')) as {lesson_files:string[];modules:{number:number;title:string}[]};
 const parts=release.lesson_files.map(file=>JSON.parse(readFileSync(`scripts/marketing-basics/releases/${file}`,'utf8')) as {lessons:Lesson[];metrics:Metric[]});
 const packet={...release,lessons:parts.flatMap(part=>part.lessons),metrics:parts.flatMap(part=>part.metrics)};
+const practical=loadThirdPracticalMarketingCandidates();
 
 describe('Marketing Basics community modules 11–15',()=>{
   it('preserves all 51 donor lessons and the approved module order',()=>{
@@ -33,7 +35,9 @@ describe('Marketing Basics community modules 11–15',()=>{
       const words=marketingVisibleWords(l);
       expect(words).toBe(m.rendered.words);
       expect(marketingVisibleFragments(l).flatMap(p=>p.split('\n')).filter(p=>p.trim()).length).toBe(m.rendered.lines);
-      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(words);
+      const current=practical.find(p=>p.lesson===l.lesson_id)!;
+      const currentBlocks=[...l.blocks.map(b=>({...b,content:b.type==='objective'?current.opening:b.content})),current.bridge,current.practice];
+      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(marketingVisibleWords({...l,blocks:currentBlocks}));
     }
   });
   it('requires closed practice without publishing private grading data',()=>{

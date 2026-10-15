@@ -40,4 +40,14 @@ describe('learner glossary across three courses', () => {
     expect(screen.getByText(/CAC:/)).toBeTruthy();
     expect(screen.getByText(/нов плащащ клиент/)).toBeTruthy();
   });
+
+  it('explains data export as well as video export without implying permission to share', () => {
+    const dataExport = findGlossaryTerms('Външен документ иска експорт на клиентски контакти.').find(term => term.term === 'Export / износ');
+    const videoExport = findGlossaryTerms('Избери export на готовия монтаж.').find(term => term.term === 'Export / износ');
+    expect(dataExport).toEqual(videoExport);
+    expect(dataExport?.plainBulgarian).toContain('данни или готов проект');
+    expect(dataExport?.plainBulgarian).toContain('не дава право да споделяш');
+    expect(dataExport?.familiarAssociation).toContain('таблица');
+    expect(dataExport?.familiarAssociation).toContain('видеофайл');
+  });
 });
