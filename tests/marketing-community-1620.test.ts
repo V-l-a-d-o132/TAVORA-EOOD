@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import type { PGlite } from '@electric-sql/pglite';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
+import { loadFinalPracticalMarketingCandidates } from '../scripts/prepare-final-practical-marketing-assets.mjs';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
 import { marketingVisibleFragments, marketingVisibleWords } from '../src/lib/marketing-reading-count';
 import { locateLesson } from '../src/lib/academy-lesson-location';
@@ -33,7 +34,9 @@ describe('Marketing Basics community modules 16–20',()=>{
       const words=marketingVisibleWords(l);
       expect(words).toBe(m.rendered.words);
       expect(marketingVisibleFragments(l).flatMap(p=>p.split('\n')).filter(p=>p.trim()).length).toBe(m.rendered.lines);
-      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(words);
+      const practical=loadFinalPracticalMarketingCandidates().find(p=>p.lesson===l.lesson_id)!;
+      const current={...l,blocks:[...l.blocks.map(b=>({...b,content:b.type==='objective'?practical.opening:b.content})),practical.bridge,practical.practice]};
+      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(marketingVisibleWords(current));
     }
   });
   it('requires closed practice without publishing private grading data',()=>{

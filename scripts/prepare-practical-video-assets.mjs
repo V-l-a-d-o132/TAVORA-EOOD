@@ -1,3 +1,4 @@
+import { prepareFinalPracticalMarketingAssets } from './prepare-final-practical-marketing-assets.mjs';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -42,6 +43,7 @@ export function preparePracticalVideoAssets() {
   preparePracticalMarketingAssets();
   prepareNextPracticalMarketingAssets();
   prepareThirdPracticalMarketingAssets();
+prepareFinalPracticalMarketingAssets();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

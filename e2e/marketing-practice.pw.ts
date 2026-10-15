@@ -5,12 +5,12 @@ import { pathToFileURL } from 'node:url';
 test('Marketing practice works on mobile, exports an offline HTML and applies stops',async({page,browser},testInfo)=>{
   await page.setViewportSize({width:320,height:800});
   await page.goto('/academy/marketing-basics-practice.html');
-  await expect(page.getByRole('heading',{name:'Направи. Провери. Запази версия 2.'})).toBeVisible();
-  await page.getByLabel('Лийд към клиент p, %').fill('');
+  await expect(page.getByRole('heading',{name:'Избери. Провери. Промени решението.'})).toBeVisible();
+  await page.getByLabel('Лийд към клиент p, %').selectOption('');
   await page.getByRole('button',{name:'Изчисли',exact:true}).click();
   await expect(page.getByRole('alert')).toContainText('празно не означава нула');
-  await page.getByLabel('Лийд към клиент p, %').fill('25,5');
-  await page.getByLabel('Лийд към клиент p, %').press('Enter');
+  await page.getByLabel('Лийд към клиент p, %').selectOption('25,5');
+  await page.getByRole('button',{name:'Изчисли',exact:true}).click();
   await expect(page.locator('#cpl-result')).toContainText('15,30');
   await page.getByRole('button',{name:'Провери 7 гранични случая'}).click();
   await expect(page.locator('#cpl-tests-result')).toContainText('7/7');
@@ -35,7 +35,7 @@ test('Marketing practice works on mobile, exports an offline HTML and applies st
   const offline=await browser.newContext({offline:true});const offlinePage=await offline.newPage();
   await offlinePage.goto(pathToFileURL(portablePath).href);
   await expect(offlinePage.locator('#crm-cases tr')).toHaveCount(20);
-  await offlinePage.getByLabel('Лийд към клиент p, %').fill('25');await offlinePage.getByRole('button',{name:'Изчисли',exact:true}).click();
+  await offlinePage.getByLabel('Лийд към клиент p, %').selectOption('25');await offlinePage.getByRole('button',{name:'Изчисли',exact:true}).click();
   await expect(offlinePage.locator('#cpl-result')).toContainText('15,00');
   await offline.close();
 });
