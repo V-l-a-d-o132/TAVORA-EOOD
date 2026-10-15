@@ -1,0 +1,112 @@
+{
+  "verifiedOn": "2026-10-15",
+  "implementationCommit": "d8ef5bfc26ae008d8593e63d6cf6c97cc9f71a0f",
+  "migration": "20261015121821_practical_marketing_first_5_publication",
+  "publication": {
+    "release": "practical_marketing_first_5_20261015",
+    "published": 41,
+    "progressRowsCarried": 2
+  },
+  "publishedChecks": {
+    "modules": [
+      {
+        "lessons": 7,
+        "module_id": "s03-m01"
+      },
+      {
+        "lessons": 8,
+        "module_id": "s03-m02"
+      },
+      {
+        "lessons": 8,
+        "module_id": "s03-m03"
+      },
+      {
+        "lessons": 8,
+        "module_id": "s03-m05"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s03-m07"
+      }
+    ],
+    "release": "practical_marketing_first_5_20261015",
+    "totalLessons": 41,
+    "newTotalBlocks": 795,
+    "originalBlocks": 713,
+    "validatedLessons": 41,
+    "graderMapsMatched": 41,
+    "safeRetryFeedback": 41,
+    "historicalAttempts": 0,
+    "safeSelectedFeedback": 41,
+    "stagedContentMatched": 41,
+    "untargetedContentMd5": "b42c623dcc1fb2d6a71a5782e43ee94d",
+    "familyMarkersPreserved": 41,
+    "openingBodiesPreserved": 41,
+    "originalBlocksRetained": 713,
+    "unplannedOriginalChanges": 0,
+    "archivedOldVersionProgress": 2,
+    "oldVersionProgressRemaining": 0
+  },
+  "capacity": {
+    "wordsBefore": 62385,
+    "wordsAfter": 80698,
+    "linesBefore": 5002,
+    "linesAfter": 6247,
+    "counting": "Visible text fragments; source line breaks, independent of screen wrapping."
+  },
+  "checks": {
+    "automated": 48,
+    "browser": 33,
+    "marketingBrowserRepeatedAfterMobileReadabilityFix": 8,
+    "syntheticCiPublisherTests": 10,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "distributionScan": "passed"
+  },
+  "deployment": {
+    "main": "published",
+    "supabase": "published",
+    "readdyProductionDeployment": "User pull and publish required; not verified by this release."
+  },
+  "additionalChecks": {
+    "publisherReplay": {
+      "published": 41,
+      "alreadyPublished": true
+    },
+    "publishedStatuses": 41,
+    "anonymousMarketingAccess": false,
+    "hookClarificationMatches": 1,
+    "publicStudiosWithoutGraderFields": 41
+  },
+  "privateAccessChecks": {
+    "table": {
+      "rls": true,
+      "anon": false,
+      "forceRls": true,
+      "serviceRole": false,
+      "authenticated": false
+    },
+    "functions": [
+      {
+        "name": "marketing_practice_feedback",
+        "searchPath": [
+          "search_path=\"\""
+        ],
+        "anonExecute": false,
+        "serviceRoleExecute": false,
+        "authenticatedExecute": false
+      },
+      {
+        "name": "publish_practical_marketing_first_5",
+        "searchPath": [
+          "search_path=\"\""
+        ],
+        "anonExecute": false,
+        "serviceRoleExecute": false,
+        "authenticatedExecute": false
+      }
+    ]
+  }
+}
