@@ -1,0 +1,60 @@
+{
+  "release": "practical_video_06_10_20261015",
+  "verifiedOn": "2026-10-15",
+  "implementationCommit": "a748133d3b78358c16c6532ebbc81690efd05650",
+  "databasePublished": true,
+  "lessons": 77,
+  "progressRowsCarried": 4,
+  "automatedTests": {
+    "passed": 32,
+    "failed": 0
+  },
+  "browserTests": {
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": "passed",
+  "build": "passed",
+  "distributionCheck": "passed",
+  "verification": {
+    "modules": [
+      {
+        "lessons": 18,
+        "module_id": "s02-m06",
+        "required_practices": 18
+      },
+      {
+        "lessons": 16,
+        "module_id": "s02-m07",
+        "required_practices": 16
+      },
+      {
+        "lessons": 16,
+        "module_id": "s02-m08",
+        "required_practices": 16
+      },
+      {
+        "lessons": 11,
+        "module_id": "s02-m09",
+        "required_practices": 11
+      },
+      {
+        "lessons": 16,
+        "module_id": "s02-m10",
+        "required_practices": 16
+      }
+    ],
+    "anonCanPublish": false,
+    "invalidVersions": 0,
+    "uploadRestrictions": 2,
+    "candidateMismatches": 0,
+    "changedOpeningBodies": 0,
+    "exposedPrivateGrading": false,
+    "wrongExamFamilyMarker": 0,
+    "changedOldTeachingBlocks": 0,
+    "firstBatchStillPublished": 90
+  },
+  "frontendRedeploymentConfirmed": false
+}
