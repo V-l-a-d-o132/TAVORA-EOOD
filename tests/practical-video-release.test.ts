@@ -27,8 +27,8 @@ beforeAll(async () => {
   db = await createSilkDatabase();
   await db.exec(readFileSync('supabase/migrations/20261009190315_silk_road_market_ready_publication.sql','utf8').split('-- PUBLISH_MARKET_CURRICULUM')[0]);
   await db.exec(readFileSync('supabase/migrations/20261010163647_perfect_video_story_first_publication.sql','utf8').split('-- PUBLISH_VIDEO_STORY_CURRICULUM')[0]);
-  await db.exec(readFileSync('supabase/migrations/20261014130939_practical_video_studio_payloads.sql','utf8'));
-  await db.exec(readFileSync('supabase/migrations/20261014133148_practical_video_01_05_publication.sql','utf8'));
+  await db.exec(readFileSync('supabase/migrations/20261015064651_practical_video_studio_payloads.sql','utf8'));
+  await db.exec(readFileSync('supabase/migrations/20261015064718_practical_video_01_05_publication.sql','utf8'));
   for(const l of candidates) {
     const lid=(await db.query<{id:string}>("INSERT INTO academy_lessons(module_id,lesson_id,status) VALUES($1,$2,'draft') RETURNING id",[l.module,l.lesson])).rows[0].id;
     const vid=(await db.query<{id:string}>("INSERT INTO academy_lesson_versions(academy_lesson_id,version_number,title,objective,hook,change_note) VALUES($1,1,$2,'Учебна цел.','Учебен случай.','perfect_video_story_first_20261010') RETURNING id",[lid,l.title])).rows[0].id;
