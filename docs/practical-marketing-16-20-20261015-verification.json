@@ -1,0 +1,127 @@
+{
+  "release": "practical_marketing_16_20_20261015",
+  "verifiedDate": "2026-10-15",
+  "implementationCommit": "c39b4c7c9b4524c69ea277495f118b18bb2ae666",
+  "implementationTree": "ac75c3c58331f33ed8fdc11f20755bcf15f671de",
+  "migration": "20261015201823_practical_marketing_16_20_publication",
+  "publication": {
+    "release": "practical_marketing_16_20_20261015",
+    "published": 55,
+    "progressRowsCarried": 0
+  },
+  "verification": {
+    "modules": [
+      {
+        "lessons": 10,
+        "module_id": "s03-m14"
+      },
+      {
+        "lessons": 11,
+        "module_id": "s03-m17"
+      },
+      {
+        "lessons": 9,
+        "module_id": "s03-m18"
+      },
+      {
+        "lessons": 11,
+        "module_id": "s03-m19"
+      },
+      {
+        "lessons": 14,
+        "module_id": "s03-m20"
+      }
+    ],
+    "release": "practical_marketing_16_20_20261015",
+    "attemptMd5": "b34007782ee6dc16cd695321622278c2",
+    "totalLessons": 55,
+    "newTotalBlocks": 1004,
+    "originalBlocks": 894,
+    "examFunctionMd5": "204dea024131a516a461700e18bde5ad",
+    "validatedLessons": 55,
+    "graderMapsMatched": 55,
+    "publishedStatuses": 55,
+    "requiredNewBlocks": 110,
+    "retainedExamBanks": 5,
+    "safeRetryFeedback": 55,
+    "historicalAttempts": 1459,
+    "safeSelectedFeedback": 55,
+    "stagedContentMatched": 55,
+    "untargetedContentMd5": "9c1ecd1d6ff9a692c451f4e77c0ddb4f",
+    "freeSilkOpeningAccess": true,
+    "retainedExamQuestions": 120,
+    "familyMarkersPreserved": 55,
+    "openingBodiesPreserved": 55,
+    "originalBlocksRetained": 894,
+    "priorMarketingFeedback": 155,
+    "allMarketingModuleCount": 20,
+    "originVersionsPreserved": 55,
+    "anonymousMarketingAccess": false,
+    "unplannedOriginalChanges": 0,
+    "allMarketingStudioLessons": 210,
+    "archivedOldVersionProgress": 0,
+    "oldVersionProgressRemaining": 0,
+    "publicStudiosWithoutGraderFields": 55
+  },
+  "history": {
+    "attemptsBefore": 1459,
+    "attemptsAfter": 1459,
+    "attemptSnapshotUnchanged": true,
+    "untargetedContentUnchanged": true,
+    "preExistingStaleProgressRows": 2,
+    "staleProgressPreserved": true,
+    "sourceVersionProgressRows": 0,
+    "progressRowsCarried": 0
+  },
+  "privateAccess": {
+    "forcedRls": true,
+    "clientTableGrants": 0,
+    "clientPublisherGrants": 0
+  },
+  "functionMd5": {
+    "submit_course_exam": "204dea024131a516a461700e18bde5ad",
+    "complete_lesson_block": "1e6d02cdb1bfb436ab2738e4c4a55897",
+    "marketing_practice_feedback": "2d4089c46234c8395b337c065963349a"
+  },
+  "examGraderUnchanged": true,
+  "idempotentReplay": {
+    "published": 55,
+    "alreadyPublished": true
+  },
+  "tests": {
+    "unitAndDatabasePassed": 58,
+    "archivalPrivateSourceTestsSkipped": 3,
+    "newReleaseTestsWithRealKeys": 12,
+    "newReleaseTestsWithSyntheticCiKeys": 12,
+    "browserPassed": 12,
+    "browserWidths": [
+      320,
+      1280
+    ],
+    "browserThemes": [
+      "light",
+      "dark"
+    ],
+    "all60FinalQuestionsRendered": true,
+    "exactExamThresholdsTested": true,
+    "portableLabOfflineTested": true,
+    "typecheck": true,
+    "lint": true,
+    "distributionCheck": true,
+    "build": true
+  },
+  "volume": {
+    "wordsBefore": 86918,
+    "wordsAfter": 111621,
+    "linesBefore": 8389,
+    "linesAfter": 10104,
+    "originalBlocks": 894,
+    "addedRequiredBlocks": 110
+  },
+  "completeMarketingProgram": {
+    "modules": 20,
+    "lessonsWithRequiredStudio": 210
+  },
+  "newSecurityAdvisories": 0,
+  "readdyProductionUiVerified": false
+}
