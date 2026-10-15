@@ -3,6 +3,7 @@ import { studioMatches, studioPlaylist, studioPlanText, type ClosedStudio } from
 import type { JsonObject } from '@/lib/lesson-engine-v2';
 import { VideoPracticeGraphic } from '@/components/academy/VideoDecisionLab';
 import { CaptionPreview, SchedulePreview, SpeedPreview, TransitionPreview } from '@/components/academy/ProductionPracticePreviews';
+import { BudgetPreview, MetricsPreview, StoryboardPreview } from '@/components/academy/FinalPracticePreviews';
 
 interface Props { studio: ClosedStudio; state: JsonObject; busy: boolean; completed: boolean; onChange: (state: JsonObject) => void; onSubmit: (state: JsonObject) => void }
 const asset = '/academy-labs/perfect-video/practical/coffee-machine.mp4';
@@ -19,7 +20,7 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
   const [mediaError, setMediaError] = useState('');
   const complete = studio.slots.every(slot => !!matches[slot.id]);
   const baseComplete = studio.slots.filter(slot => slot.phase !== 'change').every(slot => !!matches[slot.id]);
-  const preview = ['transition', 'speed'].includes(studio.kind) ? playlist.at(-1) : playlist[0];
+  const preview = ['transition', 'speed', 'budget'].includes(studio.kind) ? playlist.at(-1) : playlist[0];
   const download = () => {
     const url = URL.createObjectURL(new Blob([studioPlanText(studio, matches)], { type: 'text/plain;charset=utf-8' }));
     const link = document.createElement('a'); link.href = url; link.download = 'ucheben-plan.txt';
@@ -83,12 +84,15 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
         {studio.kind === 'caption' && <CaptionPreview studio={studio} choice={preview} />}
         {studio.kind === 'speed' && <SpeedPreview choice={preview} />}
         {studio.kind === 'transition' && <TransitionPreview choice={preview} />}
-        <dl className="mt-4 space-y-4">{studio.slots.filter(slot => !slot.preview || studio.kind === 'decision').map(slot => <div key={slot.id}>
+        {studio.kind === 'metrics' && <MetricsPreview studio={studio} matches={matches} />}
+        {studio.kind === 'budget' && <BudgetPreview choice={preview} />}
+        {studio.kind === 'storyboard' && <StoryboardPreview studio={studio} matches={matches} />}
+        <dl className="mt-4 space-y-4">{studio.slots.filter(slot => (slot.phase !== 'change' || baseComplete) && (!slot.preview || studio.kind === 'decision')).map(slot => <div key={slot.id}>
           <dt className="text-xs font-semibold uppercase tracking-wider academy-subtle">{slot.text}</dt><dd className="mt-1 text-sm leading-6 academy-body">{studio.choices.find(choice => choice.id === matches[slot.id])?.text || 'Още няма избор.'}</dd>
         </div>)}</dl>
         {mediaError && <p role="alert" className="mt-3 text-sm academy-warning">{mediaError}</p>}
         <p className="mt-5 border-t academy-border pt-4 text-xs leading-5 academy-muted">{studio.limit}</p>
-        {studio.kind !== 'decision' && <a href={['sound', 'transition'].includes(studio.kind) ? '/academy-labs/perfect-video/closed/SOURCES.md' : studio.kind === 'schedule' ? '/academy-labs/perfect-video/practical/PRODUCTION-SOURCES.md' : '/academy-labs/perfect-video/practical/SOURCES.md'} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs underline academy-muted">Произход на учебния материал</a>}
+        {studio.kind !== 'decision' && <a href={['metrics', 'budget', 'storyboard'].includes(studio.kind) ? '/academy-labs/perfect-video/practical/FINAL-SOURCES.md' : ['sound', 'transition'].includes(studio.kind) ? '/academy-labs/perfect-video/closed/SOURCES.md' : studio.kind === 'schedule' ? '/academy-labs/perfect-video/practical/PRODUCTION-SOURCES.md' : '/academy-labs/perfect-video/practical/SOURCES.md'} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs underline academy-muted">Произход на учебния материал</a>}
       </section>
     </div>
     <div className="flex flex-wrap items-center gap-3">

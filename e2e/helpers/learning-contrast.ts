@@ -51,4 +51,11 @@ export async function assertLearningContrast(root: Locator) {
 
 export async function assertLearningFits(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'No page-wide horizontal overflow').toBe(true);
+  const clippedTitles = await page.locator('h1').evaluateAll(headings => headings.filter(heading => {
+    if (!heading.getClientRects().length) return false;
+    const bounds = heading.getBoundingClientRect(), range = document.createRange();
+    range.selectNodeContents(heading);
+    return [...range.getClientRects()].some(line => line.left < bounds.left - 1 || line.right > bounds.right + 1);
+  }).map(heading => heading.textContent));
+  expect(clippedTitles, 'Lesson titles wrap inside their own panel').toEqual([]);
 }

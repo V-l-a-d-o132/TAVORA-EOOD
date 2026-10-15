@@ -195,7 +195,7 @@ export default function LessonEngineV2({
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold academy-body"><span className="rounded-full border academy-accent-border academy-accent-bg px-3 py-1 academy-accent">Практически урок</span><span><i className="ri-time-line mr-1" />{lessonReadingDuration(moduleId, lesson.lessonId, countVisibleLessonWords(lesson))}</span><span><i className="ri-star-line mr-1 academy-warning" />{xp} XP</span></div>
         <span aria-live="polite" className={`text-xs ${saveStatus === 'error' ? 'academy-accent' : 'academy-muted'}`}>{saveStatus === 'saving' ? 'Запазване…' : saveStatus === 'saved' ? 'Прогресът е запазен' : saveStatus === 'error' ? 'Проблем при запазване' : userId ? 'Автоматично запазване' : 'Преглед без запис'}</span>
       </div>
-      <h1 className="mt-5 text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">{lesson.title}</h1>
+      <h1 className="mt-5 break-words text-2xl font-semibold leading-[1.15] tracking-tight [overflow-wrap:anywhere] sm:text-4xl">{lesson.title}</h1>
       {lesson.subtitle && <p className="mt-3 max-w-2xl text-base leading-7 academy-body">{lesson.subtitle}</p>}
       <p className="mt-3 text-xs leading-5 academy-muted">Ориентир само за четене. За упражненията отдели време според своята задача и темпо.</p>
       {!lesson.blocks.some(block => block.type === 'objective') && <>

@@ -17,3 +17,6 @@ __pycache__/
 /public/academy-labs/perfect-video/practical/coffee-machine.mp4
 /scripts/perfect-video/releases/practical-01-05-20261014.json
 /scripts/perfect-video/releases/practical-06-10-20261015.json
+
+# Generated public final-video curriculum; decoded and verified from tracked asset parts.
+scripts/perfect-video/releases/practical-11-15-20261015.json
