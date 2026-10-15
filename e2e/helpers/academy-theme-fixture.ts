@@ -8,7 +8,7 @@ const HOST = 'dashboard-fixture.supabase.co';
 const USER = { id: '00000000-0000-4000-8000-000000000091', email: 'student@example.invalid', user_metadata: { full_name: 'Ученик' }, app_metadata: {}, aud: 'authenticated', created_at: '2026-10-01T12:00:00Z' };
 const opening = openings.lessons[0];
 
-export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string; objective?: string; matchingExpected?: Record<string,string> };
+export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string; objective?: string; matchingExpected?: Record<string,string>; matchingFeedback?: {slot:string;label:string;success:string;retry:string}[] };
 type ThemeAccessFixture = { hasFullAccess?: boolean; unlockedModules?: string[]; completedFreeModule?: boolean };
 
 /** Auth, saves and grading are all synthetic; no request reaches a live service. */
@@ -80,7 +80,11 @@ export async function prepareAcademyTheme(page: Page, preference = 'dark', fixtu
       if (complete && !progress.completed_block_keys.includes(payload.p_block_key)) {
         progress = { ...progress, completed_block_keys: [...progress.completed_block_keys, payload.p_block_key], xp: progress.xp + 5 };
       }
-      return route.fulfill({ json: { attemptId: 'synthetic-block', correct, score: complete ? 1 : 0, maxScore: 1, feedback: { complete, explanation: complete ? 'Пробната проверка е премината.' : 'Пробният избор изисква поправка.' }, progress } });
+      const details = block?.type === 'matching' ? fixture?.matchingFeedback?.map(item => {
+        const passed = payload.p_payload.matches?.[item.slot] === fixture.matchingExpected?.[item.slot];
+        return {label:item.label,correct:passed,note:passed?item.success:item.retry};
+      }) : undefined;
+      return route.fulfill({ json: { attemptId: 'synthetic-block', correct, score: complete ? 1 : 0, maxScore: 1, feedback: { complete, explanation: complete ? 'Пробната проверка е премината.' : 'Пробният избор изисква поправка.',...(details?{details}:{}) }, progress } });
     }
     if (name === 'academy_submit_course_exam') return route.fulfill({ json: { attemptId: 'synthetic-exam', correct: false, score: 0, maxScore: 1, feedback: { complete: false, explanation: 'Демонстрационна обратна връзка за преглед на темата.', scorePercent: 0, correctCount: 0, totalQuestions: 1 }, progress } });
     return route.fulfill({ json: null });

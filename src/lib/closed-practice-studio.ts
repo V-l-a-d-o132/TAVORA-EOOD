@@ -1,6 +1,6 @@
 import type { JsonObject } from '@/lib/lesson-engine-v2';
 
-export type StudioKind = 'cut' | 'frame' | 'colour' | 'sound' | 'diagram' | 'decision' | 'schedule' | 'caption' | 'speed' | 'transition' | 'metrics' | 'budget' | 'storyboard';
+export type StudioKind = 'cut' | 'frame' | 'colour' | 'sound' | 'diagram' | 'decision' | 'schedule' | 'caption' | 'speed' | 'transition' | 'metrics' | 'budget' | 'storyboard' | 'message' | 'roles';
 export type StudioDiagram = { kind: 'light' | 'focus' | 'white-balance' | 'exposure' | 'motion' | 'continuity'; variant: string };
 export type StudioSchedule = { start: number; duration: number; label: string };
 export type StudioCaption = { text: string; position: 'top' | 'middle' | 'bottom'; size: 'small' | 'normal' | 'large' };
@@ -8,14 +8,17 @@ export type StudioCalculation = { label: string; a: number; b: number; operation
 export type StudioBudget = { hours: number; hourly: number; external: number; reservePercent: number; price?: number };
 export type StudioBoard = { scene: 'choice' | 'order' | 'packing' | 'handover' | 'pickup' | 'crop' | 'missing'; caption: string; seconds: number };
 export type StudioReport = { title: string; points: { at: number; value: number }[] };
-export type StudioChoice = { id: string; text: string; clip?: [number, number]; audio?: string; diagram?: StudioDiagram; look?: 'source' | 'warm' | 'cool' | 'dark'; crop?: 'wide' | 'action' | 'edge'; schedule?: StudioSchedule; caption?: StudioCaption; rate?: number; transition?: 'early' | 'sync' | 'tail'; calculation?: StudioCalculation; budget?: StudioBudget; board?: StudioBoard; focus?: [number, number] };
+export type StudioCopy = { part: 'headline' | 'benefit' | 'proof' | 'terms' | 'action' | 'relationship'; text: string };
+export type StudioRoleName = 'seeker' | 'user' | 'payer' | 'approver' | 'adviser';
+export type StudioRole = { person: string; roles: StudioRoleName[]; detail: string };
+export type StudioChoice = { id: string; text: string; clip?: [number, number]; audio?: string; diagram?: StudioDiagram; look?: 'source' | 'warm' | 'cool' | 'dark'; crop?: 'wide' | 'action' | 'edge'; schedule?: StudioSchedule; caption?: StudioCaption; rate?: number; transition?: 'early' | 'sync' | 'tail'; calculation?: StudioCalculation; budget?: StudioBudget; board?: StudioBoard; focus?: [number, number]; copy?: StudioCopy; role?: StudioRole };
 export type StudioSlot = { id: string; text: string; choices: string[]; preview: boolean; phase: 'base' | 'change' };
-export type ClosedStudio = { kind: StudioKind; title: string; context: string; task: string; limit: string; change: string; startHour: number; surface: 'video' | 'poster'; report?: StudioReport; slots: StudioSlot[]; choices: StudioChoice[] };
+export type ClosedStudio = { kind: StudioKind; title: string; context: string; task: string; limit: string; change: string; startHour: number; surface: 'video' | 'poster'; domain: 'video' | 'marketing'; report?: StudioReport; slots: StudioSlot[]; choices: StudioChoice[] };
 
 const record = (value: unknown): JsonObject => value !== null && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {};
 const text = (value: unknown) => typeof value === 'string' ? value : '';
 const records = (value: unknown) => Array.isArray(value) ? value.map(record) : [];
-const kinds: StudioKind[] = ['cut', 'frame', 'colour', 'sound', 'diagram', 'decision', 'schedule', 'caption', 'speed', 'transition', 'metrics', 'budget', 'storyboard'];
+const kinds: StudioKind[] = ['cut', 'frame', 'colour', 'sound', 'diagram', 'decision', 'schedule', 'caption', 'speed', 'transition', 'metrics', 'budget', 'storyboard', 'message', 'roles'];
 const diagramVariants: Record<string, string[]> = { light: ['back', 'side', 'front'], focus: ['back', 'front'], 'white-balance': ['cool', 'neutral', 'warm'], exposure: ['dark', 'balanced', 'clipped'], motion: ['short', 'long'], continuity: ['same', 'cross'] };
 const audioPaths = new Set([...['clean', 'room', 'noise', 'clipped'].map(id => `/academy-labs/perfect-video/closed/voice-${id}.mp3`), ...['early', 'sync'].map(id => `/academy-labs/perfect-video/closed/cut-${id}.mp3`)]);
 const finite = (n: unknown, min: number, max: number): n is number => typeof n === 'number' && Number.isFinite(n) && n >= min && n <= max;
@@ -31,6 +34,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
     const timing = record(preview.schedule);
     const caption = record(preview.caption);
     const calculation = record(preview.calculation), budget = record(preview.budget), board = record(preview.board);
+    const copy = record(preview.copy), role = record(preview.role);
     const focus = Array.isArray(preview.focus) && preview.focus.length === 2 && preview.focus.every(n => finite(n, 0, 3600)) && preview.focus[0] < preview.focus[1] ? preview.focus as [number, number] : undefined;
     const clip = Array.isArray(preview.clip) && preview.clip.length === 2 && preview.clip.every(n => typeof n === 'number' && Number.isFinite(n))
       && preview.clip[0] >= 0 && preview.clip[1] <= 32 && preview.clip[0] < preview.clip[1] ? preview.clip as [number, number] : undefined;
@@ -44,7 +48,9 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
       transition: ['early', 'sync', 'tail'].includes(text(preview.transition)) ? preview.transition as StudioChoice['transition'] : undefined,
       calculation: finite(calculation.a, 0, 1e9) && finite(calculation.b, 0, 1e9) && ['percent', 'multiply', 'divide'].includes(text(calculation.operation)) && text(calculation.label).length <= 100 && text(calculation.unit).length <= 40 ? { label: text(calculation.label), a: calculation.a, b: calculation.b, operation: calculation.operation as StudioCalculation['operation'], aLabel: text(calculation.aLabel).slice(0, 100), bLabel: text(calculation.bLabel).slice(0, 100), unit: text(calculation.unit) } : undefined,
       budget: finite(budget.hours, 0, 10000) && finite(budget.hourly, 0, 100000) && finite(budget.external, 0, 1e8) && finite(budget.reservePercent, 0, 100) && (budget.price === undefined || finite(budget.price, 0, 1e9)) ? budget as StudioBudget : undefined,
-      board: ['choice', 'order', 'packing', 'handover', 'pickup', 'crop', 'missing'].includes(text(board.scene)) && text(board.caption).length <= 120 && finite(board.seconds, 1, 60) ? board as StudioBoard : undefined, focus };
+      board: ['choice', 'order', 'packing', 'handover', 'pickup', 'crop', 'missing'].includes(text(board.scene)) && text(board.caption).length <= 120 && finite(board.seconds, 1, 60) ? board as StudioBoard : undefined, focus,
+      copy: ['headline', 'benefit', 'proof', 'terms', 'action', 'relationship'].includes(text(copy.part)) && text(copy.text).length > 0 && text(copy.text).length <= 500 ? copy as StudioCopy : undefined,
+      role: Array.isArray(role.roles) && role.roles.length > 0 && role.roles.length <= 5 && new Set(role.roles).size === role.roles.length && role.roles.every(r => ['seeker', 'user', 'payer', 'approver', 'adviser'].includes(text(r))) && text(role.person).length > 0 && text(role.person).length <= 80 && text(role.detail).length <= 240 ? role as StudioRole : undefined };
   });
   const ids = new Set(choices.map(choice => choice.id));
   const slots = records(content.left).map(item => ({ id: text(item.id), text: text(item.text), preview: item.preview === true, phase: item.phase === 'change' ? 'change' as const : 'base' as const,
@@ -54,7 +60,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
   const report = record(config.report), points = records(report.points);
   const safeReport = points.length >= 2 && points.length <= 20 && points.every((p, i) => finite(p.at, 0, 3600) && finite(p.value, 0, 300) && (i === 0 || (p.at as number) > (points[i - 1].at as number)))
     ? { title: text(report.title).slice(0, 120), points: points as StudioReport['points'] } : undefined;
-  return { kind: kind as StudioKind, title: text(config.title), context: text(config.initialContext) || text(config.context), task: text(config.task), limit: text(config.limit), change: text(config.change), startHour: finite(config.startHour, 0, 23) ? config.startHour : 9, surface: config.surface === 'poster' ? 'poster' : 'video', report: safeReport, slots, choices };
+  return { kind: kind as StudioKind, title: text(config.title), context: text(config.initialContext) || text(config.context), task: text(config.task), limit: text(config.limit), change: text(config.change), startHour: finite(config.startHour, 0, 23) ? config.startHour : 9, surface: config.surface === 'poster' ? 'poster' : 'video', domain: config.domain === 'marketing' ? 'marketing' : 'video', report: safeReport, slots, choices };
 }
 
 /** Case arithmetic only. A missing denominator never becomes a zero result. */
@@ -83,6 +89,14 @@ export function studioPlaylist(studio: ClosedStudio, matches: Record<string, str
     const choice = studio.choices.find(choice => choice.id === matches[slot.id]);
     return choice ? [choice] : [];
   });
+}
+
+/** A changed condition replaces the corresponding part, retaining the rest of
+ * the learner's draft. All text comes from fixed, provided alternatives. */
+export function studioMessage(studio: ClosedStudio, matches: Record<string, string>) {
+  const chosen = new Map<StudioCopy['part'], StudioCopy>();
+  for (const choice of studioPlaylist(studio, matches)) if (choice.copy) chosen.set(choice.copy.part, choice.copy);
+  return (['headline', 'relationship', 'benefit', 'proof', 'terms', 'action'] as const).flatMap(part => chosen.has(part) ? [chosen.get(part)!] : []);
 }
 
 /** Times are supplied by the case. These checks expose the selected schedule,

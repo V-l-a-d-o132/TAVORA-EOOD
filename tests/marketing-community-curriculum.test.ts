@@ -7,6 +7,7 @@ import { bookmarkTarget, parseBookmark, resumeTargetRoute } from '../src/lib/lea
 import { marketingVisibleWords } from '../src/lib/marketing-reading-count';
 import { readFileSync } from 'node:fs';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
+import { loadPracticalMarketingCandidates } from '../scripts/prepare-practical-marketing-assets.mjs';
 
 vi.mock('../src/lib/supabase', () => ({ supabase: { rpc: vi.fn() } }));
 
@@ -72,7 +73,13 @@ describe('Marketing Basics curriculum and stable lesson locations', () => {
       expect(location.lesson.title).toBe(lesson.title);
       const words = marketingVisibleWords(lesson);
       expect(words).toBe(packet.metrics.find(metric => metric.id === lesson.lesson_id)!.rendered.words);
-      expect(ACADEMY_READING_WORDS[`${lesson.source_module_id}/${lesson.lesson_id}`]).toBe(words);
+      const current = loadPracticalMarketingCandidates().find((item: {lesson:string}) => item.lesson === lesson.lesson_id);
+      expect(current).toBeTruthy();
+      const currentBlocks = lesson.blocks.map(block => ({ ...block, content: block.type === 'objective' ? current.opening : current.amendments?.find((item: {key:string}) => item.key === (block as {key?:string}).key)?.content || block.content }));
+      currentBlocks.push(current.bridge, current.practice);
+      const currentWords = marketingVisibleWords({...lesson, blocks: currentBlocks});
+      expect(currentWords).toBe(current.wordsAfter);
+      expect(ACADEMY_READING_WORDS[`${lesson.source_module_id}/${lesson.lesson_id}`]).toBe(currentWords);
       expect(lesson.blocks.some(block => ['practical_response', 'submission', 'homework', 'reflection'].includes(block.type))).toBe(false);
     }
   });

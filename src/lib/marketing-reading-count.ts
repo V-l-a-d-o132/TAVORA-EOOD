@@ -44,7 +44,13 @@ export function marketingVisibleFragments(lesson: Lesson): string[] {
       case 'step_reveal': objects(c.steps).forEach(step => { put(step.title); put(step.text); }); break;
       case 'flip_cards': objects(c.cards).forEach(card => { put(card.front); put(card.back); }); break;
       case 'sequence_sort': objects(c.items).forEach(item => put(item.text)); break;
-      case 'matching': put(c.body); objects(c.left).forEach(item => put(item.text)); objects(c.right).forEach(item => put(item.text)); break;
+      case 'matching': {
+        const studio = object(c.studio);
+        if (Object.keys(studio).length) {
+          put(studio.title); put(studio.initialContext || studio.context); put(studio.task); put(studio.change); put(studio.limit);
+        } else put(c.body);
+        objects(c.left).forEach(item => put(item.text)); objects(c.right).forEach(item => put(item.text)); break;
+      }
       case 'scenario':
       case 'decision_tree':
       case 'client_simulation': put(c.prompt || c.body); objects(c.options).forEach(option => put(option.label)); break;

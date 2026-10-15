@@ -1,0 +1,17 @@
+{
+  "release": "practical_marketing_first_5_20261015",
+  "bytes": 67511,
+  "sha256": "9ab2c6f2bc59c9c42e413ce811b8a1799e11c098b2d5e11ca6a9047efa4c2af7",
+  "decodedBytes": 506773,
+  "decodedSha256": "4f9c04a5758e4e9da4780b36e00da1e7ef227de74c600d987de382dd1c246943",
+  "parts": [
+    "curriculum.000.base64",
+    "curriculum.001.base64",
+    "curriculum.002.base64",
+    "curriculum.003.base64",
+    "curriculum.004.base64",
+    "curriculum.005.base64",
+    "curriculum.006.base64",
+    "curriculum.007.base64"
+  ]
+}

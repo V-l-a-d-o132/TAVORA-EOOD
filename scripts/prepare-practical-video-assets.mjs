@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
 import { prepareFinalVideoAssets } from './prepare-final-video-assets.mjs';
 import { prepareProductionVideoAssets } from './prepare-production-video-assets.mjs';
+import { preparePracticalMarketingAssets } from './prepare-practical-marketing-assets.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const assetRoot = resolve(root, 'course-assets/perfect-video/practical-20261014');
@@ -36,6 +37,7 @@ export function preparePracticalVideoAssets() {
   writeFileSync(releasePath, `${JSON.stringify(loadPracticalCandidates(), null, 2)}\n`);
   prepareProductionVideoAssets();
   prepareFinalVideoAssets();
+  preparePracticalMarketingAssets();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

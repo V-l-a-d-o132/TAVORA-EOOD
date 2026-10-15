@@ -251,6 +251,9 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
     {block.type !== 'objective' && <LessonGlossary text={visibleGlossaryText(block.title, block.content)} />}
     {renderBlock()}
     {error && <div role="alert" className="mt-5 rounded-xl border academy-accent-border academy-accent-bg p-4 text-sm academy-error"><i className="ri-error-warning-line mr-2" />{error}</div>}
-    {statusMessage && <div role="status" aria-live="polite" className={`mt-5 rounded-xl border p-4 text-sm ${statusMessage.tone}`}><p className="font-semibold"><i className={`${statusMessage.icon} mr-2`} />{statusMessage.title}</p>{s(feedback?.explanation) && <p className="mt-2 leading-6 opacity-90">{s(feedback?.explanation)}</p>}{isCorrect === false && <button type="button" onClick={() => setResult(null)} className="mt-3 font-semibold underline underline-offset-4">Нов опит</button>}</div>}
+    {statusMessage && <div role="status" aria-live="polite" className={`mt-5 rounded-xl border p-4 text-sm ${statusMessage.tone}`}><p className="font-semibold"><i className={`${statusMessage.icon} mr-2`} />{statusMessage.title}</p>{s(feedback?.explanation) && <p className="mt-2 leading-6 opacity-90">{s(feedback?.explanation)}</p>}
+      {!!arr(feedback?.details).length && <ul aria-label="Разбор на решенията" className="mt-4 space-y-3">{arr(feedback?.details).map((detail, index) => <li key={index} className="rounded-lg border academy-border academy-raised p-3 academy-body">
+        <p className="font-semibold academy-text">{s(detail.label)}</p><p className="mt-1 text-xs font-semibold">{detail.correct === true ? 'По условията на случая' : 'Нуждае се от поправка'}</p><p className="mt-2 leading-6">{s(detail.note)}</p>
+      </li>)}</ul>}{isCorrect === false && <button type="button" onClick={() => setResult(null)} className="mt-3 font-semibold underline underline-offset-4">Нов опит</button>}</div>}
   </section>;
 }
