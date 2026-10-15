@@ -1,0 +1,149 @@
+{
+  "verifiedOn": "2026-10-15",
+  "implementationCommit": "26d9aa4b934f51341142cb3b32ec185bafa3454e",
+  "migration": "20261015133829_practical_marketing_6_10_publication",
+  "publication": {
+    "release": "practical_marketing_6_10_20261015",
+    "published": 63,
+    "progressRowsCarried": 0
+  },
+  "publishedChecks": {
+    "modules": [
+      {
+        "lessons": 1,
+        "module_id": "s03-m01"
+      },
+      {
+        "lessons": 12,
+        "module_id": "s03-m06"
+      },
+      {
+        "lessons": 14,
+        "module_id": "s03-m08"
+      },
+      {
+        "lessons": 14,
+        "module_id": "s03-m09"
+      },
+      {
+        "lessons": 12,
+        "module_id": "s03-m10"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s03-m11"
+      }
+    ],
+    "release": "practical_marketing_6_10_20261015",
+    "attemptMd5": "b34007782ee6dc16cd695321622278c2",
+    "totalLessons": 63,
+    "newTotalBlocks": 1114,
+    "originalBlocks": 988,
+    "validatedLessons": 63,
+    "graderMapsMatched": 63,
+    "publishedStatuses": 63,
+    "requiredNewBlocks": 126,
+    "safeRetryFeedback": 63,
+    "historicalAttempts": 1459,
+    "safeSelectedFeedback": 63,
+    "stagedContentMatched": 63,
+    "untargetedContentMd5": "405df99a1dc38e0e95df2ee0bb1db6f2",
+    "freeSilkOpeningAccess": true,
+    "familyMarkersPreserved": 63,
+    "openingBodiesPreserved": 63,
+    "originalBlocksRetained": 988,
+    "priorMarketingFeedback": 41,
+    "originVersionsPreserved": 63,
+    "anonymousMarketingAccess": false,
+    "unplannedOriginalChanges": 0,
+    "archivedOldVersionProgress": 0,
+    "oldVersionProgressRemaining": 0,
+    "publicStudiosWithoutGraderFields": 63
+  },
+  "capacity": {
+    "wordsBefore": 79858,
+    "wordsAfter": 107025,
+    "linesBefore": 7579,
+    "linesAfter": 9506,
+    "counting": "Visible rendered fields; source line breaks including blank lines, independent of screen wrapping."
+  },
+  "checks": {
+    "automatedUnique": 74,
+    "browser": 17,
+    "actualPrivateGraderReleaseTests": 10,
+    "syntheticCiReleaseTests": 10,
+    "allIncorrectAlternativesTested": true,
+    "all63LessonsCompletedThroughClosedRpc": true,
+    "previous240VideoLessonsRegression": true,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "distributionScan": "passed",
+    "visualReview": "workflow at 320px and 1280px"
+  },
+  "additionalChecks": {
+    "publisherReplay": {
+      "published": 63,
+      "alreadyPublished": true
+    },
+    "olderProgressRowsPreserved": 3,
+    "previousPublishedVersionProgressRowsBefore": 0,
+    "historyAttemptsPreserved": 1459,
+    "sourceAccountEmpty": true
+  },
+  "privateAccessChecks": {
+    "table": {
+      "rls": true,
+      "anon": false,
+      "forceRls": true,
+      "serviceRole": false,
+      "authenticated": false
+    },
+    "functions": [
+      {
+        "name": "marketing_practice_feedback",
+        "searchPath": [
+          "search_path=\"\""
+        ],
+        "anonExecute": false,
+        "serviceRoleExecute": false,
+        "authenticatedExecute": false
+      },
+      {
+        "name": "publish_practical_marketing_6_10",
+        "searchPath": [
+          "search_path=\"\""
+        ],
+        "anonExecute": false,
+        "serviceRoleExecute": false,
+        "authenticatedExecute": false
+      }
+    ]
+  },
+  "securityReview": {
+    "newPrivateTableNoPolicy": "Intentional owner-only table: FORCE RLS and all client privileges revoked.",
+    "existingWarnings": [
+      {
+        "name": "function_search_path_mutable",
+        "count": 8
+      },
+      {
+        "name": "extension_in_public",
+        "count": 1
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "count": 1
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "count": 1
+      }
+    ]
+  },
+  "deployment": {
+    "main": "published",
+    "supabase": "published",
+    "readdyProductionDeployment": "User pull and publish required; not verified by this release."
+  }
+}
