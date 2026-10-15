@@ -1,0 +1,112 @@
+{
+  "release": "practical_marketing_11_15_20261015",
+  "verifiedDate": "2026-10-15",
+  "implementationCommit": "e293104e09e0d5794dd3d6971a0aeba3402777b3",
+  "implementationTree": "a8f72088b927f9783d0f54807c64789573a6cbf3",
+  "migration": "20261015192236_practical_marketing_11_15_publication",
+  "publication": {
+    "release": "practical_marketing_11_15_20261015",
+    "published": 51,
+    "progressRowsCarried": 0
+  },
+  "verification": {
+    "modules": [
+      {
+        "lessons": 10,
+        "module_id": "s03-m04"
+      },
+      {
+        "lessons": 12,
+        "module_id": "s03-m12"
+      },
+      {
+        "lessons": 12,
+        "module_id": "s03-m13"
+      },
+      {
+        "lessons": 9,
+        "module_id": "s03-m15"
+      },
+      {
+        "lessons": 8,
+        "module_id": "s03-m16"
+      }
+    ],
+    "release": "practical_marketing_11_15_20261015",
+    "attemptMd5": "b34007782ee6dc16cd695321622278c2",
+    "totalLessons": 51,
+    "newTotalBlocks": 939,
+    "originalBlocks": 837,
+    "validatedLessons": 51,
+    "graderMapsMatched": 51,
+    "publishedStatuses": 51,
+    "requiredNewBlocks": 102,
+    "safeRetryFeedback": 51,
+    "historicalAttempts": 1459,
+    "safeSelectedFeedback": 51,
+    "stagedContentMatched": 51,
+    "untargetedContentMd5": "1585fa7028c855ee3d23b6cf605be61d",
+    "freeSilkOpeningAccess": true,
+    "familyMarkersPreserved": 51,
+    "openingBodiesPreserved": 51,
+    "originalBlocksRetained": 837,
+    "priorMarketingFeedback": 104,
+    "originVersionsPreserved": 51,
+    "anonymousMarketingAccess": false,
+    "unplannedOriginalChanges": 0,
+    "archivedOldVersionProgress": 0,
+    "oldVersionProgressRemaining": 0,
+    "publicStudiosWithoutGraderFields": 51
+  },
+  "history": {
+    "attemptsBefore": 1459,
+    "attemptsAfter": 1459,
+    "attemptSnapshotUnchanged": true,
+    "untargetedContentUnchanged": true,
+    "preExistingStaleProgressRows": 1,
+    "staleProgressPreserved": true,
+    "sourceVersionProgressRows": 0,
+    "progressRowsCarried": 0
+  },
+  "privateAccess": {
+    "forcedRls": true,
+    "clientTableGrants": 0,
+    "clientPublisherGrants": 0
+  },
+  "functionMd5": {
+    "complete_lesson_block": "04e770998b1768c60b3bab120d9b2009",
+    "marketing_practice_feedback": "1315f71a1a9150007b4ce508a80e5143"
+  },
+  "idempotentReplay": {
+    "published": 51,
+    "alreadyPublished": true
+  },
+  "tests": {
+    "unitAndDatabasePassed": 44,
+    "archivalPrivateSourceTestsSkipped": 2,
+    "newReleaseTestsWithRealKeys": 10,
+    "newReleaseTestsWithSyntheticCiKeys": 10,
+    "browserPassed": 10,
+    "browserWidths": [
+      320,
+      1280
+    ],
+    "browserThemes": [
+      "light",
+      "dark"
+    ],
+    "typecheck": true,
+    "lint": true,
+    "distributionCheck": true,
+    "build": true
+  },
+  "volume": {
+    "wordsBefore": 75429,
+    "wordsAfter": 99104,
+    "linesBefore": 6355,
+    "linesAfter": 7978,
+    "originalBlocks": 837,
+    "addedRequiredBlocks": 102
+  },
+  "readdyProductionUiVerified": false
+}
