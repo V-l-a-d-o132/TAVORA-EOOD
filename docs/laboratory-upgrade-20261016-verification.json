@@ -1,0 +1,341 @@
+{
+  "release": "academy_laboratories_20261016",
+  "verifiedDate": "2026-10-16",
+  "sourceBaseCommit": "43f3a0111c0816300ddeebe742b282746e37e540",
+  "courses": [
+    "s01",
+    "s02",
+    "s03"
+  ],
+  "features": {
+    "sharedFiniteDraftComparison": true,
+    "comparisonDoesNotSubmitOrGrantXp": true,
+    "silkCases": 2,
+    "silkWorkbookChecks": 8,
+    "silkDraftsStoreOnlyFiniteChoices": true,
+    "videoDemonstrations": 11,
+    "videoRehearsalCases": 22,
+    "marketingCrmCases": 20,
+    "marketingEmailCases": 10,
+    "retainedCalculatorBoundaryCases": 7,
+    "marketingCorrectionReusesExecution": true,
+    "marketingCapacityHours": [
+      76,
+      57
+    ]
+  },
+  "tests": {
+    "unitAndComponentPassed": 95,
+    "unitFiles": 15,
+    "browserUniqueScenariosPassed": 44,
+    "newBrowserScenarios": 12,
+    "regressionBrowserScenarios": 32,
+    "browserWidths": [
+      320,
+      375,
+      1280
+    ],
+    "browserThemes": [
+      "light",
+      "dark"
+    ],
+    "typecheck": true,
+    "lint": true,
+    "explicitChangedFileDistributionScan": true,
+    "productionBuild": true,
+    "sandboxParentDocumentAccessDenied": true,
+    "browserWebSecurityEnabled": true,
+    "downloadedFilesOpenedOfflineInChromium": [
+      "silk-prototype-workbook",
+      "video-case-workbook",
+      "marketing-practice-html"
+    ]
+  },
+  "browserExecution": {
+    "partitionedForEnvironmentTimeLimit": true,
+    "firstBatchTimeLimitSeconds": 600,
+    "batches": [
+      {
+        "planned": 44,
+        "completed": 37,
+        "passed": 37,
+        "end": null
+      },
+      {
+        "planned": 7,
+        "completed": 7,
+        "passed": 6,
+        "end": "failed"
+      },
+      {
+        "planned": 1,
+        "completed": 1,
+        "passed": 1,
+        "end": "passed"
+      }
+    ],
+    "resolvedLegacyTestChange": "Unfold the CRM demonstration list before selecting its case button.",
+    "latestUniqueResults": [
+      {
+        "title": "light: all eleven video demonstrations retain choices at 320px",
+        "status": "passed",
+        "durationMs": 40801
+      },
+      {
+        "title": "light: silk prototype keeps its records, choices and checks at 320px",
+        "status": "passed",
+        "durationMs": 15719
+      },
+      {
+        "title": "light: all eleven video demonstrations retain choices at 1280px",
+        "status": "passed",
+        "durationMs": 19296
+      },
+      {
+        "title": "light: silk prototype keeps its records, choices and checks at 1280px",
+        "status": "passed",
+        "durationMs": 12857
+      },
+      {
+        "title": "light: all six audio files play and keep playback through a theme change",
+        "status": "passed",
+        "durationMs": 10397
+      },
+      {
+        "title": "light: embedded request desk accepts keyboard submission and retains its journal",
+        "status": "passed",
+        "durationMs": 2925
+      },
+      {
+        "title": "light: s01 lesson blocks preserve work, feedback and XP",
+        "status": "passed",
+        "durationMs": 32705
+      },
+      {
+        "title": "light: s02 lesson blocks preserve work, feedback and XP",
+        "status": "passed",
+        "durationMs": 33483
+      },
+      {
+        "title": "light: s03 lesson blocks preserve work, feedback and XP",
+        "status": "passed",
+        "durationMs": 47742
+      },
+      {
+        "title": "light: payment, publishing and request journals survive theme changes",
+        "status": "passed",
+        "durationMs": 23937
+      },
+      {
+        "title": "dark: all eleven video demonstrations retain choices at 320px",
+        "status": "passed",
+        "durationMs": 17001
+      },
+      {
+        "title": "dark: silk prototype keeps its records, choices and checks at 320px",
+        "status": "passed",
+        "durationMs": 12257
+      },
+      {
+        "title": "dark: all eleven video demonstrations retain choices at 1280px",
+        "status": "passed",
+        "durationMs": 22943
+      },
+      {
+        "title": "dark: silk prototype keeps its records, choices and checks at 1280px",
+        "status": "passed",
+        "durationMs": 21463
+      },
+      {
+        "title": "dark: all six audio files play and keep playback through a theme change",
+        "status": "passed",
+        "durationMs": 12100
+      },
+      {
+        "title": "dark: embedded request desk accepts keyboard submission and retains its journal",
+        "status": "passed",
+        "durationMs": 3658
+      },
+      {
+        "title": "dark: s01 lesson blocks preserve work, feedback and XP",
+        "status": "passed",
+        "durationMs": 25957
+      },
+      {
+        "title": "dark: s02 lesson blocks preserve work, feedback and XP",
+        "status": "passed",
+        "durationMs": 24731
+      },
+      {
+        "title": "dark: s03 lesson blocks preserve work, feedback and XP",
+        "status": "passed",
+        "durationMs": 34926
+      },
+      {
+        "title": "dark: payment, publishing and request journals survive theme changes",
+        "status": "passed",
+        "durationMs": 47100
+      },
+      {
+        "title": "Standalone teaching files remain functional and do not call external services",
+        "status": "passed",
+        "durationMs": 4435
+      },
+      {
+        "title": "light: s01 comparison preserves grading, restores choices and exports a useful record",
+        "status": "passed",
+        "durationMs": 8350
+      },
+      {
+        "title": "light: s02 comparison preserves grading, restores choices and exports a useful record",
+        "status": "passed",
+        "durationMs": 6380
+      },
+      {
+        "title": "light: s03 comparison preserves grading, restores choices and exports a useful record",
+        "status": "passed",
+        "durationMs": 6785
+      },
+      {
+        "title": "light: Silk draft resumes and a single downloaded workbook really works offline",
+        "status": "passed",
+        "durationMs": 5648
+      },
+      {
+        "title": "light: a new video goal changes the decision and the real demonstration",
+        "status": "passed",
+        "durationMs": 5960
+      },
+      {
+        "title": "light: Marketing prediction, correction and changed capacity survive a portable export",
+        "status": "passed",
+        "durationMs": 2760
+      },
+      {
+        "title": "dark: s01 comparison preserves grading, restores choices and exports a useful record",
+        "status": "passed",
+        "durationMs": 8274
+      },
+      {
+        "title": "dark: s02 comparison preserves grading, restores choices and exports a useful record",
+        "status": "passed",
+        "durationMs": 5069
+      },
+      {
+        "title": "dark: s03 comparison preserves grading, restores choices and exports a useful record",
+        "status": "passed",
+        "durationMs": 5465
+      },
+      {
+        "title": "dark: Silk draft resumes and a single downloaded workbook really works offline",
+        "status": "passed",
+        "durationMs": 6175
+      },
+      {
+        "title": "dark: a new video goal changes the decision and the real demonstration",
+        "status": "passed",
+        "durationMs": 8140
+      },
+      {
+        "title": "dark: Marketing prediction, correction and changed capacity survive a portable export",
+        "status": "passed",
+        "durationMs": 4294
+      },
+      {
+        "title": "light 320px: all four guest practices, retry, reload and voluntary purchase bridge",
+        "status": "passed",
+        "durationMs": 14261
+      },
+      {
+        "title": "light 1280px: all four guest practices, retry, reload and voluntary purchase bridge",
+        "status": "passed",
+        "durationMs": 9849
+      },
+      {
+        "title": "dark 320px: all four guest practices, retry, reload and voluntary purchase bridge",
+        "status": "passed",
+        "durationMs": 10250
+      },
+      {
+        "title": "dark 1280px: all four guest practices, retry, reload and voluntary purchase bridge",
+        "status": "passed",
+        "durationMs": 11077
+      },
+      {
+        "title": "a paid learner finishes the same four tasks and continues directly to the site module",
+        "status": "passed",
+        "durationMs": 10144
+      },
+      {
+        "title": "a signed-in learner can revalidate guest work without losing it or buying again",
+        "status": "passed",
+        "durationMs": 3727
+      },
+      {
+        "title": "l02-01: finite operation, changed condition and feedback on a mobile light theme",
+        "status": "passed",
+        "durationMs": 4440
+      },
+      {
+        "title": "l03-02: finite operation, changed condition and feedback on a mobile light theme",
+        "status": "passed",
+        "durationMs": 4461
+      },
+      {
+        "title": "l06-03: finite operation, changed condition and feedback on a mobile light theme",
+        "status": "passed",
+        "durationMs": 4097
+      },
+      {
+        "title": "l09-01: finite operation, changed condition and feedback on a mobile light theme",
+        "status": "passed",
+        "durationMs": 4933
+      },
+      {
+        "title": "Marketing practice works on mobile, exports an offline HTML and applies stops",
+        "status": "passed",
+        "durationMs": 4278
+      }
+    ]
+  },
+  "privacy": {
+    "studentUploadsRequired": false,
+    "openTextNumericOrUrlAnswersRequired": false,
+    "externalPaidAccountRequired": false,
+    "localWorkbooksGrantCourseCredit": false,
+    "newAnalyticsTrackerAdded": false
+  },
+  "boundaries": {
+    "supabaseSchemaOrContentChanged": false,
+    "privateGraderOrExamBankChanged": false,
+    "learnerHistoryMigrated": false,
+    "videoOfflineWorkbookIncludesMovingImageOrAudio": false,
+    "hostedBrowserChecksUseControlledFixtures": true,
+    "readdyProductionUiVerified": false,
+    "readdyPullAndPublishRequired": true,
+    "fullAccessibilityAudit": false,
+    "conversionOrLongTermLearningMeasured": false
+  },
+  "sourceSha256": {
+    "e2e/academy-lab-upgrade.pw.ts": "66591b1dc83b2eee99c5e679561f945f9810ea880cc1eeb9883c6df37a6e2603",
+    "e2e/marketing-practice.pw.ts": "98b8080b268ac03b8b717a6e959a376e2c89dc573790ebb647b17367028cd969",
+    "playwright.themes.config.ts": "b2d3910a6ae60015d90c8197ea36828c0406eaf8188e7c5a520bd7acc2b1bd43",
+    "public/academy/marketing-basics-practice.html": "8237d11376038440c4a55ad16095c73750a4ef7ab3b16cbc2f885d784825dd93",
+    "src/components/academy/ClosedPracticeStudio.tsx": "1a29d92c4b2640d93c18090c753ce32417ba4d79e269a921b42bbdcea335c4eb",
+    "src/components/academy/VideoDecisionLab.tsx": "0993bdcd670cd60610787221c1aaf035c35cb499f30e890c5f0629cb87a0f22c",
+    "src/components/academy/VideoLabChallenge.tsx": "b6f273fa40917bb5cef644b32496aaafeb4597e44e899793275affdf671ec3f6",
+    "src/data/silk-road-start.ts": "1f9351f0bc2d2ae512e54a26d19adbdef7b66bae39cb03f102f1f412dd3968ca",
+    "src/data/video-lab-challenges.ts": "14cbb7959d8eda0d32c906c5d8237fc35a14a97a85af9d4daccb21a62334cbfc",
+    "src/lib/closed-practice-studio.ts": "5f322dbaf131de7c75f2a89130a06a3c62f86c2d6d62166d0a7476f06cd745ca",
+    "src/lib/portable-lab-theme.ts": "bde0101d6a93e503248e689a6953e5e76f583ce72ea6c52dd70aa6562dc8f65b",
+    "src/lib/silk-lab-draft.ts": "69c6529f82d54c74dd8cffec7ebe270895a6ca01ef3158f17ebe0e3a5c240fd3",
+    "src/lib/silk-road-practice.ts": "3b5986fd4e021122c4a4fc5b91deaf31e6e57526cd0f1fe8e5d58d7821d5017d",
+    "src/lib/video-lab-workbook.ts": "790295070aa3c94d02ea87185c17ad4fb6e9298cf822398d8ee980b2efeaaf42",
+    "src/pages/academy-lab/document.ts": "c88208c45a5e9a8bc2663e11b32308a33decd59fff9fb04f7bf277749503671c",
+    "src/pages/academy-lab/page.tsx": "9145cabadb48ef24f941d2cd5d85e50452b907e33030f1e34d17c1ef7b30bd5d",
+    "src/pages/perfect-video-start/page.tsx": "d7a303b0d63459747b8730c42622e98db7268a71ac092301b461859a7f70d255",
+    "src/pages/silk-road-start/page.tsx": "c95d272c140b8d8a0fdc5c1515c02e18bf9d40180bbfba83250153025254b692",
+    "tests/laboratory-upgrade.test.tsx": "8f46d8961bd0ec13e9a237287dcdc9c24a2feaa480eaf9ffb2826aa8144b5b0f",
+    "tests/marketing-practice-dom.test.ts": "c170c1108d1a06fb6db615c7efba1a23bca6063b0fce9739a16cb02b6907d820"
+  }
+}

@@ -16,6 +16,7 @@ test('Marketing practice works on mobile, exports an offline HTML and applies st
   await expect(page.locator('#cpl-tests-result')).toContainText('7/7');
   await page.getByRole('button',{name:'Изпълни 20 случая',exact:true}).click();
   await expect(page.locator('#crm-result')).toContainText('15 записа · 11 задачи');
+  await page.getByText('Всички CRM входове и демонстрации',{exact:true}).click();
   await page.getByRole('button',{name:'Изпълни S01',exact:true}).click();
   await expect(page.locator('#crm-result')).toContainText('15 записа · 11 задачи');
   await page.getByRole('button',{name:'Изпълни 10 имейл случая',exact:true}).click();

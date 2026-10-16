@@ -1,4 +1,4 @@
-export const SILK_PRACTICE_VERSION = '2026-10-08.1';
+export const SILK_PRACTICE_VERSION = '2026-10-16.2';
 
 export interface SilkPracticeCase {
   id: 'workshop' | 'bakery';

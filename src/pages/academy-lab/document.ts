@@ -6,8 +6,8 @@ export { labHtml, labScript };
 export function buildLabDocument() {
   const script = labScript.replace(/<\/script/gi, '<\\/script');
   const heightScript = `
-    const reportHeight = () => parent.postMessage({type:'tavora-lab-height',height:Math.ceil(document.querySelector('main').getBoundingClientRect().height)}, '*');
-    new ResizeObserver(reportHeight).observe(document.querySelector('main'));
+    const reportHeight = () => { if(parent !== window) parent.postMessage({type:'tavora-lab-height',height:Math.ceil(document.querySelector('main').getBoundingClientRect().height)}, '*'); };
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(reportHeight).observe(document.querySelector('main'));
     reportHeight();`;
   return labHtml
     .replace(/<p><a href="index\.html"[\s\S]*?<\/p>/, '')

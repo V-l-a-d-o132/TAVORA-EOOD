@@ -17,6 +17,54 @@ function open(source=html) {
   opened.push(dom);return {dom,downloads};
 }
 describe('Marketing practice page interactions and portable export',()=>{
+  it('asks for a CRM prediction before execution and rechecks a correction without another effect',()=>{
+    const {dom}=open(),d=dom.window.document;
+    const select=(id:string,value:string)=>{const el=d.getElementById(id) as HTMLSelectElement;el.value=value;el.dispatchEvent(new dom.window.Event('change'));};
+    const click=(id:string)=>(d.getElementById(id) as HTMLButtonElement).click();
+    expect(d.getElementById('crm-cases')!.textContent).not.toContain('Един запис и една задача за уточняване.');
+    expect((d.getElementById('crm-predict') as HTMLButtonElement).disabled).toBe(true);
+    select('crm-prediction','booking_unconfirmed');select('crm-effect','yes');click('crm-predict');
+    expect(d.querySelectorAll('#crm-log tr')).toHaveLength(1);
+    expect(d.getElementById('crm-feedback')!.textContent).toContain('Свери прогнозата');
+    select('crm-prediction','needs_dimensions');click('crm-predict');
+    expect(d.querySelectorAll('#crm-log tr')).toHaveLength(1);
+    expect(d.getElementById('crm-progress')!.textContent).toContain('1/20');
+    click('crm-again');select('crm-prediction','needs_dimensions');select('crm-effect','no');click('crm-predict');
+    expect(d.querySelectorAll('#crm-log tr')).toHaveLength(2);
+    expect(d.getElementById('crm-result')!.textContent).toContain('1 записа · 1 задачи');
+    expect(d.getElementById('crm-feedback')!.textContent).toContain('Няма нов ефект');
+    click('crm-all');expect(d.getElementById('crm-progress')!.textContent).toContain('1/20');
+    click('crm-reset');expect(d.getElementById('crm-progress')!.textContent).toContain('0/20');
+    expect(d.querySelectorAll('#crm-log tr')).toHaveLength(0);
+  });
+  it('distinguishes a late refusal from a sent email and preserves the exercise through theme changes',()=>{
+    const {dom}=open(),d=dom.window.document;
+    const select=(id:string,value:string)=>{const el=d.getElementById(id) as HTMLSelectElement;el.value=value;el.dispatchEvent(new dom.window.Event('change'));};
+    select('email-study','E09');select('email-prediction','draft_ready');(d.getElementById('email-predict') as HTMLButtonElement).click();
+    expect(d.getElementById('email-feedback')!.textContent).toContain('Черновата е потисната');
+    select('email-prediction','suppressed_after_recheck');(d.getElementById('email-predict') as HTMLButtonElement).click();
+    expect(d.getElementById('email-progress')!.textContent).toContain('1/10');
+    expect(d.querySelectorAll('#email-log tr')).toHaveLength(1);
+    (d.querySelector('[data-theme-choice="dark"]') as HTMLButtonElement).click();
+    expect(d.documentElement.dataset.theme).toBe('dark');expect(d.querySelectorAll('#email-log tr')).toHaveLength(1);
+    (d.querySelector('[data-theme-choice="light"]') as HTMLButtonElement).click();
+    expect((d.getElementById('email-prediction') as HTMLSelectElement).value).toBe('suppressed_after_recheck');
+    expect(d.getElementById('email-result')!.textContent).toContain('0 изпратени писма');
+  });
+  it('compares explicit model assumptions and revises capacity when the resource falls',()=>{
+    const {dom}=open(),d=dom.window.document;
+    const select=(id:string,value:string)=>{const el=d.getElementById(id) as HTMLSelectElement;el.value=value;el.dispatchEvent(new dom.window.Event('change'));};
+    const click=(id:string)=>(d.getElementById(id) as HTMLButtonElement).click();
+    d.getElementById('cpl-form')!.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));click('cpl-save');
+    select('close-rate','10');d.getElementById('cpl-form')!.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));
+    expect(d.getElementById('cpl-compare')!.textContent).toContain('Разлика: -9,00');
+    select('project-action','fulfil');click('project-check');expect(d.getElementById('project-feedback')!.textContent).toContain('Стъпката следва');
+    select('project-hours','57');expect(d.getElementById('project-preview')!.textContent).toContain('28 поръчки');
+    select('project-action','fulfil');click('project-check');expect(d.getElementById('project-feedback')!.textContent).toContain('не се побират');
+    select('project-action','renegotiate');click('project-check');expect(d.getElementById('project-feedback')!.textContent).toContain('Стъпката следва');
+    select('project-offer','B');expect(d.getElementById('project-preview')!.textContent).toContain('Търсенето на този вариант е неизвестно');
+    select('project-action','pilot');click('project-check');expect(d.getElementById('project-feedback')!.textContent).toContain('Стъпката следва');
+  });
   it('offers all seven boundary inputs as finite selections without an open answer or upload',()=>{
     const {dom}=open(),d=dom.window.document;
     expect(d.querySelectorAll('input,textarea,[contenteditable="true"]')).toHaveLength(0);

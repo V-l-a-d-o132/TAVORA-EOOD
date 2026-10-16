@@ -134,3 +134,19 @@ export function studioPlanText(studio: ClosedStudio, matches: Record<string, str
     slot.text, studio.choices.find(choice => choice.id === matches[slot.id])?.text || 'Няма избрано решение.', '',
   ]), studio.limit, '', 'Това е чернова по предоставения учебен случай. Файлът не удостоверява оценка, собствен проект или реален бизнес резултат.'].join('\n');
 }
+
+/** Compare only provided choices. A comparison is not a grading result. */
+export function studioComparison(studio: ClosedStudio, before: Record<string, string>, after: Record<string, string>) {
+  const a = studioMatches(studio, { matches: before }), b = studioMatches(studio, { matches: after });
+  const description = (id?: string) => studio.choices.find(choice => choice.id === id)?.text || 'Няма избрано решение.';
+  return studio.slots.filter(slot => slot.phase !== 'change' || a[slot.id] || b[slot.id]).map(slot => ({
+    id: slot.id, label: slot.text, before: description(a[slot.id]), after: description(b[slot.id]), changed: a[slot.id] !== b[slot.id],
+  }));
+}
+
+export function studioComparisonText(studio: ClosedStudio, before: Record<string, string>, after: Record<string, string>) {
+  return ['Сравнение на два учебни варианта', '', studio.context, '', studio.task,
+    ...(studio.change ? ['', 'Промяна в задачата', studio.change] : []), '',
+    ...studioComparison(studio, before, after).flatMap(row => [row.label, `Запазен вариант: ${row.before}`, `Текущ вариант: ${row.after}`, row.changed ? 'Изборът е променен.' : 'Изборът е запазен.', '']),
+    studio.limit, '', 'Сравнението описва избрани части. То не удостоверява оценка, завършен урок или външен резултат.'].join('\n');
+}

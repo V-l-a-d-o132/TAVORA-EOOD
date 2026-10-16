@@ -1,5 +1,6 @@
 import { SILK_PRACTICE_VERSION, type SilkPracticeCase } from '@/data/silk-road-start';
 import labScript from '../../public/academy-labs/silk-road/request-lab.js?raw';
+import { withPortableLabTheme } from './portable-lab-theme';
 
 export interface SilkPagePlan {
   price: string;
@@ -12,16 +13,42 @@ export interface SilkPagePlan {
 export interface SilkCheck { id: string; label: string; passed: boolean; help: string }
 export const emptySilkPlan = (): SilkPagePlan => ({ price: '', source: '', action: '', duplicates: '', missingContact: '' });
 
+export const SILK_PLAN_FIELDS: { key: keyof SilkPagePlan; label: string; placeholder: string; options: [string, string][] }[] = [
+  { key: 'price', label: 'Каква цена ще покажеш в евро?', placeholder: 'Избери цена от материалите', options: ['16', '18', '20', '25'].map(price => [price, `${price} €`]) },
+  { key: 'source', label: 'На кой източник стъпва цената?', placeholder: 'Избери източник', options: [['advert', 'Старата обява'], ['current', 'Актуалните утвърдени условия'], ['voice', 'Желанието на посетителя']] },
+  { key: 'action', label: 'Какво обещава бутонът?', placeholder: 'Избери действие', options: [['confirm', 'Незабавно потвърждение'], ['request', 'Запитване и последващо уточняване'], ['pay', 'Плащане и автоматично потвърждение']] },
+  { key: 'duplicates', label: 'При повторение на една заявка', placeholder: 'Избери поведение', options: [['new-record', 'Създаваме нов запис'], ['same-id', 'Връщаме същия резултат без втори запис']] },
+  { key: 'missingContact', label: 'Ако контактът липсва', placeholder: 'Избери поведение', options: [['guess', 'Добавяме предполагаем контакт'], ['ask', 'Искаме контакт и пазим полетата']] },
+];
+
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]!));
 const parsePrice = (value: string) => /^\d+(?:[.,]\d{1,2})?$/.test(value.trim()) ? Number(value.trim().replace(',', '.')) : NaN;
 
 export function checkSilkPlan(study: SilkPracticeCase, plan: SilkPagePlan): SilkCheck[] {
+  // Keep this function self-contained: the same check is embedded in the offline workbook.
+  const parsePrice = (value: string) => /^\d+(?:[.,]\d{1,2})?$/.test(value.trim()) ? Number(value.trim().replace(',', '.')) : NaN;
   return [
     { id: 'source', label: 'Цена от актуалните утвърдени условия', passed: plan.source === 'current' && parsePrice(plan.price) === study.price, help: `Свери показаните утвърдени условия за ${study.name}. Обявата е стар материал. Посочената актуална цена е ${study.price} €.` },
     { id: 'action', label: 'Действието съответства на предоставените права и данни', passed: plan.action === 'request', help: 'Нямаш потвърдени часове или наличности. Бутонът трябва да приема запитване, след което човек уточнява условията.' },
     { id: 'duplicates', label: 'Повторението не създава втори запис', passed: plan.duplicates === 'same-id', help: 'Пази номера на едно действие при повторение. Не сливай различни заявки само заради общ контакт.' },
     { id: 'contact', label: 'Липсващият контакт не се измисля', passed: plan.missingContact === 'ask', help: 'Покажи кое поле липсва и запази въведеното. AI не може да добави контакт, който посетителят не е предоставил.' },
   ];
+}
+
+/** One portable file, with the same finite controls, artifact and checks as online. */
+export function buildSilkWorkbook(study: SilkPracticeCase, supplied: SilkPagePlan): string {
+  const plan = Object.fromEntries(SILK_PLAN_FIELDS.map(field => [field.key, field.options.some(([id]) => id === supplied[field.key]) ? supplied[field.key] : ''])) as unknown as SilkPagePlan;
+  const fields = SILK_PLAN_FIELDS.map(field => `<label for="plan-${field.key}">${escapeHtml(field.label)}</label><select data-plan="${field.key}" id="plan-${field.key}"><option value="">${escapeHtml(field.placeholder)}</option>${field.options.map(([id, label]) => `<option value="${id}"${plan[field.key] === id ? ' selected' : ''}>${escapeHtml(label)}</option>`).join('')}</select>`).join('');
+  const source = `<section aria-label="Материали и избори"><h2>Материали за този случай</h2><ul>${study.facts.map(fact => `<li>${escapeHtml(fact)}</li>`).join('')}</ul><p>${escapeHtml(study.source)}</p><details><summary>Промени плана на страницата</summary>${fields}</details><p>Промяната изчиства временните записи. Проверявай новия вариант отначало. Всички входове са предоставени учебни избори.</p></section>`;
+  const checks = `<section><h2>Изпитай своя вариант</h2><p>Проверката използва временни учебни записи. Не дава XP и не записва резултат в Академията.</p><button type="button" id="workbook-check">Провери този вариант</button><ul id="workbook-results" aria-live="polite"></ul></section>`;
+  const spec = JSON.stringify(study).replace(/</g, '\\u003c');
+  const script = `<script>
+const workbookStudy=${spec};const inspectWorkbookPlan=(${checkSilkPlan.toString()});
+const workbookResults=document.getElementById('workbook-results');const workbookButton=document.getElementById('workbook-check');
+document.querySelectorAll('[data-plan]').forEach(select=>select.addEventListener('change',()=>{if(window.TavoraSilkPrototype.isBusy()){select.value=plan[select.dataset.plan];return;}plan[select.dataset.plan]=select.value;window.TavoraSilkPrototype.reset();workbookResults.replaceChildren();document.getElementById('offer-price').textContent=plan.price?plan.price+' €':'Цена за уточняване';document.getElementById('send').textContent=plan.action==='confirm'?'Потвърди веднага':plan.action==='pay'?'Плати и получи потвърждение':'Изпрати запитване';}));
+workbookButton.addEventListener('click',async()=>{if(window.TavoraSilkPrototype.isBusy()){workbookResults.textContent='Изчакай текущото учебно изпращане, после провери варианта.';return;}workbookButton.disabled=true;document.querySelectorAll('[data-plan]').forEach(select=>select.disabled=true);try{const results=[...inspectWorkbookPlan(workbookStudy,plan),...await checkPrototype(document,window.TavoraSilkPrototype)];workbookResults.replaceChildren(...results.map(result=>{const li=document.createElement('li');li.textContent=(result.passed?'Преминато: ':'Нужна е поправка: ')+result.label+(result.passed?'':' — '+result.help);li.dataset.passed=String(result.passed);return li;}));}finally{workbookButton.disabled=false;document.querySelectorAll('[data-plan]').forEach(select=>select.disabled=false);}});
+</script>`;
+  return withPortableLabTheme(buildSilkPrototype(study, plan).replace(`<h1>${escapeHtml(study.service)}</h1>`, `<h2>${escapeHtml(study.service)}</h2>`).replace('<main>', `<main><h1>Работна тетрадка: страница и запитване</h1><p>Самостоятелна локална практика. Работи без интернет; няма качване, външно изпращане или собствен писмен отговор.</p>${source}`).replace('</main>', `${checks}${script}</main>`));
 }
 
 /** The same artifact is previewed and exercised; checks concern this supplied case only. */
@@ -43,7 +70,7 @@ const store={all:()=>entries.slice(),save:item=>entries.push({...item,confirmed:
 const draw=()=>{document.getElementById('record-count').textContent=String(entries.length);document.getElementById('records').replaceChildren(...entries.map(item=>{const row=document.createElement('tr');[item.id,item.name,item.contact,item.preferredDate||'неуточнена',item.confirmed?'Потвърдено без проверка':'Запитване; чака уточнение'].forEach(value=>{const cell=document.createElement('td');cell.textContent=value;row.appendChild(cell)});return row}));};
 const send=async repeat=>{if(busy)return;busy=true;const button=document.getElementById('send');button.disabled=true;document.getElementById('repeat').disabled=true;document.getElementById('clear').disabled=true;try{let input={name:document.getElementById('name').value.trim(),contact:document.getElementById('contact').value.trim(),preferredDate:document.getElementById('date').value};let same=last&&JSON.stringify(input)===JSON.stringify({name:last.name,contact:last.contact,preferredDate:last.preferredDate});let request=repeat&&last?{...last}:{...input,id:same?last.id:'T-'+(++counter)};if(plan.duplicates==='new-record'&&repeat)request.id='T-'+(++counter);if(plan.missingContact==='guess'&&!request.contact)request.contact='guessed@example.invalid';document.getElementById('status').textContent='Изпращане… още няма потвърждение.';const result=await originalProcess(request,document.getElementById('mode').value,store);if(result.state==='accepted'||result.state==='duplicate'||result.state==='error')last=request;document.getElementById('status').textContent=result.message;if(result.state==='accepted'&&plan.action!=='request')document.getElementById('status').textContent='Потвърдено без проверка на наличност или график.';if(result.field)document.getElementById(result.field).focus();draw();return result}finally{busy=false;button.disabled=false;document.getElementById('repeat').disabled=!last;document.getElementById('clear').disabled=false;}};
 document.getElementById('request-form').addEventListener('submit',event=>{event.preventDefault();void send(false)});document.getElementById('repeat').addEventListener('click',()=>void send(true));document.getElementById('clear').addEventListener('click',()=>{store.clear();last=null;document.getElementById('repeat').disabled=true;draw();document.getElementById('status').textContent='Изчистени са само учебните записи.'});document.getElementById('storage-note').textContent='Списъкът е временен за тази отворена страница.';
-window.TavoraSilkPrototype={store,send,reset:()=>{entries=[];last=null;counter=0;draw()}};
+window.TavoraSilkPrototype={store,send,isBusy:()=>busy,reset:()=>{entries=[];last=null;counter=0;draw();document.getElementById('repeat').disabled=true;document.getElementById('status').textContent='Още няма изпратено запитване.'}};
 const checkPrototype=${exerciseSilkPrototype.toString()};
 window.addEventListener('message',async event=>{if(event.source!==parent||event.data?.type!=='tavora-silk-check'||typeof event.data.requestId!=='string')return;try{const results=await checkPrototype(document,window.TavoraSilkPrototype);parent.postMessage({type:'tavora-silk-check-result',requestId:event.data.requestId,results},'*')}catch{parent.postMessage({type:'tavora-silk-check-result',requestId:event.data.requestId,error:true},'*')}});
 const reportHeight=()=>{if(parent!==window)parent.postMessage({type:'tavora-silk-prototype-height',height:Math.ceil(document.querySelector('main').getBoundingClientRect().height)},'*')};if(typeof ResizeObserver!=='undefined'){new ResizeObserver(reportHeight).observe(document.querySelector('main'));reportHeight();}

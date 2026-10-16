@@ -111,7 +111,7 @@ function Graphic({ kind, variant, second, duration, id }: { kind: VideoLabKind; 
   </svg>;
 }
 
-export default function VideoDecisionLab({ kind = 'story' }: { kind?: VideoLabKind }) {
+export default function VideoDecisionLab({ kind = 'story', request }: { kind?: VideoLabKind; request?: { variant: string; nonce: number } }) {
   const lab = labs[kind];
   const [variant, setVariant] = useState(lab.variants[0].id);
   const [second, setSecond] = useState(0);
@@ -124,6 +124,10 @@ export default function VideoDecisionLab({ kind = 'story' }: { kind?: VideoLabKi
   const duration = kind === 'pacing' ? variant === 'fast' ? 2.8 : 9 : kind === 'motion' ? 6 : 8;
   const selected = lab.variants.find(v => v.id === variant) || lab.variants[0];
   useEffect(() => { setVariant(labs[kind].variants[0].id); setSecond(0); setPlaying(false); setAudioError(false); }, [kind]);
+  useEffect(() => {
+    if (!request || !labs[kind].variants.some(item => item.id === request.variant)) return;
+    audio.current?.pause(); setVariant(request.variant); setSecond(0); setPlaying(false); setAudioError(false);
+  }, [kind, request]);
   useEffect(() => {
     if (!playing || !animated) return;
     let previous = performance.now();

@@ -2,7 +2,8 @@ import ThemeSelector from '@/components/academy/ThemeSelector';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SILK_PRACTICE_CASES, SILK_START_QUESTIONS, SILK_START_TERMS } from '@/data/silk-road-start';
-import { buildSilkPrototype, checkSilkPlan, emptySilkPlan, type SilkCheck, type SilkPagePlan } from '@/lib/silk-road-practice';
+import { SILK_PLAN_FIELDS, buildSilkPrototype, buildSilkWorkbook, checkSilkPlan, emptySilkPlan, type SilkCheck, type SilkPagePlan } from '@/lib/silk-road-practice';
+import { readSilkLabDraft, saveSilkLabDraft } from '@/lib/silk-lab-draft';
 import inquiries from '@/data/silk-road-packet/inquiries.csv?raw';
 import advertUrl from '@/data/silk-road-packet/old-advert.svg?url';
 import voiceUrl from '@/data/silk-road-packet/voicemail.wav?url';
@@ -16,8 +17,10 @@ export default function SilkRoadStartPage() {
   const [goal, setGoal] = useState('website');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [diagnosed, setDiagnosed] = useState(false);
-  const [caseIndex, setCaseIndex] = useState(0);
-  const [plan, setPlan] = useState<SilkPagePlan>(emptySilkPlan);
+  const [initialDraft] = useState(readSilkLabDraft);
+  const [caseIndex, setCaseIndex] = useState(initialDraft.caseIndex);
+  const [plans, setPlans] = useState(initialDraft.plans);
+  const [storageReady, setStorageReady] = useState(true);
   const [checks, setChecks] = useState<SilkCheck[] | null>(null);
   const [executed, setExecuted] = useState<SilkCheck[] | null>(null);
   const [verified, setVerified] = useState<string[]>([]);
@@ -28,8 +31,11 @@ export default function SilkRoadStartPage() {
   const pending = useRef<string | null>(null);
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const study = SILK_PRACTICE_CASES[caseIndex];
+  const plan = plans[study.id];
   const prototype = useMemo(() => buildSilkPrototype(study, plan), [study, plan]);
   const passed = checks?.every(item => item.passed) && executed?.every(item => item.passed);
+
+  useEffect(() => { setStorageReady(saveSilkLabDraft({ caseIndex, plans })); }, [caseIndex, plans]);
 
   useEffect(() => {
     const receive = (event: MessageEvent) => {
@@ -54,7 +60,7 @@ export default function SilkRoadStartPage() {
     pending.current = null; if (timeout.current) clearTimeout(timeout.current);
     setBusy(false); setChecks(null); setExecuted(null); setError('');
     setVerified(previous => previous.filter(id => id !== study.id));
-    setPlan(previous => ({ ...previous, [key]: value }));
+    setPlans(previous => ({ ...previous, [study.id]: { ...previous[study.id], [key]: value } }));
   };
 
   const run = () => {
@@ -67,7 +73,20 @@ export default function SilkRoadStartPage() {
 
   const chooseCase = (index: number) => {
     pending.current = null; if (timeout.current) clearTimeout(timeout.current);
-    setBusy(false); setCaseIndex(index); setPlan(emptySilkPlan()); setChecks(null); setExecuted(null); setError('');
+    setBusy(false); setCaseIndex(index); setChecks(null); setExecuted(null); setError('');
+  };
+
+  const resetPlan = () => {
+    pending.current = null; if (timeout.current) clearTimeout(timeout.current);
+    setBusy(false); setChecks(null); setExecuted(null); setError('');
+    setVerified(previous => previous.filter(id => id !== study.id));
+    setPlans(previous => ({ ...previous, [study.id]: emptySilkPlan() }));
+  };
+
+  const downloadWorkbook = () => {
+    const url = URL.createObjectURL(new Blob([buildSilkWorkbook(study, plan)], { type: 'text/html;charset=utf-8' }));
+    const link = document.createElement('a'); link.href = url; link.download = `tavora-${study.id}-lab.html`;
+    document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const renderChecks = (items: SilkCheck[]) => <ul className="space-y-3">{items.map(item => <li key={item.id} className={`rounded-xl border p-4 ${item.passed ? 'academy-success-border academy-success-bg' : 'academy-warning-border academy-warning-bg'}`}><p className="font-medium">{item.passed ? 'Преминато' : 'Нужна е поправка'}: {item.label}</p>{!item.passed && <p className="mt-2 text-sm leading-6 academy-body">{item.help}</p>}</li>)}</ul>;
@@ -113,13 +132,12 @@ export default function SilkRoadStartPage() {
       <section id="project" className="mt-12 scroll-mt-6 border-t academy-border pt-8">
         <h2 className="text-2xl font-semibold">Подготви прототип</h2><p className="mt-3 leading-7 academy-body">Текущ случай: <strong className="academy-text">{study.name}</strong>. {study.question}</p>
         <p className="mt-3 text-sm leading-7 academy-muted">Изборите ти променят страницата и поведението на формата. Първо направи собствен опит. След проверката ще видиш конкретната поправка.</p>
+        <p aria-live="polite" className="mt-3 text-sm leading-6 academy-muted">{!storageReady ? 'Браузърът не позволява запазване. Работата продължава в тази страница; свали тетрадката преди затваряне.' : initialDraft.restored ? 'Възстановени са последните учебни избори. Изпитай прототипа отново; запазена чернова не означава премината проверка.' : 'Плановете за двата случая се пазят в този браузър. Резултатите от проверката са за тази сесия и не дават XP.'}</p>
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
-          <label>Каква цена ще покажеш в евро?<select value={plan.price} onChange={event => change('price', event.target.value)} className={fieldClass}><option value="">Избери цена от материалите</option>{[16,18,20,25].map(price => <option key={price} value={String(price)}>{price} €</option>)}</select></label>
-          <label>На кой източник стъпва цената?<select value={plan.source} onChange={event => change('source', event.target.value)} className={fieldClass}><option value="">Избери източник</option><option value="advert">Старата обява</option><option value="current">Актуалните утвърдени условия</option><option value="voice">Желанието на посетителя</option></select></label>
-          <label>Какво обещава бутонът?<select value={plan.action} onChange={event => change('action', event.target.value)} className={fieldClass}><option value="">Избери действие</option><option value="confirm">Незабавно потвърждение</option><option value="request">Запитване и последващо уточняване</option><option value="pay">Плащане и автоматично потвърждение</option></select></label>
-          <label>При повторение на една заявка<select value={plan.duplicates} onChange={event => change('duplicates', event.target.value)} className={fieldClass}><option value="">Избери поведение</option><option value="new-record">Създаваме нов запис</option><option value="same-id">Връщаме същия резултат без втори запис</option></select></label>
-          <label>Ако контактът липсва<select value={plan.missingContact} onChange={event => change('missingContact', event.target.value)} className={fieldClass}><option value="">Избери поведение</option><option value="guess">Добавяме предполагаем контакт</option><option value="ask">Искаме контакт и пазим полетата</option></select></label>
+          {SILK_PLAN_FIELDS.map(field => <label key={field.key}>{field.label}<select value={plan[field.key]} onChange={event => change(field.key, event.target.value)} className={fieldClass}><option value="">{field.placeholder}</option>{field.options.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>)}
         </div>
+        <div className="mt-5 flex flex-wrap gap-3"><button type="button" disabled={busy} onClick={resetPlan} className="rounded-xl border academy-border-strong px-4 py-3 text-sm academy-body">Изчисти плана за този случай</button><button type="button" disabled={busy} onClick={downloadWorkbook} className="rounded-xl border academy-border-strong px-4 py-3 text-sm academy-text">Изтегли работеща тетрадка · HTML</button></div>
+        <p className="mt-3 text-xs leading-6 academy-muted">Тетрадката съдържа условията, избрания план, работещата форма и проверки. Отваря се като един HTML файл без интернет. Можеш да променяш предоставените избори и да изпитваш резултата отново.</p>
         <details className="mt-7 rounded-2xl border academy-border p-4" open><summary className="cursor-pointer font-semibold">Твоята страница: пробвай формата</summary><iframe ref={frame} title="Твоят учебен прототип" srcDoc={prototype} sandbox="allow-scripts allow-forms" className="mt-4 block w-full rounded-xl border-0 bg-white" style={{ height }} /></details>
       </section>
 
