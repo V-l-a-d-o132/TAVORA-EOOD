@@ -1,0 +1,219 @@
+{
+  "release": "practical_silk_20261016",
+  "verifiedDate": "2026-10-16",
+  "implementationCommit": "8c94106652baf7397077a328e52b746dcd2454d3",
+  "implementationTree": "503299b7aedc83b45f9c9564f3519b301684291a",
+  "migration": "20261016073844_practical_silk_studio_publication",
+  "publication": {
+    "release": "practical_silk_20261016",
+    "published": 74,
+    "progressRowsCarried": 3
+  },
+  "verification": {
+    "modules": [
+      {
+        "lessons": 4,
+        "module_id": "s01-m01"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s01-m02"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s01-m03"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s01-m04"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s01-m05"
+      },
+      {
+        "lessons": 10,
+        "module_id": "s01-m06"
+      },
+      {
+        "lessons": 4,
+        "module_id": "s01-m07"
+      },
+      {
+        "lessons": 4,
+        "module_id": "s01-m08"
+      },
+      {
+        "lessons": 4,
+        "module_id": "s01-m09"
+      },
+      {
+        "lessons": 4,
+        "module_id": "s01-m10"
+      },
+      {
+        "lessons": 4,
+        "module_id": "s01-m11"
+      }
+    ],
+    "totalLessons": 74,
+    "finalExamBanks": 1,
+    "newTotalBlocks": 1256,
+    "originalBlocks": 1108,
+    "validatedLessons": 74,
+    "graderMapsMatched": 74,
+    "publishedStatuses": 74,
+    "requiredNewBlocks": 148,
+    "safeRetryFeedback": 74,
+    "finalExamQuestions": 33,
+    "currentProgressRows": 3,
+    "safeSelectedFeedback": 74,
+    "stagedContentMatched": 74,
+    "familyMarkersPreserved": 74,
+    "openingBodiesPreserved": 74,
+    "originalBlocksRetained": 1108,
+    "originVersionsPreserved": 74,
+    "openAnswerOrUploadBlocks": 0,
+    "unplannedOriginalChanges": 0,
+    "archivedOldVersionProgress": 3,
+    "oldVersionProgressRemaining": 0,
+    "preExistingStaleProgressRows": 105,
+    "publicStudiosWithoutGraderFields": 74,
+    "finalExamPublicAndPrivateUnchanged": true
+  },
+  "history": {
+    "attemptsBefore": 1459,
+    "attemptsAfter": 1459,
+    "attemptSnapshotMd5": "b34007782ee6dc16cd695321622278c2",
+    "attemptSnapshotUnchanged": true,
+    "untargetedContentMd5": "4ecfa4a65909d96571e05424a97a49a9",
+    "untargetedContentUnchanged": true,
+    "preExistingStaleProgressRows": 105,
+    "staleProgressMd5": "21744a71732f1bda7ac12588913c34cc",
+    "staleProgressPreserved": true,
+    "archivedSourceProgressMd5": "317d1ae60b3afbbacf4ac381b610cd11",
+    "sourceVersionProgressRows": 3,
+    "progressRowsCarried": 3,
+    "creditVerification": {
+      "rows": 3,
+      "noNewCompletionClaims": true,
+      "xpMatchesRetainedBlocks": true,
+      "newStudiosNotPrecredited": 3,
+      "onlyPreviouslyEarnedKeys": true
+    }
+  },
+  "access": {
+    "forcedRls": true,
+    "capturedAt": "2026-10-16T11:05:12.790147+00:00",
+    "functionMd5": {
+      "submit_course_exam": "204dea024131a516a461700e18bde5ad",
+      "complete_lesson_block": "0c4f5fee5894129da27cb1725df499c7",
+      "submit_silk_road_exam": "139a8980485ff76f6f5eae4c04adfbfd",
+      "silk_practice_feedback": "7daac86eb005a47490afb4150ea41508",
+      "marketing_practice_feedback": "2d4089c46234c8395b337c065963349a"
+    },
+    "clientTableGrants": 0,
+    "anonymousFreeAccess": true,
+    "anonymousPaidAccess": false,
+    "clientFeedbackGrants": 0,
+    "freePublishedLessons": 4,
+    "clientPublisherGrants": 0,
+    "freePracticePositions": [
+      {
+        "lesson": "l01-01",
+        "position": 30
+      },
+      {
+        "lesson": "l01-02",
+        "position": 30
+      },
+      {
+        "lesson": "l01-03",
+        "position": 30
+      },
+      {
+        "lesson": "l01-04",
+        "position": 30
+      }
+    ],
+    "anonymousMarketingAccess": false
+  },
+  "securityAdvisors": {
+    "warningFindingsBefore": 11,
+    "warningFindingsAfter": 11,
+    "addedWarningFindings": [],
+    "addedInfoFindings": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "practical_silk_upgrades",
+          "type": "table",
+          "schema": "academy_private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      }
+    ]
+  },
+  "idempotentReplay": {
+    "published": 74,
+    "alreadyPublished": true
+  },
+  "tests": {
+    "unitAndDatabasePassed": 79,
+    "testFiles": 12,
+    "releaseTestsWithRealPrivateKeys": 12,
+    "releaseTestsWithSyntheticCiKeys": 12,
+    "browserPassedWithRealPrivateKeys": 10,
+    "browserPassedWithSyntheticCiKeys": 10,
+    "browserWidths": [
+      320,
+      1280
+    ],
+    "browserThemes": [
+      "light",
+      "dark"
+    ],
+    "guestJourney": true,
+    "signedInOwnerJourney": true,
+    "guestToAccountRestore": true,
+    "changedConditionPreviews": true,
+    "typecheck": true,
+    "lint": true,
+    "distributionCheck": true,
+    "productionBuild": true
+  },
+  "volume": {
+    "wordsBefore": 89150,
+    "wordsAfter": 119382,
+    "logicalLinesBefore": 7779,
+    "logicalLinesAfter": 10081,
+    "originalBlocks": 1108,
+    "addedRequiredBlocks": 148
+  },
+  "freeModule": {
+    "module": "s01-m01",
+    "lessons": 4,
+    "case": "Измислено учебно велоателие „Орбита“",
+    "finiteChoiceSlotsPerLesson": 4,
+    "alternativesPerSlot": 3,
+    "changedConditionPerLesson": 1,
+    "bridgeAfterAllFourLessons": true,
+    "existingCheckout": true,
+    "paidAccountsContinueWithoutRepurchase": true
+  },
+  "privacy": {
+    "studentUploadsRequired": false,
+    "openTextOrNumberAnswersRequired": false,
+    "ownPaidAccountRequired": false,
+    "privateGradingMapsInNewGitFiles": false
+  },
+  "releaseBoundary": {
+    "supabaseContentPublished": true,
+    "githubMainUpdated": true,
+    "readdyProductionUiVerified": false,
+    "readdyPullAndPublishRequired": true,
+    "conversionUpliftMeasured": false,
+    "realWorldSkillCertified": false
+  }
+}
