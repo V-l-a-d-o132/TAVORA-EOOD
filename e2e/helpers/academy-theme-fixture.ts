@@ -9,7 +9,7 @@ const USER = { id: '00000000-0000-4000-8000-000000000091', email: 'student@examp
 const opening = openings.lessons[0];
 
 export type ThemeLessonFixture = { blocks: Array<{ key: string; type: string; [key: string]: unknown }>; title?: string; objective?: string; matchingExpected?: Record<string,string>; matchingFeedback?: {slot:string;label:string;success:string;retry:string}[] };
-type ThemeAccessFixture = { hasFullAccess?: boolean; unlockedModules?: string[]; completedFreeModule?: boolean };
+type ThemeAccessFixture = { hasFullAccess?: boolean; unlockedModules?: string[]; completedFreeModule?: boolean; anonymous?: boolean };
 
 /** Auth, saves and grading are all synthetic; no request reaches a live service. */
 export async function prepareAcademyTheme(page: Page, preference = 'dark', fixture?: ThemeLessonFixture, access: ThemeAccessFixture = {}) {
@@ -18,14 +18,15 @@ export async function prepareAcademyTheme(page: Page, preference = 'dark', fixtu
   const requests: Record<string, number> = {};
   let progress = { current_block_key: fixture?.blocks[0].key || opening.first_page.key, completed_block_keys: [] as string[], block_state: {} as Record<string, unknown>, xp: 0, score_percent: null, mastery_status: 'learning', completed_at: null, last_activity_at: '2026-10-13T12:00:00Z' };
   let bookmark = { moduleId: 's01-m01', lessonId: 'l01-01', timestamp: '2026-10-13T12:00:00Z' };
-  await page.addInitScript(({ user, expires, preference }) => {
+  await page.addInitScript(({ user, expires, preference, anonymous }) => {
     if (window !== window.top) return;
-    localStorage.setItem('sb-dashboard-fixture-auth-token', JSON.stringify({ user, access_token: 'synthetic-theme-fixture', refresh_token: 'synthetic-refresh', token_type: 'bearer', expires_in: 3600, expires_at: expires }));
+    if (anonymous) localStorage.removeItem('sb-dashboard-fixture-auth-token');
+    else localStorage.setItem('sb-dashboard-fixture-auth-token', JSON.stringify({ user, access_token: 'synthetic-theme-fixture', refresh_token: 'synthetic-refresh', token_type: 'bearer', expires_in: 3600, expires_at: expires }));
     // Seed only the first visit; a reload must restore the user's later choice.
-    const key = 'tavora:academy-theme:' + user.id;
+    const key = 'tavora:academy-theme:' + (anonymous ? 'guest' : user.id);
     if (!localStorage.getItem(key)) localStorage.setItem(key, preference);
     localStorage.setItem('cookie_consent', JSON.stringify({ necessary: true, analytics: false, marketing: false }));
-  }, { user: USER, expires: Math.floor(Date.now() / 1000) + 3600, preference });
+  }, { user: USER, expires: Math.floor(Date.now() / 1000) + 3600, preference, anonymous: access.anonymous === true });
   await page.route('**/*', async route => {
     const url = new URL(route.request().url());
     if (url.hostname === '127.0.0.1') return route.continue();

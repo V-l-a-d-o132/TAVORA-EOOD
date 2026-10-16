@@ -7,8 +7,10 @@ import PdfPresentationViewer from '@/pages/module/components/PdfPresentationView
 import InlineQuiz from '@/pages/module/components/InlineQuiz';
 import ModuleLoginGate from '@/pages/module/components/ModuleLoginGate';
 import type { QuizQuestion } from '@/lib/academy-content';
+import { FreeSilkJourney, FreeSilkBridge, FreeSilkAccountRestore } from '@/components/academy/FreeSilkJourney';
 
 interface LessonContentViewerProps {
+  canContinueSilk?: boolean;
   moduleId: string;
   modNumber: string | number;
   modTitle: string;
@@ -56,6 +58,7 @@ export default function LessonContentViewer({
   lessons,
   activeLessonIndex,
   activeLesson,
+  canContinueSilk = false,
   isModule1,
   user,
   hasFullAccess,
@@ -96,14 +99,17 @@ export default function LessonContentViewer({
   }, [activeLesson.id, onSlideProgress]);
   const isInteractiveCourse = /^s0[123]-/.test(moduleId);
   const nextModuleInCourse = nextModule?.id.split('-')[0] === moduleId.split('-')[0] ? nextModule : undefined;
+  const [restoreEpoch, setRestoreEpoch] = useState(0);
 
   return (
     <main className={`min-w-0 space-y-5 ${isInteractiveCourse && allCompleted ? 'pb-28 md:pb-0' : ''}`}>
+      {isModule1 && <FreeSilkJourney completedLessons={lessons.filter(l => progressMap?.[l.id]?.completed).map(l => l.id)} activeLessonId={activeLesson.id} guest={!user} />}
+      {isModule1 && user && <FreeSilkAccountRestore onProgress={(id,p)=>onTrustedProgress?.(id,{completed:typeof p.completedAt==='string',xp:p.xp,scorePercent:p.scorePercent,masteryStatus:p.masteryStatus})} onFinished={()=>setRestoreEpoch(n=>n+1)} />}
       {isInteractiveCourse && !moduleId.startsWith('s01-') && modHomeworkPrompt && <details className="rounded-2xl border academy-border academy-surface p-4 academy-body">
         <summary className="cursor-pointer text-sm font-semibold academy-text">Практически резултат от модул {modNumber}</summary>
         <p className="mt-3 whitespace-pre-line text-sm leading-7">{modHomeworkPrompt}</p>
       </details>}
-      <div key={`${moduleId}:${activeLesson.id}`}>
+      <div key={`${moduleId}:${activeLesson.id}:${restoreEpoch}`}>
         {/* Interactive lesson mode for all modules */}
         {isInteractiveCourse ? (
           <div className="min-h-[480px]">
@@ -114,7 +120,6 @@ export default function LessonContentViewer({
               onComplete={() => markLessonComplete(activeLesson.id)}
               onNextLesson={hasNextLesson ? goNext : undefined}
               hasNextLesson={hasNextLesson}
-              lockAfterComplete={moduleId === 's01-m01' && !user && activeLessonIndex === lessons.length - 1}
               isUnlocked={isModuleUnlocked}
               hasFullAccess={hasFullAccess}
               onSlideProgress={reportSlideProgress}
@@ -310,7 +315,8 @@ export default function LessonContentViewer({
           </>
         )}
       </div>
-      {isInteractiveCourse && allCompleted && <section aria-label="Модулът е преминат" className="rounded-2xl border academy-success-border academy-success-bg p-5 academy-text">
+      {isInteractiveCourse && isModule1 && allCompleted && <FreeSilkBridge canContinue={canContinueSilk} />}
+      {isInteractiveCourse && !isModule1 && allCompleted && <section aria-label="Модулът е преминат" className="rounded-2xl border academy-success-border academy-success-bg p-5 academy-text">
         <h2 className="text-lg font-semibold">Уроците в модула са преминати</h2>
         {nextModuleInCourse ? <Link to={`/module/${nextModuleInCourse.id}`} className="mt-4 inline-flex min-h-11 items-center rounded-xl academy-primary px-5 py-3 text-sm font-semibold">Следващ модул: {nextModuleInCourse.title}</Link>
           : <Link to="/dashboard" className="mt-4 inline-flex min-h-11 items-center rounded-xl border academy-border-strong px-5 py-3 text-sm font-semibold">Към таблото с напредъка</Link>}

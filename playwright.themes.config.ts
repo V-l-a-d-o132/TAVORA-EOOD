@@ -1,11 +1,12 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e', testMatch: ['**/academy-{themes,lab-themes,catalog-theme,practice-studios,production-studios,final-studios,marketing-studios,marketing-next-studios,marketing-third-studios,marketing-final-studios}.pw.ts', '**/marketing-practice.pw.ts'], outputDir: 'test-results/themes',
+  testDir: './e2e', testMatch: ['**/academy-{themes,lab-themes,catalog-theme,practice-studios,production-studios,final-studios,marketing-studios,marketing-next-studios,marketing-third-studios,marketing-final-studios,silk-studios}.pw.ts', '**/marketing-practice.pw.ts'], outputDir: 'test-results/themes',
   timeout: 45000, workers: 1,
   use: {
     baseURL: 'http://127.0.0.1:5191', browserName: 'chromium',
-    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH } : undefined,
+    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+      args: process.env.PLAYWRIGHT_CHROMIUM_ARGS ? JSON.parse(process.env.PLAYWRIGHT_CHROMIUM_ARGS) : undefined } : undefined,
     viewport: { width: 1280, height: 1000 }, screenshot: 'only-on-failure',
   },
   webServer: {

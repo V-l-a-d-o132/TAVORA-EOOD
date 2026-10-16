@@ -1,0 +1,23 @@
+{
+  "release": "practical_silk_20261016",
+  "bytes": 121248,
+  "sha256": "78dd2e3891375ebd5442cf83ea838c5666846b81e44f4be86c7cb4b3d3733f06",
+  "decodedBytes": 994098,
+  "decodedSha256": "206e8867922b4a45a4454ae7ae15ff924a5f2bca8e8220ab6fbf1b0d7b013a5d",
+  "parts": [
+    "curriculum.000.base64",
+    "curriculum.001.base64",
+    "curriculum.002.base64",
+    "curriculum.003.base64",
+    "curriculum.004.base64",
+    "curriculum.005.base64",
+    "curriculum.006.base64",
+    "curriculum.007.base64",
+    "curriculum.008.base64",
+    "curriculum.009.base64",
+    "curriculum.010.base64",
+    "curriculum.011.base64",
+    "curriculum.012.base64",
+    "curriculum.013.base64"
+  ]
+}

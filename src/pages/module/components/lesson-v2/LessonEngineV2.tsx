@@ -15,6 +15,7 @@ import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import { notifyLearningProgressChanged, recordLessonVisit } from '@/lib/learning-resume';
 import { countVisibleLessonWords, lessonReadingDuration } from '@/lib/academy-reading-time';
 import { closedLessonState } from '@/lib/closed-lesson-state';
+import { readFreeSilkProgress, saveFreeSilkProgress } from '@/lib/free-silk-progress';
 
 interface Props {
   moduleId: string;
@@ -65,6 +66,7 @@ export default function LessonEngineV2({
   const [showPreviewGate, setShowPreviewGate] = useState(false);
   const draftQueue = useRef<LessonDraftQueue | null>(null);
   const completionReported = useRef(false);
+  const [guestVersion, setGuestVersion] = useState('');
   const saveVisit = useCallback(async () => {
     if (!userId || !lesson || previewMode) return;
     try {
@@ -100,17 +102,25 @@ export default function LessonEngineV2({
   useEffect(() => {
     if (!lesson) return;
     const progress = lesson.versionChanged ? null : lesson.progress;
-    const states = closedLessonState(lesson.blocks, progress?.blockState || {});
-    const done = completedFromProgress(progress);
-    const resumeIndex = Math.max(0, lesson.blocks.findIndex((block) => block.key === progress?.currentBlockKey));
+    const guest = !userId && !previewMode ? readFreeSilkProgress(lesson) : null;
+    const states = closedLessonState(lesson.blocks, guest?.blockState || progress?.blockState || {});
+    const done = guest ? new Set(guest.completedBlockKeys) : completedFromProgress(progress);
+    const resumeIndex = Math.max(0, lesson.blocks.findIndex((block) => block.key === (guest?.currentBlockKey || progress?.currentBlockKey)));
     setBlockState(states);
     setCompleted(done);
-    setXp(progress?.xp || 0);
+    setXp(guest?.xp ?? progress?.xp ?? 0);
     setMasteryStatus(progress?.masteryStatus || 'learning');
     setCurrentIndex(resumeIndex);
     setShowPreviewGate(false);
     completionReported.current = false;
-  }, [lesson]);
+    setGuestVersion(lesson.versionId);
+  }, [lesson, userId, previewMode]);
+
+  useEffect(() => {
+    if (!userId && !previewMode && lesson && guestVersion === lesson.versionId) {
+      saveFreeSilkProgress(lesson, lesson.blocks[currentIndex]?.key || null, blockState, completed);
+    }
+  }, [blockState, completed, currentIndex, guestVersion, lesson, previewMode, userId]);
 
   useEffect(() => {
     setSaveStatus('idle');
@@ -193,7 +203,7 @@ export default function LessonEngineV2({
     <header className="mb-5 overflow-hidden rounded-3xl border academy-border academy-card-gradient p-5 shadow-2xl academy-shadow sm:p-7 md:p-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold academy-body"><span className="rounded-full border academy-accent-border academy-accent-bg px-3 py-1 academy-accent">Практически урок</span><span><i className="ri-time-line mr-1" />{lessonReadingDuration(moduleId, lesson.lessonId, countVisibleLessonWords(lesson))}</span><span><i className="ri-star-line mr-1 academy-warning" />{xp} XP</span></div>
-        <span aria-live="polite" className={`text-xs ${saveStatus === 'error' ? 'academy-accent' : 'academy-muted'}`}>{saveStatus === 'saving' ? 'Запазване…' : saveStatus === 'saved' ? 'Прогресът е запазен' : saveStatus === 'error' ? 'Проблем при запазване' : userId ? 'Автоматично запазване' : 'Преглед без запис'}</span>
+        <span aria-live="polite" className={`text-xs ${saveStatus === 'error' ? 'academy-accent' : 'academy-muted'}`}>{saveStatus === 'saving' ? 'Запазване…' : saveStatus === 'saved' ? 'Прогресът е запазен' : saveStatus === 'error' ? 'Проблем при запазване' : userId ? 'Автоматично запазване' : 'Практика без профил'}</span>
       </div>
       <h1 className="mt-5 break-words text-2xl font-semibold leading-[1.15] tracking-tight [overflow-wrap:anywhere] sm:text-4xl">{lesson.title}</h1>
       {lesson.subtitle && <p className="mt-3 max-w-2xl text-base leading-7 academy-body">{lesson.subtitle}</p>}
@@ -243,7 +253,10 @@ export default function LessonEngineV2({
         if (saved === false) throw new Error('Бележките още не са запазени. Провери връзката и опитай отново.');
         const response = await completeLessonBlock(lesson, currentBlock, payload);
         if (userId && response.progress) notifyLearningProgressChanged(userId);
-        if (response.feedback.complete === true) setCompleted((previous) => new Set(previous).add(currentBlock.key));
+        if (response.feedback.complete === true) {
+          setCompleted((previous) => new Set(previous).add(currentBlock.key));
+          if (!userId && !completed.has(currentBlock.key)) setXp(previous => previous + currentBlock.points);
+        }
         const serverDone = response.progress?.completed_block_keys;
         if (Array.isArray(serverDone)) setCompleted(new Set(serverDone.filter((key): key is string => typeof key === 'string')));
         if (typeof response.progress?.xp === 'number') setXp(response.progress.xp);
@@ -263,7 +276,7 @@ export default function LessonEngineV2({
 
     <div className="fixed inset-x-0 bottom-0 z-30 border-t academy-border academy-nav px-4 pb-[calc(.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl md:sticky md:mt-5 md:rounded-2xl md:border md:p-3" aria-label="Навигация в урока">
       {!canAdvance && !isLast && <p className="mb-2 text-center text-xs academy-warning">{lessonBlockPresentation(currentBlock).continueHint}</p>}
-      <div className="mx-auto flex max-w-4xl items-center gap-3"><button type="button" disabled={currentIndex === 0} onClick={() => goTo(currentIndex - 1)} className="rounded-xl border academy-border px-4 py-3 text-sm academy-body disabled:opacity-30"><i className="ri-arrow-left-line mr-2" />Назад</button><div className="min-w-0 flex-1 text-center text-xs academy-muted"><span className="hidden sm:inline">Стъпка </span>{currentIndex + 1} / {lesson.blocks.length}</div>{!isLast ? <button type="button" disabled={!canAdvance} title={!canAdvance ? 'Завърши текущата задача' : undefined} onClick={() => goTo(currentIndex + 1)} className="rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-950/30 disabled:cursor-not-allowed disabled:academy-disabled disabled:academy-subtle disabled:shadow-none">Следваща<i className="ri-arrow-right-line ml-2" /></button> : hasNextLesson ? <button type="button" disabled={!allComplete} onClick={onNextLesson} className="rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:academy-disabled disabled:academy-subtle">Следващ урок<i className="ri-arrow-right-line ml-2" /></button> : <span className={`rounded-xl px-5 py-3 text-sm font-semibold ${allComplete ? 'academy-success-bg academy-success' : 'academy-raised academy-subtle'}`}>{allComplete ? 'Урокът е завършен' : 'Завърши всички задачи'}</span>}</div>
+      <div className="mx-auto flex max-w-4xl items-center gap-3"><button type="button" disabled={currentIndex === 0} onClick={() => goTo(currentIndex - 1)} className="rounded-xl border academy-border px-4 py-3 text-sm academy-body disabled:opacity-30"><i className="ri-arrow-left-line mr-2" aria-hidden="true" />Назад</button><div className="min-w-0 flex-1 text-center text-xs academy-muted"><span className="hidden sm:inline">Стъпка </span>{currentIndex + 1} / {lesson.blocks.length}</div>{!isLast ? <button type="button" disabled={!canAdvance} title={!canAdvance ? 'Завърши текущата задача' : undefined} onClick={() => goTo(currentIndex + 1)} className="rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-950/30 disabled:cursor-not-allowed disabled:academy-disabled disabled:academy-subtle disabled:shadow-none">Следваща<i className="ri-arrow-right-line ml-2" aria-hidden="true" /></button> : hasNextLesson ? <button type="button" disabled={!allComplete} onClick={onNextLesson} className="rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:academy-disabled disabled:academy-subtle">Следващ урок<i className="ri-arrow-right-line ml-2" aria-hidden="true" /></button> : <span className={`rounded-xl px-5 py-3 text-sm font-semibold ${allComplete ? 'academy-success-bg academy-success' : 'academy-raised academy-subtle'}`}>{allComplete ? 'Урокът е завършен' : 'Завърши всички задачи'}</span>}</div>
     </div>
 
     {showPreviewGate && <div role="dialog" aria-modal="true" aria-labelledby="preview-gate-title" className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-5"><div className="max-w-md rounded-3xl border academy-accent-border academy-raised p-7 text-center shadow-2xl"><i className="ri-lock-unlock-line text-4xl academy-accent" /><h2 id="preview-gate-title" className="mt-4 text-2xl font-semibold">Продължи с пълен достъп</h2><p className="mt-3 leading-7 academy-muted">Завърши безплатния преглед. Влез в профила си или отключи програмата, за да запазиш напредъка си и да продължиш.</p><button type="button" onClick={() => setShowPreviewGate(false)} className="mt-5 rounded-xl border academy-border-strong px-5 py-3 text-sm">Прегледай отговорите</button></div></div>}

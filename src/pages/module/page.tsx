@@ -14,6 +14,7 @@ import MobileLessonSheet from '@/pages/module/components/MobileLessonSheet';
 import LessonContentViewer from '@/pages/module/components/LessonContentViewer';
 import { newestBookmark, readLocalBookmark, type LessonBookmark } from '@/lib/learning-resume';
 import { legacyMarketingRoute, lessonRoute, requestedLessonIndex } from '@/lib/academy-lesson-location';
+import { FREE_SILK_LESSONS, FREE_SILK_PROGRESS_EVENT, freeSilkDeviceSummary } from '@/lib/free-silk-progress';
 
 /* ─── Module Page (Orchestrator) ─── */
 export default function ModulePage() {
@@ -65,6 +66,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   // Public Module 1 support
   const isModule1 = moduleId === 's01-m01';
   const [localCompletedLessons, setLocalCompletedLessons] = useState<string[]>([]);
+  const [guestXp, setGuestXp] = useState(0);
 
   // Next module for completion banner
   const nextModule = useMemo(() => {
@@ -75,9 +77,9 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   // This header shows module XP. Global levels belong to the dashboard.
   const totalPoints = useMemo(() => {
     if (!mod || !Array.isArray(mod.lessons)) return 0;
-    if (isModule1 && !user) return localCompletedLessons.length * 10;
+    if (isModule1 && !user) return guestXp;
     return mod.lessons.reduce((sum, lesson) => sum + (progressMap?.[lesson.id]?.xp || 0), 0);
-  }, [mod, progressMap, isModule1, user, localCompletedLessons]);
+  }, [mod, progressMap, isModule1, user, guestXp]);
 
   /* ─── Academy Pixel ViewContent ─── */
   useEffect(() => {
@@ -182,9 +184,11 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
   useEffect(() => {
     let active = true;
     setPdfUrl(null);
+    if (moduleId && /^s0[123]-/.test(moduleId)) { setPdfLoading(false); return; }
     if (!moduleId || !activePdfLesson?.id || !activePdfLesson.pdfPath) return;
     setPdfLoading(true);
     getPdfUrl(moduleId, activePdfLesson.id).then(url => { if (active) setPdfUrl(url); })
+      .catch(() => { if (active) setPdfUrl(null); })
       .finally(() => { if (active) setPdfLoading(false); });
     return () => { active = false; };
   }, [moduleId, activePdfLesson, user?.id]);
@@ -230,6 +234,19 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
 
     return () => { cancelled = true; };
   }, [activeLessonIndex, mod, user?.id]);
+
+  useEffect(() => {
+    if (!isModule1 || user) return;
+    const refresh = () => {
+      const summary = freeSilkDeviceSummary();
+      setLocalCompletedLessons(summary.completedLessonIds);
+      setGuestXp(summary.xp);
+      setProgressMap(previous => ({ ...previous, ...Object.fromEntries(FREE_SILK_LESSONS.map(id => [id, { completed: summary.completedLessonIds.includes(id), pageNumber: 1, totalPages: 0, quizScore: null, quizTotal: null }])) }));
+    };
+    refresh();
+    window.addEventListener(FREE_SILK_PROGRESS_EVENT, refresh);
+    return () => window.removeEventListener(FREE_SILK_PROGRESS_EVENT, refresh);
+  }, [isModule1, user]);
 
   /* ─── Actions ─── */
   const markLessonComplete = useCallback(async (lessonId: string) => {
@@ -558,6 +575,7 @@ function ModuleView({ moduleId }: { moduleId: string | undefined }) {
             activeLessonIndex={activeLessonIndex}
             activeLesson={activeLesson}
             isModule1={isModule1}
+            canContinueSilk={hasFullAccess || unlockedModules.includes('s01-m02')}
             user={user}
             hasFullAccess={hasFullAccess}
             isModuleUnlocked={isModuleUnlocked}
