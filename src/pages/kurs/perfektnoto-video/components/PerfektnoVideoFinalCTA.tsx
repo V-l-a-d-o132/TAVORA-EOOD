@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ACADEMY_FREE_ACCESS_DESCRIPTION } from '@/config/academy-catalog';
 
 export default function PerfektnoVideoFinalCTA() {
   return (
@@ -14,8 +15,7 @@ export default function PerfektnoVideoFinalCTA() {
           </h2>
 
           <p className="text-sm text-white/75 leading-relaxed mb-8 max-w-lg">
-            Програмата се отключва с покупка или предоставен достъп. Безплатният пробен модул на Академията е AI според задачата.
-            Започни да анализираш видео нуждите на бизнеса си днес.
+            „Перфектното Видео“ се отключва с покупка или предоставен достъп. {ACADEMY_FREE_ACCESS_DESCRIPTION}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
