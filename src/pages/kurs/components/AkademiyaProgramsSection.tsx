@@ -1,3 +1,5 @@
+import { ACADEMY_PROGRAM_DETAILS } from '@/data/academy-program-details';
+import { getTierById } from '@/config/pricing';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '@/config/pricing';
@@ -17,37 +19,37 @@ const PROGRAMS = [
   {
     id: 'silkRoad',
     name: 'Пътят на коприната',
-    price: 99,
+    price: getTierById('silkRoad')!.price,
     modules: 11,
     lessons: String(ACADEMY_PROGRAM_STATS.silkRoad.lessonCount),
     tagline: 'AI Business Blueprint',
     forWho: 'За хора, които искат да изградят и продават дигитална услуга с AI — от нулата.',
     problem: 'Разпиляно знание за AI, без ясен път от идея до платена услуга.',
-    outcome: 'След програмата ще можеш да оформяш оферта, да изграждаш сайт с AI и да привличаш клиенти.',
+    outcome: ACADEMY_PROGRAM_DETAILS.silkRoad.outcome,
     route: '/kurs/ai-business-blueprint',
   },
   {
     id: 'perfectVideo',
     name: 'Перфектното Видео',
-    price: 99,
+    price: getTierById('perfectVideo')!.price,
     modules: 15,
     lessons: String(ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount),
     tagline: 'Бизнес видео продукция',
     forWho: 'За предприемачи и маркетолози, които искат професионално видео без продукционна компания.',
     problem: 'Видео без стратегия — скъпо, хаотично и без измерваем резултат.',
-    outcome: 'След програмата ще можеш да планираш, заснемаш и монтираш бизнес видео, което носи резултат.',
+    outcome: ACADEMY_PROGRAM_DETAILS.perfectVideo.outcome,
     route: '/kurs/perfektnoto-video',
   },
   {
     id: 'marketingBasics',
     name: 'Marketing Basics',
-    price: 129,
+    price: getTierById('marketingBasics')!.price,
     modules: 20,
     lessons: String(ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount),
-    tagline: 'Пълна маркетинг система',
+    tagline: 'Хора, доверие и изпълнимо предложение',
     forWho: 'За собственици на бизнес и маркетинг специалисти, които искат систематизиран маркетинг.',
     problem: 'Маркетинг на парче — публикация тук, реклама там, без цялостна система.',
-    outcome: 'След програмата ще имаш работеща маркетинг система от позициониране до превръщане на клиенти.',
+    outcome: ACADEMY_PROGRAM_DETAILS.marketingBasics.outcome,
     route: '/kurs/marketing-basics',
   },
 ];

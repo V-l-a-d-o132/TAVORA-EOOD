@@ -1,3 +1,4 @@
+import ProgramPracticeDetails from '@/pages/kurs/components/ProgramPracticeDetails';
 import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { MARKETING_BASICS_FAQ } from '@/data/academy-public-faq';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
@@ -22,7 +23,7 @@ const marketingBasics = getTierById('marketingBasics');
 
 const FAQ_ITEMS = MARKETING_BASICS_FAQ;
 
-const courseUpdated = '2026-09-30';
+const courseUpdated = '2026-10-16';
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -32,7 +33,7 @@ const SCHEMA = {
       '@id': 'https://imashnujnoto.com/kurs/marketing-basics#webpage',
       url: 'https://imashnujnoto.com/kurs/marketing-basics',
       name: 'Marketing Basics — изгради маркетинг система | Академия TAVORA',
-      description: `Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока в 20 модула, практически проект и финален изпит. ТАВОРА ЕООД.`,
+      description: `Маркетинг през човешкия избор, общностите, доверието и изпълненото обещание. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока в 20 модула, практика по предоставени случаи и финален изпит с 60 въпроса. ТАВОРА ЕООД.`,
       inLanguage: 'bg',
       dateModified: courseUpdated,
       isPartOf: { '@id': 'https://imashnujnoto.com/#website' },
@@ -49,11 +50,11 @@ const SCHEMA = {
       '@type': 'Course',
       '@id': 'https://imashnujnoto.com/kurs/marketing-basics#course',
       name: 'Marketing Basics',
-      description: `20-модулна маркетинг система за малък и локален бизнес. GEO, AI агенти и автоматизация са вградени директно в ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока с финален практически проект и изпит. От позициониране до измерване на резултатите.`,
+      description: `20 модула за човешкия избор, общностите, предложението, доверието и изпълнението. SEO, реклама, ИИ и данни се разглеждат в ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока с предоставени материали, затворени задачи и финален изпит с 60 въпроса.`,
       url: 'https://imashnujnoto.com/kurs/marketing-basics',
       provider: { '@type': 'Organization', '@id': 'https://imashnujnoto.com/#organization', name: 'ТАВОРА ЕООД', legalName: 'ТАВОРА ЕООД', url: 'https://imashnujnoto.com' },
-      courseMode: 'online', inLanguage: 'bg', educationalLevel: 'Beginner to Advanced',
-      teaches: ['Маркетинг стратегия', 'Позициониране', 'Локално SEO', 'GEO оптимизация', 'Google Business Profile', 'Meta Advantage+', 'Google AI Max', 'Имейл маркетинг', 'Конверсионна оптимизация', 'Маркетинг аналитика'],
+      courseMode: 'online', inLanguage: 'bg', educationalLevel: 'Beginner',
+      teaches: ['Човешки избор и общности', 'Доверие и доброволна препоръка', 'Маркетинг стратегия', 'Позициониране', 'Локално SEO', 'GEO оптимизация', 'Google Business Profile', 'Meta Advantage+', 'Google AI Max', 'Имейл маркетинг', 'Конверсионна оптимизация', 'Маркетинг аналитика'],
       offers: {
         '@type': 'Offer',
         name: 'Marketing Basics',
@@ -85,7 +86,7 @@ export default function MarketingBasicsFunnelPage() {
     document.title = 'Marketing Basics — изгради маркетинг система | Академия TAVORA';
     academyPixel.viewContent('Marketing Basics');
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', `Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока в 20 модула, практически проект и финален изпит. ТАВОРА ЕООД.`);
+    if (metaDesc) metaDesc.setAttribute('content', `Маркетинг през човешкия избор, общностите, доверието и изпълненото обещание. ${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} публикувани урока в 20 модула, практика по предоставени случаи и финален изпит с 60 въпроса. ТАВОРА ЕООД.`);
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', 'https://imashnujnoto.com/kurs/marketing-basics');
 
@@ -109,6 +110,7 @@ export default function MarketingBasicsFunnelPage() {
       <SharedNav />
       <main>
         <MarketingBasicsHero keyword={keyword} />
+        <ProgramPracticeDetails programId="marketingBasics" />
         <MarketingBasicsForWho />
         <MarketingBasicsProblem />
         <MarketingBasicsProgram />

@@ -144,6 +144,7 @@ interface BlogArticleLayoutProps {
   heroAlt: string;
   breadcrumbLabel: string;
   title: ReactNode;
+  authorName?: string;
   intro: ReactNode;
   tocItems: TocItem[];
   related: RelatedItem[];
@@ -170,6 +171,7 @@ export default function BlogArticleLayout({
   heroAlt,
   breadcrumbLabel,
   title,
+  authorName = 'Владимир Атанасов',
   intro,
   tocItems,
   related,
@@ -252,7 +254,7 @@ export default function BlogArticleLayout({
               />
             </div>
             <div>
-              <div className="text-sm text-[#1C1C1E]/70">Владимир Атанасов</div>
+              <div className="text-sm text-[#1C1C1E]/70">{authorName}</div>
               <div className="text-[10px] text-[#1C1C1E]/65">Дигитален маркетинг, ТАВОРА ЕООД</div>
             </div>
           </div>

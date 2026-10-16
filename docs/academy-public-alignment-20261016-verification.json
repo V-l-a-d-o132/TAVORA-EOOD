@@ -1,0 +1,389 @@
+{
+  "verifiedOn": "2026-10-16",
+  "baseCommit": "5c541b30c9e1c1c9bfb63c4c2b0a11ec153545f3",
+  "supabase": {
+    "project": "plxqbbgjojxfnkgotrba",
+    "readOnly": true,
+    "programmes": [
+      {
+        "lessons": 74,
+        "modules": 11,
+        "programme": "s01"
+      },
+      {
+        "lessons": 240,
+        "modules": 15,
+        "programme": "s02"
+      },
+      {
+        "lessons": 210,
+        "modules": 20,
+        "programme": "s03"
+      }
+    ],
+    "products": [
+      {
+        "tier_id": "systems-10",
+        "currency": "eur",
+        "full_access": false,
+        "amount_cents": 4900,
+        "module_count": 10
+      },
+      {
+        "tier_id": "koprinena-pateka",
+        "currency": "eur",
+        "full_access": false,
+        "amount_cents": 9900,
+        "module_count": 11
+      },
+      {
+        "tier_id": "perfektno-video",
+        "currency": "eur",
+        "full_access": false,
+        "amount_cents": 9900,
+        "module_count": 15
+      },
+      {
+        "tier_id": "marketing-basics",
+        "currency": "eur",
+        "full_access": false,
+        "amount_cents": 12900,
+        "module_count": 20
+      },
+      {
+        "tier_id": "premium-all",
+        "currency": "eur",
+        "full_access": true,
+        "amount_cents": 24900,
+        "module_count": 46
+      },
+      {
+        "tier_id": "strategic_access",
+        "currency": "eur",
+        "full_access": true,
+        "amount_cents": 49700,
+        "module_count": 46
+      }
+    ],
+    "anonymousAccess": {
+      "s01-m01": true,
+      "s01-m02": false,
+      "s02-m01": false,
+      "s03-m01": false
+    },
+    "publishedLessonTitlesMatched": 524,
+    "examQuestions": [
+      {
+        "title": "Финален изпит: 33 решения",
+        "lesson_id": "l11-04",
+        "module_id": "s01-m11",
+        "questions": 33,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Провери решенията по целия случай",
+        "lesson_id": "pv15-09",
+        "module_id": "s02-m15",
+        "questions": 12,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Провери решенията по целия случай",
+        "lesson_id": "pv15-10",
+        "module_id": "s02-m15",
+        "questions": 12,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Провери решенията по целия случай",
+        "lesson_id": "pv15-11",
+        "module_id": "s02-m15",
+        "questions": 12,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Провери решенията по целия случай",
+        "lesson_id": "pv15-12",
+        "module_id": "s02-m15",
+        "questions": 12,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Провери решенията по целия случай",
+        "lesson_id": "pv15-13",
+        "module_id": "s02-m15",
+        "questions": 30,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Групова проверка 1",
+        "lesson_id": "lm20-10",
+        "module_id": "s03-m20",
+        "questions": 14,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Групова проверка 2",
+        "lesson_id": "lm20-11",
+        "module_id": "s03-m20",
+        "questions": 16,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Групова проверка 3",
+        "lesson_id": "lm20-12",
+        "module_id": "s03-m20",
+        "questions": 15,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Групова проверка 4",
+        "lesson_id": "lm20-13",
+        "module_id": "s03-m20",
+        "questions": 15,
+        "block_type": "course_exam"
+      },
+      {
+        "title": "Пълен финален изпит",
+        "lesson_id": "lm20-14",
+        "module_id": "s03-m20",
+        "questions": 60,
+        "block_type": "course_exam"
+      }
+    ]
+  },
+  "checks": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed",
+    "distributionScan": "passed",
+    "unitFiles": 4,
+    "unitTests": 23,
+    "uniqueBrowserScenarios": 26,
+    "browserBatches": [
+      {
+        "log": "browser-runtime-1792159273023.log",
+        "planned": 26,
+        "reported": 24,
+        "end": null
+      },
+      {
+        "log": "browser-runtime-1792159568134.log",
+        "planned": 2,
+        "reported": 2,
+        "end": "passed"
+      }
+    ],
+    "browserResults": [
+      {
+        "title": "light: course catalogue has one free module and readable access states at 320px",
+        "status": "passed"
+      },
+      {
+        "title": "light: course catalogue has one free module and readable access states at 1280px",
+        "status": "passed"
+      },
+      {
+        "title": "light: an unpaid account can open the free module and has no paid-course free badge",
+        "status": "passed"
+      },
+      {
+        "title": "light: a purchased video course stays accessible without a free label",
+        "status": "passed"
+      },
+      {
+        "title": "dark: course catalogue has one free module and readable access states at 320px",
+        "status": "passed"
+      },
+      {
+        "title": "dark: course catalogue has one free module and readable access states at 1280px",
+        "status": "passed"
+      },
+      {
+        "title": "dark: an unpaid account can open the free module and has no paid-course free badge",
+        "status": "passed"
+      },
+      {
+        "title": "dark: a purchased video course stays accessible without a free label",
+        "status": "passed"
+      },
+      {
+        "title": "320px public /kurs/ai-business-blueprint: programme, practice and sharing metadata agree",
+        "status": "passed"
+      },
+      {
+        "title": "320px public /kurs/perfektnoto-video: programme, practice and sharing metadata agree",
+        "status": "passed"
+      },
+      {
+        "title": "320px public /kurs/marketing-basics: programme, practice and sharing metadata agree",
+        "status": "passed"
+      },
+      {
+        "title": "320px public article perfektnoto-video-biznes-sistema: current modules and matching FAQ schema",
+        "status": "passed"
+      },
+      {
+        "title": "320px public article marketing-basics-palna-sistema: current modules and matching FAQ schema",
+        "status": "passed"
+      },
+      {
+        "title": "320px anonymous academy: four real free lessons and three separate lab previews",
+        "status": "passed"
+      },
+      {
+        "title": "1280px public /kurs/ai-business-blueprint: programme, practice and sharing metadata agree",
+        "status": "passed"
+      },
+      {
+        "title": "1280px public /kurs/perfektnoto-video: programme, practice and sharing metadata agree",
+        "status": "passed"
+      },
+      {
+        "title": "1280px public /kurs/marketing-basics: programme, practice and sharing metadata agree",
+        "status": "passed"
+      },
+      {
+        "title": "1280px public article perfektnoto-video-biznes-sistema: current modules and matching FAQ schema",
+        "status": "passed"
+      },
+      {
+        "title": "1280px public article marketing-basics-palna-sistema: current modules and matching FAQ schema",
+        "status": "passed"
+      },
+      {
+        "title": "1280px anonymous academy: four real free lessons and three separate lab previews",
+        "status": "passed"
+      },
+      {
+        "title": "checkout systems-10: published course scope is visible before authentication",
+        "status": "passed"
+      },
+      {
+        "title": "checkout koprinena-pateka: published course scope is visible before authentication",
+        "status": "passed"
+      },
+      {
+        "title": "checkout perfektno-video: published course scope is visible before authentication",
+        "status": "passed"
+      },
+      {
+        "title": "checkout marketing-basics: published course scope is visible before authentication",
+        "status": "passed"
+      },
+      {
+        "title": "checkout premium-all: published course scope is visible before authentication",
+        "status": "passed"
+      },
+      {
+        "title": "checkout strategic_access: published course scope is visible before authentication",
+        "status": "passed"
+      }
+    ]
+  },
+  "boundaries": {
+    "realPaymentOrRegistrationCreated": false,
+    "studentAttemptsCreated": false,
+    "databaseWrites": false,
+    "lessonBodiesChanged": false,
+    "liveVisualAcceptanceCompleted": false,
+    "hostingPublication": "Readdy Pull/Publish by owner"
+  },
+  "livePublicBefore": [
+    {
+      "path": "/kurs",
+      "status": 200,
+      "bytes": 22363,
+      "file": "kurs.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/kurs/ai-business-blueprint",
+      "status": 200,
+      "bytes": 22363,
+      "file": "kurs-ai-business-blueprint.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/kurs/perfektnoto-video",
+      "status": 200,
+      "bytes": 22363,
+      "file": "kurs-perfektnoto-video.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/kurs/marketing-basics",
+      "status": 200,
+      "bytes": 22363,
+      "file": "kurs-marketing-basics.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/llms.txt",
+      "status": 200,
+      "bytes": 10335,
+      "file": "llms.txt.html",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "/ai.txt",
+      "status": 200,
+      "bytes": 8424,
+      "file": "ai.txt.html",
+      "content_type": "text/plain; charset=utf-8"
+    }
+  ],
+  "sourceHashes": {
+    "docs/academy-public-alignment-20261016.md": "a7a8cc0a1b36dd62a33e9ddb3bf79ee20c45e976718e613517adde2fd57ad325",
+    "e2e/academy-public-info.pw.ts": "46c9d9704d2732d843f626fc932be38a764139eef4559713def4719f3e9c5432",
+    "playwright.themes.config.ts": "a344ab8ba9113513f7589867a62cd083a2509a6badbec18d5552e79b5cc9d1d3",
+    "public/ai.txt": "2fa7b8bbc7e47be9ed9a9442a617fbcf552ebc6d624f1cbc40a4af9426625bf4",
+    "public/llms.txt": "eb7b87da8a9d4b28c05463f4993c7f632237d764c9ba24ed589d17018b5bd9fd",
+    "public/sitemap.xml": "876a09de6ec8feadd4243e67451d7c8cdbfcb6dd5bf39d57c472750df8e120b7",
+    "src/config/academy-catalog.ts": "c339803a8d97ebe42a038a542694dc64f4eaf41259556f42a0cf8242bfa19c95",
+    "src/config/pricing.ts": "5183dda4c695bfe3477fa4d67dd953db1ec029d323d86c02c8ef3b0e4a13dcb9",
+    "src/data/academy-program-details.ts": "f881e90d74037be2e45be022649e9f1d019e30f5d76dd93377155e76a3d982cc",
+    "src/data/academy-public-faq.ts": "6de9ed64806be4d6c4b7577c73055acd4ee8a3820a2bbec812bc2142935f3a55",
+    "src/pages/blog/ai-business-blueprint-putyat-na-koprinata/page.tsx": "15fd0559208f2c36a38e7774e378591c387c9096acd4077aa06cff844c9f9e95",
+    "src/pages/blog/components/AcademyCourseArticle.tsx": "2c8f7377ebc7ed808909229deddf344cbb5f174a9c328ad70779a5a5bad1c746",
+    "src/pages/blog/components/BlogArticleLayout.tsx": "c6fb65d7a2906d4f7f670aaaf052861f58f89196ab42e513b9e63d7bd2ab8750",
+    "src/pages/blog/marketing-basics-palna-sistema/page.tsx": "9ff3fd93a7db3da6ba376bb3e4cb7f57428f0e83d3b03eaee8201f142fd59442",
+    "src/pages/blog/page.tsx": "8c0ad79b4e591417a4b7700c7ebff971515e7a7ee8092e2a13b11eddd55a3794",
+    "src/pages/blog/perfektnoto-video-biznes-sistema/page.tsx": "86c21504e11ce0326f829dc6fbd99742da8a83cb156b7d4f997a7b066f6a5837",
+    "src/pages/checkout-akademiya/page.tsx": "6f5c52500c5cdd1c81546fcec92f1d64c4d8d93cccb11518e40fb729498e5cf5",
+    "src/pages/home/components/ApplicationSection.tsx": "2c907430c1d30e94eed63decb88896e2d9f50b2cd587a7370c16e59c13ae2503",
+    "src/pages/kurs-potvardjenie/page.tsx": "42f77ad2944a6a9f9689d429b03dd2ca47be4ab201f72fe72a4e669fbbf9a298",
+    "src/pages/kurs/ai-business-blueprint/components/AiBlueprintFinalCTA.tsx": "6636daa7305ae9835cdddbc1685c26cd1e97d2b10f2a9828f96b9222de6d8445",
+    "src/pages/kurs/ai-business-blueprint/components/AiBlueprintForWho.tsx": "d52e802aaf58624de160c7f85c3c4310ec6168b8f5200007b373c2d654d7867f",
+    "src/pages/kurs/ai-business-blueprint/components/AiBlueprintProblem.tsx": "8975f30e114a709f8083a4f7a71df76cbd564c262da1641c5f7a06fc76602467",
+    "src/pages/kurs/ai-business-blueprint/components/AiBlueprintWhyTavora.tsx": "cb95008a31978c7495712da083841daea52516ca2cc0aa414845cc51a53e1ce6",
+    "src/pages/kurs/ai-business-blueprint/page.tsx": "630d3bf2c06911d008ee3a6b12748cc86a3ae4af3f5c4e5ed101b7ab88e3709e",
+    "src/pages/kurs/components/AcademyAccessSection.tsx": "75d85aa7c6739e178608f33b1fcb4d27bcb8ff44e03e785f25ad2e5c20ce401b",
+    "src/pages/kurs/components/AkademiyaEnrollmentSection.tsx": "382ec7d6958fe75b5e5e6ec1d7e3a5e0db66fde7e356d71aa42106cc863a9438",
+    "src/pages/kurs/components/AkademiyaFAQSection.tsx": "01da4cfb20deb1fc060bb23021a35ad1127e3b5f1d174d73ea8bdbef6c9183cd",
+    "src/pages/kurs/components/AkademiyaHeroSection.tsx": "54ebc338c2622bb9931fa2c99a9cb633604577e9e5dacc92d9e94a625677ba32",
+    "src/pages/kurs/components/AkademiyaOutcomesSection.tsx": "05126bf5038664b536055c80d9c3c95181507662b596f2848ad4f7c5eec5f0ed",
+    "src/pages/kurs/components/AkademiyaPathSection.tsx": "c00ee4268ae01580c46282a44bed5a52838550fc4114a18985213f2e19cebe0f",
+    "src/pages/kurs/components/AkademiyaProgramsSection.tsx": "33ba40bbf32ead1ba4d9738d7980e8e1c1d7f66564f1e1f0ffae452435840c7c",
+    "src/pages/kurs/components/AkademiyaResultsSection.tsx": "f58392033e67ea719ad18cc691572e54eee8aad3780878769e485e18529136b9",
+    "src/pages/kurs/components/CourseIntroduction.tsx": "4cbfd8d1b78e43bcb149bb28092d6667eeb011b4bdb6c48b6c2a9de8dab0bfeb",
+    "src/pages/kurs/components/LearningPlatform.tsx": "76c23a860a9ff16a938a11e4aff7daf707b32e4a448c8f1457ebf49e3d6ac730",
+    "src/pages/kurs/components/Module1PreviewSection.tsx": "d006ef012244d8c6b38e513d797dbe877ab14ec520eeb42b1f6ab7c2da2d0600",
+    "src/pages/kurs/components/ProgramPracticeDetails.tsx": "4bed728e37f8f0ca3fd2ff09df1163201f8731e6a177b0a6858924608a81737a",
+    "src/pages/kurs/components/ProgramPricing.tsx": "96d2ced0e3bc06ce03b2575cb4c0d933256bf936add136d7ff70d7b73e5af04f",
+    "src/pages/kurs/marketing-basics/components/MarketingBasicsFinalCTA.tsx": "a36790f8cc452eb90cbc2b0ec5115273b76ed16fe69ce0af9042f33f2ecf33a7",
+    "src/pages/kurs/marketing-basics/components/MarketingBasicsForWho.tsx": "75187f645d042659dfe893a2fb3c649c83bf34239b52ff83f0a08df6e0d4d6e4",
+    "src/pages/kurs/marketing-basics/components/MarketingBasicsHero.tsx": "4c2643d61ac1c3a89c0f46f83f7f7828733a984dccc9244af6a46f229c4c96cd",
+    "src/pages/kurs/marketing-basics/components/MarketingBasicsProblem.tsx": "7cff70db900b44c4d50dfd211fedb4e783fdbde2726c0d81e887e52486484019",
+    "src/pages/kurs/marketing-basics/components/MarketingBasicsProgram.tsx": "ba015cf3e3f3326008675c1c3ce6ec2785735e7add02eb1a52cd4ffb221c8de8",
+    "src/pages/kurs/marketing-basics/components/MarketingBasicsWhyTavora.tsx": "177c30263947576c1f4b7d4245fd8e07e7cf3466ff0f60dfae5ac6b291466992",
+    "src/pages/kurs/marketing-basics/page.tsx": "428e90c72d69e4075b924602ec2ad287b043ad4dcff4c48d0ba2926ab7857c7d",
+    "src/pages/kurs/perfektnoto-video/components/PerfektnoVideoFinalCTA.tsx": "21febe52d5116634c41ba8b0339a9b5769df156b9c80e65dda105eb5fb78cedc",
+    "src/pages/kurs/perfektnoto-video/page.tsx": "86a4f49575b28e882e0103ce6fc531e637f8ad337f1995e92aa294c40f96eecf",
+    "src/pages/register/page.tsx": "9c7f84094e91fc973c8b17b7a39259d6ae360096252f8ff21d7fdd33115cbd08",
+    "src/pages/terms/page.tsx": "38820ef00dffb6ea2f1d980cf5afc9c0f005a8ade6f6843b8bdb800cb7ac2337",
+    "tests/academy-public-alignment.test.ts": "c076fb869140cbc4edf215b6ad8eeab8eb748c40ae418570792930ab04c46067",
+    "tests/fixtures/academy-public-facts-20261016.json": "f3b3be44629879cc7c48b28d1511f028c094e2fdbccf39ebfc4267383e946c1d",
+    "tests/fixtures/academy-published-catalog.json": "e90ee112fbd35da6314b758d4395335454f4b988b1100f2d0255befe2a23ebef"
+  }
+}

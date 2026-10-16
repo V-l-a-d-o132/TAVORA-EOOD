@@ -16,10 +16,10 @@ const C = {
 };
 
 const PLATFORM_PREVIEW = [
-  { num: '01', title: 'AI Advantage', state: 'done' },
-  { num: '02', title: 'Оферта и сайт', state: 'active' },
-  { num: '03', title: 'Съдържание и маркетинг', state: 'locked' },
-  { num: '04', title: 'Клиенти и система', state: 'locked' },
+  { num: '01', title: 'AI според задачата', state: 'done' },
+  { num: '02', title: 'От човешки проблем до работеща страница', state: 'active' },
+  { num: '03', title: 'SEO и GEO оптимизация', state: 'locked' },
+  { num: '04', title: 'Съдържание и копирайтинг', state: 'locked' },
 ];
 
 export default function AkademiyaHeroSection() {
@@ -93,11 +93,11 @@ export default function AkademiyaHeroSection() {
           </button>
 
           <p className="text-xs mt-2" style={{ color: C.textDim }}>
-            Модул 1 (AI Advantage) е безплатен. Без карта и без автоматично плащане.
+            Модул 1 (AI според задачата) е безплатен. Без карта и без автоматично плащане.
           </p>
         </div>
 
-        {/* Platform preview — clean visual of the learning interface */}
+        <p className="text-xs mb-4" style={{ color: C.textMuted }}>Илюстрация на учебната подредба; показаните състояния не са твой прогрес.</p>
         <div className="w-full max-w-3xl mx-auto">
           <div className="p-5 md:p-7" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
             <div className="flex items-center justify-between mb-5">

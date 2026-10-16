@@ -45,11 +45,11 @@ export default function AcademyAccessSection() {
 
         {/* Headline */}
         <h2 className="text-xl md:text-3xl font-bold text-center mb-3 tracking-tight" style={{ color: C.text }}>
-          Влез и започни веднага
+          Опитай първо, запази прогреса с акаунт
         </h2>
         <p className="text-sm md:text-base text-center mb-8 max-w-md mx-auto leading-relaxed" style={{ color: C.textMuted }}>
-          Модул 1 — AI Advantage е безплатен. Създай акаунт и започни.
-          Без карта. Без задължения. Само стойност.
+          Модул 1 — „AI според задачата“ е безплатен и може да се опита като гост. С акаунт запазваш учебния прогрес.
+          Без карта и без автоматично плащане.
         </p>
 
         <div className="p-5 md:p-7" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
@@ -106,7 +106,7 @@ export default function AcademyAccessSection() {
             </span>
             <span className="text-[10px] flex items-center gap-1" style={{ color: C.textDim }}>
               <i className="ri-time-line" />
-              30 секунди
+              Със свое темпо
             </span>
           </div>
         </div>

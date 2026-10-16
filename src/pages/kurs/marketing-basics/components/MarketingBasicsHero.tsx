@@ -28,12 +28,12 @@ export default function MarketingBasicsHero({ keyword }: MarketingBasicsHeroProp
             className="text-3xl md:text-5xl lg:text-6xl font-light text-[#1C1C1E] leading-tight mb-5"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            Изгради маркетинг система, която свързва{' '}
-            <em className="text-[#e53e3e]">позициониране, съдържание и продажби</em>
+            Разбери как хората избират и как да създадеш{' '}
+            <em className="text-[#e53e3e]">предложение, което си струва да препоръчат</em>
           </h1>
 
           <p className="text-sm md:text-base text-[#1C1C1E]/65 max-w-2xl leading-relaxed mb-4">
-            Практическа програма за разбиране на пазара, изграждане на оферта, създаване на съдържание и измерване на резултатите.
+            Маркетингът започва с нуждата, хората около решението и обещанието, което можеш да изпълниш. После идват посланието, каналът и проверката.
           </p>
           <p className="text-xs text-[#1C1C1E]/45 mb-8 max-w-2xl">
             {keyword}
@@ -63,9 +63,8 @@ export default function MarketingBasicsHero({ keyword }: MarketingBasicsHeroProp
               <span className="text-xs font-medium text-[#1C1C1E]">Накратко</span>
             </div>
             <p className="text-sm text-[#1C1C1E]/65 leading-relaxed">
-              <strong className="text-[#1C1C1E]">Marketing Basics</strong> е 20-модулната маркетинг система на
-              Академия TAVORA, организирана в 4 фази: Позициониране, Присъствие, Трафик и Превръщане.
-              Всички 20 модула са публикувани: {ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока, практически проект и финален изпит.
+              <strong className="text-[#1C1C1E]">Marketing Basics</strong> има 20 модула в четири групи по пет: хора и доверие; съдържание и проверка на бизнеса; условия, партньорства и кампании; измерване и изпълнение.
+              Всички 20 модула са публикувани: {ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока, финален учебен казус и изпити.
               Работиш с учебни казуси, практически задачи и примерни решения за малък и локален бизнес.
             </p>
           </div>

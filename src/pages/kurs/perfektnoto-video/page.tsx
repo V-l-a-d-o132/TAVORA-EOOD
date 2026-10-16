@@ -1,3 +1,4 @@
+import ProgramPracticeDetails from '@/pages/kurs/components/ProgramPracticeDetails';
 import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { PERFECT_VIDEO_FAQ } from '@/data/academy-public-faq';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
@@ -22,7 +23,7 @@ const perfectVideo = getTierById('perfectVideo');
 
 const FAQ_ITEMS = PERFECT_VIDEO_FAQ;
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-16';
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -60,7 +61,7 @@ const SCHEMA = {
       },
       courseMode: 'online',
       inLanguage: 'bg',
-      educationalLevel: 'Beginner to Advanced',
+      educationalLevel: 'Beginner',
       teaches: ['Видео продукция', 'Видео маркетинг', 'Снимачни техники', 'Видео монтаж', 'Осветление и цвят', 'Звук и аудио', 'AI за видео', 'Мобилна видеография', 'YouTube аналитика'],
       offers: {
         '@type': 'Offer',
@@ -127,6 +128,7 @@ export default function PerfektnotoVideoFunnelPage() {
       <SharedNav />
       <main>
         <PerfektnoVideoHero keyword={keyword} />
+        <ProgramPracticeDetails programId="perfectVideo" />
         <PerfektnoVideoForWho />
         <PerfektnoVideoProblem />
         <PerfektnoVideoProgram />

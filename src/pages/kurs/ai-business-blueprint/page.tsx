@@ -1,3 +1,4 @@
+import ProgramPracticeDetails from '@/pages/kurs/components/ProgramPracticeDetails';
 import { syncPageSocialMeta } from '@/lib/page-social-meta';
 import { SILK_ROAD_FAQ } from '@/data/academy-public-faq';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
@@ -22,7 +23,7 @@ const silkRoad = getTierById('silkRoad');
 
 const FAQ_ITEMS = SILK_ROAD_FAQ;
 
-const today = new Date().toISOString().split('T')[0];
+const today = '2026-10-16';
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -62,8 +63,7 @@ const SCHEMA = {
       },
       courseMode: 'online',
       inLanguage: 'bg',
-      educationalLevel: 'Beginner to Advanced',
-      timeRequired: 'PT32H',
+      educationalLevel: 'Beginner',
       teaches: [
         'AI за бизнес',
         'Уеб дизайн и проверка на работеща страница',
@@ -81,7 +81,6 @@ const SCHEMA = {
         availability: 'https://schema.org/InStock',
       },
       numberOfModules: 11,
-      educationalCredentialAwarded: 'Certificate of Completion',
     },
     {
       '@type': 'FAQPage',
@@ -163,6 +162,7 @@ export default function AiBusinessBlueprintFunnelPage() {
 
       <main>
         <AiBlueprintHero keyword={keyword} />
+        <ProgramPracticeDetails programId="silkRoad" />
         <AiBlueprintForWho />
         <AiBlueprintProblem />
         <AiBlueprintProgram />

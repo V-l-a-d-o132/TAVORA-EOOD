@@ -220,9 +220,9 @@ export default function ApplicationSection() {
                     {
                       id: 'standard-course' as const,
                       name: 'AI Business Blueprint',
-                      sub: '11 модула — от AI промптиране до Revenue Blueprint',
+                      sub: '11 модула — ИИ, сайт, съдържание, заявка и продажба на услуга',
                       price: `${getTierById('silkRoad')?.price} EUR`,
-                      features: [`11 модула · ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока`, 'Revenue Blueprint система', 'Доживотен достъп', 'Безплатни обновления'],
+                      features: [`11 модула · ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока`, 'Продажба и изпълнение на дигитална услуга система', 'Доживотен достъп', 'Безплатни обновления'],
                     },
                     {
                       id: 'premium-course' as const,

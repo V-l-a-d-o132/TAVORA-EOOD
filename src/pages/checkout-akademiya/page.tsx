@@ -1,4 +1,5 @@
-import { ACADEMY_PROGRAM_STATS, ACADEMY_STARTER_STATS, ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
+import { ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
+import { PRICING_TIERS, formatPrice, INDIVIDUAL_TOTAL } from '@/config/pricing';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -40,94 +41,17 @@ interface TierInfo {
   savingsNote?: string;
 }
 
-const TIER_INFO: Record<CheckoutTier, TierInfo> = {
-  'systems-10': {
-    label: 'Стартов пакет',
-    price: '49 €',
-    metaValue: 49,
-    modulesCount: '10 модула',
-    lessonsCount: `${ACADEMY_STARTER_STATS.lessonCount} урока`,
-    includes: [
-      'Първите 10 модула от „Пътят на коприната“',
-      `${ACADEMY_STARTER_STATS.lessonCount} интерактивни урока с тестове`,
-      'Без Revenue Blueprint (11-и модул)',
-      'Доживотен достъп',
-      '30 дни гаранция за връщане на парите',
-    ],
-  },
-  'koprinena-pateka': {
-    label: 'Пътят на коприната',
-    price: '99 €',
-    metaValue: 99,
-    modulesCount: '11 модула',
-    lessonsCount: `${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока`,
-    includes: [
-      '11 модула — от AI Advantage до Revenue Blueprint',
-      `${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} интерактивни урока с тестове`,
-      'Revenue Blueprint — оферти, ценообразуване, клиенти',
-      'Доживотен достъп + бъдещи обновления',
-      '30 дни гаранция за връщане на парите',
-    ],
-  },
-  'perfektno-video': {
-    label: 'Перфектното Видео',
-    price: '99 €',
-    metaValue: 99,
-    modulesCount: '15 модула',
-    lessonsCount: `${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока`,
-    includes: [
-      '15 модула — от стратегия до монтаж',
-      `${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} интерактивни урока`,
-      'От идея до готово бизнес видео',
-      'Доживотен достъп + бъдещи обновления',
-      '30 дни гаранция за връщане на парите',
-    ],
-  },
-  'marketing-basics': {
-    label: 'Marketing Basics',
-    price: '129 €',
-    metaValue: 129,
-    modulesCount: '20 модула',
-    lessonsCount: `${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока`,
-    includes: [
-      '20 модула — от позициониране до продажби',
-      `${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} интерактивни урока`,
-      'Google Business Profile, реклами, SEO, имейл маркетинг',
-      'Доживотен достъп + бъдещи обновления',
-      '30 дни гаранция за връщане на парите',
-    ],
-  },
-  'premium-all': {
-    label: 'Пълен достъп',
-    price: '249 €',
-    metaValue: 249,
-    modulesCount: '46 модула',
-    lessonsCount: `${ACADEMY_TOTAL_STATS.lessonCount} урока`,
-    savingsNote: 'При отделна покупка: 327 €. Спестяваш 78 €.',
-    includes: [
-      'Всички 46 модула — трите пълни програми',
-      `${ACADEMY_TOTAL_STATS.lessonCount} интерактивни урока с тестове`,
-      'Тестове и практически материали',
-      'Сертификат за завършване',
-      'Доживотен достъп + бъдещи обновления',
-      '30 дни гаранция за връщане на парите',
-    ],
-  },
-  'strategic_access': {
-    label: 'Пълен достъп + стратегически сесии',
-    price: '497 €',
-    metaValue: 497,
-    modulesCount: '46 модула',
-    lessonsCount: `${ACADEMY_TOTAL_STATS.lessonCount} урока`,
-    includes: [
-      'Всичко от пълния достъп',
-      '2 индивидуални онлайн срещи по 60 мин. с Владимир Атанасов',
-      '„Системата зад Академия TAVORA“ — практически ресурс',
-      'Сертификат за завършване',
-      'Доживотен достъп + бъдещи обновления',
-    ],
-  },
-};
+const TIER_INFO = Object.fromEntries(PRICING_TIERS.map(tier => [tier.checkoutTier, {
+  label: tier.name,
+  price: formatPrice(tier.price),
+  metaValue: tier.price,
+  modulesCount: `${tier.moduleCount} модула`,
+  lessonsCount: `${tier.lessonCount} урока`,
+  includes: tier.includes,
+  ...(tier.id === 'fullAccess' ? {
+    savingsNote: `При отделна покупка: ${formatPrice(INDIVIDUAL_TOTAL)}. Спестяваш ${formatPrice(INDIVIDUAL_TOTAL - tier.price)}.`,
+  } : {}),
+}])) as Record<CheckoutTier, TierInfo>;
 
 const DEFAULT_TIER: CheckoutTier = 'koprinena-pateka';
 

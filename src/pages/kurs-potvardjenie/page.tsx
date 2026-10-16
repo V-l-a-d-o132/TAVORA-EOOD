@@ -324,7 +324,7 @@ export default function KursPotvardjeniePage() {
             {[
               {
                 num: "1",
-                title: "Започни с AI Advantage",
+                title: "Започни с AI според задачата",
                 desc:
                   "Първият модул те учи да работиш с AI като професионалист.",
               },

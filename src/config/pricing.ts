@@ -1,3 +1,4 @@
+import { ACADEMY_PROGRAM_DETAILS } from '@/data/academy-program-details';
 import { ACADEMY_PROGRAM_STATS, ACADEMY_STARTER_STATS, ACADEMY_TOTAL_STATS } from '@/config/academy-catalog';
 // ─────────────────────────────────────────────────────────────
 // Единен източник на цени за Академия TAVORA.
@@ -72,7 +73,7 @@ export const PRICING_TIERS: PricingTier[] = [
     type: 'starter',
     includes: [
       'Първите 10 модула от „Пътят на коприната“',
-      'Без Revenue Blueprint (последния, 11-и модул)',
+      'Без модул 11 — „Продажба и изпълнение на дигитална услуга“',
       'Доживотен достъп до избраните модули',
       'Подходящ за човек, който първо иска да изгради основите',
     ],
@@ -82,7 +83,7 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Пътят на коприната',
     price: 99,
     currency: 'EUR',
-    description: '11 модула за изграждане и продажба на дигитална услуга с AI — от оферта и сайт до привличане на клиенти.',
+    description: ACADEMY_PROGRAM_DETAILS.silkRoad.description,
     route: '/kurs/ai-business-blueprint',
     checkoutTier: 'koprinena-pateka',
     moduleCount: 11,
@@ -91,7 +92,7 @@ export const PRICING_TIERS: PricingTier[] = [
     includes: [
       '11 модула',
       `${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока`,
-      'Revenue Blueprint — оферти, ценообразуване, намиране на клиенти и устойчиво развитие',
+      'Модул 11 — оферти, ценообразуване, намиране на клиенти и изпълнение',
       'Доживотен достъп',
       'Бъдещи обновления',
     ],
@@ -101,7 +102,7 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Перфектното Видео',
     price: 99,
     currency: 'EUR',
-    description: '15 модула за създаване на бизнес видео — от стратегия и сценарий до снимачен ден и монтаж.',
+    description: ACADEMY_PROGRAM_DETAILS.perfectVideo.description,
     route: '/kurs/perfektnoto-video',
     checkoutTier: 'perfektno-video',
     moduleCount: 15,
@@ -110,7 +111,7 @@ export const PRICING_TIERS: PricingTier[] = [
     includes: [
       '15 модула',
       `${ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока`,
-      'От идея до готово бизнес видео',
+      'История, кадър, звук и монтаж по готови материали',
       'Доживотен достъп',
       'Бъдещи обновления',
     ],
@@ -120,7 +121,7 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Marketing Basics',
     price: 129,
     currency: 'EUR',
-    description: '20 модула за изграждане на цялостна маркетинг система — позициониране, присъствие, трафик и превръщане.',
+    description: ACADEMY_PROGRAM_DETAILS.marketingBasics.description,
     route: '/kurs/marketing-basics',
     checkoutTier: 'marketing-basics',
     moduleCount: 20,
@@ -129,7 +130,7 @@ export const PRICING_TIERS: PricingTier[] = [
     includes: [
       '20 модула',
       `${ACADEMY_PROGRAM_STATS.marketingBasics.lessonCount} урока`,
-      'От позициониране до превръщане на посетители в клиенти',
+      'Хора, предложение, доверие, препоръка и изпълнение',
       'Доживотен достъп',
       'Бъдещи обновления',
     ],

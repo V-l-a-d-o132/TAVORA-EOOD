@@ -101,7 +101,7 @@ export default function ProgramPricing({
                 <div className="p-3 mb-5 rounded-lg bg-[#F9F9F7] border border-[#1C1C1E]/8">
                   <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1C1C1E]/55 mb-1">Какво не е включено</div>
                   <p className="text-xs text-[#1C1C1E]/60 leading-relaxed">
-                    Revenue Blueprint (последния, 11-и модул) и двете други програми — „Перфектното Видео“ и „Marketing Basics“.
+                    Модул 11 — „Продажба и изпълнение на дигитална услуга“ и двете други програми — „Перфектното Видео“ и „Marketing Basics“.
                   </p>
                 </div>
               )}

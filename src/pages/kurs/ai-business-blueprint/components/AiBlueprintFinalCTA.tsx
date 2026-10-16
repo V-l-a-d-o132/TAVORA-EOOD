@@ -10,7 +10,7 @@ export default function AiBlueprintFinalCTA() {
           <h2 className="text-2xl md:text-4xl font-light leading-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
             AI Business Blueprint
             <br />
-            <span className="italic text-white/55">от безплатен първи модул до Revenue Blueprint</span>
+            <span className="italic text-white/55">с безплатно начало и практика до продажбата и изпълнението</span>
           </h2>
 
           <p className="text-sm text-white/75 leading-relaxed mb-8 max-w-lg">
