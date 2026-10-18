@@ -38,7 +38,7 @@ describe('Detailed published lesson openings',()=>{
     expect(screen.getByRole('heading',{name:'Практически резултат'})).toBeTruthy();
     expect(screen.getByText('Как ще провериш:')).toBeTruthy();
     expect(screen.getByLabelText('5 XP')).toBeTruthy();
-    expect(screen.queryByRole('complementary',{name:'Думи на човешки език'})).toBeNull();
+    expect(screen.queryByRole('complementary',{name:'Речник'})).toBeNull();
     expect(screen.getAllByRole('listitem')).toHaveLength(5);
     fireEvent.click(screen.getByRole('button',{name:'Прочетох'}));
     await waitFor(()=>expect(submit).toHaveBeenCalledWith({acknowledged:true}));
@@ -46,7 +46,7 @@ describe('Detailed published lesson openings',()=>{
   it('keeps contextual definitions available in the teaching pages',()=>{
     const p=pages.find(p=>p.lesson_id==='l01-01')!;
     render(<LessonBlockRenderer block={{...p.first_page,id:'test',key:'teaching',type:'rich_text',title:'ИИ в процеса',content:{body:'ИИ и автоматизация в CRM.'}}} moduleId={p.module_id} lessonId={p.lesson_id} completed={false} onStateChange={vi.fn()} onSubmit={vi.fn()}/>);
-    expect(screen.getByRole('complementary',{name:'Думи на човешки език'})).toBeTruthy();
+    expect(screen.getByRole('complementary',{name:'Речник'})).toBeTruthy();
   });
   it('shows video practice as a provided case, with the exact final exam requirements',()=>{
     const p=pages.find(p=>p.lesson_id==='pv15-13')!;
@@ -54,7 +54,7 @@ describe('Detailed published lesson openings',()=>{
     expect(screen.getByText(/30 въпроса по предоставени случаи/)).toBeTruthy();
     expect(screen.getByText(/предишните 239 урока/)).toBeTruthy();
     expect(screen.getByText(/24 от 30 верни отговора/)).toBeTruthy();
-    expect(screen.queryByRole('complementary',{name:'Думи на човешки език'})).toBeNull();
+    expect(screen.queryByRole('complementary',{name:'Речник'})).toBeNull();
     expect(screen.queryByRole('textbox')).toBeNull();
   });
 });

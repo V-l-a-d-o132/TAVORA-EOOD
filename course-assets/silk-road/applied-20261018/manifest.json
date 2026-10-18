@@ -1,0 +1,13 @@
+{
+  "release": "silk_applied_20261018",
+  "parts": [
+    "curriculum.000.base64",
+    "curriculum.001.base64",
+    "curriculum.002.base64",
+    "curriculum.003.base64"
+  ],
+  "bytes": 109326,
+  "sha256": "c6df7b97fa8b82b18bbcaa0c1561b00d2ed09a11a8fb5e636d2346af2d9b161f",
+  "decodedBytes": 768633,
+  "decodedSha256": "ef0e7c24d7486382398bf4651b0909edb6da3e207059596f3bac113e11fe8a9b"
+}

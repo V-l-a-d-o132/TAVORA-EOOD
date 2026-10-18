@@ -230,7 +230,7 @@ const SECTION_DEFINITIONS: SourceSection[] = [
       {
         id: 's01-m11',
         number: '11',
-        title: 'Услуга, цена и устойчиво изпълнение',
+        title: 'Продажба и изпълнение на дигитална услуга',
         isLocked: true,
         subtitle: 'Реален проблем, проверен обхват и честна икономика',
         lessons: [

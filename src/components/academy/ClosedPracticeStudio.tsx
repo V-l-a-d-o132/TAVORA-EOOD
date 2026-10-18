@@ -6,6 +6,7 @@ import { CaptionPreview, SchedulePreview, SpeedPreview, TransitionPreview } from
 import { BudgetPreview, MetricsPreview, StoryboardPreview } from '@/components/academy/FinalPracticePreviews';
 import { MarketingWorkflowPreview, MessagePreview, RolesPreview } from '@/components/academy/MarketingPracticePreviews';
 import { BriefPreview, PagePreview, SearchPreview } from '@/components/academy/SilkPracticePreviews';
+import ProvidedMaterials from '@/components/academy/ProvidedMaterials';
 
 interface Props { studio: ClosedStudio; state: JsonObject; busy: boolean; completed: boolean; onChange: (state: JsonObject) => void; onSubmit: (state: JsonObject) => void }
 const asset = '/academy-labs/perfect-video/practical/coffee-machine.mp4';
@@ -58,6 +59,7 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
 
   return <div data-testid="closed-practice-studio" className="space-y-5">
     <div className="space-y-3 text-base leading-7 academy-body"><p>{studio.context}</p><p className="font-medium academy-text">{studio.task}</p></div>
+    {studio.materials && <ProvidedMaterials key={studio.materials.title} materials={studio.materials} />}
     <div className="rounded-xl border academy-border academy-tint p-4">
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm"><p className="font-semibold academy-text">Избрани решения: {selectedCount}/{studio.slots.length}</p><p className="academy-muted">{complete ? 'Готови са за проверка.' : baseComplete ? 'Прочети новото условие и приспособи решението.' : 'Избери първите части и наблюдавай резултата.'}</p></div>
       <progress aria-label="Попълнени избори в работната задача" max={studio.slots.length} value={selectedCount} className="mt-3 h-2 w-full accent-red-600" />

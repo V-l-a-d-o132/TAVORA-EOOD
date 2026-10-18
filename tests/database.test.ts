@@ -301,11 +301,11 @@ describe("Lesson Engine V2 migration and publication", () => {
     await actor("authenticated", A);
     const loaded = (await db.query<{ lesson: { versionId: string } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
     await db.query("SELECT academy_autosave_lesson($1,$2,$3,$4,$5)", [
-      "s01-m01", "l01-01", loaded.versionId, "concept", { concept: { draft: "resume-here" } },
+      "s01-m01", "l01-01", loaded.versionId, "quiz", { quiz: { answer: "b" } },
     ]);
-    const resumed = (await db.query<{ lesson: { progress: { current_block_key: string; completed_at: string | null }; } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
-    expect(JSON.stringify(resumed)).toContain("resume-here");
-    expect(resumed.progress.current_block_key).toBe("concept");
+    const resumed = (await db.query<{ lesson: { progress: { current_block_key: string; completed_at: string | null; block_state: { quiz: { answer: string } } }; } }>("SELECT academy_get_lesson_v2('s01-m01','l01-01') lesson")).rows[0].lesson;
+    expect(resumed.progress.block_state.quiz.answer).toBe("b");
+    expect(resumed.progress.current_block_key).toBe("quiz");
     expect(resumed.progress.completed_at).toBeNull();
   });
 
@@ -847,6 +847,10 @@ describe("Perfect Video final exam", () => {
     await expect(db.query(
       "SELECT academy_complete_lesson_block('s02-m15','pv15-09',$1,'exam',$2,$3)",
       [ref.version_id, { acknowledged: true }, crypto.randomUUID()],
+    )).rejects.toThrow(/Unexpected learning payload field/);
+    await expect(db.query(
+      "SELECT academy_complete_lesson_block('s02-m15','pv15-09',$1,'exam',$2,$3)",
+      [ref.version_id, { answers: ref.answers }, crypto.randomUUID()],
     )).rejects.toThrow(/course exam endpoint/);
     await expect(db.query(
       "SELECT academy_submit_course_exam('s02-m15','pv15-09',$1,'exam',$2,$3)",
@@ -956,10 +960,13 @@ describe("Marketing Basics course exam", () => {
       expect(JSON.stringify(bundle)).not.toMatch(/answer_key|"evaluation"/);
       await rejects(async () => { await actor("authenticated", ADMIN); return db.query(
         "SELECT academy_complete_lesson_block('s03-m20','lm20-10',$1,'exam',$2,$3)",
-        [group.version_id, { acknowledged: true }, crypto.randomUUID()]); }, /course exam endpoint/);
+        [group.version_id, { acknowledged: true }, crypto.randomUUID()]); }, /Unexpected learning payload field/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return db.query(
+        "SELECT academy_complete_lesson_block('s03-m20','lm20-10',$1,'exam',$2,$3)",
+        [group.version_id, { answers: group.answers }, crypto.randomUUID()]); }, /course exam endpoint/);
       await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { q1: 'a' }); }, /every exam question/);
-      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { ...group.answers, extra: 'a' }); }, /every exam question/);
-      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { ...group.answers, q1: 'invalid' }); }, /Invalid or missing/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { ...group.answers, extra: 'a' }); }, /Unknown choice slot/);
+      await rejects(async () => { await actor("authenticated", ADMIN); return submit(group, { ...group.answers, q1: 'invalid' }); }, /Unknown slot choice/);
       await rejects(async () => { await actor("authenticated", ADMIN); return submit({ ...group, version_id: crypto.randomUUID() }); }, /Published exam not found/);
       await rejects(async () => { await actor("authenticated", ADMIN); return submit(final, final.answers); }, /предишните 13/);
       await actor();

@@ -9,8 +9,8 @@ export default function LessonGlossary({ text }: { text: string }) {
   const activeIndex = Math.min(selected, terms.length - 1);
   const active = terms[activeIndex];
 
-  return <aside aria-label="Думи на човешки език" className="mb-6 rounded-2xl border academy-info-border academy-info-bg p-4 sm:p-5">
-    <p className="text-[11px] font-bold uppercase tracking-[.16em] academy-info">На човешки език</p>
+  return <aside aria-label="Речник" className="mb-6 rounded-2xl border academy-info-border academy-info-bg p-4 sm:p-5">
+    <p className="text-[11px] font-bold uppercase tracking-[.16em] academy-info">Речник</p>
     <div className="mt-3 flex flex-wrap gap-2" aria-label="Избери дума за обяснение">
       {terms.map((item, index) => <button key={item.term} type="button" aria-pressed={index === activeIndex}
         onClick={() => setSelected(index)}

@@ -1,6 +1,8 @@
 import type { JsonObject } from '@/lib/lesson-engine-v2';
 import ClosedWorkflowLab from './ClosedWorkflowLab';
 import VideoDecisionLab, { isVideoLabKind } from '@/components/academy/VideoDecisionLab';
+import ProvidedMaterials from '@/components/academy/ProvidedMaterials';
+import { parseProvidedMaterials } from '@/lib/provided-materials';
 
 const strings = (value: unknown): string[] => Array.isArray(value)
   ? value.filter((item): item is string => typeof item === 'string') : [];
@@ -34,6 +36,8 @@ export default function LessonRichText({ content, allowCode = false, allowVideoL
   const figureSrc = text(figure.src);
   const showFigure = /^\/academy-labs\/silk-road\/closed\/[a-z-]+\.svg$/.test(figureSrc) && !!text(figure.alt);
   const simulation = content.simulation;
+  const materials = parseProvidedMaterials(content.materials);
+  if (materials && content.materialsFallback === true) body = '';
   const code = content.code && typeof content.code === 'object' && !Array.isArray(content.code) ? content.code as JsonObject : {};
   // Older hosted builds still display the complete example from body.
   // The enhanced renderer shows that exact suffix only once, as escaped text.
@@ -55,6 +59,7 @@ export default function LessonRichText({ content, allowCode = false, allowVideoL
     </figure>}
     {(simulation === 'checkout' || simulation === 'publishing' || simulation === 'request') && <ClosedWorkflowLab key={simulation} kind={simulation} />}
     {allowVideoLab && isVideoLabKind(content.videoLab) && <VideoDecisionLab key={content.videoLab} kind={content.videoLab} />}
+    {materials && <ProvidedMaterials key={materials.title} materials={materials} />}
     {objects(content.points).length > 0 && <ul className="mt-5 space-y-3">
       {objects(content.points).map((point, index) => <li key={text(point.id) || index} className="flex gap-3 academy-body">
         <span className="mt-2 h-2 w-2 shrink-0 rounded-full academy-primary" />{text(point.text)}

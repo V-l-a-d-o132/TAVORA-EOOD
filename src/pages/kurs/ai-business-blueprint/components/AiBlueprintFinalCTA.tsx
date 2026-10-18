@@ -48,7 +48,7 @@ export default function AiBlueprintFinalCTA() {
           <div className="hidden sm:block w-1 h-1 rounded-full bg-white/20" />
           <div className="flex items-center gap-2">
             <i className="ri-verified-badge-line text-white/60" />
-            <span>Реални клиентски резултати</span>
+            <span>Практика с обратна връзка</span>
           </div>
         </div>
       </div>

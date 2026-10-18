@@ -1,4 +1,5 @@
 import type { JsonObject } from '@/lib/lesson-engine-v2';
+import { parseProvidedMaterials, type ProvidedMaterials } from '@/lib/provided-materials';
 
 export type StudioKind = 'cut' | 'frame' | 'colour' | 'sound' | 'diagram' | 'decision' | 'schedule' | 'caption' | 'speed' | 'transition' | 'metrics' | 'budget' | 'storyboard' | 'message' | 'roles' | 'workflow' | 'brief' | 'page' | 'search';
 export type StudioDocument = { part: 'goal' | 'facts' | 'scope' | 'checks' | 'handover'; title: string; text: string };
@@ -17,7 +18,7 @@ export type StudioRole = { person: string; roles: StudioRoleName[]; detail: stri
 export type StudioFlow = { part: 'entry' | 'record' | 'owner' | 'reply' | 'review' | 'outcome'; title: string; detail: string };
 export type StudioChoice = { id: string; text: string; clip?: [number, number]; audio?: string; diagram?: StudioDiagram; look?: 'source' | 'warm' | 'cool' | 'dark'; crop?: 'wide' | 'action' | 'edge'; schedule?: StudioSchedule; caption?: StudioCaption; rate?: number; transition?: 'early' | 'sync' | 'tail'; calculation?: StudioCalculation; budget?: StudioBudget; board?: StudioBoard; focus?: [number, number]; copy?: StudioCopy; role?: StudioRole; flow?: StudioFlow; document?: StudioDocument; page?: StudioPagePart; search?: StudioSearchPart };
 export type StudioSlot = { id: string; text: string; choices: string[]; preview: boolean; phase: 'base' | 'change' };
-export type ClosedStudio = { kind: StudioKind; title: string; context: string; task: string; limit: string; change: string; startHour: number; surface: 'video' | 'poster'; domain: 'video' | 'marketing' | 'silk-road'; report?: StudioReport; slots: StudioSlot[]; choices: StudioChoice[] };
+export type ClosedStudio = { kind: StudioKind; title: string; context: string; task: string; limit: string; change: string; startHour: number; surface: 'video' | 'poster'; domain: 'video' | 'marketing' | 'silk-road'; report?: StudioReport; materials?: ProvidedMaterials; slots: StudioSlot[]; choices: StudioChoice[] };
 
 const record = (value: unknown): JsonObject => value !== null && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {};
 const text = (value: unknown) => typeof value === 'string' ? value : '';
@@ -75,7 +76,10 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
   const report = record(config.report), points = records(report.points);
   const safeReport = points.length >= 2 && points.length <= 20 && points.every((p, i) => finite(p.at, 0, 3600) && finite(p.value, 0, 300) && (i === 0 || (p.at as number) > (points[i - 1].at as number)))
     ? { title: text(report.title).slice(0, 120), points: points as StudioReport['points'] } : undefined;
-  return { kind: kind as StudioKind, title: text(config.title), context: text(config.initialContext) || text(config.context), task: text(config.task), limit: text(config.limit), change: text(config.change), startHour: finite(config.startHour, 0, 23) ? config.startHour : 9, surface: config.surface === 'poster' ? 'poster' : 'video', domain: config.domain === 'silk-road' ? 'silk-road' : config.domain === 'marketing' ? 'marketing' : 'video', report: safeReport, slots, choices };
+  const materials = parseProvidedMaterials(config.materials) || undefined;
+  const context = materials && config.materialsFallback === true && text(config.materialsIntro)
+    ? text(config.materialsIntro) : text(config.initialContext) || text(config.context);
+  return { kind: kind as StudioKind, title: text(config.title), context, task: text(config.task), limit: text(config.limit), change: text(config.change), startHour: finite(config.startHour, 0, 23) ? config.startHour : 9, surface: config.surface === 'poster' ? 'poster' : 'video', domain: config.domain === 'silk-road' ? 'silk-road' : config.domain === 'marketing' ? 'marketing' : 'video', report: safeReport, materials, slots, choices };
 }
 
 /** Case arithmetic only. A missing denominator never becomes a zero result. */

@@ -1,0 +1,36 @@
+{
+  "historical_attempts": 1459,
+  "missing_or_changed_attempts": 0,
+  "published_lessons": 74,
+  "published_blocks": 1297,
+  "material_sets": 30,
+  "transfer_cases": 11,
+  "transfer_decisions": 47,
+  "open_blocks": 0,
+  "archived_carried_rows": 3,
+  "final_questions": 33,
+  "validation_errors": 0,
+  "publication": {
+    "release": "silk_applied_20261018",
+    "published": 74,
+    "addedBlocks": 41,
+    "progressRowsCarried": 3
+  },
+  "liveGuest": {
+    "passed": true,
+    "transactionRolledBack": true
+  },
+  "otherCoursesUnchanged": true,
+  "unitTests": {
+    "passed": 592,
+    "skipped": 8
+  },
+  "browserTests": {
+    "passed": 28
+  },
+  "frontendDeployment": "requires Readdy Pull/Publish",
+  "migration": {
+    "version": "20261018081531",
+    "name": "silk_applied_materials_and_transfer"
+  }
+}

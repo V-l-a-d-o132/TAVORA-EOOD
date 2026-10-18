@@ -1,5 +1,6 @@
 import { ACADEMY_READING_WORDS } from '@/data/academy-reading-words';
 import { marketingVisibleWords } from '@/lib/marketing-reading-count';
+import { parseProvidedMaterials, type ProvidedMaterials } from '@/lib/provided-materials';
 
 // A planning range, not a promise about how fast any student reads.
 // Practice, research, filming and assessment are deliberately outside it.
@@ -65,9 +66,15 @@ export function countVisibleLessonWords(lesson: {
     if (Array.isArray(value)) return value.reduce<number>((total, part) => total + count(part), 0);
     if (value && typeof value === 'object') {
       if ('studio' in value && value.studio !== null && typeof value.studio === 'object') {
-        const configured = value as { studio: { title?: unknown; initialContext?: unknown; context?: unknown; task?: unknown; limit?: unknown; change?: unknown }; left?: { text?: unknown }[]; right?: { text?: unknown }[] };
-        return count([configured.studio.title, configured.studio.initialContext || configured.studio.context, configured.studio.task, configured.studio.limit, configured.studio.change])
+        const configured = value as { studio: { title?: unknown; initialContext?: unknown; context?: unknown; task?: unknown; limit?: unknown; change?: unknown; materials?: unknown; materialsIntro?: unknown; materialsFallback?: unknown }; left?: { text?: unknown }[]; right?: { text?: unknown }[] };
+        const materials = parseProvidedMaterials(configured.studio.materials);
+        return count([configured.studio.title, materials && configured.studio.materialsFallback === true ? configured.studio.materialsIntro : configured.studio.initialContext || configured.studio.context, configured.studio.task, configured.studio.limit, configured.studio.change])
+          + (materials ? countMaterials(materials) : 0)
           + count(configured.left?.map(slot => slot.text)) + count(configured.right?.map(choice => choice.text));
+      }
+      if ('materials' in value && 'materialsFallback' in value && value.materialsFallback === true) {
+        const materials = parseProvidedMaterials(value.materials);
+        if (materials) return countMaterials(materials);
       }
       const fallback = 'codeFallback' in value && value.codeFallback === true;
       const tableFallback = silkRoad && 'tableFallback' in value && value.tableFallback === true;
@@ -79,6 +86,8 @@ export function countVisibleLessonWords(lesson: {
     }
     return 0;
   };
+  const countMaterials = (materials: ProvidedMaterials) => count([materials.title, materials.instruction,
+    ...materials.items.flatMap(item => [item.label, item.body, item.code, item.columns, item.rows])]);
   return count(lesson.title) + count(lesson.subtitle) + count(lesson.objective)
     + lesson.blocks.reduce((total, block) => total + count(block.title) + count(block.content), 0);
 }
