@@ -26,6 +26,7 @@ export default function AiBlueprintProgram() {
         {ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока с обяснения, готови казуси и задължителни проверки. Избираш, свързваш и подреждаш — без качване на файлове и свободни отговори. Времето за четене е отделно от решаването.
       </p>
 
+      <p className="mb-6 text-sm leading-relaxed text-[#1C1C1E]/75"><Link to="/academy-tools/silk-road" className="font-medium underline underline-offset-4">Инструменти за задачите: снимки, сайтове, ИИ и автоматизация</Link>. Виж условията и пробвай подготовката на предоставено изображение.</p>
       <div className="space-y-3">
         {MODULES.map((mod) => (
           <div key={mod.num} className="rounded-2xl border border-[#1C1C1E]/8 overflow-hidden transition-all duration-200">

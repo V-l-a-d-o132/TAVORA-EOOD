@@ -94,6 +94,7 @@ export default function SilkRoadStartPage() {
   return <main className="min-h-screen academy-bg academy-text">
     <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-12"><div className="mb-4 flex justify-end"><ThemeSelector /></div>
       <Link to="/kurs" className={`text-sm ${linkClass}`}>Обратно към Академията</Link>
+      <Link to="/academy-tools/silk-road" className={`ml-5 inline-block text-sm ${linkClass}`}>Инструменти и подготовка на изображения</Link>
       <header className="mb-10 mt-8 max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-[.15em] academy-accent">Пътят на коприната · начален маршрут</p>
         <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">Започни с една полезна задача</h1>

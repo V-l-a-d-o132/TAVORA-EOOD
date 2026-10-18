@@ -228,6 +228,7 @@ export default function LessonEngineV2({
 
     {moduleId.startsWith('s01-') && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
       <a href="/academy-labs/silk-road/start" className="font-semibold academy-accent underline underline-offset-4">Начален маршрут и учебна папка</a>
+      <a href={`/academy-tools/silk-road?module=${moduleId}`} className="ml-4 inline-block font-semibold academy-accent underline underline-offset-4">Инструменти за модула</a>
       <p className="mt-2">Започни с предоставения казус или се върни към проверката на своя прототип.</p>
       {lesson.blocks.filter(block => block.key.startsWith('checkpoint_')).map(block => <p key={block.key} className="mt-2">
         {typeof block.content.skillName === 'string' ? block.content.skillName : block.title}: <span className={completed.has(block.key) ? 'academy-success' : 'academy-muted'}>{completed.has(block.key) ? 'премината учебна проверка' : 'още няма премината проверка'}</span>

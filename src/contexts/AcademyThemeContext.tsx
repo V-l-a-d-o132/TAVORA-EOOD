@@ -42,6 +42,6 @@ export function AcademyThemeProvider({ children }: { children: React.ReactNode }
 export function AcademyThemeScope({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
   const { theme } = useAcademyTheme();
-  const active = pathname === '/dashboard' || pathname === '/kurs' || pathname.startsWith('/module/') || pathname.startsWith('/academy-labs/');
+  const active = pathname === '/dashboard' || pathname === '/kurs' || pathname.startsWith('/module/') || pathname.startsWith('/academy-labs/') || pathname.startsWith('/academy-tools/');
   return <div className={active ? 'academy-themed' : undefined} data-academy-theme={active ? theme : undefined}>{children}</div>;
 }

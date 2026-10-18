@@ -1,0 +1,15 @@
+{
+  "release": "silk_toolkit_20261018",
+  "parts": [
+    "curriculum.000.base64",
+    "curriculum.001.base64"
+  ],
+  "bytes": 60260,
+  "sha256": "2ac4be2c828248f70eb702a1da9647451bc14d2e376dce1fb1d5c2a7a036a8ec",
+  "decodedBytes": 478821,
+  "decodedSha256": "9a9641554f58a5d79b76a7aaf02bc8dd97accddf5fa108fda99daf40dc3a8e15",
+  "lessons": 74,
+  "guides": 51,
+  "cases": 11,
+  "decisions": 43
+}

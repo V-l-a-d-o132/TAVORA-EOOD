@@ -1,6 +1,7 @@
 import { ACADEMY_READING_WORDS } from '@/data/academy-reading-words';
 import { marketingVisibleWords } from '@/lib/marketing-reading-count';
 import { parseProvidedMaterials, type ProvidedMaterials } from '@/lib/provided-materials';
+import { parseLessonToolkit, toolkitVisibleText } from '@/lib/silk-toolkit';
 
 // A planning range, not a promise about how fast any student reads.
 // Practice, research, filming and assessment are deliberately outside it.
@@ -65,6 +66,10 @@ export function countVisibleLessonWords(lesson: {
     }
     if (Array.isArray(value)) return value.reduce<number>((total, part) => total + count(part), 0);
     if (value && typeof value === 'object') {
+      if ('toolkit' in value && 'toolkitFallback' in value && value.toolkitFallback === true) {
+        const toolkit = parseLessonToolkit(value.toolkit);
+        if (toolkit) return count(['toolkitIntro' in value ? value.toolkitIntro : '', ...toolkitVisibleText(toolkit)]);
+      }
       if ('studio' in value && value.studio !== null && typeof value.studio === 'object') {
         const configured = value as { studio: { title?: unknown; initialContext?: unknown; context?: unknown; task?: unknown; limit?: unknown; change?: unknown; materials?: unknown; materialsIntro?: unknown; materialsFallback?: unknown }; left?: { text?: unknown }[]; right?: { text?: unknown }[] };
         const materials = parseProvidedMaterials(configured.studio.materials);
