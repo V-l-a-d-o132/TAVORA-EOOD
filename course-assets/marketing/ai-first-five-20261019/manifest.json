@@ -1,0 +1,30 @@
+{
+  "release": "marketing_ai_first_five_20261019",
+  "curriculum": {
+    "parts": [
+      "curriculum.000.base64"
+    ],
+    "bytes": 21311,
+    "sha256": "22b1cbfc5ceef43179a78d775074ce3fb84185bfd8418dd8d3ccef531576c957",
+    "decodedBytes": 158765,
+    "decodedSha256": "9f929b3613a72d8e3de2aaefcb1e36e80d2cc25615654aee660065ab240f64ae"
+  },
+  "source": {
+    "parts": [
+      "source.000.base64",
+      "source.001.base64",
+      "source.002.base64",
+      "source.003.base64",
+      "source.004.base64",
+      "source.005.base64",
+      "source.006.base64"
+    ],
+    "bytes": 217612,
+    "sha256": "b9cf626d9310083b007a1ba6ab097931d02051421f8703c21d2fa450dc29a99c",
+    "decodedBytes": 1347313,
+    "decodedSha256": "381fbbf830cd2121ba68456c2f4d2def2c6e83fa9b35a64ed1408d2947de3eed"
+  },
+  "guides": 13,
+  "cases": 13,
+  "decisions": 52
+}
