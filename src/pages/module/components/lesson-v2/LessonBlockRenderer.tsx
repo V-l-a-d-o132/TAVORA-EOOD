@@ -90,7 +90,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         return <><blockquote className="border-l-4 academy-accent-border pl-5 text-lg leading-relaxed academy-body">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':
       case 'rich_text':
-        return <><LessonRichText content={block.content} allowCode={moduleId?.startsWith('s01-')} allowVideoLab={moduleId?.startsWith('s02-')} />{acknowledgement}</>;
+        return <><LessonRichText content={block.content} allowCode={moduleId?.startsWith('s01-')} allowVideoLab={moduleId?.startsWith('s02-')} allowMarketingAi={moduleId?.startsWith('s03-')} />{acknowledgement}</>;
       case 'before_after': {
         const before = obj(block.content.before);
         const after = obj(block.content.after);

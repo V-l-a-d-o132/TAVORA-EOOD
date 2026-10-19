@@ -1,3 +1,4 @@
+import { loadMarketingAiCandidates } from '../scripts/prepare-marketing-ai-assets.mjs';
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
 import { LEARNING_SECTIONS, PREVIOUS_MARKETING_LESSONS } from '../src/mocks/learning-platform';
@@ -79,7 +80,8 @@ describe('Marketing Basics curriculum and stable lesson locations', () => {
       currentBlocks.push(current.bridge, current.practice);
       const currentWords = marketingVisibleWords({...lesson, blocks: currentBlocks});
       expect(currentWords).toBe(current.wordsAfter);
-      expect(ACADEMY_READING_WORDS[`${lesson.source_module_id}/${lesson.lesson_id}`]).toBe(currentWords);
+      const ai = loadMarketingAiCandidates().find(r => r.lesson === lesson.lesson_id);
+      expect(ACADEMY_READING_WORDS[`${lesson.source_module_id}/${lesson.lesson_id}`]).toBe(marketingVisibleWords({...lesson, blocks: [...currentBlocks, ...(ai?.payload.additions || [])]}));
       expect(lesson.blocks.some(block => ['practical_response', 'submission', 'homework', 'reflection'].includes(block.type))).toBe(false);
     }
   });

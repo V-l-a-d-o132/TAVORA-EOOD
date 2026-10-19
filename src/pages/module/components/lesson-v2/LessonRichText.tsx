@@ -7,6 +7,8 @@ import LessonToolkit from '@/components/academy/LessonToolkit';
 import { parseLessonToolkit } from '@/lib/silk-toolkit';
 import VideoAiGuide from '@/components/academy/VideoAiGuide';
 import { parseVideoAiGuide } from '@/lib/video-ai';
+import MarketingAiGuide from '@/components/academy/MarketingAiGuide';
+import { parseMarketingAiGuide } from '@/lib/marketing-ai';
 
 const strings = (value: unknown): string[] => Array.isArray(value)
   ? value.filter((item): item is string => typeof item === 'string') : [];
@@ -25,7 +27,7 @@ function httpsUrl(value: unknown): string | null {
 }
 
 /** Optional tables and references; existing rich-text content keeps its rendering. */
-export default function LessonRichText({ content, allowCode = false, allowVideoLab = false }: { content: JsonObject; allowCode?: boolean; allowVideoLab?: boolean }) {
+export default function LessonRichText({ content, allowCode = false, allowVideoLab = false, allowMarketingAi = false }: { content: JsonObject; allowCode?: boolean; allowVideoLab?: boolean; allowMarketingAi?: boolean }) {
   const columns = strings(content.columns);
   const rows = objects(content.table).map(row => strings(row.cells));
   const hasTable = columns.length > 0 && rows.length > 0 && rows.every(row => row.length === columns.length);
@@ -46,6 +48,8 @@ export default function LessonRichText({ content, allowCode = false, allowVideoL
   if (toolkit && content.toolkitFallback === true) body = text(content.toolkitIntro);
   const videoAi = allowVideoLab ? parseVideoAiGuide(content.videoAi) : null;
   if (videoAi && content.videoAiFallback === true) body = '';
+  const marketingAi = allowMarketingAi ? parseMarketingAiGuide(content.marketingAi) : null;
+  if (marketingAi && content.marketingAiFallback === true) body = '';
   const code = content.code && typeof content.code === 'object' && !Array.isArray(content.code) ? content.code as JsonObject : {};
   // Older hosted builds still display the complete example from body.
   // The enhanced renderer shows that exact suffix only once, as escaped text.
@@ -70,6 +74,7 @@ export default function LessonRichText({ content, allowCode = false, allowVideoL
     {materials && <ProvidedMaterials key={materials.title} materials={materials} />}
     {toolkit && <LessonToolkit key={toolkit.title} toolkit={toolkit} />}
     {videoAi && <VideoAiGuide key={videoAi.title} guide={videoAi} />}
+    {marketingAi && <MarketingAiGuide key={marketingAi.lesson} guide={marketingAi} />}
     {objects(content.points).length > 0 && <ul className="mt-5 space-y-3">
       {objects(content.points).map((point, index) => <li key={text(point.id) || index} className="flex gap-3 academy-body">
         <span className="mt-2 h-2 w-2 shrink-0 rounded-full academy-primary" />{text(point.text)}

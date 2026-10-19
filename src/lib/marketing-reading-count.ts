@@ -1,3 +1,4 @@
+import { parseMarketingAiGuide, marketingAiVisibleText } from '@/lib/marketing-ai';
 type Block = { title: string; type: string; content: unknown };
 type Lesson = { title: string; subtitle: string; blocks: readonly Block[] };
 
@@ -26,6 +27,8 @@ export function marketingVisibleFragments(lesson: Lesson): string[] {
       case 'hook': put(c.body || c.problem); break;
       case 'concept':
       case 'rich_text': {
+        const guide = c.marketingAiFallback === true ? parseMarketingAiGuide(c.marketingAi) : null;
+        if (guide) { marketingAiVisibleText(guide).forEach(put); break; }
         const columns = strings(c.columns);
         const rows = objects(c.table).map(row => strings(row.cells));
         const hasTable = columns.length > 0 && rows.length > 0 && rows.every(row => row.length === columns.length);
