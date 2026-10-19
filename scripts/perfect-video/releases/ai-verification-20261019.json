@@ -1,0 +1,192 @@
+{
+  "release": "video_ai_20261019",
+  "date": "2026-10-19",
+  "baseMain": "bcc8f6483ea9c241085903ec25a3f77d379cc7b3",
+  "course": {
+    "lessons": 240,
+    "modules": 15,
+    "newVersions": 69,
+    "untouchedVersions": 171,
+    "oldBlocksRetained": 3137,
+    "newBlocks": 75,
+    "totalBlocks": 3212,
+    "guides": 60,
+    "moduleCases": 15,
+    "decisions": 61,
+    "tools": 15,
+    "demonstrations": 5,
+    "guideDemonstrations": 16,
+    "wordsBefore": 281736,
+    "wordsAfter": 304303
+  },
+  "database": {
+    "migration": "20261019074909_perfect_video_ai_guides_and_checks",
+    "publication": {
+      "release": "video_ai_20261019",
+      "published": 69,
+      "addedBlocks": 75,
+      "progressRowsCarried": 4
+    },
+    "programsBefore": [
+      {
+        "program": "s01",
+        "lessons": 74,
+        "blocks": 1359,
+        "fingerprint": "1c08caebad371da11310b1166f4def90"
+      },
+      {
+        "program": "s02",
+        "lessons": 240,
+        "blocks": 3137,
+        "fingerprint": "2659bb71e65af11307c8ebe307c92d4b"
+      },
+      {
+        "program": "s03",
+        "lessons": 210,
+        "blocks": 3852,
+        "fingerprint": "4fb1787ea3f49e7a55345c40209029ff"
+      }
+    ],
+    "programsAfter": [
+      {
+        "program": "s01",
+        "lessons": 74,
+        "blocks": 1359,
+        "fingerprint": "1c08caebad371da11310b1166f4def90"
+      },
+      {
+        "program": "s02",
+        "lessons": 240,
+        "blocks": 3212,
+        "fingerprint": "7d32d1a07aed314f4ec92d8fafe81f12"
+      },
+      {
+        "program": "s03",
+        "lessons": 210,
+        "blocks": 3852,
+        "fingerprint": "4fb1787ea3f49e7a55345c40209029ff"
+      }
+    ],
+    "retention": {
+      "original_blocks": 906,
+      "changed": 0
+    },
+    "attempts": {
+      "checked": 1459,
+      "changed": 0
+    },
+    "progress": {
+      "total": 31,
+      "versionsUpdated": 4,
+      "identicalOtherRows": 27,
+      "preservedWork": 4,
+      "issues": []
+    },
+    "archivedProgress": {
+      "reviewed": 4,
+      "identical": 4
+    },
+    "unaffectedVersions": {
+      "unaffected": 171,
+      "unchanged_versions": 171,
+      "correct_origins": 69
+    },
+    "exams": {
+      "banks": 5,
+      "questions": 78
+    },
+    "access": {
+      "anon_staging": false,
+      "student_staging": false,
+      "anon_publish": false,
+      "student_keys": false,
+      "exam_hash": "301524dae39043704201ab87a7466394"
+    },
+    "newSecurityWarnings": 0,
+    "newOwnerOnlyStagingInfo": 1,
+    "anonymousAccess": {
+      "freeSilkModule1": true,
+      "paidVideo": false,
+      "paidMarketing": false
+    }
+  },
+  "verification": {
+    "fullSuite": {
+      "passed": 612,
+      "failed": 5,
+      "skipped": 8,
+      "total": 625,
+      "seconds": 699.07,
+      "diagnosis": "Four 5-second timeouts under concurrent load; one old reading-count assertion expected the pre-upgrade edition."
+    },
+    "rechecks": [
+      {
+        "files": [
+          "practical-marketing-next-release.test.ts"
+        ],
+        "passed": 10,
+        "failed": 0,
+        "testTimeout": 30000
+      },
+      {
+        "files": [
+          "final-practice-studio.test.tsx",
+          "academy-navigation.test.tsx",
+          "silk-road-closed-staging.test.ts"
+        ],
+        "passed": 28,
+        "failed": 0,
+        "testTimeout": 30000
+      }
+    ],
+    "executedTestsVerified": 617,
+    "unresolvedFailures": 0,
+    "privatePublication": {
+      "passed": 6,
+      "failed": 0,
+      "sourceLessons": 240,
+      "decisionAlternativesChecked": 183
+    },
+    "ciSynthetic": {
+      "passed": 10,
+      "failed": 0
+    },
+    "browser": {
+      "regressionsPassed": 23,
+      "newPassed": 10,
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "widths": [
+        320,
+        1280
+      ],
+      "actualDownloads": [
+        "SRT",
+        "MP3",
+        "MP4",
+        "TXT"
+      ],
+      "uploadsOrOpenInputs": 0,
+      "unauthorizedPaidAccess": 0
+    },
+    "typecheck": "passed",
+    "newFilesLint": "passed",
+    "distribution": "passed",
+    "lint": "passed",
+    "build": {
+      "status": "passed",
+      "sourceHash": "84557da383e05c01b54bcd819958bd73debc8f20607bd47b60f6b16f87018465",
+      "chunks": 134,
+      "prerenderedArticles": 11
+    }
+  },
+  "limits": {
+    "externalScreenRecordings": "Not supplied; tool routes are based on official documentation.",
+    "personalAuthorDemo": "[НУЖНО ОТ МЕН]",
+    "illustration": "Actual AI-generated static illustration, not generated video.",
+    "audio": "Actual preprocessed RNNoise result from the supplied synthetic voice; no cloud inference.",
+    "deployment": "Supabase published. Frontend requires Readdy Pull then Publish after main update."
+  }
+}

@@ -2,6 +2,7 @@ import { ACADEMY_READING_WORDS } from '@/data/academy-reading-words';
 import { marketingVisibleWords } from '@/lib/marketing-reading-count';
 import { parseProvidedMaterials, type ProvidedMaterials } from '@/lib/provided-materials';
 import { parseLessonToolkit, toolkitVisibleText } from '@/lib/silk-toolkit';
+import { parseVideoAiGuide, videoAiVisibleText } from '@/lib/video-ai';
 
 // A planning range, not a promise about how fast any student reads.
 // Practice, research, filming and assessment are deliberately outside it.
@@ -66,6 +67,10 @@ export function countVisibleLessonWords(lesson: {
     }
     if (Array.isArray(value)) return value.reduce<number>((total, part) => total + count(part), 0);
     if (value && typeof value === 'object') {
+      if ('videoAi' in value && 'videoAiFallback' in value && value.videoAiFallback === true) {
+        const guide = parseVideoAiGuide(value.videoAi);
+        if (guide) return count(videoAiVisibleText(guide));
+      }
       if ('toolkit' in value && 'toolkitFallback' in value && value.toolkitFallback === true) {
         const toolkit = parseLessonToolkit(value.toolkit);
         if (toolkit) return count(['toolkitIntro' in value ? value.toolkitIntro : '', ...toolkitVisibleText(toolkit)]);

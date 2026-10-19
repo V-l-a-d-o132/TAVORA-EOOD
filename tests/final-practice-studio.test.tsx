@@ -6,7 +6,10 @@ import ClosedPracticeStudio from '../src/components/academy/ClosedPracticeStudio
 import { parseClosedStudio, studioBudget, studioCalculation, studioMatches, studioPlanText } from '../src/lib/closed-practice-studio';
 import { loadFinalCandidates } from '../scripts/prepare-final-video-assets.mjs';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
+import { loadVideoAiCandidates } from '../scripts/prepare-video-ai-assets.mjs';
+import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 const lessons = loadFinalCandidates();
+const aiSupplements = loadVideoAiCandidates();
 const lesson = (id: string) => lessons.find(l => l.lesson === id)!;
 const parsed = (id: string) => parseClosedStudio(lesson(id).practice.content)!;
 const props = { busy: false, completed: false, onChange: vi.fn(), onSubmit: vi.fn() };
@@ -20,7 +23,9 @@ test('all 73 new cases preserve older rendering, finite choices, text capacity a
     expect(studio.slots.filter(s => s.phase === 'change')).toHaveLength(1);
     expect(studio.slots.every(s => s.choices.length >= 3)).toBe(true);
     expect(l.wordsAfter).toBeGreaterThan(l.wordsBefore);
-    expect(ACADEMY_READING_WORDS[`${l.module}/${l.lesson}`]).toBe(l.wordsAfter);
+    const additions = aiSupplements.find(row => row.lesson === l.lesson)?.payload.additions || [];
+    const addedWords = countVisibleLessonWords({ moduleId: l.module, title: '', subtitle: '', objective: '', blocks: additions });
+    expect(ACADEMY_READING_WORDS[`${l.module}/${l.lesson}`]).toBe(l.wordsAfter + addedWords);
     delete fallback.studio.productionKind; delete fallback.studio.initialContext; delete fallback.studio.change;
     const old = parseClosedStudio(fallback)!;
     expect(['decision','cut','frame','colour','sound','diagram']).toContain(old.kind);

@@ -235,6 +235,11 @@ export default function LessonEngineV2({
       </p>)}
     </div>}
 
+    {moduleId.startsWith('s02-') && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
+      <a href={`/academy-tools/perfect-video?module=${moduleId}`} className="font-semibold academy-accent underline underline-offset-4">Инструменти за модула и работилница с ИИ</a>
+      <p className="mt-2">Конкретни стъпки, условия за достъп и предоставени файлове за сравнение. Самостоятелните решения се проверяват в урока.</p>
+    </div>}
+
     {['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
       <a href="/academy-labs/perfect-video/start" className="font-semibold academy-accent underline underline-offset-4">Първи клип: учебна папка и проверка на файла</a>
       <p className="mt-2">Започни с предоставения бриф или се върни към своята версия. Графичният пример не удостоверява снимане или реален бизнес резултат.</p>

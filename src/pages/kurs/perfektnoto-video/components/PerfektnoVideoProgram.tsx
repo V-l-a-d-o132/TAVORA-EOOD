@@ -26,6 +26,8 @@ export default function PerfektnoVideoProgram() {
         {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока с обяснения, примери и затворени проверки. Времената са ориентири за четене; решенията, повторенията и личното упражняване са със собствено темпо.
       </p>
 
+      <p className="mb-6 text-sm leading-relaxed text-[#1C1C1E]/75"><Link to="/academy-tools/perfect-video" className="font-medium underline underline-offset-4">Виж инструментите и пробвай работилницата с ИИ</Link>. Сравнявай предоставени сценарии, субтитри, звук и изнесени файлове. Публичните примери не отключват платените уроци.</p>
+
       <div className="space-y-3">
         {MODULES.map((mod) => {
           const modKey = parseInt(mod.num, 10);

@@ -1,0 +1,90 @@
+{
+  "release": "video_ai_20261019",
+  "curriculum": {
+    "parts": [
+      "curriculum.000.base64",
+      "curriculum.001.base64"
+    ],
+    "bytes": 49545,
+    "sha256": "fc50d0351488dfc1e941733af4f97726f68b6cdcda7e1edb9aa3c5bb6616a906",
+    "decodedBytes": 593287,
+    "decodedSha256": "d35e4967eb15c07ab8f96db1627d22a2f75a97fde8a5aa269cab2396153fdd23"
+  },
+  "source": {
+    "parts": [
+      "source.000.base64",
+      "source.001.base64",
+      "source.002.base64",
+      "source.003.base64",
+      "source.004.base64",
+      "source.005.base64",
+      "source.006.base64",
+      "source.007.base64",
+      "source.008.base64",
+      "source.009.base64",
+      "source.010.base64",
+      "source.011.base64",
+      "source.012.base64",
+      "source.013.base64",
+      "source.014.base64",
+      "source.015.base64"
+    ],
+    "bytes": 732841,
+    "sha256": "ad3cbc6cf124e179b35d25b2bd4438eb03841be768b2f4bafe0dc2c4f01f915a",
+    "decodedBytes": 5263829,
+    "decodedSha256": "8cb2536fac084f98fae07e5bdd77c23e180906ea08a5f95c54b92296911024bd"
+  },
+  "generated-coffee-webp": {
+    "parts": [
+      "generated-coffee-webp.000.base64"
+    ],
+    "bytes": 38900,
+    "sha256": "1c156a64d7f4aa904a6403b9f3587aeed8cf2d3cc54b233dcb9d870b7de0400f",
+    "file": "generated-coffee.webp"
+  },
+  "voice-neural-mp3": {
+    "parts": [
+      "voice-neural-mp3.000.base64",
+      "voice-neural-mp3.001.base64"
+    ],
+    "bytes": 75501,
+    "sha256": "eaa8ef537f7fad3883790005fbd14e87aa4f07dcc994a86f8a1d3e77110c077b",
+    "file": "voice-neural.mp3"
+  },
+  "voice-filtered-mp3": {
+    "parts": [
+      "voice-filtered-mp3.000.base64",
+      "voice-filtered-mp3.001.base64"
+    ],
+    "bytes": 75501,
+    "sha256": "f925c64427965b9308bc394cf3db49fff48ee4bee63cb072f0a923814eb51c4c",
+    "file": "voice-filtered.mp3"
+  },
+  "wide-mp4": {
+    "parts": [
+      "wide-mp4.000.base64",
+      "wide-mp4.001.base64",
+      "wide-mp4.002.base64"
+    ],
+    "bytes": 100345,
+    "sha256": "a6d9c91a2d1b025fd0a511f34c81beb188b3c5d6dd110518bd5282d4ae09de0b",
+    "file": "wide.mp4"
+  },
+  "portrait-mp4": {
+    "parts": [
+      "portrait-mp4.000.base64"
+    ],
+    "bytes": 41960,
+    "sha256": "a4f9ef6e521425faeb1774338d0a686fd57c8f423776c78854538875e3667658",
+    "file": "portrait.mp4"
+  },
+  "portrait-edge-mp4": {
+    "parts": [
+      "portrait-edge-mp4.000.base64",
+      "portrait-edge-mp4.001.base64"
+    ],
+    "bytes": 50074,
+    "sha256": "34c228198a0a7d5f1985c0c69d35456a967c56e275449990d7dfe8ffaa0d2932",
+    "file": "portrait-edge.mp4"
+  }
+}
