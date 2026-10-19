@@ -1,0 +1,467 @@
+{
+  "release": "marketing_ai_first_five_20261019",
+  "wordsBefore": 80698,
+  "wordsAfter": 88582,
+  "wordsAdded": 7884,
+  "lessons": 41,
+  "updatedLessons": 13,
+  "blocksBefore": 795,
+  "blocksAfter": 821,
+  "guides": 13,
+  "cases": 13,
+  "decisions": 52,
+  "perLesson": {
+    "s03-m01/lm01-00": {
+      "before": 2461,
+      "after": 2461,
+      "added": 0
+    },
+    "s03-m01/lm01-02": {
+      "before": 2009,
+      "after": 2646,
+      "added": 637
+    },
+    "s03-m01/lm01-03": {
+      "before": 1883,
+      "after": 1883,
+      "added": 0
+    },
+    "s03-m01/lm01-04": {
+      "before": 2273,
+      "after": 2273,
+      "added": 0
+    },
+    "s03-m01/lm01-05": {
+      "before": 1979,
+      "after": 1979,
+      "added": 0
+    },
+    "s03-m01/lm01-06": {
+      "before": 1945,
+      "after": 1945,
+      "added": 0
+    },
+    "s03-m01/lm01-07": {
+      "before": 1989,
+      "after": 2615,
+      "added": 626
+    },
+    "s03-m02/lm02-01": {
+      "before": 2445,
+      "after": 2445,
+      "added": 0
+    },
+    "s03-m02/lm02-02": {
+      "before": 1967,
+      "after": 1967,
+      "added": 0
+    },
+    "s03-m02/lm02-03": {
+      "before": 2147,
+      "after": 2147,
+      "added": 0
+    },
+    "s03-m02/lm02-04": {
+      "before": 1980,
+      "after": 1980,
+      "added": 0
+    },
+    "s03-m02/lm02-05": {
+      "before": 1999,
+      "after": 2552,
+      "added": 553
+    },
+    "s03-m02/lm02-06": {
+      "before": 2115,
+      "after": 2729,
+      "added": 614
+    },
+    "s03-m02/lm02-07": {
+      "before": 2007,
+      "after": 2007,
+      "added": 0
+    },
+    "s03-m02/lm02-08": {
+      "before": 2015,
+      "after": 2593,
+      "added": 578
+    },
+    "s03-m03/lm03-01": {
+      "before": 1900,
+      "after": 1900,
+      "added": 0
+    },
+    "s03-m03/lm03-02": {
+      "before": 1811,
+      "after": 1811,
+      "added": 0
+    },
+    "s03-m03/lm03-03": {
+      "before": 1824,
+      "after": 1824,
+      "added": 0
+    },
+    "s03-m03/lm03-04": {
+      "before": 2363,
+      "after": 3108,
+      "added": 745
+    },
+    "s03-m03/lm03-05": {
+      "before": 1946,
+      "after": 1946,
+      "added": 0
+    },
+    "s03-m03/lm03-06": {
+      "before": 2129,
+      "after": 2766,
+      "added": 637
+    },
+    "s03-m03/lm03-07": {
+      "before": 1760,
+      "after": 1760,
+      "added": 0
+    },
+    "s03-m03/lm03-08": {
+      "before": 1996,
+      "after": 2683,
+      "added": 687
+    },
+    "s03-m05/lm05-01": {
+      "before": 1962,
+      "after": 2533,
+      "added": 571
+    },
+    "s03-m05/lm05-02": {
+      "before": 1953,
+      "after": 2496,
+      "added": 543
+    },
+    "s03-m05/lm05-03": {
+      "before": 1773,
+      "after": 1773,
+      "added": 0
+    },
+    "s03-m05/lm05-04": {
+      "before": 1868,
+      "after": 1868,
+      "added": 0
+    },
+    "s03-m05/lm05-05": {
+      "before": 2165,
+      "after": 2165,
+      "added": 0
+    },
+    "s03-m05/lm05-06": {
+      "before": 1962,
+      "after": 1962,
+      "added": 0
+    },
+    "s03-m05/lm05-07": {
+      "before": 1942,
+      "after": 1942,
+      "added": 0
+    },
+    "s03-m05/lm05-08": {
+      "before": 2085,
+      "after": 2622,
+      "added": 537
+    },
+    "s03-m07/lm07-01": {
+      "before": 1715,
+      "after": 1715,
+      "added": 0
+    },
+    "s03-m07/lm07-02": {
+      "before": 1738,
+      "after": 1738,
+      "added": 0
+    },
+    "s03-m07/lm07-03": {
+      "before": 1647,
+      "after": 2266,
+      "added": 619
+    },
+    "s03-m07/lm07-04": {
+      "before": 1659,
+      "after": 1659,
+      "added": 0
+    },
+    "s03-m07/lm07-05": {
+      "before": 1639,
+      "after": 1639,
+      "added": 0
+    },
+    "s03-m07/lm07-06": {
+      "before": 1755,
+      "after": 1755,
+      "added": 0
+    },
+    "s03-m07/lm07-07": {
+      "before": 1738,
+      "after": 1738,
+      "added": 0
+    },
+    "s03-m07/lm07-08": {
+      "before": 1736,
+      "after": 2273,
+      "added": 537
+    },
+    "s03-m07/lm07-09": {
+      "before": 1747,
+      "after": 1747,
+      "added": 0
+    },
+    "s03-m07/lm07-10": {
+      "before": 2671,
+      "after": 2671,
+      "added": 0
+    }
+  },
+  "date": "2026-10-19",
+  "tests": {
+    "unitAndDatabaseAndRegression": 118,
+    "browser": 9,
+    "lightAndDark": true,
+    "widths": [
+      320,
+      1280
+    ],
+    "typecheck": true,
+    "changedComponentLint": true,
+    "build": true,
+    "distributionScan": true
+  },
+  "production": {
+    "published_lessons": 13,
+    "draft_mismatches": 0,
+    "altered_old_blocks": 0,
+    "altered_lesson_metadata": 0,
+    "validation_errors": 0,
+    "new_required_blocks": 26,
+    "first_five_blocks": 821,
+    "marketing_lessons": 210,
+    "staging_exposed": false
+  },
+  "preservation": {
+    "matchedPublicTeachingHashes": 41,
+    "unchangedOutsideLessons": 511,
+    "unchangedOutsideStoredModules": 46,
+    "newSecurityAdvisories": 0,
+    "liveProgressRowsCarried": 0
+  },
+  "codeCheckpoint": "692e1a5d2dc5e12fc33b18bc4f8b2f2369c401bb",
+  "frontend": {
+    "targetBranch": "main",
+    "hosting": "Readdy",
+    "requiredAction": "Pull → Publish",
+    "publicPath": "/academy-tools/marketing-basics",
+    "fallback": "Complete readable source text and existing closed-choice checks"
+  },
+  "publicTeachingHashes": [
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-00",
+      "public_hash": "419dcc1d2a14fdbdd3fd5fb2797dd6b1"
+    },
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-02",
+      "public_hash": "b1b4ada36ec402cac82ed258e8dd0f15"
+    },
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-03",
+      "public_hash": "dd048636120130c73d8c5e5b202cb6f0"
+    },
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-04",
+      "public_hash": "f05a770fa4900bd3e2f3e0adb034c167"
+    },
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-05",
+      "public_hash": "1ab47c6c59bdb73099ec00f706aebe6f"
+    },
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-06",
+      "public_hash": "ac1e1efbbff592e9454b386ef8744894"
+    },
+    {
+      "module_id": "s03-m01",
+      "lesson_id": "lm01-07",
+      "public_hash": "d1d9f7223b56b0ebac90bffaa780bf2d"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-01",
+      "public_hash": "c07ffbc1e0e3b01b0fee7e2e34ff0d5e"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-02",
+      "public_hash": "eb50fd47f5fbd795e084648972b6f7af"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-03",
+      "public_hash": "db7916e4834f22417f06df9aa4ab3bf6"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-04",
+      "public_hash": "9b26e1edcb57c95935506d144247fe71"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-05",
+      "public_hash": "6aac4425e93e83a42f3c9c01e6a477a2"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-06",
+      "public_hash": "5bb422e2e3a9757def516f4607cddd97"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-07",
+      "public_hash": "2e7fd11efff9fd331a770889b32778e7"
+    },
+    {
+      "module_id": "s03-m02",
+      "lesson_id": "lm02-08",
+      "public_hash": "63fc312e018fb690effd43d94ff1dcc7"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-01",
+      "public_hash": "b862c7c4cd6d77a15ea80770908d425f"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-02",
+      "public_hash": "e1a673fba131a4faddf7171820303f99"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-03",
+      "public_hash": "ccbf31a2a0e6ec2f419671ad0e5937ce"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-04",
+      "public_hash": "36bb4e47ccd49a69d68e19ff4fa71012"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-05",
+      "public_hash": "e64fc276ebe3c8faac483a38a5274fa8"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-06",
+      "public_hash": "06cb81a06b09a3186838ac3e2bc2b3d0"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-07",
+      "public_hash": "80a67743cd36068bec7b2943652b3d00"
+    },
+    {
+      "module_id": "s03-m03",
+      "lesson_id": "lm03-08",
+      "public_hash": "a07762e373244bf3238de393029f0da6"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-01",
+      "public_hash": "96a8bdb6eb3102ef62875ec5765458ac"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-02",
+      "public_hash": "e13d5e8f04fa2229fa4b89175b10024e"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-03",
+      "public_hash": "5556bd808b67e32ee7366b27fd5b58d6"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-04",
+      "public_hash": "5317fcb075876881de54d7c6b24d9fea"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-05",
+      "public_hash": "a06f6bdd1e5bd0b31c9ed78d7cea6eaa"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-06",
+      "public_hash": "79b4421bdd7d892f0f76ec6c1ec157ac"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-07",
+      "public_hash": "ef5ac8bc42918c97c3d5643980d37f1a"
+    },
+    {
+      "module_id": "s03-m05",
+      "lesson_id": "lm05-08",
+      "public_hash": "ef69de2c8576652f7cfe45a7c9b12a8e"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-01",
+      "public_hash": "b25993840b1f969acff234cec9a818e5"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-02",
+      "public_hash": "275d103ea2f2743a36066b8aa6130712"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-03",
+      "public_hash": "496a7f3ad20896128f1b5157eb96fb1f"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-04",
+      "public_hash": "49bd10b7c31b5e6e2f98246472724096"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-05",
+      "public_hash": "aa102cf8906da0a27ab8d66e38aced19"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-06",
+      "public_hash": "de6edcc742455c8a590d941b30df43ff"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-07",
+      "public_hash": "d07d4940efaad716db03de439a06835f"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-08",
+      "public_hash": "723791ba83405b66b2d32c0e08a3c028"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-09",
+      "public_hash": "a498bb696d539fac92b1f5a080d37798"
+    },
+    {
+      "module_id": "s03-m07",
+      "lesson_id": "lm07-10",
+      "public_hash": "f2b78ce52c078846d6def1368c12c2ca"
+    }
+  ]
+}
