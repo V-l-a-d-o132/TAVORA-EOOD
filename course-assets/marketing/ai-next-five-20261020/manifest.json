@@ -1,0 +1,32 @@
+{
+  "release": "marketing_ai_next_five_20261020",
+  "curriculum": {
+    "parts": [
+      "curriculum.000.base64",
+      "curriculum.001.base64"
+    ],
+    "bytes": 36839,
+    "sha256": "1ab36e7c12744fbe16ea42389ecce77f82902b0a12b0b27b883c62bf84c87e59",
+    "decodedBytes": 247447,
+    "decodedSha256": "8f417d485cca13aca574ca72e523ae02335b7fcd870e7973e2ecf09c9189303e"
+  },
+  "source": {
+    "parts": [
+      "source.000.base64",
+      "source.001.base64",
+      "source.002.base64",
+      "source.003.base64",
+      "source.004.base64",
+      "source.005.base64",
+      "source.006.base64",
+      "source.007.base64"
+    ],
+    "bytes": 257670,
+    "sha256": "2005c6a1eb57ea37ae4aa5473f7d5f337d722c66a7371f3d7f813f1e5d73cde0",
+    "decodedBytes": 1924665,
+    "decodedSha256": "982db596385a66f840e9ec1f538ed448d1e778143e108b43ff0edfcd2dbec59f"
+  },
+  "guides": 17,
+  "cases": 17,
+  "decisions": 68
+}
