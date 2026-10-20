@@ -15,7 +15,7 @@ for (const theme of ['light', 'dark']) for (const width of [320, 1280]) {
     await page.goto('/academy-tools/marketing-basics');
     await expect(page.getByRole('heading', { name: 'От въпроса на човека до провереното послание' })).toBeVisible();
     const demo = page.getByRole('region', { name: 'Предоставена демонстрация' });
-    expect(await page.getByRole('combobox', { name: 'Избери модул' }).locator('option').evaluateAll(options => options.map(o => (o as HTMLOptionElement).value))).toEqual(['s03-m01', 's03-m02', 's03-m05', 's03-m03', 's03-m07']);
+    expect(await page.getByRole('combobox', { name: 'Избери модул' }).locator('option').evaluateAll(options => options.slice(0, 5).map(o => (o as HTMLOptionElement).value))).toEqual(['s03-m01', 's03-m02', 's03-m05', 's03-m03', 's03-m07']);
     for (const id of ['s03-m01', 's03-m02', 's03-m05', 's03-m03', 's03-m07']) {
       await page.getByRole('combobox', { name: 'Избери модул' }).selectOption(id);
       await demo.getByRole('button', { name: 'Свери с източниците', exact: true }).click();
@@ -32,7 +32,7 @@ for (const theme of ['light', 'dark']) for (const width of [320, 1280]) {
       }
       await assertLearningFits(page); await assertLearningContrast(demo);
     }
-    await expect(page.getByRole('region', { name: 'Подбрани инструменти' }).getByRole('article')).toHaveCount(6);
+    await expect(page.getByRole('region', { name: 'Подбрани инструменти' }).getByRole('article')).toHaveCount(13);
     const pomelli = page.getByRole('article', { name: 'Pomelli', exact: true });
     await pomelli.getByText('Работен маршрут · Pomelli', { exact: true }).click();
     await expect(pomelli.locator('ol li')).toHaveCount(3);

@@ -15,9 +15,9 @@ afterEach(cleanup);
 test('the five displayed modules and 13 real lessons resolve correctly; six tools have safe official routes', () => {
   expect(MARKETING_AI_MODULES.map(m => m.id)).toEqual(['s03-m01', 's03-m02', 's03-m05', 's03-m03', 's03-m07']);
   const source = new Set(loadMarketingAiSource().map(l => l.lesson_id));
-  expect(rows).toHaveLength(13); expect(MARKETING_AI_TOOLS).toHaveLength(6);
+  expect(rows).toHaveLength(13); expect(MARKETING_AI_TOOLS).toHaveLength(13);
   for (const r of rows) { expect(source.has(r.lesson)).toBe(true); expect(marketingAiLessonLink(r.lesson)).toBe(`/module/${r.module}?lesson=${r.lesson}`); }
-  expect(marketingAiLessonLink('lm01-01')).toBeNull(); expect(marketingAiLessonLink('__proto__')).toBeNull();
+  expect(marketingAiLessonLink('lm01-01')).toBe('/module/s03-m09?lesson=lm01-01'); expect(marketingAiLessonLink('__proto__')).toBeNull();
   for (const t of MARKETING_AI_TOOLS) { expect(parseMarketingAiTool(t)).toEqual(t); expect(t.steps).toHaveLength(3); expect(t.sources.every(url => url.startsWith('https://'))).toBe(true); }
 });
 

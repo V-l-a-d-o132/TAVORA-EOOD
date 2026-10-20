@@ -30,7 +30,7 @@ export default function MarketingBasicsProgram() {
       </p>
 
       <div className="space-y-4">
-        <p className="mb-6 text-sm leading-relaxed text-[#1C1C1E]/65">В първите пет модула работиш и по предоставени примери с ИИ: клиентски реплики, оферти, послания и отзиви. <Link to="/academy-tools/marketing-basics" className="font-medium text-[#1C1C1E] underline underline-offset-4">Разгледай инструментите и учебните сравнения</Link>.</p>
+        <p className="mb-6 text-sm leading-relaxed text-[#1C1C1E]/65">В първите десет модула работиш и по предоставени примери с ИИ: клиентски реплики, оферти, послания, съдържание, страници и отчети. <Link to="/academy-tools/marketing-basics" className="font-medium text-[#1C1C1E] underline underline-offset-4">Разгледай инструментите и учебните сравнения</Link>.</p>
         {GROUPS.map((group, gi) => (
           <div key={group.id} className="rounded-2xl border border-[#1C1C1E]/8 overflow-hidden transition-all duration-200">
             <button

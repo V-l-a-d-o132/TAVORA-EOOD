@@ -5,10 +5,10 @@
       "curriculum.000.base64",
       "curriculum.001.base64"
     ],
-    "bytes": 36839,
-    "sha256": "1ab36e7c12744fbe16ea42389ecce77f82902b0a12b0b27b883c62bf84c87e59",
-    "decodedBytes": 247447,
-    "decodedSha256": "8f417d485cca13aca574ca72e523ae02335b7fcd870e7973e2ecf09c9189303e"
+    "bytes": 37894,
+    "sha256": "51d870e1ad65be1021a0f026ee70064420e8231a7be731648c1b2547aea01759",
+    "decodedBytes": 253103,
+    "decodedSha256": "dd9ba48bc575ffbc0d550688eb9df0f9b74eef28085c6af465b449c334250198"
   },
   "source": {
     "parts": [
