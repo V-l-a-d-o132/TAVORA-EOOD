@@ -32,7 +32,7 @@ for (const theme of ['light', 'dark']) for (const width of [320, 1280]) {
       }
       await assertLearningFits(page); await assertLearningContrast(demo);
     }
-    await expect(page.getByRole('region', { name: 'Подбрани инструменти' }).getByRole('article')).toHaveCount(13);
+    await expect(page.getByRole('region', { name: 'Подбрани инструменти' }).getByRole('article')).toHaveCount(23);
     const pomelli = page.getByRole('article', { name: 'Pomelli', exact: true });
     await pomelli.getByText('Работен маршрут · Pomelli', { exact: true }).click();
     await expect(pomelli.locator('ol li')).toHaveCount(3);

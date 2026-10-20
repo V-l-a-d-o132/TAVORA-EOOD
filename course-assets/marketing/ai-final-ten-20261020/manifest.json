@@ -1,0 +1,42 @@
+{
+  "release": "marketing_ai_final_ten_20261020",
+  "curriculum": {
+    "parts": [
+      "curriculum.000.base64",
+      "curriculum.001.base64",
+      "curriculum.002.base64"
+    ],
+    "bytes": 70394,
+    "sha256": "f227d05874afda2871e55860595db8cefb8e96e7afb666277bdc1e12470fc037",
+    "decodedBytes": 495720,
+    "decodedSha256": "917e2ece4e19ecb641625900877e44d0686433974d4abaa55e7ea1979f03db23"
+  },
+  "source": {
+    "parts": [
+      "source.000.base64",
+      "source.001.base64",
+      "source.002.base64",
+      "source.003.base64",
+      "source.004.base64",
+      "source.005.base64",
+      "source.006.base64",
+      "source.007.base64",
+      "source.008.base64",
+      "source.009.base64",
+      "source.010.base64",
+      "source.011.base64",
+      "source.012.base64",
+      "source.013.base64",
+      "source.014.base64",
+      "source.015.base64",
+      "source.016.base64"
+    ],
+    "bytes": 551547,
+    "sha256": "7343ece2d67a0849284fbd10e19bf3349c0e400f992d18eb9f9049749bb45623",
+    "decodedBytes": 3751312,
+    "decodedSha256": "642e28421a51c746a0b70647ee41d270394344ee58e059838b65eab81f490295"
+  },
+  "guides": 34,
+  "cases": 34,
+  "decisions": 136
+}

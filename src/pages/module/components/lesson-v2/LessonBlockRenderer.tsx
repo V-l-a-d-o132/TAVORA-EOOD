@@ -195,6 +195,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
         const minimumGroupPercent = n(block.content.minimumGroupPercent);
         return <div>
           <p className="mb-4 leading-7 academy-body">{s(block.content.introduction)}</p>
+          {moduleId === 's03-m20' && lessonId === 'lm20-14' && <p className="mb-4 rounded-xl border academy-border academy-tint p-4 text-sm leading-7 academy-body">Преди нов опит на финалния изпит завърши 64-те практически проверки с ИИ в двадесетте модула и предишните 13 урока на модул 20. Четирите групови проверки остават част от подготовката.</p>}
           <p className="mb-6 rounded-xl border academy-border academy-tint p-4 text-sm academy-body">Отговорени: {answered} от {questions.length}. Нужно е поне {n(block.content.minimumPercent, 80)}% в един пълен опит.{minimumGroupPercent > 0 && ` Изискват се и поне ${minimumGroupPercent}% във всяка тематична група.`}</p>
           <div className="space-y-8">{questions.map((question, index) => {
             const questionId = s(question.id, `q${index + 1}`);

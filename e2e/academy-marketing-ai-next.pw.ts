@@ -48,7 +48,7 @@ for (const theme of ['light', 'dark']) for (const width of [320, 1280]) {
       await assertLearningFits(page); await assertLearningContrast(demo);
       if (id !== 's03-m10') await demo.getByRole('region', {name: {'s03-m11':'Изпробвай календар при промяна на приема','s03-m08':'Пробвай трите състояния на действието','s03-m06':'Сравни какво е останало във входа','s03-m09':'Прочети един и същ обхват'}[id]}).screenshot({path: info.outputPath(`model-${id}-${theme}-${width}.png`)});
     }
-    await expect(page.getByRole('region', { name: 'Подбрани инструменти' }).getByRole('article')).toHaveCount(13);
+    await expect(page.getByRole('region', { name: 'Подбрани инструменти' }).getByRole('article')).toHaveCount(23);
     const pomelli = page.getByRole('article', { name: 'Pomelli', exact: true });
     await pomelli.getByText('Работен маршрут · Pomelli', { exact: true }).click();
     await expect(pomelli.locator('ol li')).toHaveCount(3);

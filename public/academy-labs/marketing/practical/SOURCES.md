@@ -119,3 +119,23 @@
 ## Какво още изисква реална проверка
 
 Премината задача показва решение по предоставен случай. Истинското разбиране на получател, пригодността на услуга, пазарната цена и доброволната препоръка изискват проверка с реалните хора и условия. Новите случаи не представят такива резултати като вече постигнати.
+
+## ИИ допълнения за модули 11–20 · 20.10.2026
+
+Издание `marketing_ai_final_ten_20261020`: 34 показани метода и 34 нови затворени случая, 136 решения. Осемте работещи модела използват измислени входове и локално състояние; не са заснети външни продукти или реални клиентски резултати. Запазени са досегашните уроци и подробните начални страници. Пълният обхват и методът за проверка са в `docs/marketing-ai-final-ten-20261020.md`.
+
+Официални източници за новите маршрути:
+
+- Make: https://help.make.com/introduction-to-make-ai-agent-new и https://help.make.com/credit-usage-for-ai-agents
+- n8n: https://docs.n8n.io/hosting/community-edition-features/
+- Gamma: https://help.gamma.app/en/articles/7834324-how-do-credits-work-in-gamma
+- Meta: https://www.facebook.com/business/help/938372127764391 и https://www.facebook.com/business/help/25941857932125812
+- Google Ads: https://support.google.com/google-ads/answer/15909989?hl=en и https://support.google.com/google-ads/answer/2471185?hl=en
+- Датиран DSA график: https://ads-developers.googleblog.com/2026/08/migrate-campaign-level-broad-match-and.html
+- Ask Advisor: https://support.google.com/analytics/answer/16675569?hl=en и https://blog.google/products/ads-commerce/ask-advisor/
+- HubSpot: https://knowledge.hubspot.com/customer-agent/understand-the-customer-agent и https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server
+- Brevo: https://help.brevo.com/hc/en-us/articles/11994642550674-Generate-marketing-content-with-Aura-Brevo-s-AI-powered-assistant
+- Claude Artifacts: https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them
+- Gemini Canvas: https://support.google.com/gemini/answer/16047321?hl=en
+
+Цени, лимити, езици и достъп до конкретен акаунт се проверяват преди реална употреба. Курсът не изисква платени рекламни действия, изпратени имейли или външен акаунт.

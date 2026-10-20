@@ -14,11 +14,11 @@ afterEach(cleanup);
 
 test('17 targets resolve through the displayed order, retaining the moved lesson source identity', () => {
   expect(MARKETING_AI_NEXT_MODULES.map(m=>m.id)).toEqual(['s03-m10','s03-m11','s03-m08','s03-m06','s03-m09']);
-  expect(rows).toHaveLength(17); expect(loadNextMarketingAiSource()).toHaveLength(63); expect(MARKETING_AI_TOOLS).toHaveLength(13);
+  expect(rows).toHaveLength(17); expect(loadNextMarketingAiSource()).toHaveLength(63); expect(MARKETING_AI_TOOLS).toHaveLength(23);
   for (const r of rows) expect(marketingAiLessonLink(r.lesson)).toBe(`/module/${r.lesson==='lm01-01'?'s03-m09':r.module}?lesson=${r.lesson}`);
   expect(rows.find(r=>r.lesson==='lm01-01').module).toBe('s03-m01');
   render(<LessonRichText content={guideBlock(rows.find(r=>r.lesson==='lm01-01')).content} allowMarketingAi />);
-  expect(screen.getByRole('link',{name:'Инструменти и примери за първите десет модула'}).getAttribute('href')).toBe('/academy-tools/marketing-basics?module=s03-m09');
+  expect(screen.getByRole('link',{name:'Инструменти и примери за всички двадесет модула'}).getAttribute('href')).toBe('/academy-tools/marketing-basics?module=s03-m09');
   expect(marketingAiLessonLink('constructor')).toBeNull(); expect(marketingAiLessonLink('lm09-99')).toBeNull();
 });
 

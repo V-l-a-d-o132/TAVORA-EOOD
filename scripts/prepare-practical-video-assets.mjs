@@ -13,6 +13,7 @@ import { prepareThirdPracticalMarketingAssets } from './prepare-third-practical-
 import { prepareVideoAiAssets } from './prepare-video-ai-assets.mjs';
 import { prepareMarketingAiAssets } from './prepare-marketing-ai-assets.mjs';
 import { prepareNextMarketingAiAssets } from './prepare-next-marketing-ai-assets.mjs';
+import { prepareFinalMarketingAiAssets } from './prepare-final-marketing-ai-assets.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const assetRoot = resolve(root, 'course-assets/perfect-video/practical-20261014');
@@ -52,6 +53,7 @@ export function preparePracticalVideoAssets() {
   prepareVideoAiAssets();
   prepareMarketingAiAssets();
   prepareNextMarketingAiAssets();
+  prepareFinalMarketingAiAssets();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

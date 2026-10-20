@@ -1,3 +1,4 @@
+import { loadFinalMarketingAiCandidates } from '../scripts/prepare-final-marketing-ai-assets.mjs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import type { PGlite } from '@electric-sql/pglite';
@@ -37,7 +38,7 @@ describe('Marketing Basics community modules 11–15',()=>{
       expect(marketingVisibleFragments(l).flatMap(p=>p.split('\n')).filter(p=>p.trim()).length).toBe(m.rendered.lines);
       const current=practical.find(p=>p.lesson===l.lesson_id)!;
       const currentBlocks=[...l.blocks.map(b=>({...b,content:b.type==='objective'?current.opening:b.content})),current.bridge,current.practice];
-      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(marketingVisibleWords({...l,blocks:currentBlocks}));
+      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(marketingVisibleWords({...l,blocks:[...currentBlocks,...(loadFinalMarketingAiCandidates().find(r=>r.lesson===l.lesson_id)?.payload.additions||[])]}));
     }
   });
   it('requires closed practice without publishing private grading data',()=>{
