@@ -72,7 +72,7 @@ export function runFinalModel(id: FinalWorkbenchId, caseId: string, action: stri
   }
   const plan = action === 'a' ? { price: 800, hours: 18 } : action === 'b' ? { price: 950, hours: 28 } : { price: 650, hours: 12 };
   const fits = plan.price <= Number(data.budget) && plan.hours <= Number(data.hours), approved = action !== 'narrow' || data.approved === true;
-  return result(`${plan.price} € / лимит ${data.budget} €; ${plan.hours} часа / капацитет ${data.hours}. ${!fits ? 'Пакетът не се събира по всички граници.' : !approved ? 'Ресурсът стига, но по-тесният обхват чака приемане.' : 'Пакетът се събира и обхватът е приет. Пазарен резултат не е гарантиран.'}`, fits && approved);
+  return result(`${plan.price} € / лимит ${data.budget} €; ${plan.hours} часа / капацитет ${data.hours}. ${!fits ? 'Пакетът надвишава бюджета или наличните работни часове.' : !approved ? 'Ресурсът стига, но по-тесният обхват чака приемане.' : 'Пакетът се събира и обхватът е приет. Пазарен резултат не е гарантиран.'}`, fits && approved);
 }
 export function finalWorkbenchVisibleText(id: FinalWorkbenchId): string[] {
   const model = source[id];
