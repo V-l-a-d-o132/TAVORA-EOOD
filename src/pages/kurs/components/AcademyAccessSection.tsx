@@ -48,7 +48,7 @@ export default function AcademyAccessSection() {
           Опитай първо, запази прогреса с акаунт
         </h2>
         <p className="text-sm md:text-base text-center mb-8 max-w-md mx-auto leading-relaxed" style={{ color: C.textMuted }}>
-          Модул 1 — „AI според задачата“ е безплатен и може да се опита като гост. С акаунт запазваш учебния прогрес.
+          Модул 1 — „Първата ти дигитална услуга“ е безплатен и може да се опита като гост. С акаунт запазваш учебния прогрес.
           Без карта и без автоматично плащане.
         </p>
 

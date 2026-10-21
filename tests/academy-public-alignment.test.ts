@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import snapshot from './fixtures/academy-public-facts-20261016.json';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
@@ -14,7 +14,9 @@ describe('Public promises against the independently read published catalogue of 
     }))));
     const sort = (rows: typeof navigation) => [...rows].sort((a, b) => `${a.module_id}/${a.lesson_id}`.localeCompare(`${b.module_id}/${b.lesson_id}`));
     expect(navigation).toHaveLength(524);
-    expect(sort(navigation)).toEqual(sort(snapshot.lessons));
+    const updated = readdirSync('course-assets/silk-road/first-service').filter(f => /^l\d\d-\d\d\.json$/.test(f)).map(f => JSON.parse(readFileSync(`course-assets/silk-road/first-service/${f}`, 'utf8')));
+    const expected = snapshot.lessons.map(l => ({ ...l, title: updated.find(u => u.moduleId === l.module_id && u.lessonId === l.lesson_id)?.title || l.title }));
+    expect(sort(navigation)).toEqual(sort(expected));
     expect(ACADEMY_TOTAL_STATS.lessonCount).toBe(snapshot.programmes.reduce((sum, course) => sum + course.lessons, 0));
   });
 

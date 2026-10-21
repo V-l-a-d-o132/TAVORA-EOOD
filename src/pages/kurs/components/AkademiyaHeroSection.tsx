@@ -16,7 +16,7 @@ const C = {
 };
 
 const PLATFORM_PREVIEW = [
-  { num: '01', title: 'AI според задачата', state: 'done' },
+  { num: '01', title: 'Първата ти дигитална услуга', state: 'done' },
   { num: '02', title: 'От човешки проблем до работеща страница', state: 'active' },
   { num: '03', title: 'SEO и GEO оптимизация', state: 'locked' },
   { num: '04', title: 'Съдържание и копирайтинг', state: 'locked' },
@@ -93,7 +93,7 @@ export default function AkademiyaHeroSection() {
           </button>
 
           <p className="text-xs mt-2" style={{ color: C.textDim }}>
-            Модул 1 (AI според задачата) е безплатен. Без карта и без автоматично плащане.
+            Модул 1 (Първата ти дигитална услуга) е безплатен. Без карта и без автоматично плащане.
           </p>
         </div>
 

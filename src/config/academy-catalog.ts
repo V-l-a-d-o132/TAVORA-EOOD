@@ -3,7 +3,7 @@
 export const ACADEMY_CATALOG_VERIFIED_ON = '2026-10-16';
 export const ACADEMY_FREE_MODULE_ID = 's01-m01';
 export const ACADEMY_FREE_ACCESS_DESCRIPTION =
-  'Безплатен е само модул 01 — „AI според задачата“ от „Пътят на коприната“, с четири пълни урока. Публичните лаборатории са отделни проби и не отключват платени модули.';
+  'Безплатен е само модул 01 — „Първата ти дигитална услуга“ от „Пътят на коприната“, с четири пълни урока. Публичните лаборатории са отделни проби и не отключват платени модули.';
 
 // Public question counts checked against the currently published exam blocks.
 export const ACADEMY_EXAM_STATS = {

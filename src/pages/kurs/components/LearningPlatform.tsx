@@ -294,7 +294,7 @@ export default function LearningPlatform() {
                   </div>
                   <div>
                     <p className="text-sm font-bold" style={{ color: C.text }}>Започни от първия модул</p>
-                    <p className="text-xs mt-0.5" style={{ color: C.textMuted }}>Пътят на коприната — Модул 01: AI според задачата</p>
+                    <p className="text-xs mt-0.5" style={{ color: C.textMuted }}>Пътят на коприната — Модул 01: Първата ти дигитална услуга</p>
                   </div>
                 </div>
                 <button

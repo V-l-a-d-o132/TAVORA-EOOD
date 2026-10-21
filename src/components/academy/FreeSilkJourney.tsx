@@ -7,9 +7,9 @@ import type { LessonProgressV2 } from '@/lib/lesson-engine-v2';
 
 const steps = [
   { title: 'Избери полезна задача', result: 'Раздели фактите, липсващото и позволеното действие.' },
-  { title: 'Подготви проверимо задание', result: 'Сглоби инструкция и пази условията от източника.' },
-  { title: 'Сравни двата подхода', result: 'Сметни времето за приета чернова, включително проверката.' },
-  { title: 'Свържи стъпките', result: 'Определи правата, отговорника и кога помощникът спира.' },
+  { title: 'Сглоби ясна страница', result: 'Използвай ИИ за чернова и запази условията на услугата.' },
+  { title: 'Сметни цялата работа', result: 'Сравни подготовка, поправки и проверен резултат.' },
+  { title: 'Провери и предай', result: 'Проследи заявката и избери ясен обхват за предаване.' },
 ];
 
 export function FreeSilkAccountRestore({ onProgress, onFinished }: { onProgress:(lesson:string,progress:LessonProgressV2)=>void; onFinished:()=>void }) {
@@ -27,8 +27,9 @@ export function FreeSilkJourney({ completedLessons, activeLessonId, guest }: { c
   const count = FREE_SILK_LESSONS.filter(id => completedLessons.includes(id)).length;
   return <section aria-label="Твоята първа работна задача" className="rounded-2xl border academy-border academy-surface p-5 academy-body">
     <p className="text-xs font-semibold uppercase tracking-wider academy-accent">Безплатен модул · 4 урока</p>
-    <h2 className="mt-2 text-xl font-semibold academy-text">От неясно искане до проверима ИИ чернова</h2>
-    <p className="mt-3 text-sm leading-7">Работиш с предоставеното велоателие „Орбита“. Избираш, виждаш какво подготвяш и променяш решението при ново условие. Нужни са само тези уроци — без външен акаунт или качване на файл.</p>
+    <h2 className="mt-2 text-xl font-semibold academy-text">От нуждата на бизнеса до проверен учебен прототип</h2>
+    <p className="mt-3 text-sm leading-7">Работиш с предоставеното велоателие „Педал“. Избираш, виждаш какво подготвяш и променяш решението при ново условие. Нужни са само тези уроци — без външен акаунт или качване на файл.</p>
+    <Link to="/academy-labs/silk-road/start#project" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold underline academy-text">Пробвай учебната страница</Link>
     <details className="mt-4">
       <summary className="cursor-pointer text-sm font-semibold academy-text">Твоят маршрут: {count} от 4 урока преминати{guest ? ' на това устройство' : ''}</summary>
       <ol className="mt-4 grid gap-3 sm:grid-cols-2">{steps.map((step, i) => <li key={step.title} className="rounded-xl border academy-border academy-tint p-4" aria-current={FREE_SILK_LESSONS[i] === activeLessonId ? 'step' : undefined}>
@@ -44,9 +45,10 @@ export function FreeSilkBridge({ canContinue }: { canContinue: boolean }) {
   const course = getTierById('silkRoad');
   return <section aria-label="След безплатния модул" className="space-y-5 rounded-2xl border academy-accent-border academy-card-gradient p-5 academy-body sm:p-7">
     <div><p className="text-xs font-semibold uppercase tracking-wider academy-accent">Четирите учебни урока са преминати</p>
-      <h2 className="mt-2 text-2xl font-semibold academy-text">Вече имаш начин да проверяваш ИИ работа.</h2>
-      <p className="mt-3 text-sm leading-7">Избра задача, сглоби задание, сравни време за приет резултат и определи граници на свързан помощник. Следващата работа е да превърнеш предложението в ясна страница с проверен път до заявката.</p>
+      <h2 className="mt-2 text-2xl font-semibold academy-text">Свърза нуждата, страницата и проверката.</h2>
+      <p className="mt-3 text-sm leading-7">Избра полезна услуга, сглоби учебна страница, сравни цялото време за работа и провери как се предава резултатът. В модул 2 развиваш страницата: четимост, изображения, мобилна версия и приемане по конкретни проверки.</p>
     </div>
+    <p className="text-sm leading-7"><Link to="/academy-labs/silk-road/start#project" className="underline">Отвори прототипа и работния файл</Link>. Проверки в лабораторията и проверки в уроците са отделни действия.</p>
     {canContinue ? <Link to="/module/s01-m02" className="inline-flex min-h-11 items-center justify-center rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white">Продължи към модул 2: сайтът</Link> : <>
       <p className="text-sm leading-7">Курсът „Пътят на коприната“ включва {course?.moduleCount} модула и {course?.lessonCount} урока. {course && <strong className="academy-text">Цена: {formatPrice(course.price)}.</strong>}</p>
       <div className="flex flex-wrap gap-3">
