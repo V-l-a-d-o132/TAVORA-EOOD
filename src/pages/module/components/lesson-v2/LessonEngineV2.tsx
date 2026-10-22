@@ -1,4 +1,5 @@
 import { videoClientStage } from '@/data/video-client-project';
+import { videoProductionStage } from '@/data/video-production-project';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   autosaveLessonV2,
@@ -240,6 +241,7 @@ export default function LessonEngineV2({
       <a href={`/academy-tools/perfect-video?module=${moduleId}`} className="font-semibold academy-accent underline underline-offset-4">Инструменти за модула и работилница с ИИ</a>
       <p className="mt-2">{videoClientStage(moduleId)?.result}</p>
       <a href="/academy-labs/perfect-video/start#client-project" className="mt-2 inline-block font-semibold academy-accent underline underline-offset-4">Учебна поръчка V-1: монтаж, цена и предаване</a>
+      {videoProductionStage(moduleId) && <a href={`/academy-labs/perfect-video/start?stage=${videoProductionStage(moduleId)}#client-production`} className="mt-2 block font-semibold academy-accent underline underline-offset-4">Продължи V-1: сценарий, камера, светлина и звук</a>}
     </div>}
 
     {['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">

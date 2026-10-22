@@ -1,0 +1,26 @@
+{
+  "release": "video_client_production_v1",
+  "modules": {
+    "s02-m02": 20,
+    "s02-m03": 21,
+    "s02-m04": 17,
+    "s02-m05": 8
+  },
+  "lessons": 66,
+  "newCases": 4,
+  "newDecisions": 20,
+  "curriculum": {
+    "parts": [
+      "lessons.000.base64",
+      "lessons.001.base64",
+      "lessons.002.base64",
+      "lessons.003.base64",
+      "lessons.004.base64",
+      "lessons.005.base64"
+    ],
+    "bytes": 206288,
+    "sha256": "1761b3e6b93dbc181db15d80b5f0fa550d9195605bad36cf0cf66429cf41dd14",
+    "decodedBytes": 1483574,
+    "decodedSha256": "f26573e68e999d937fc736bf0dc9a03ccc47dae2a4d4fc8a1a09f7e5ee2019e7"
+  }
+}

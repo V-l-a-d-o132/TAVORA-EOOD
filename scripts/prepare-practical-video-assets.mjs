@@ -1,4 +1,5 @@
 import { prepareVideoClientAssets } from './prepare-video-client-assets.mjs';
+import { prepareVideoProductionAssets } from './prepare-video-production-assets.mjs';
 import { prepareFinalPracticalMarketingAssets } from './prepare-final-practical-marketing-assets.mjs';
 import { preparePracticalSilkAssets } from './prepare-practical-silk-assets.mjs';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -63,3 +64,4 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
 }
 
 prepareVideoClientAssets();
+prepareVideoProductionAssets();
