@@ -1,3 +1,4 @@
+import { videoClientStage } from '@/data/video-client-project';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   autosaveLessonV2,
@@ -237,12 +238,13 @@ export default function LessonEngineV2({
 
     {moduleId.startsWith('s02-') && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
       <a href={`/academy-tools/perfect-video?module=${moduleId}`} className="font-semibold academy-accent underline underline-offset-4">Инструменти за модула и работилница с ИИ</a>
-      <p className="mt-2">Конкретни стъпки, условия за достъп и предоставени файлове за сравнение. Самостоятелните решения се проверяват в урока.</p>
+      <p className="mt-2">{videoClientStage(moduleId)?.result}</p>
+      <a href="/academy-labs/perfect-video/start#client-project" className="mt-2 inline-block font-semibold academy-accent underline underline-offset-4">Учебна поръчка V-1: монтаж, цена и предаване</a>
     </div>}
 
     {['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
-      <a href="/academy-labs/perfect-video/start" className="font-semibold academy-accent underline underline-offset-4">Първи клип: учебна папка и проверка на файла</a>
-      <p className="mt-2">Започни с предоставения бриф или се върни към своята версия. Графичният пример не удостоверява снимане или реален бизнес резултат.</p>
+      <a href="/academy-labs/perfect-video/start" className="font-semibold academy-accent underline underline-offset-4">Първи клип: учебна поръчка и работна маса</a>
+      <p className="mt-2">Започни с предоставения бриф, сравни монтажите и проследи разчета. Самостоятелните решения се проверяват в задачите на урока.</p>
       {lesson.blocks.filter(block => block.key.startsWith('checkpoint_video_')).map(block => <p key={block.key} className="mt-2">
         {typeof block.content.skillName === 'string' ? block.content.skillName : block.title}: <span className={completed.has(block.key) ? 'academy-success' : 'academy-muted'}>{completed.has(block.key) ? 'премината учебна проверка' : 'още няма премината проверка'}</span>
       </p>)}

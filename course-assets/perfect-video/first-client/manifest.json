@@ -1,0 +1,26 @@
+{
+  "process": {
+    "file": "process.mp4",
+    "parts": [
+      "process.000.base64",
+      "process.001.base64",
+      "process.002.base64",
+      "process.003.base64",
+      "process.004.base64"
+    ],
+    "bytes": 182771,
+    "sha256": "ff90ede79398002afe2309c57a70552ac3ef7f57e3ab3a3ac91bbaa4750d9b45"
+  },
+  "confusing": {
+    "file": "confusing.mp4",
+    "parts": [
+      "confusing.000.base64",
+      "confusing.001.base64",
+      "confusing.002.base64",
+      "confusing.003.base64",
+      "confusing.004.base64"
+    ],
+    "bytes": 184296,
+    "sha256": "b669063066752e5a3d3bf38cb2ad7e48644566b8bbebb7d44bc4ab1c437ff30f"
+  }
+}

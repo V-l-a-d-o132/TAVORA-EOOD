@@ -169,7 +169,8 @@ describe('compatible first video practice', () => {
     expect(screen.getByText('още няма премината проверка')).toBeTruthy();
     expect(screen.getByText('Задължителните стъпки са преминати. Новите проверки по избор се отчитат отделно.')).toBeTruthy();
     expect(screen.queryByText('премината учебна проверка')).toBeNull();
-    expect(screen.getByRole('link', { name: 'Първи клип: учебна папка и проверка на файла' }).getAttribute('href')).toBe('/academy-labs/perfect-video/start');
+    expect(screen.getByRole('link', { name: 'Първи клип: учебна поръчка и работна маса' }).getAttribute('href')).toBe('/academy-labs/perfect-video/start');
+    expect(screen.getByRole('link',{name:'Учебна поръчка V-1: монтаж, цена и предаване'}).getAttribute('href')).toBe('/academy-labs/perfect-video/start#client-project');
   });
   it('resumes a quiz by its grading ID with stable unordered choices', async () => {
     const block = { ...createBlock('quiz', 0), id: 'stable-video-quiz', content: { question: 'Избери проверимото.', options: [{ id: 'a', label: 'Първо твърдение' }, { id: 'b', label: 'Запазен избор' }, { id: 'c', label: 'Трето твърдение' }] } };

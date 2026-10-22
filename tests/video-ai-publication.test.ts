@@ -9,6 +9,9 @@ import { loadVideoAiCandidates, loadVideoAiSource } from '../scripts/prepare-vid
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
 const rows = loadVideoAiCandidates();
+// The publication under test is historical; current reading metadata includes the later first-client edition.
+const firstClientDir = 'course-assets/perfect-video/first-client/lessons';
+const currentFirstClient = new Map(readdirSync(firstClientDir).filter(f=>f.endsWith('.json')).map(f=>{const l=JSON.parse(readFileSync(`${firstClientDir}/${f}`,'utf8'));return [l.lessonId,l];}));
 const privateRows = process.env.VIDEO_AI_PRIVATE ? JSON.parse(readFileSync(process.env.VIDEO_AI_PRIVATE, 'utf8')) : null;
 const privateSource = process.env.VIDEO_AI_SOURCE ? JSON.parse(readFileSync(process.env.VIDEO_AI_SOURCE, 'utf8')) : null;
 const payload = r => privateRows?.find(x => x.lesson === r.lesson).payload || { ...r.payload, additions: r.payload.additions.map(b => b.type === 'matching' ? { ...b, evaluation: { matches: Object.fromEntries(b.content.left.map(s => [s.id, s.choices[0]])) }, feedback: { success: 'Synthetic accepted decision.', retry: 'Synthetic retry guidance.', details: Object.fromEntries(b.content.left.map(s => [s.id, { success: 'Synthetic accepted part.', retry: 'Synthetic part needs revision.' }])) } } : b) };
@@ -81,10 +84,11 @@ test('atomic publication preserves all 3137 old blocks, 240 openings and five ex
   expect(changed).toBe(0); expect(await outside()).toEqual(beforeOutside); expect(await banks()).toEqual(examBanks);
   expect(examBanks).toHaveLength(5); expect(examBanks.reduce((n, b) => n + b.content.questions.length, 0)).toBe(78);
   const after = await currentTeaching(); expect(after).toHaveLength(240); expect(after.reduce((n, l) => n + l.blocks.length, 0)).toBe(3212);
-  for (const l of after) expect(ACADEMY_READING_WORDS[`${l.moduleId}/${l.lesson_id}`]).toBe(countVisibleLessonWords(l));
+  for (const l of after) expect(ACADEMY_READING_WORDS[`${l.moduleId}/${l.lesson_id}`]).toBe(countVisibleLessonWords(currentFirstClient.get(l.lesson_id) || l));
   for (const [i, l] of after.entries()) expect(l.blocks.find(b => b.type === 'objective')).toEqual(beforeTeaching[i].blocks.find(b => b.type === 'objective'));
   const beforeWords = beforeTeaching.reduce((n, l) => n + countVisibleLessonWords(l), 0), afterWords = after.reduce((n, l) => n + countVisibleLessonWords(l), 0);
   expect(afterWords).toBeGreaterThan(beforeWords);
+  expect(afterWords).toBe(304303); // Recorded size of the unchanged video_ai_20261019 edition.
   if (process.env.VIDEO_AI_METRICS) writeFileSync(process.env.VIDEO_AI_METRICS, JSON.stringify({ wordsBefore: beforeWords, wordsAfter: afterWords, lessons: 240, newBlocks: 75, guides: 60, cases: 15, decisions: 61, perLesson: Object.fromEntries(after.map(l => [`${l.moduleId}/${l.lesson_id}`, countVisibleLessonWords(l)])) }, null, 2));
 });
 

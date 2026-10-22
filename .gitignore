@@ -35,3 +35,6 @@ scripts/silk-road/releases/toolkit-20261018.json
 /public/academy-labs/perfect-video/ai/*.mp3
 /public/academy-labs/perfect-video/ai/*.mp4
 /public/academy-labs/perfect-video/ai/*.webp
+
+# Verified first-client project movies reconstructed by prebuild.
+/public/academy-labs/perfect-video/first-client/*.mp4
