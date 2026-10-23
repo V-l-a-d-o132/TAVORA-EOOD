@@ -1,4 +1,4 @@
-import videoWorkflowOrder from '../../course-assets/perfect-video/client-workflow/order.json';
+import { VIDEO_WORKFLOW_LESSON_ORDER as videoWorkflowOrder } from '@/data/video-workflow-order';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { MARKETING_BASICS_OCT2026_MODULES } from '@/data/marketing-basics-oct2026';
 import { marketingCommunityModules } from '@/data/marketing-basics-community';

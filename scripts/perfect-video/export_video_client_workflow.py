@@ -8,6 +8,7 @@ import argparse,base64,copy,gzip,hashlib,json,re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 TARGET=ROOT/'course-assets/perfect-video/client-workflow'
+ORDER_TARGET=ROOT/'src/data/video-workflow-order.ts'
 def export(rows):
     assert len(rows)==77
     order={}
@@ -36,7 +37,8 @@ def export(rows):
         (TARGET/name).write_text(encoded[start:start+50000]+'\n')
     manifest=dict(release='video_client_workflow_v1',modules={k:len(v) for k,v in order.items()},lessons=77,blocks=1061,newCases=5,newDecisions=25,curriculum=dict(parts=parts,bytes=len(packed),sha256=hashlib.sha256(packed).hexdigest(),decodedBytes=len(data),decodedSha256=hashlib.sha256(data).hexdigest()))
     (TARGET/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-    (TARGET/'order.json').write_text(json.dumps(order,indent=2)+'\n')
+    ORDER_TARGET.parent.mkdir(parents=True,exist_ok=True)
+    ORDER_TARGET.write_text('// Shared by the course catalogue and the reviewed curriculum exporter.\nexport const VIDEO_WORKFLOW_LESSON_ORDER: Record<string, string[]> = '+json.dumps(order,indent=2)+';\n')
     print(json.dumps({k:v for k,v in manifest.items() if k!='curriculum'}))
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--private-source',required=True);a=p.parse_args()

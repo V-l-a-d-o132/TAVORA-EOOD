@@ -1,4 +1,5 @@
-{
+// Shared by the course catalogue and the reviewed curriculum exporter.
+export const VIDEO_WORKFLOW_LESSON_ORDER: Record<string, string[]> = {
   "s02-m06": [
     "pv06-01",
     "pv06-15",
@@ -86,4 +87,4 @@
     "pv10-15",
     "pv10-16"
   ]
-}
+};

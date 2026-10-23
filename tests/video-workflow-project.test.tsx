@@ -9,7 +9,7 @@ import { parseClosedStudio } from '../src/lib/closed-practice-studio';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 import { LEARNING_SECTIONS, PREVIOUS_VIDEO_WORKFLOW_LESSONS } from '../src/mocks/learning-platform';
 import { lessonRoute, requestedLessonIndex } from '../src/lib/academy-lesson-location';
-import order from '../course-assets/perfect-video/client-workflow/order.json';
+import { VIDEO_WORKFLOW_LESSON_ORDER as order } from '../src/data/video-workflow-order';
 afterEach(cleanup);
 test('dependencies, full cost and renewed acceptance follow the changed version',()=>{
  expect(videoWorkflowReview(INITIAL_WORKFLOW).issues).toHaveLength(6);

@@ -34,10 +34,10 @@ describe('academy deployment proof', () => {
     put(root, 'src/main.tsx', 'export const release = "changed synthetic release";');
     expect(sourceFingerprint(root)).not.toBe(original);
     const beforeOrder = sourceFingerprint(root);
-    put(root, 'course-assets/perfect-video/client-workflow/order.json', JSON.stringify({ 's02-m09': ['pv09-01', 'pv09-08'] }));
+    put(root, 'src/data/video-workflow-order.ts', JSON.stringify({ 's02-m09': ['pv09-01', 'pv09-08'] }));
     expect(sourceFingerprint(root)).not.toBe(beforeOrder);
     const firstOrder = sourceFingerprint(root);
-    put(root, 'course-assets/perfect-video/client-workflow/order.json', JSON.stringify({ 's02-m09': ['pv09-08', 'pv09-01'] }));
+    put(root, 'src/data/video-workflow-order.ts', JSON.stringify({ 's02-m09': ['pv09-08', 'pv09-01'] }));
     expect(sourceFingerprint(root)).not.toBe(firstOrder);
     const result = createBuildManifest(root, [{ fileName: 'js/index-test.js', code: entryCode }], new Date('2026-10-04T17:00:00Z'));
     expect(Object.keys(result).sort()).toEqual(['builtAt', 'chunks', 'entries', 'revision', 'schema', 'sourceHash']);
