@@ -1,3 +1,4 @@
+import { prepareVideoWorkflowAssets } from './prepare-video-workflow-assets.mjs';
 import { prepareVideoClientAssets } from './prepare-video-client-assets.mjs';
 import { prepareVideoProductionAssets } from './prepare-video-production-assets.mjs';
 import { prepareFinalPracticalMarketingAssets } from './prepare-final-practical-marketing-assets.mjs';
@@ -65,3 +66,4 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
 
 prepareVideoClientAssets();
 prepareVideoProductionAssets();
+prepareVideoWorkflowAssets();

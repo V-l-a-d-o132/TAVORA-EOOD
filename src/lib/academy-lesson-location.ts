@@ -1,4 +1,4 @@
-import { LEARNING_SECTIONS, PREVIOUS_MARKETING_LESSONS, type Module } from '@/mocks/learning-platform';
+import { LEARNING_SECTIONS, PREVIOUS_MARKETING_LESSONS, PREVIOUS_VIDEO_WORKFLOW_LESSONS, type Module } from '@/mocks/learning-platform';
 
 export function locateLesson(moduleId: string, lessonId: string) {
   for (const section of LEARNING_SECTIONS) {
@@ -12,7 +12,7 @@ export function locateLesson(moduleId: string, lessonId: string) {
 }
 
 export function lessonRoute(moduleId: string, lessonId: string, lessonIndex: number): string {
-  const query = moduleId.startsWith('s03-') ? lessonId : String(lessonIndex);
+  const query = (moduleId.startsWith('s03-') || PREVIOUS_VIDEO_WORKFLOW_LESSONS[moduleId]) ? lessonId : String(lessonIndex);
   return `/module/${moduleId}?lesson=${encodeURIComponent(query)}`;
 }
 
@@ -28,7 +28,8 @@ export function legacyMarketingRoute(moduleId: string | undefined, query: string
 
 export function requestedLessonIndex(module: Module | null, query: string | null): number {
   if (!module || query === null) return 0;
-  const index = /^[0-9]+$/.test(query) ? Number(query) : module.lessons.findIndex(lesson => lesson.id === query);
+  const legacyId = /^[0-9]+$/.test(query) ? PREVIOUS_VIDEO_WORKFLOW_LESSONS[module.id]?.[Number(query)] : undefined;
+  const index = legacyId ? module.lessons.findIndex(lesson => lesson.id === legacyId) : /^[0-9]+$/.test(query) ? Number(query) : module.lessons.findIndex(lesson => lesson.id === query);
   return index >= 0 && index < module.lessons.length ? index : 0;
 }
 

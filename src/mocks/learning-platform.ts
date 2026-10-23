@@ -1,3 +1,4 @@
+import videoWorkflowOrder from '../../course-assets/perfect-video/client-workflow/order.json';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { MARKETING_BASICS_OCT2026_MODULES } from '@/data/marketing-basics-oct2026';
 import { marketingCommunityModules } from '@/data/marketing-basics-community';
@@ -761,6 +762,15 @@ export const PREVIOUS_MARKETING_LESSONS = Object.fromEntries(
   SECTION_DEFINITIONS.find(section => section.id === 'marketing-basics')!.modules
     .map(module => [module.id, module.lessons.map(({ id, title }) => ({ id, title }))]),
 );
+
+export const PREVIOUS_VIDEO_WORKFLOW_LESSONS = Object.fromEntries(
+  SECTION_DEFINITIONS.flatMap(section => section.modules).filter(module => Object.hasOwn(videoWorkflowOrder, module.id))
+    .map(module => [module.id, module.lessons.map(lesson => lesson.id)]),
+);
+for (const section of SECTION_DEFINITIONS) for (const module of section.modules) {
+  const order = (videoWorkflowOrder as Record<string, string[]>)[module.id];
+  if (order) module.lessons.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+}
 
 // Durations are generated from the published text snapshot, not hand-entered
 // practice budgets. The learner's actual work time remains individual.

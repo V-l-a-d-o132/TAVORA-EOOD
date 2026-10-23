@@ -1,3 +1,4 @@
+import { videoWorkflowStage } from '@/data/video-workflow-project';
 import { videoClientStage } from '@/data/video-client-project';
 import { videoProductionStage } from '@/data/video-production-project';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -241,6 +242,7 @@ export default function LessonEngineV2({
       <a href={`/academy-tools/perfect-video?module=${moduleId}`} className="font-semibold academy-accent underline underline-offset-4">Инструменти за модула и работилница с ИИ</a>
       <p className="mt-2">{videoClientStage(moduleId)?.result}</p>
       <a href="/academy-labs/perfect-video/start#client-project" className="mt-2 inline-block font-semibold academy-accent underline underline-offset-4">Учебна поръчка V-1: монтаж, цена и предаване</a>
+      {videoWorkflowStage(moduleId) && <a href={`/academy-labs/perfect-video/start?workflow=${videoWorkflowStage(moduleId)}#client-workflow`} className="mt-2 block font-semibold academy-accent underline underline-offset-4">Продължи V-1: от подготовка до предаване</a>}
       {videoProductionStage(moduleId) && <a href={`/academy-labs/perfect-video/start?stage=${videoProductionStage(moduleId)}#client-production`} className="mt-2 block font-semibold academy-accent underline underline-offset-4">Продължи V-1: сценарий, камера, светлина и звук</a>}
     </div>}
 

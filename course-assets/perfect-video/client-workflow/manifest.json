@@ -1,0 +1,29 @@
+{
+  "release": "video_client_workflow_v1",
+  "modules": {
+    "s02-m06": 18,
+    "s02-m07": 16,
+    "s02-m08": 16,
+    "s02-m09": 11,
+    "s02-m10": 16
+  },
+  "lessons": 77,
+  "blocks": 1061,
+  "newCases": 5,
+  "newDecisions": 25,
+  "curriculum": {
+    "parts": [
+      "lessons.000.base64",
+      "lessons.001.base64",
+      "lessons.002.base64",
+      "lessons.003.base64",
+      "lessons.004.base64",
+      "lessons.005.base64",
+      "lessons.006.base64"
+    ],
+    "bytes": 249619,
+    "sha256": "0505dad19cc1c25fdf28ab4e59d6f749e35712dc6ba3de097e4c8972d0eb207b",
+    "decodedBytes": 1733924,
+    "decodedSha256": "b9bc1010c268208b8909e08f69166410464743fc0d83e7120aafbee297cad90a"
+  }
+}

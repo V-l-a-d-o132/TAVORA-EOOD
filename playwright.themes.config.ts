@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e', testMatch: ['**/academy-{themes,lab-themes,lab-upgrade,catalog-theme,public-info,practice-studios,production-studios,final-studios,marketing-studios,marketing-next-studios,marketing-third-studios,marketing-final-studios,silk-studios,silk-applied,silk-toolkit,video-ai,video-client,video-production,marketing-ai,marketing-ai-next,marketing-ai-final}.pw.ts', '**/marketing-practice.pw.ts'], outputDir: 'test-results/themes',
+  testDir: './e2e', testMatch: ['**/academy-{themes,lab-themes,lab-upgrade,catalog-theme,public-info,practice-studios,production-studios,final-studios,marketing-studios,marketing-next-studios,marketing-third-studios,marketing-final-studios,silk-studios,silk-applied,silk-toolkit,video-ai,video-client,video-production,video-workflow,marketing-ai,marketing-ai-next,marketing-ai-final}.pw.ts', '**/marketing-practice.pw.ts'], outputDir: 'test-results/themes',
   timeout: 45000, workers: 1,
   use: {
     baseURL: 'http://127.0.0.1:5191', browserName: 'chromium',
