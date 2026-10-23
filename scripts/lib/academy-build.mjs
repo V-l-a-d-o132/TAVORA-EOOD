@@ -5,7 +5,7 @@ import { join, relative } from 'node:path';
 
 const sourceRoots = ['src', 'public', 'index.html', 'package.json', 'package-lock.json',
   'vite.config.ts', 'tailwind.config.ts', 'postcss.config.ts', 'tsconfig.app.json',
-  'scripts/lib/academy-build.mjs'];
+  'scripts/lib/academy-build.mjs', 'course-assets/perfect-video/client-workflow/order.json'];
 
 export const sha256 = value => createHash('sha256').update(value).digest('hex');
 

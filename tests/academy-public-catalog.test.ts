@@ -20,7 +20,8 @@ describe('Public catalogue against the published Supabase snapshot', () => {
 
   it('does not offer unpublished editing lessons through the navigation', () => {
     const editingModule = LEARNING_SECTIONS[1].modules.find(module => module.id === 's02-m09');
-    expect(editingModule?.lessons.map(lesson => lesson.id)).toEqual(published.editingModuleLessonIds);
+    // Publication identity is independent of the revised teaching order.
+    expect(editingModule?.lessons.map(lesson => lesson.id).sort()).toEqual([...published.editingModuleLessonIds].sort());
   });
 
   it('preserves the six checkout products, prices and purchased module counts', () => {
