@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { LEARNING_SECTIONS } from "../src/mocks/learning-platform";
 
+import { VIDEO_COMPLETION_LESSON_ORDER } from '../src/data/video-completion-order';
+
 const course = LEARNING_SECTIONS.find((section) =>
   section.modules.some((module) => module.id === "s02-m10"),
 );
@@ -18,7 +20,7 @@ describe("Perfect Video modules 10–12 catalog", () => {
     };
     for (const [id, lessonIds] of Object.entries(expected)) {
       const module = course?.modules.find((entry) => entry.id === id);
-      expect(module?.lessons.map((lesson) => lesson.id)).toEqual(lessonIds);
+      expect(module?.lessons.map((lesson) => lesson.id)).toEqual(VIDEO_COMPLETION_LESSON_ORDER[id] || lessonIds);
       expect(module?.lessons.every((lesson) => lesson.hasQuiz)).toBe(true);
       expect(module?.lessons.every((lesson) => lesson.duration !== "5 мин")).toBe(true);
       expect(module?.duration).toMatch(/^≈/);

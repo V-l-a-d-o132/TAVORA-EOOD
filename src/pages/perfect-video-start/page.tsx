@@ -1,3 +1,4 @@
+import VideoCompletionWorkshop from '@/components/academy/VideoCompletionWorkshop';
 import VideoWorkflowWorkshop from '@/components/academy/VideoWorkflowWorkshop';
 import VideoClientProject from '@/components/academy/VideoClientProject';
 import VideoProductionWorkshop from '@/components/academy/VideoProductionWorkshop';
@@ -35,6 +36,7 @@ export default function PerfectVideoStartPage() {
     <VideoClientProject />
     <VideoProductionWorkshop />
     <VideoWorkflowWorkshop />
+    <VideoCompletionWorkshop />
     <div className="mb-6 rounded-xl border academy-border academy-tint p-4"><p className="text-sm font-semibold academy-text">Обосновани решения в тази сесия: {total}/22</p><progress aria-label="Учебни случаи с проверено основание" max={22} value={total} className="mt-3 h-2 w-full accent-red-600" /><p className="mt-2 text-xs leading-6 academy-muted">Първо сравни вариантите, после реши новото задание. Можеш да сменяш темите и да се връщаш към изборите си. Презареждането започва нова сесия.</p></div>
     <nav aria-label="Избери демонстрация" className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{VIDEO_LAB_KINDS.map((item, i) => <button type="button" key={item} aria-pressed={item === kind} onClick={() => setKind(item)} className={`rounded-xl border px-4 py-3 text-left text-sm leading-5 focus:outline-none focus:ring-2 focus:ring-red-300 ${item === kind ? 'academy-accent-border academy-accent-bg academy-text' : 'academy-border academy-body hover:academy-tint'}`}><span className="mr-3 font-mono text-xs academy-accent">{String(i + 1).padStart(2, '0')}</span>{videoLabTitle(item)}<span className="mt-2 block text-xs academy-muted">{completed(item)}/2 нови случая</span></button>)}</nav>
     <div ref={desk} className="scroll-mt-6"><VideoDecisionLab key={kind} kind={kind} request={preview?.kind === kind ? preview : undefined} /></div>

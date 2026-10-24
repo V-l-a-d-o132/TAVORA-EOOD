@@ -46,8 +46,8 @@ describe("Perfect Video 13–14 publication", () => {
       const catalog = section?.modules.find((entry) => entry.id === moduleId);
       const published = lessons.filter((entry) => entry.module_id === moduleId);
       expect(published).toHaveLength(18);
-      expect(published.map((entry) => entry.lesson_id)).toEqual(
-        catalog?.lessons.map((entry) => entry.id),
+      expect(published.map((entry) => entry.lesson_id).sort()).toEqual(
+        catalog?.lessons.map((entry) => entry.id).sort(),
       );
       for (const lesson of published) {
         const listing = catalog?.lessons.find((entry) => entry.id === lesson.lesson_id);

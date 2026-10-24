@@ -1,0 +1,28 @@
+{
+  "release": "video_client_completion_v1",
+  "modules": {
+    "s02-m11": 16,
+    "s02-m12": 8,
+    "s02-m13": 18,
+    "s02-m14": 18,
+    "s02-m15": 13
+  },
+  "lessons": 73,
+  "blocks": 965,
+  "newCases": 5,
+  "newDecisions": 25,
+  "curriculum": {
+    "parts": [
+      "lessons.000.base64",
+      "lessons.001.base64",
+      "lessons.002.base64",
+      "lessons.003.base64",
+      "lessons.004.base64",
+      "lessons.005.base64"
+    ],
+    "bytes": 223383,
+    "sha256": "d6a99403b15349fd7c314541a70be50b33e815478540783c195ae63a24ef2bce",
+    "decodedBytes": 1635228,
+    "decodedSha256": "3b4c379b82fe84e727b3be7adc538f7be39a229120f8834fecaeb3fb8ae60b86"
+  }
+}
