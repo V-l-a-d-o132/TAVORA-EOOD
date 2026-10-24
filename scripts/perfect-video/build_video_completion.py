@@ -56,6 +56,7 @@ def build(source,cases):
    by['principle']['content']['body']+='\n\nВ текущото описание на YouTube views и engaged views са различни: първото включва старт на възпроизвеждане, второто — кликване за гледане или продължено гледане след началните секунди. Показатели като средна продължителност и задържане имат своя отчетна основа. Записвай точно име, формат, период и знаменател; не дели произволно общото време на всички стартирания.'
    by['reference']['content']['body']+='\n\nОпределения, сверени на 23.10.2026: https://blog.youtube/inside-youtube/engaged-views-youtube-explained/'
   if code=='pv11-06':by['reference']['content']['body']+='\n\nРъчните глави в YouTube изискват начало 00:00, поне три марки във възходящ ред и части с дължина поне 10 секунди. Провери достъпа до функцията. Източник, сверен на 23.10.2026: https://support.google.com/youtube/answer/9884579?hl=en'
+  if code=='pv13-03':by['quiz_1']['content']['question']='В отделния учебен разчет: 14 часа × 40 €, 120 € външни разходи и резерв 10% върху сбора. Колко е основата преди клиентска надценка?'
   output.append(r)
  assert sum(len(r['payload']['blocks']) for r in output)==965
  return output

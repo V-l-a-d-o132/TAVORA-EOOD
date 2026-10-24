@@ -271,7 +271,7 @@ export const ACADEMY_READING_WORDS: Readonly<Record<string, number>> = {
   's02-m12/pv12-08': 2025,
   's02-m13/pv13-01': 1104,
   's02-m13/pv13-02': 1099,
-  's02-m13/pv13-03': 1399,
+  's02-m13/pv13-03': 1412,
   's02-m13/pv13-04': 1097,
   's02-m13/pv13-05': 1090,
   's02-m13/pv13-06': 1039,

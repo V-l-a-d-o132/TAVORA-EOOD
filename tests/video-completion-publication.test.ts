@@ -125,7 +125,17 @@ test('new final practice is required by both exam entries before the unchanged q
   const exam=(await db.query<any>("select b.block_key,k.answer_key from academy_lesson_blocks b join academy_private.lesson_block_keys k on k.block_id=b.id where b.version_id=$1 and b.block_type='course_exam'",[v])).rows[0];
   await actor(db,'authenticated',STUDENT);
   for(const b of checks.filter(b=>b.block_key!=='video_production_transfer_v1'))await db.query('select academy_complete_lesson_block($1,$2,$3,$4,$5,$6)',['s02-m15','pv15-13',v,b.block_key,b.answer_key,randomUUID()]);
-  for(const entry of ['academy_submit_course_exam','academy_private.submit_perfect_video_exam'])await expect(db.query(`select ${entry}($1,$2,$3,$4,$5,$6)`,['s02-m15','pv15-13',v,exam.block_key,{answers:exam.answer_key.answers},randomUUID()])).rejects.toThrow(/практическото решение/);
- }finally{await actor(db);await db.exec('rollback');}
+  for(const entry of ['academy_submit_course_exam','academy_private.submit_perfect_video_exam']){
+   await actor(db,entry.startsWith('academy_private.')?'postgres':'authenticated',STUDENT);
+   await db.exec('savepoint exam_gate');
+   await expect(db.query(`select ${entry}($1,$2,$3,$4,$5,$6)`,['s02-m15','pv15-13',v,exam.block_key,{answers:exam.answer_key.answers},randomUUID()])).rejects.toThrow(/практическото решение/);
+   await db.exec('rollback to savepoint exam_gate');
+  }
+  await actor(db,'authenticated',STUDENT);
+  const transfer=checks.find(b=>b.block_key==='video_production_transfer_v1');
+  await db.query('select academy_complete_lesson_block($1,$2,$3,$4,$5,$6)',['s02-m15','pv15-13',v,transfer.block_key,transfer.answer_key,randomUUID()]);
+  await actor(db,'postgres',STUDENT);
+  await db.query("select academy_private.assert_video_practice_ready('s02-m15','pv15-13',$1)",[v]);
+ }finally{await db.exec('rollback');await actor(db);}
 });
 
