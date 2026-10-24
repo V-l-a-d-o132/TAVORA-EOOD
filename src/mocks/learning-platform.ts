@@ -1,4 +1,5 @@
-import { VIDEO_WORKFLOW_LESSON_ORDER as videoWorkflowOrder } from '@/data/video-workflow-order';
+import { VIDEO_COMPLETION_LESSON_ORDER } from '@/data/video-completion-order';
+import { VIDEO_WORKFLOW_LESSON_ORDER as previousVideoWorkflowOrder } from '@/data/video-workflow-order';
 import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
 import { MARKETING_BASICS_OCT2026_MODULES } from '@/data/marketing-basics-oct2026';
 import { marketingCommunityModules } from '@/data/marketing-basics-community';
@@ -756,6 +757,8 @@ const SECTION_DEFINITIONS: SourceSection[] = [
     ],
   },
 ];
+
+const videoWorkflowOrder={...previousVideoWorkflowOrder,...VIDEO_COMPLETION_LESSON_ORDER};
 
 // Only legacy indexed Marketing links use this original order.
 export const PREVIOUS_MARKETING_LESSONS = Object.fromEntries(

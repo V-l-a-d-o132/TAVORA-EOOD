@@ -1,3 +1,4 @@
+import { loadVideoCompletionLessons } from '../scripts/prepare-video-completion-assets.mjs';
 import { loadVideoWorkflowLessons } from '../scripts/prepare-video-workflow-assets.mjs';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import { readFileSync, mkdtempSync, rmSync, writeFileSync, readdirSync } from 'node:fs';
@@ -14,7 +15,7 @@ const rows = loadVideoAiCandidates();
 // The publication under test is historical; current reading metadata includes the later first-client edition.
 const firstClientDir = 'course-assets/perfect-video/first-client/lessons';
 const currentFirstClient = new Map(readdirSync(firstClientDir).filter(f=>f.endsWith('.json')).map(f=>{const l=JSON.parse(readFileSync(`${firstClientDir}/${f}`,'utf8'));return [l.lessonId,l];}));
-for (const l of [...loadVideoProductionLessons(), ...loadVideoWorkflowLessons()]) currentFirstClient.set(l.lessonId,l);
+for (const l of [...loadVideoProductionLessons(), ...loadVideoWorkflowLessons(), ...loadVideoCompletionLessons()]) currentFirstClient.set(l.lessonId,l);
 const privateRows = process.env.VIDEO_AI_PRIVATE ? JSON.parse(readFileSync(process.env.VIDEO_AI_PRIVATE, 'utf8')) : null;
 const privateSource = process.env.VIDEO_AI_SOURCE ? JSON.parse(readFileSync(process.env.VIDEO_AI_SOURCE, 'utf8')) : null;
 const payload = r => privateRows?.find(x => x.lesson === r.lesson).payload || { ...r.payload, additions: r.payload.additions.map(b => b.type === 'matching' ? { ...b, evaluation: { matches: Object.fromEntries(b.content.left.map(s => [s.id, s.choices[0]])) }, feedback: { success: 'Synthetic accepted decision.', retry: 'Synthetic retry guidance.', details: Object.fromEntries(b.content.left.map(s => [s.id, { success: 'Synthetic accepted part.', retry: 'Synthetic part needs revision.' }])) } } : b) };
