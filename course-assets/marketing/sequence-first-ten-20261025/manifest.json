@@ -1,0 +1,39 @@
+{
+  "release": "marketing_sequence_first_ten_20261025",
+  "source": {
+    "parts": [
+      "source.000.base64",
+      "source.001.base64",
+      "source.002.base64",
+      "source.003.base64",
+      "source.004.base64",
+      "source.005.base64",
+      "source.006.base64",
+      "source.007.base64",
+      "source.008.base64",
+      "source.009.base64",
+      "source.010.base64",
+      "source.011.base64",
+      "source.012.base64",
+      "source.013.base64",
+      "source.014.base64",
+      "source.015.base64",
+      "source.016.base64"
+    ],
+    "bytes": 736180,
+    "sha256": "40252b436a66c01dd7b3851b7805c5b9c0c637ff07700e9c01c3c54bcd16bc0a",
+    "decodedBytes": 3989117,
+    "decodedSha256": "dc4268f0b02fa4bc48994cfd2e7c3c1ab29e42ee4302e8b475092ae1c780b8df"
+  },
+  "curriculum": {
+    "parts": [
+      "curriculum.000.base64",
+      "curriculum.001.base64",
+      "curriculum.002.base64"
+    ],
+    "bytes": 99624,
+    "sha256": "3c7c2107255fd8a8089b0a3446ce78a4fa5330b73acb42f6b4fc2b91d7857fc2",
+    "decodedBytes": 799466,
+    "decodedSha256": "454bc642ffe69997edec106283511669d3661d540f883f3ff1ee889603c97318"
+  }
+}

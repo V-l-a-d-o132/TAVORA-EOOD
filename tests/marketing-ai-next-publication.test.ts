@@ -6,7 +6,9 @@ import { actor, createSilkDatabase, STUDENT, OTHER } from './helpers/silk-road-d
 import { loadNextMarketingAiCandidates, loadNextMarketingAiSource } from '../scripts/prepare-next-marketing-ai-assets.mjs';
 import { loadMarketingAiCandidates, loadMarketingAiSource } from '../scripts/prepare-marketing-ai-assets.mjs';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
-import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
+// Historical editions keep their historical reading counts; the sequence suite checks current counts.
+import editionCounts from '../docs/marketing-ai-next-five-20261020-verification.json';
+const ACADEMY_READING_WORDS = Object.fromEntries(Object.entries(editionCounts.perLesson).map(([key, value]) => [key, typeof value === 'number' ? value : value.after]));
 const rows = loadNextMarketingAiCandidates();
 const privateRows = process.env.MARKETING_AI_NEXT_PRIVATE ? JSON.parse(readFileSync(process.env.MARKETING_AI_NEXT_PRIVATE, 'utf8')) : null;
 const privateSource = process.env.MARKETING_AI_NEXT_SOURCE ? JSON.parse(readFileSync(process.env.MARKETING_AI_NEXT_SOURCE, 'utf8')) : null;

@@ -1,0 +1,1931 @@
+{
+  "release": "marketing_sequence_first_ten_20261025",
+  "perLesson": {
+    "s03-m01/lm01-00": {
+      "wordsBefore": 2461,
+      "wordsAfter": 2750,
+      "linesBefore": 141,
+      "linesAfter": 149,
+      "blocksBefore": 21,
+      "blocksAfter": 22
+    },
+    "s03-m01/lm01-04": {
+      "wordsBefore": 2273,
+      "wordsAfter": 2308,
+      "linesBefore": 131,
+      "linesAfter": 133,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m01/lm01-05": {
+      "wordsBefore": 1979,
+      "wordsAfter": 2012,
+      "linesBefore": 122,
+      "linesAfter": 124,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m01/lm01-02": {
+      "wordsBefore": 2646,
+      "wordsAfter": 2749,
+      "linesBefore": 185,
+      "linesAfter": 188,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m01/lm01-03": {
+      "wordsBefore": 1883,
+      "wordsAfter": 1998,
+      "linesBefore": 120,
+      "linesAfter": 123,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m01/lm01-06": {
+      "wordsBefore": 1945,
+      "wordsAfter": 1976,
+      "linesBefore": 121,
+      "linesAfter": 123,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m01/lm01-07": {
+      "wordsBefore": 2615,
+      "wordsAfter": 3172,
+      "linesBefore": 184,
+      "linesAfter": 223,
+      "blocksBefore": 21,
+      "blocksAfter": 22
+    },
+    "s03-m02/lm02-01": {
+      "wordsBefore": 2445,
+      "wordsAfter": 2794,
+      "linesBefore": 166,
+      "linesAfter": 175,
+      "blocksBefore": 20,
+      "blocksAfter": 21
+    },
+    "s03-m02/lm02-02": {
+      "wordsBefore": 1967,
+      "wordsAfter": 1997,
+      "linesBefore": 125,
+      "linesAfter": 127,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m02/lm02-03": {
+      "wordsBefore": 2147,
+      "wordsAfter": 2177,
+      "linesBefore": 136,
+      "linesAfter": 138,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m02/lm02-08": {
+      "wordsBefore": 2593,
+      "wordsAfter": 2628,
+      "linesBefore": 188,
+      "linesAfter": 190,
+      "blocksBefore": 23,
+      "blocksAfter": 23
+    },
+    "s03-m02/lm02-05": {
+      "wordsBefore": 2552,
+      "wordsAfter": 2583,
+      "linesBefore": 184,
+      "linesAfter": 186,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m02/lm02-06": {
+      "wordsBefore": 2729,
+      "wordsAfter": 2757,
+      "linesBefore": 201,
+      "linesAfter": 203,
+      "blocksBefore": 23,
+      "blocksAfter": 23
+    },
+    "s03-m02/lm02-04": {
+      "wordsBefore": 1980,
+      "wordsAfter": 2012,
+      "linesBefore": 135,
+      "linesAfter": 137,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m02/lm02-07": {
+      "wordsBefore": 2007,
+      "wordsAfter": 2549,
+      "linesBefore": 125,
+      "linesAfter": 164,
+      "blocksBefore": 19,
+      "blocksAfter": 20
+    },
+    "s03-m05/lm05-01": {
+      "wordsBefore": 2533,
+      "wordsAfter": 2794,
+      "linesBefore": 191,
+      "linesAfter": 199,
+      "blocksBefore": 22,
+      "blocksAfter": 23
+    },
+    "s03-m05/lm05-02": {
+      "wordsBefore": 2496,
+      "wordsAfter": 2527,
+      "linesBefore": 191,
+      "linesAfter": 193,
+      "blocksBefore": 23,
+      "blocksAfter": 23
+    },
+    "s03-m05/lm05-03": {
+      "wordsBefore": 1773,
+      "wordsAfter": 1806,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m05/lm05-04": {
+      "wordsBefore": 1868,
+      "wordsAfter": 1896,
+      "linesBefore": 129,
+      "linesAfter": 131,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m05/lm05-05": {
+      "wordsBefore": 2165,
+      "wordsAfter": 2201,
+      "linesBefore": 135,
+      "linesAfter": 137,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m05/lm05-06": {
+      "wordsBefore": 1962,
+      "wordsAfter": 1998,
+      "linesBefore": 133,
+      "linesAfter": 135,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m05/lm05-07": {
+      "wordsBefore": 1942,
+      "wordsAfter": 1974,
+      "linesBefore": 130,
+      "linesAfter": 132,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m05/lm05-08": {
+      "wordsBefore": 2622,
+      "wordsAfter": 3174,
+      "linesBefore": 185,
+      "linesAfter": 224,
+      "blocksBefore": 22,
+      "blocksAfter": 23
+    },
+    "s03-m03/lm03-01": {
+      "wordsBefore": 1900,
+      "wordsAfter": 2193,
+      "linesBefore": 132,
+      "linesAfter": 141,
+      "blocksBefore": 19,
+      "blocksAfter": 20
+    },
+    "s03-m03/lm03-06": {
+      "wordsBefore": 2766,
+      "wordsAfter": 2791,
+      "linesBefore": 196,
+      "linesAfter": 198,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m03/lm03-02": {
+      "wordsBefore": 1811,
+      "wordsAfter": 1841,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m03/lm03-03": {
+      "wordsBefore": 1824,
+      "wordsAfter": 1855,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m03/lm03-07": {
+      "wordsBefore": 1760,
+      "wordsAfter": 1791,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m03/lm03-08": {
+      "wordsBefore": 2683,
+      "wordsAfter": 2712,
+      "linesBefore": 209,
+      "linesAfter": 211,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m03/lm03-05": {
+      "wordsBefore": 1946,
+      "wordsAfter": 1983,
+      "linesBefore": 132,
+      "linesAfter": 134,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m03/lm03-04": {
+      "wordsBefore": 3108,
+      "wordsAfter": 3684,
+      "linesBefore": 220,
+      "linesAfter": 259,
+      "blocksBefore": 23,
+      "blocksAfter": 24
+    },
+    "s03-m07/lm07-01": {
+      "wordsBefore": 1715,
+      "wordsAfter": 1956,
+      "linesBefore": 109,
+      "linesAfter": 117,
+      "blocksBefore": 16,
+      "blocksAfter": 17
+    },
+    "s03-m07/lm07-07": {
+      "wordsBefore": 1738,
+      "wordsAfter": 1770,
+      "linesBefore": 115,
+      "linesAfter": 117,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m07/lm07-08": {
+      "wordsBefore": 2273,
+      "wordsAfter": 2306,
+      "linesBefore": 174,
+      "linesAfter": 176,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m07/lm07-03": {
+      "wordsBefore": 2266,
+      "wordsAfter": 2296,
+      "linesBefore": 171,
+      "linesAfter": 173,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m07/lm07-04": {
+      "wordsBefore": 1659,
+      "wordsAfter": 1686,
+      "linesBefore": 116,
+      "linesAfter": 118,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m07/lm07-05": {
+      "wordsBefore": 1639,
+      "wordsAfter": 1668,
+      "linesBefore": 110,
+      "linesAfter": 112,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m07/lm07-06": {
+      "wordsBefore": 1755,
+      "wordsAfter": 1785,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m07/lm07-02": {
+      "wordsBefore": 1738,
+      "wordsAfter": 1766,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m07/lm07-09": {
+      "wordsBefore": 1747,
+      "wordsAfter": 1776,
+      "linesBefore": 121,
+      "linesAfter": 123,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m07/lm07-10": {
+      "wordsBefore": 2671,
+      "wordsAfter": 3202,
+      "linesBefore": 190,
+      "linesAfter": 229,
+      "blocksBefore": 29,
+      "blocksAfter": 30
+    },
+    "s03-m10/lm10-01": {
+      "wordsBefore": 1619,
+      "wordsAfter": 1882,
+      "linesBefore": 114,
+      "linesAfter": 122,
+      "blocksBefore": 16,
+      "blocksAfter": 17
+    },
+    "s03-m10/lm10-02": {
+      "wordsBefore": 1787,
+      "wordsAfter": 1819,
+      "linesBefore": 128,
+      "linesAfter": 130,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m10/lm10-03": {
+      "wordsBefore": 2471,
+      "wordsAfter": 2508,
+      "linesBefore": 208,
+      "linesAfter": 210,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m10/lm10-04": {
+      "wordsBefore": 1647,
+      "wordsAfter": 1673,
+      "linesBefore": 123,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m10/lm10-05": {
+      "wordsBefore": 2322,
+      "wordsAfter": 2352,
+      "linesBefore": 185,
+      "linesAfter": 187,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m10/lm10-06": {
+      "wordsBefore": 1686,
+      "wordsAfter": 1715,
+      "linesBefore": 130,
+      "linesAfter": 132,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m10/lm10-07": {
+      "wordsBefore": 1642,
+      "wordsAfter": 1670,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m10/lm10-08": {
+      "wordsBefore": 2648,
+      "wordsAfter": 2677,
+      "linesBefore": 209,
+      "linesAfter": 211,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m10/lm10-09": {
+      "wordsBefore": 1632,
+      "wordsAfter": 1661,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m10/lm10-10": {
+      "wordsBefore": 1681,
+      "wordsAfter": 1715,
+      "linesBefore": 139,
+      "linesAfter": 141,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m10/lm10-11": {
+      "wordsBefore": 1612,
+      "wordsAfter": 1641,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m10/lm10-12": {
+      "wordsBefore": 2026,
+      "wordsAfter": 2575,
+      "linesBefore": 143,
+      "linesAfter": 182,
+      "blocksBefore": 19,
+      "blocksAfter": 20
+    },
+    "s03-m11/lm11-01": {
+      "wordsBefore": 2657,
+      "wordsAfter": 2910,
+      "linesBefore": 186,
+      "linesAfter": 194,
+      "blocksBefore": 20,
+      "blocksAfter": 21
+    },
+    "s03-m11/lm11-02": {
+      "wordsBefore": 1839,
+      "wordsAfter": 1870,
+      "linesBefore": 125,
+      "linesAfter": 127,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m11/lm11-03": {
+      "wordsBefore": 2666,
+      "wordsAfter": 2700,
+      "linesBefore": 194,
+      "linesAfter": 196,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m11/lm11-04": {
+      "wordsBefore": 1691,
+      "wordsAfter": 1720,
+      "linesBefore": 111,
+      "linesAfter": 113,
+      "blocksBefore": 15,
+      "blocksAfter": 15
+    },
+    "s03-m11/lm11-05": {
+      "wordsBefore": 1867,
+      "wordsAfter": 1900,
+      "linesBefore": 119,
+      "linesAfter": 121,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m11/lm11-06": {
+      "wordsBefore": 2630,
+      "wordsAfter": 2717,
+      "linesBefore": 183,
+      "linesAfter": 186,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m11/lm11-07": {
+      "wordsBefore": 1786,
+      "wordsAfter": 1817,
+      "linesBefore": 121,
+      "linesAfter": 123,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m11/lm11-08": {
+      "wordsBefore": 1854,
+      "wordsAfter": 1884,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m11/lm11-09": {
+      "wordsBefore": 1746,
+      "wordsAfter": 1772,
+      "linesBefore": 123,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m11/lm11-10": {
+      "wordsBefore": 3250,
+      "wordsAfter": 3769,
+      "linesBefore": 271,
+      "linesAfter": 310,
+      "blocksBefore": 26,
+      "blocksAfter": 27
+    },
+    "s03-m08/lm08-01": {
+      "wordsBefore": 1649,
+      "wordsAfter": 1895,
+      "linesBefore": 118,
+      "linesAfter": 126,
+      "blocksBefore": 16,
+      "blocksAfter": 17
+    },
+    "s03-m08/lm08-02": {
+      "wordsBefore": 1488,
+      "wordsAfter": 1512,
+      "linesBefore": 114,
+      "linesAfter": 116,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m08/lm08-03": {
+      "wordsBefore": 2414,
+      "wordsAfter": 2444,
+      "linesBefore": 194,
+      "linesAfter": 196,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m08/lm08-04": {
+      "wordsBefore": 1610,
+      "wordsAfter": 1637,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m08/lm08-05": {
+      "wordsBefore": 1717,
+      "wordsAfter": 1744,
+      "linesBefore": 153,
+      "linesAfter": 155,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m08/lm08-06": {
+      "wordsBefore": 1871,
+      "wordsAfter": 1900,
+      "linesBefore": 142,
+      "linesAfter": 144,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m08/lm08-07": {
+      "wordsBefore": 1622,
+      "wordsAfter": 1649,
+      "linesBefore": 123,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m08/lm08-08": {
+      "wordsBefore": 2325,
+      "wordsAfter": 2352,
+      "linesBefore": 176,
+      "linesAfter": 178,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m08/lm08-09": {
+      "wordsBefore": 1699,
+      "wordsAfter": 1726,
+      "linesBefore": 128,
+      "linesAfter": 130,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m08/lm08-10": {
+      "wordsBefore": 1626,
+      "wordsAfter": 1658,
+      "linesBefore": 114,
+      "linesAfter": 116,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m08/lm08-11": {
+      "wordsBefore": 2370,
+      "wordsAfter": 2402,
+      "linesBefore": 188,
+      "linesAfter": 190,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m08/lm08-12": {
+      "wordsBefore": 1707,
+      "wordsAfter": 1736,
+      "linesBefore": 130,
+      "linesAfter": 132,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m08/lm08-13": {
+      "wordsBefore": 1578,
+      "wordsAfter": 1605,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m08/lm08-14": {
+      "wordsBefore": 1851,
+      "wordsAfter": 2371,
+      "linesBefore": 138,
+      "linesAfter": 177,
+      "blocksBefore": 19,
+      "blocksAfter": 20
+    },
+    "s03-m06/lm06-01": {
+      "wordsBefore": 1819,
+      "wordsAfter": 2082,
+      "linesBefore": 129,
+      "linesAfter": 139,
+      "blocksBefore": 16,
+      "blocksAfter": 17
+    },
+    "s03-m06/lm06-02": {
+      "wordsBefore": 1705,
+      "wordsAfter": 1732,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m06/lm06-03": {
+      "wordsBefore": 1489,
+      "wordsAfter": 1516,
+      "linesBefore": 115,
+      "linesAfter": 117,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m06/lm06-04": {
+      "wordsBefore": 2199,
+      "wordsAfter": 2288,
+      "linesBefore": 172,
+      "linesAfter": 175,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m06/lm06-05": {
+      "wordsBefore": 2388,
+      "wordsAfter": 2417,
+      "linesBefore": 183,
+      "linesAfter": 185,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m06/lm06-06": {
+      "wordsBefore": 1522,
+      "wordsAfter": 1550,
+      "linesBefore": 113,
+      "linesAfter": 115,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m06/lm06-07": {
+      "wordsBefore": 1492,
+      "wordsAfter": 1516,
+      "linesBefore": 114,
+      "linesAfter": 116,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m06/lm06-08": {
+      "wordsBefore": 1738,
+      "wordsAfter": 1768,
+      "linesBefore": 127,
+      "linesAfter": 129,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m06/lm06-09": {
+      "wordsBefore": 2134,
+      "wordsAfter": 2163,
+      "linesBefore": 166,
+      "linesAfter": 168,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m06/lm06-10": {
+      "wordsBefore": 1639,
+      "wordsAfter": 1670,
+      "linesBefore": 144,
+      "linesAfter": 146,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m06/lm06-11": {
+      "wordsBefore": 1529,
+      "wordsAfter": 1558,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m06/lm06-12": {
+      "wordsBefore": 1778,
+      "wordsAfter": 2328,
+      "linesBefore": 134,
+      "linesAfter": 173,
+      "blocksBefore": 19,
+      "blocksAfter": 20
+    },
+    "s03-m09/lm09-01": {
+      "wordsBefore": 1560,
+      "wordsAfter": 1863,
+      "linesBefore": 120,
+      "linesAfter": 132,
+      "blocksBefore": 16,
+      "blocksAfter": 17
+    },
+    "s03-m09/lm09-02": {
+      "wordsBefore": 1514,
+      "wordsAfter": 1543,
+      "linesBefore": 114,
+      "linesAfter": 116,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m09/lm09-03": {
+      "wordsBefore": 1588,
+      "wordsAfter": 1621,
+      "linesBefore": 120,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m09/lm09-04": {
+      "wordsBefore": 1666,
+      "wordsAfter": 1690,
+      "linesBefore": 125,
+      "linesAfter": 127,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m09/lm09-05": {
+      "wordsBefore": 1642,
+      "wordsAfter": 1674,
+      "linesBefore": 124,
+      "linesAfter": 126,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m01/lm01-01": {
+      "wordsBefore": 2867,
+      "wordsAfter": 2896,
+      "linesBefore": 190,
+      "linesAfter": 192,
+      "blocksBefore": 23,
+      "blocksAfter": 23
+    },
+    "s03-m09/lm09-06": {
+      "wordsBefore": 1580,
+      "wordsAfter": 1610,
+      "linesBefore": 117,
+      "linesAfter": 119,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m09/lm09-07": {
+      "wordsBefore": 2510,
+      "wordsAfter": 2592,
+      "linesBefore": 208,
+      "linesAfter": 211,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m09/lm09-08": {
+      "wordsBefore": 2291,
+      "wordsAfter": 2376,
+      "linesBefore": 184,
+      "linesAfter": 187,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m09/lm09-09": {
+      "wordsBefore": 1653,
+      "wordsAfter": 1684,
+      "linesBefore": 125,
+      "linesAfter": 127,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m09/lm09-10": {
+      "wordsBefore": 1494,
+      "wordsAfter": 1520,
+      "linesBefore": 115,
+      "linesAfter": 117,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m09/lm09-11": {
+      "wordsBefore": 1497,
+      "wordsAfter": 1525,
+      "linesBefore": 114,
+      "linesAfter": 116,
+      "blocksBefore": 16,
+      "blocksAfter": 16
+    },
+    "s03-m09/lm09-12": {
+      "wordsBefore": 2274,
+      "wordsAfter": 2308,
+      "linesBefore": 178,
+      "linesAfter": 180,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m09/lm09-13": {
+      "wordsBefore": 1656,
+      "wordsAfter": 1685,
+      "linesBefore": 128,
+      "linesAfter": 130,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m09/lm09-14": {
+      "wordsBefore": 2021,
+      "wordsAfter": 2631,
+      "linesBefore": 157,
+      "linesAfter": 196,
+      "blocksBefore": 21,
+      "blocksAfter": 22
+    },
+    "s03-m04/lm04-01": {
+      "wordsBefore": 2171,
+      "wordsAfter": 2171,
+      "linesBefore": 143,
+      "linesAfter": 143,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m04/lm04-02": {
+      "wordsBefore": 2226,
+      "wordsAfter": 2226,
+      "linesBefore": 127,
+      "linesAfter": 127,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m04/lm04-03": {
+      "wordsBefore": 1946,
+      "wordsAfter": 1946,
+      "linesBefore": 120,
+      "linesAfter": 120,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m04/lm04-04": {
+      "wordsBefore": 2032,
+      "wordsAfter": 2032,
+      "linesBefore": 123,
+      "linesAfter": 123,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m04/lm04-05": {
+      "wordsBefore": 2791,
+      "wordsAfter": 2791,
+      "linesBefore": 196,
+      "linesAfter": 196,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m04/lm04-06": {
+      "wordsBefore": 2585,
+      "wordsAfter": 2585,
+      "linesBefore": 184,
+      "linesAfter": 184,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m04/lm04-07": {
+      "wordsBefore": 2583,
+      "wordsAfter": 2583,
+      "linesBefore": 180,
+      "linesAfter": 180,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m04/lm04-08": {
+      "wordsBefore": 2683,
+      "wordsAfter": 2683,
+      "linesBefore": 190,
+      "linesAfter": 190,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m04/lm04-09": {
+      "wordsBefore": 1951,
+      "wordsAfter": 1951,
+      "linesBefore": 124,
+      "linesAfter": 124,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m04/lm04-10": {
+      "wordsBefore": 2060,
+      "wordsAfter": 2060,
+      "linesBefore": 132,
+      "linesAfter": 132,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m16/lm16-01": {
+      "wordsBefore": 1838,
+      "wordsAfter": 1838,
+      "linesBefore": 112,
+      "linesAfter": 112,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m16/lm16-02": {
+      "wordsBefore": 2632,
+      "wordsAfter": 2632,
+      "linesBefore": 190,
+      "linesAfter": 190,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m16/lm16-03": {
+      "wordsBefore": 2595,
+      "wordsAfter": 2595,
+      "linesBefore": 193,
+      "linesAfter": 193,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m16/lm16-04": {
+      "wordsBefore": 1751,
+      "wordsAfter": 1751,
+      "linesBefore": 125,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m16/lm16-05": {
+      "wordsBefore": 1810,
+      "wordsAfter": 1810,
+      "linesBefore": 124,
+      "linesAfter": 124,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m16/lm16-06": {
+      "wordsBefore": 1872,
+      "wordsAfter": 1872,
+      "linesBefore": 139,
+      "linesAfter": 139,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m16/lm16-07": {
+      "wordsBefore": 1810,
+      "wordsAfter": 1810,
+      "linesBefore": 117,
+      "linesAfter": 117,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m16/lm16-08": {
+      "wordsBefore": 3256,
+      "wordsAfter": 3256,
+      "linesBefore": 281,
+      "linesAfter": 281,
+      "blocksBefore": 26,
+      "blocksAfter": 26
+    },
+    "s03-m15/lm15-01": {
+      "wordsBefore": 1770,
+      "wordsAfter": 1770,
+      "linesBefore": 110,
+      "linesAfter": 110,
+      "blocksBefore": 15,
+      "blocksAfter": 15
+    },
+    "s03-m15/lm15-02": {
+      "wordsBefore": 1940,
+      "wordsAfter": 1940,
+      "linesBefore": 140,
+      "linesAfter": 140,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m15/lm15-03": {
+      "wordsBefore": 2029,
+      "wordsAfter": 2029,
+      "linesBefore": 122,
+      "linesAfter": 122,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m15/lm15-04": {
+      "wordsBefore": 1724,
+      "wordsAfter": 1724,
+      "linesBefore": 117,
+      "linesAfter": 117,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m15/lm15-05": {
+      "wordsBefore": 2577,
+      "wordsAfter": 2577,
+      "linesBefore": 198,
+      "linesAfter": 198,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m15/lm15-06": {
+      "wordsBefore": 2401,
+      "wordsAfter": 2401,
+      "linesBefore": 172,
+      "linesAfter": 172,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m15/lm15-07": {
+      "wordsBefore": 2545,
+      "wordsAfter": 2545,
+      "linesBefore": 201,
+      "linesAfter": 201,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m15/lm15-08": {
+      "wordsBefore": 1758,
+      "wordsAfter": 1758,
+      "linesBefore": 118,
+      "linesAfter": 118,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m15/lm15-09": {
+      "wordsBefore": 2593,
+      "wordsAfter": 2593,
+      "linesBefore": 206,
+      "linesAfter": 206,
+      "blocksBefore": 25,
+      "blocksAfter": 25
+    },
+    "s03-m12/lm12-01": {
+      "wordsBefore": 1739,
+      "wordsAfter": 1739,
+      "linesBefore": 110,
+      "linesAfter": 110,
+      "blocksBefore": 15,
+      "blocksAfter": 15
+    },
+    "s03-m12/lm12-02": {
+      "wordsBefore": 1903,
+      "wordsAfter": 1903,
+      "linesBefore": 125,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m12/lm12-03": {
+      "wordsBefore": 1862,
+      "wordsAfter": 1862,
+      "linesBefore": 126,
+      "linesAfter": 126,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m12/lm12-04": {
+      "wordsBefore": 2477,
+      "wordsAfter": 2477,
+      "linesBefore": 175,
+      "linesAfter": 175,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m12/lm12-05": {
+      "wordsBefore": 2574,
+      "wordsAfter": 2574,
+      "linesBefore": 184,
+      "linesAfter": 184,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m12/lm12-06": {
+      "wordsBefore": 2419,
+      "wordsAfter": 2419,
+      "linesBefore": 174,
+      "linesAfter": 174,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m12/lm12-07": {
+      "wordsBefore": 2057,
+      "wordsAfter": 2057,
+      "linesBefore": 135,
+      "linesAfter": 135,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m12/lm12-08": {
+      "wordsBefore": 1897,
+      "wordsAfter": 1897,
+      "linesBefore": 136,
+      "linesAfter": 136,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m12/lm12-09": {
+      "wordsBefore": 1794,
+      "wordsAfter": 1794,
+      "linesBefore": 129,
+      "linesAfter": 129,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m12/lm12-10": {
+      "wordsBefore": 1791,
+      "wordsAfter": 1791,
+      "linesBefore": 112,
+      "linesAfter": 112,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m12/lm12-11": {
+      "wordsBefore": 1758,
+      "wordsAfter": 1758,
+      "linesBefore": 117,
+      "linesAfter": 117,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m12/lm12-12": {
+      "wordsBefore": 2644,
+      "wordsAfter": 2644,
+      "linesBefore": 202,
+      "linesAfter": 202,
+      "blocksBefore": 24,
+      "blocksAfter": 24
+    },
+    "s03-m13/lm13-01": {
+      "wordsBefore": 1814,
+      "wordsAfter": 1814,
+      "linesBefore": 116,
+      "linesAfter": 116,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m13/lm13-02": {
+      "wordsBefore": 2048,
+      "wordsAfter": 2048,
+      "linesBefore": 139,
+      "linesAfter": 139,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m13/lm13-03": {
+      "wordsBefore": 2480,
+      "wordsAfter": 2480,
+      "linesBefore": 182,
+      "linesAfter": 182,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m13/lm13-04": {
+      "wordsBefore": 2681,
+      "wordsAfter": 2681,
+      "linesBefore": 200,
+      "linesAfter": 200,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m13/lm13-05": {
+      "wordsBefore": 2460,
+      "wordsAfter": 2460,
+      "linesBefore": 187,
+      "linesAfter": 187,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m13/lm13-06": {
+      "wordsBefore": 2581,
+      "wordsAfter": 2581,
+      "linesBefore": 184,
+      "linesAfter": 184,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m13/lm13-07": {
+      "wordsBefore": 1838,
+      "wordsAfter": 1838,
+      "linesBefore": 116,
+      "linesAfter": 116,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m13/lm13-08": {
+      "wordsBefore": 1869,
+      "wordsAfter": 1869,
+      "linesBefore": 123,
+      "linesAfter": 123,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m13/lm13-09": {
+      "wordsBefore": 1914,
+      "wordsAfter": 1914,
+      "linesBefore": 143,
+      "linesAfter": 143,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m13/lm13-10": {
+      "wordsBefore": 1788,
+      "wordsAfter": 1788,
+      "linesBefore": 116,
+      "linesAfter": 116,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m13/lm13-11": {
+      "wordsBefore": 2491,
+      "wordsAfter": 2491,
+      "linesBefore": 180,
+      "linesAfter": 180,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m13/lm13-12": {
+      "wordsBefore": 2786,
+      "wordsAfter": 2786,
+      "linesBefore": 204,
+      "linesAfter": 204,
+      "blocksBefore": 25,
+      "blocksAfter": 25
+    },
+    "s03-m14/lm14-01": {
+      "wordsBefore": 1630,
+      "wordsAfter": 1630,
+      "linesBefore": 127,
+      "linesAfter": 127,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m14/lm14-02": {
+      "wordsBefore": 1559,
+      "wordsAfter": 1559,
+      "linesBefore": 119,
+      "linesAfter": 119,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m14/lm14-03": {
+      "wordsBefore": 1634,
+      "wordsAfter": 1634,
+      "linesBefore": 123,
+      "linesAfter": 123,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m14/lm14-04": {
+      "wordsBefore": 1595,
+      "wordsAfter": 1595,
+      "linesBefore": 109,
+      "linesAfter": 109,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m14/lm14-05": {
+      "wordsBefore": 1506,
+      "wordsAfter": 1506,
+      "linesBefore": 116,
+      "linesAfter": 116,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m14/lm14-06": {
+      "wordsBefore": 2572,
+      "wordsAfter": 2572,
+      "linesBefore": 205,
+      "linesAfter": 205,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m14/lm14-07": {
+      "wordsBefore": 1600,
+      "wordsAfter": 1600,
+      "linesBefore": 110,
+      "linesAfter": 110,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m14/lm14-08": {
+      "wordsBefore": 2515,
+      "wordsAfter": 2515,
+      "linesBefore": 178,
+      "linesAfter": 178,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m14/lm14-09": {
+      "wordsBefore": 2222,
+      "wordsAfter": 2222,
+      "linesBefore": 176,
+      "linesAfter": 176,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m14/lm14-10": {
+      "wordsBefore": 2551,
+      "wordsAfter": 2551,
+      "linesBefore": 211,
+      "linesAfter": 211,
+      "blocksBefore": 25,
+      "blocksAfter": 25
+    },
+    "s03-m17/lm17-01": {
+      "wordsBefore": 1657,
+      "wordsAfter": 1657,
+      "linesBefore": 126,
+      "linesAfter": 126,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m17/lm17-02": {
+      "wordsBefore": 1574,
+      "wordsAfter": 1574,
+      "linesBefore": 113,
+      "linesAfter": 113,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m17/lm17-03": {
+      "wordsBefore": 1780,
+      "wordsAfter": 1780,
+      "linesBefore": 120,
+      "linesAfter": 120,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m17/lm17-04": {
+      "wordsBefore": 2196,
+      "wordsAfter": 2196,
+      "linesBefore": 179,
+      "linesAfter": 179,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m17/lm17-05": {
+      "wordsBefore": 2319,
+      "wordsAfter": 2319,
+      "linesBefore": 183,
+      "linesAfter": 183,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m17/lm17-06": {
+      "wordsBefore": 2768,
+      "wordsAfter": 2768,
+      "linesBefore": 200,
+      "linesAfter": 200,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m17/lm17-07": {
+      "wordsBefore": 1709,
+      "wordsAfter": 1709,
+      "linesBefore": 137,
+      "linesAfter": 137,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m17/lm17-08": {
+      "wordsBefore": 1554,
+      "wordsAfter": 1554,
+      "linesBefore": 118,
+      "linesAfter": 118,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m17/lm17-09": {
+      "wordsBefore": 1612,
+      "wordsAfter": 1612,
+      "linesBefore": 120,
+      "linesAfter": 120,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m17/lm17-10": {
+      "wordsBefore": 1709,
+      "wordsAfter": 1709,
+      "linesBefore": 125,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m17/lm17-11": {
+      "wordsBefore": 4204,
+      "wordsAfter": 4204,
+      "linesBefore": 407,
+      "linesAfter": 407,
+      "blocksBefore": 45,
+      "blocksAfter": 45
+    },
+    "s03-m18/lm18-01": {
+      "wordsBefore": 1614,
+      "wordsAfter": 1614,
+      "linesBefore": 113,
+      "linesAfter": 113,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m18/lm18-02": {
+      "wordsBefore": 2506,
+      "wordsAfter": 2506,
+      "linesBefore": 213,
+      "linesAfter": 213,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m18/lm18-03": {
+      "wordsBefore": 2251,
+      "wordsAfter": 2251,
+      "linesBefore": 177,
+      "linesAfter": 177,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m18/lm18-04": {
+      "wordsBefore": 1556,
+      "wordsAfter": 1556,
+      "linesBefore": 115,
+      "linesAfter": 115,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m18/lm18-05": {
+      "wordsBefore": 1606,
+      "wordsAfter": 1606,
+      "linesBefore": 122,
+      "linesAfter": 122,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m18/lm18-06": {
+      "wordsBefore": 1675,
+      "wordsAfter": 1675,
+      "linesBefore": 121,
+      "linesAfter": 121,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m18/lm18-07": {
+      "wordsBefore": 1717,
+      "wordsAfter": 1717,
+      "linesBefore": 131,
+      "linesAfter": 131,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m18/lm18-08": {
+      "wordsBefore": 1751,
+      "wordsAfter": 1751,
+      "linesBefore": 125,
+      "linesAfter": 125,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m18/lm18-09": {
+      "wordsBefore": 3577,
+      "wordsAfter": 3577,
+      "linesBefore": 331,
+      "linesAfter": 331,
+      "blocksBefore": 28,
+      "blocksAfter": 28
+    },
+    "s03-m19/lm19-01": {
+      "wordsBefore": 1582,
+      "wordsAfter": 1582,
+      "linesBefore": 114,
+      "linesAfter": 114,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m19/lm19-02": {
+      "wordsBefore": 1928,
+      "wordsAfter": 1928,
+      "linesBefore": 136,
+      "linesAfter": 136,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m19/lm19-03": {
+      "wordsBefore": 1671,
+      "wordsAfter": 1671,
+      "linesBefore": 122,
+      "linesAfter": 122,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m19/lm19-04": {
+      "wordsBefore": 2520,
+      "wordsAfter": 2520,
+      "linesBefore": 186,
+      "linesAfter": 186,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m19/lm19-05": {
+      "wordsBefore": 1693,
+      "wordsAfter": 1693,
+      "linesBefore": 125,
+      "linesAfter": 125,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m19/lm19-06": {
+      "wordsBefore": 1601,
+      "wordsAfter": 1601,
+      "linesBefore": 120,
+      "linesAfter": 120,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m19/lm19-07": {
+      "wordsBefore": 1771,
+      "wordsAfter": 1771,
+      "linesBefore": 123,
+      "linesAfter": 123,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m19/lm19-08": {
+      "wordsBefore": 2179,
+      "wordsAfter": 2179,
+      "linesBefore": 175,
+      "linesAfter": 175,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m19/lm19-09": {
+      "wordsBefore": 1701,
+      "wordsAfter": 1701,
+      "linesBefore": 124,
+      "linesAfter": 124,
+      "blocksBefore": 17,
+      "blocksAfter": 17
+    },
+    "s03-m19/lm19-10": {
+      "wordsBefore": 1794,
+      "wordsAfter": 1794,
+      "linesBefore": 132,
+      "linesAfter": 132,
+      "blocksBefore": 18,
+      "blocksAfter": 18
+    },
+    "s03-m19/lm19-11": {
+      "wordsBefore": 4275,
+      "wordsAfter": 4275,
+      "linesBefore": 375,
+      "linesAfter": 375,
+      "blocksBefore": 27,
+      "blocksAfter": 27
+    },
+    "s03-m20/lm20-01": {
+      "wordsBefore": 3345,
+      "wordsAfter": 3345,
+      "linesBefore": 243,
+      "linesAfter": 243,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m20/lm20-02": {
+      "wordsBefore": 2617,
+      "wordsAfter": 2617,
+      "linesBefore": 186,
+      "linesAfter": 186,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m20/lm20-03": {
+      "wordsBefore": 3396,
+      "wordsAfter": 3396,
+      "linesBefore": 252,
+      "linesAfter": 252,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m20/lm20-04": {
+      "wordsBefore": 2574,
+      "wordsAfter": 2574,
+      "linesBefore": 181,
+      "linesAfter": 181,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m20/lm20-05": {
+      "wordsBefore": 2422,
+      "wordsAfter": 2422,
+      "linesBefore": 186,
+      "linesAfter": 186,
+      "blocksBefore": 20,
+      "blocksAfter": 20
+    },
+    "s03-m20/lm20-06": {
+      "wordsBefore": 3382,
+      "wordsAfter": 3382,
+      "linesBefore": 249,
+      "linesAfter": 249,
+      "blocksBefore": 21,
+      "blocksAfter": 21
+    },
+    "s03-m20/lm20-07": {
+      "wordsBefore": 2507,
+      "wordsAfter": 2507,
+      "linesBefore": 176,
+      "linesAfter": 176,
+      "blocksBefore": 19,
+      "blocksAfter": 19
+    },
+    "s03-m20/lm20-08": {
+      "wordsBefore": 3855,
+      "wordsAfter": 3855,
+      "linesBefore": 269,
+      "linesAfter": 269,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m20/lm20-09": {
+      "wordsBefore": 4209,
+      "wordsAfter": 4209,
+      "linesBefore": 269,
+      "linesAfter": 269,
+      "blocksBefore": 22,
+      "blocksAfter": 22
+    },
+    "s03-m20/lm20-10": {
+      "wordsBefore": 1794,
+      "wordsAfter": 1794,
+      "linesBefore": 161,
+      "linesAfter": 161,
+      "blocksBefore": 11,
+      "blocksAfter": 11
+    },
+    "s03-m20/lm20-11": {
+      "wordsBefore": 1972,
+      "wordsAfter": 1972,
+      "linesBefore": 190,
+      "linesAfter": 190,
+      "blocksBefore": 11,
+      "blocksAfter": 11
+    },
+    "s03-m20/lm20-12": {
+      "wordsBefore": 1913,
+      "wordsAfter": 1913,
+      "linesBefore": 185,
+      "linesAfter": 185,
+      "blocksBefore": 11,
+      "blocksAfter": 11
+    },
+    "s03-m20/lm20-13": {
+      "wordsBefore": 1799,
+      "wordsAfter": 1799,
+      "linesBefore": 165,
+      "linesAfter": 165,
+      "blocksBefore": 11,
+      "blocksAfter": 11
+    },
+    "s03-m20/lm20-14": {
+      "wordsBefore": 4168,
+      "wordsAfter": 4168,
+      "linesBefore": 408,
+      "linesAfter": 408,
+      "blocksBefore": 11,
+      "blocksAfter": 11
+    }
+  },
+  "modules": [
+    {
+      "number": 1,
+      "id": "s03-m01",
+      "title": "Какво е маркетинг и как хората избират",
+      "lessons": 7,
+      "wordsBefore": 15802,
+      "wordsAfter": 16965,
+      "linesBefore": 1004,
+      "linesAfter": 1063,
+      "blocksBefore": 141,
+      "blocksAfter": 143
+    },
+    {
+      "number": 2,
+      "id": "s03-m02",
+      "title": "Хората зад решението: нужди, роли и общности",
+      "lessons": 8,
+      "wordsBefore": 18420,
+      "wordsAfter": 19497,
+      "linesBefore": 1260,
+      "linesAfter": 1320,
+      "blocksBefore": 165,
+      "blocksAfter": 167
+    },
+    {
+      "number": 3,
+      "id": "s03-m05",
+      "title": "Стойност, цена и честно предложение",
+      "lessons": 8,
+      "wordsBefore": 17361,
+      "wordsAfter": 18370,
+      "linesBefore": 1218,
+      "linesAfter": 1277,
+      "blocksBefore": 166,
+      "blocksAfter": 168
+    },
+    {
+      "number": 4,
+      "id": "s03-m03",
+      "title": "Послание, което човек разбира и може да предаде",
+      "lessons": 8,
+      "wordsBefore": 17798,
+      "wordsAfter": 18850,
+      "linesBefore": 1261,
+      "linesAfter": 1321,
+      "blocksBefore": 162,
+      "blocksAfter": 164
+    },
+    {
+      "number": 5,
+      "id": "s03-m07",
+      "title": "Доверие, репутация и доброволна препоръка",
+      "lessons": 10,
+      "wordsBefore": 19201,
+      "wordsAfter": 20211,
+      "linesBefore": 1346,
+      "linesAfter": 1409,
+      "blocksBefore": 187,
+      "blocksAfter": 189
+    },
+    {
+      "number": 6,
+      "id": "s03-m10",
+      "title": "Полезно съдържание, което си струва да препратиш",
+      "lessons": 12,
+      "wordsBefore": 22773,
+      "wordsAfter": 23888,
+      "linesBefore": 1739,
+      "linesAfter": 1806,
+      "blocksBefore": 222,
+      "blocksAfter": 224
+    },
+    {
+      "number": 7,
+      "id": "s03-m11",
+      "title": "Социални мрежи и разговори в общности",
+      "lessons": 10,
+      "wordsBefore": 21986,
+      "wordsAfter": 23059,
+      "linesBefore": 1557,
+      "linesAfter": 1621,
+      "blocksBefore": 184,
+      "blocksAfter": 186
+    },
+    {
+      "number": 8,
+      "id": "s03-m08",
+      "title": "Сайтът като проверка на обещанието",
+      "lessons": 14,
+      "wordsBefore": 25527,
+      "wordsAfter": 26631,
+      "linesBefore": 1962,
+      "linesAfter": 2033,
+      "blocksBefore": 256,
+      "blocksAfter": 258
+    },
+    {
+      "number": 9,
+      "id": "s03-m06",
+      "title": "Google профилът: как хората проверяват местния бизнес",
+      "lessons": 12,
+      "wordsBefore": 21432,
+      "wordsAfter": 22588,
+      "linesBefore": 1641,
+      "linesAfter": 1711,
+      "blocksBefore": 210,
+      "blocksAfter": 212
+    },
+    {
+      "number": 10,
+      "id": "s03-m09",
+      "title": "Търсене, SEO и ИИ: от съвета до проверката",
+      "lessons": 15,
+      "wordsBefore": 27813,
+      "wordsAfter": 29218,
+      "linesBefore": 2119,
+      "linesAfter": 2198,
+      "blocksBefore": 276,
+      "blocksAfter": 278
+    },
+    {
+      "number": 11,
+      "id": "s03-m04",
+      "title": "Права, данни и инструменти, които пазят доверието",
+      "lessons": 10,
+      "wordsBefore": 23028,
+      "wordsAfter": 23028,
+      "linesBefore": 1519,
+      "linesAfter": 1519,
+      "blocksBefore": 207,
+      "blocksAfter": 207
+    },
+    {
+      "number": 12,
+      "id": "s03-m16",
+      "title": "Партньорства и препоръки с ясни интереси",
+      "lessons": 8,
+      "wordsBefore": 17564,
+      "wordsAfter": 17564,
+      "linesBefore": 1281,
+      "linesAfter": 1281,
+      "blocksBefore": 154,
+      "blocksAfter": 154
+    },
+    {
+      "number": 13,
+      "id": "s03-m15",
+      "title": "Кампании и промоции, които могат да се изпълнят",
+      "lessons": 9,
+      "wordsBefore": 19337,
+      "wordsAfter": 19337,
+      "linesBefore": 1384,
+      "linesAfter": 1384,
+      "blocksBefore": 169,
+      "blocksAfter": 169
+    },
+    {
+      "number": 14,
+      "id": "s03-m12",
+      "title": "Meta реклами: достигаш до хора с вярно обещание",
+      "lessons": 12,
+      "wordsBefore": 24915,
+      "wordsAfter": 24915,
+      "linesBefore": 1725,
+      "linesAfter": 1725,
+      "blocksBefore": 218,
+      "blocksAfter": 218
+    },
+    {
+      "number": 15,
+      "id": "s03-m13",
+      "title": "Google реклами: намерение, сравнение и цена на резултата",
+      "lessons": 12,
+      "wordsBefore": 26750,
+      "wordsAfter": 26750,
+      "linesBefore": 1890,
+      "linesAfter": 1890,
+      "blocksBefore": 227,
+      "blocksAfter": 227
+    },
+    {
+      "number": 16,
+      "id": "s03-m14",
+      "title": "Данните: какво знаем за избора и какво само предполагаме",
+      "lessons": 10,
+      "wordsBefore": 19384,
+      "wordsAfter": 19384,
+      "linesBefore": 1474,
+      "linesAfter": 1474,
+      "blocksBefore": 191,
+      "blocksAfter": 191
+    },
+    {
+      "number": 17,
+      "id": "s03-m17",
+      "title": "CRM и обслужване: обещанието след първия контакт",
+      "lessons": 11,
+      "wordsBefore": 23082,
+      "wordsAfter": 23082,
+      "linesBefore": 1828,
+      "linesAfter": 1828,
+      "blocksBefore": 226,
+      "blocksAfter": 226
+    },
+    {
+      "number": 18,
+      "id": "s03-m18",
+      "title": "Полезен инструмент, който човек разбира и препраща",
+      "lessons": 9,
+      "wordsBefore": 18253,
+      "wordsAfter": 18253,
+      "linesBefore": 1448,
+      "linesAfter": 1448,
+      "blocksBefore": 173,
+      "blocksAfter": 173
+    },
+    {
+      "number": 19,
+      "id": "s03-m19",
+      "title": "Имейлът като полезно продължение на разговора",
+      "lessons": 11,
+      "wordsBefore": 22715,
+      "wordsAfter": 22715,
+      "linesBefore": 1732,
+      "linesAfter": 1732,
+      "blocksBefore": 204,
+      "blocksAfter": 204
+    },
+    {
+      "number": 20,
+      "id": "s03-m20",
+      "title": "Финал: от разбиране на общността до изпълнимо предложение",
+      "lessons": 14,
+      "wordsBefore": 39953,
+      "wordsAfter": 39953,
+      "linesBefore": 3120,
+      "linesAfter": 3120,
+      "blocksBefore": 242,
+      "blocksAfter": 242
+    }
+  ],
+  "wordsBefore": 443094,
+  "wordsAfter": 454258,
+  "firstTenBefore": 208113,
+  "firstTenAfter": 219277
+}

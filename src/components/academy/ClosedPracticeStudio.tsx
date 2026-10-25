@@ -27,6 +27,7 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
   const selectedCount = Object.keys(matches).length;
   const complete = studio.slots.every(slot => !!matches[slot.id]);
   const baseComplete = studio.slots.filter(slot => slot.phase !== 'change').every(slot => !!matches[slot.id]);
+  const firstChange = studio.slots.find(slot => slot.phase === 'change')?.id;
   const preview = ['transition', 'speed', 'budget'].includes(studio.kind) ? playlist.at(-1) : playlist[0];
   useEffect(() => { setSaved(null); setNotice(''); }, [studio.context, studio.task]);
   const download = () => {
@@ -66,8 +67,8 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
       <p className="mt-2 text-xs leading-5 academy-muted">Попълнените избори не са оценка. Можеш да запазиш вариант за сравнение, да промениш решение и да проследиш разликата.</p>
     </div>
     <div className="grid min-w-0 gap-5 lg:grid-cols-2">
-      <div className="min-w-0 space-y-4">{studio.slots.map(slot => slot.phase === 'change' && !baseComplete ? <p key={slot.id} className="rounded-xl border academy-border p-4 text-sm leading-6 academy-muted">След първите решения ще получиш промяна в задачата.</p> : <div key={slot.id}>
-        {slot.phase === 'change' && studio.change && <div className="mb-3 rounded-xl border academy-border-strong academy-tint p-4 text-sm leading-6 academy-body"><h4 className="mb-1 font-semibold academy-text">Промяна в задачата</h4><p>{studio.change}</p></div>}
+      <div className="min-w-0 space-y-4">{studio.slots.map(slot => slot.phase === 'change' && !baseComplete ? (slot.id === firstChange ? <p key={slot.id} className="rounded-xl border academy-border p-4 text-sm leading-6 academy-muted">След първите решения ще получиш промяна в задачата.</p> : null) : <div key={slot.id}>
+        {slot.id === firstChange && studio.change && <div className="mb-3 rounded-xl border academy-border-strong academy-tint p-4 text-sm leading-6 academy-body"><h4 className="mb-1 font-semibold academy-text">Промяна в задачата</h4><p>{studio.change}</p></div>}
         <label className="block rounded-xl border academy-border p-4">
         <span className="mb-2 block text-sm font-semibold academy-text">{slot.text}</span>
         <select aria-label={slot.text} value={matches[slot.id] || ''} disabled={busy} onChange={event => {
