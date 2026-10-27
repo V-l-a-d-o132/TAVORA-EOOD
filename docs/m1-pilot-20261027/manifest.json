@@ -1,0 +1,39 @@
+{
+  "release": "silk_m01_pilot_20261027",
+  "baseCommit": "5cd0d14c4230664431c7d63b4ddc661f049318bf",
+  "state": "draft_not_published",
+  "lessons": [
+    {
+      "id": "62e8b964-2d0d-4a74-a6f6-d5cb550b4339",
+      "lessonId": "l01-01",
+      "baselineVersionId": "60c2859c-de22-486a-92e9-120ca8ff922a",
+      "versionId": "d8164a00-1a99-4877-8132-5fff10f53e54",
+      "version": 16
+    },
+    {
+      "id": "9d32e140-6ab8-43e3-bd7b-e52996461bef",
+      "lessonId": "l01-02",
+      "baselineVersionId": "513a9bb2-cf18-46e2-972e-dc97acad3178",
+      "versionId": "12092a2d-ee0c-4067-8e4d-279b859c4aeb",
+      "version": 16
+    },
+    {
+      "id": "7d0447ff-ed9b-41f2-92f3-35d88fb124ca",
+      "lessonId": "l01-03",
+      "baselineVersionId": "4fbf482f-da92-4116-8c73-20aac79be2ce",
+      "versionId": "dc7798ae-814f-48d2-b999-e92405c1498f",
+      "version": 16
+    },
+    {
+      "id": "91b689fc-684f-4ea7-a934-2ccd529b0842",
+      "lessonId": "l01-04",
+      "baselineVersionId": "5024942a-99bf-4194-84f5-8cf2e82d6544",
+      "versionId": "f5b5bdae-a22f-4d90-86e6-94f0afc75b42",
+      "version": 16
+    }
+  ],
+  "assets": {
+    "workbookSha256": "208bca5582f8293be240a9f52a180f71e2f4b8ec10c3cee848e546656e4fbe64",
+    "base": "https://imashnujnoto.com/academy-labs/silk-road/m01-pilot-20261027/"
+  }
+}

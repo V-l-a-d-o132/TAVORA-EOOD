@@ -1,0 +1,27 @@
+{
+  "method": "Repository countVisibleLessonWords; identical tokenizer and visibility rules for both CMS editions",
+  "baseline_v15": 10126,
+  "candidate_v16": 11907,
+  "per_lesson": [
+    {
+      "lesson": "l01-01",
+      "words": 2786,
+      "blocks": 25
+    },
+    {
+      "lesson": "l01-02",
+      "words": 2434,
+      "blocks": 21
+    },
+    {
+      "lesson": "l01-03",
+      "words": 2917,
+      "blocks": 22
+    },
+    {
+      "lesson": "l01-04",
+      "words": 3770,
+      "blocks": 29
+    }
+  ]
+}
