@@ -1,3 +1,4 @@
+import { withMarketingSequence } from './helpers/current-marketing-reading';
 import { loadMarketingAiCandidates } from '../scripts/prepare-marketing-ai-assets.mjs';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -82,7 +83,7 @@ test('41 lessons retain all detail and add a distinct worked example, closed pra
     expect(l.linesAfter,l.lesson).toBeGreaterThan(l.linesBefore);
     expect(l.firstPageWordsAfter,l.lesson).toBeGreaterThan(l.firstPageWordsBefore);
     const ai = loadMarketingAiCandidates().find(r => r.lesson === l.lesson);
-    expect(ACADEMY_READING_WORDS[`${l.module}/${l.lesson}`]).toBe(marketingVisibleWords({...s, blocks: [...blocks, ...(ai?.payload.additions || [])]}));
+    expect(ACADEMY_READING_WORDS[`${l.module}/${l.lesson}`]).toBe(marketingVisibleWords({...s, blocks: withMarketingSequence(l.lesson,[...blocks, ...(ai?.payload.additions || [])])}));
     const studio=parseClosedStudio(l.practice.content)!;
     expect(studio.domain).toBe('marketing');expect(studio.slots.length).toBeGreaterThanOrEqual(3);
     expect(studio.slots.filter(slot=>slot.phase==='change')).toHaveLength(1);
