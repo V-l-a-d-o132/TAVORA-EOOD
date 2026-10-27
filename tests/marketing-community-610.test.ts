@@ -1,3 +1,4 @@
+import { withMarketingSequence } from './helpers/current-marketing-reading';
 import { loadNextMarketingAiCandidates } from '../scripts/prepare-next-marketing-ai-assets.mjs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -39,7 +40,7 @@ describe('Marketing Basics community modules 6–10',()=>{
       const current=practical.find(p=>p.lesson===l.lesson_id)!;
       const currentBlocks=[...l.blocks.map(b=>({...b,content:b.type==='objective'?current.opening:b.content})),current.bridge,current.practice];
       const ai = loadNextMarketingAiCandidates().find(r => r.lesson === l.lesson_id);
-      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(marketingVisibleWords({...l,blocks:[...currentBlocks,...(ai?.payload.additions || [])]}));
+      expect(ACADEMY_READING_WORDS[`${l.source_module_id}/${l.lesson_id}`]).toBe(marketingVisibleWords({...l,blocks:withMarketingSequence(l.lesson_id,[...currentBlocks,...(ai?.payload.additions || [])])}));
     }
   });
   it('requires closed practice without publishing private grading data',()=>{
