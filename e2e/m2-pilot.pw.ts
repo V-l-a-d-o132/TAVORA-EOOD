@@ -141,5 +141,8 @@ test('exported page escapes authored markup and remains usable offline', async (
   await restored.locator('#day').fill('петък');
   await restored.locator('#submit').click();
   await expect(restored.locator('#status')).toContainText('Учебен запис');
+  await restored.locator('nav a[href="#terms"]').click();
+  await expect(restored.locator('#day')).toHaveValue('петък');
+  await expect(restored.locator('#count')).toHaveText('1');
   await context.close();
 });
