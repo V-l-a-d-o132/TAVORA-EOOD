@@ -1,0 +1,59 @@
+{
+  "method": "Exact repository countVisibleLessonWords",
+  "before": 18809,
+  "after": 19081,
+  "lessons": [
+    {
+      "lesson": "l03-01",
+      "before": 1930,
+      "after": 1936
+    },
+    {
+      "lesson": "l03-02",
+      "before": 1551,
+      "after": 1568
+    },
+    {
+      "lesson": "l03-03",
+      "before": 1856,
+      "after": 1854
+    },
+    {
+      "lesson": "l03-04",
+      "before": 1923,
+      "after": 1940
+    },
+    {
+      "lesson": "l03-05",
+      "before": 1857,
+      "after": 2032
+    },
+    {
+      "lesson": "l03-06",
+      "before": 1872,
+      "after": 1878
+    },
+    {
+      "lesson": "l03-07",
+      "before": 1993,
+      "after": 1995
+    },
+    {
+      "lesson": "l03-08",
+      "before": 1630,
+      "after": 1640
+    },
+    {
+      "lesson": "l03-09",
+      "before": 1908,
+      "after": 1902
+    },
+    {
+      "lesson": "l03-10",
+      "before": 2289,
+      "after": 2336
+    }
+  ],
+  "delta": 272,
+  "changePercent": 1.45
+}
