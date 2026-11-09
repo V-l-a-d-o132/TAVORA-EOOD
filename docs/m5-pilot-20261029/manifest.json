@@ -4,12 +4,14 @@
   "candidateVersion": 13,
   "baselineCommit": "0cc4e67a579ef205d1cf7ac43aa2fcaeb7e4da26",
   "backupBranch": "backup/m5-before-pilot-20261029",
-  "publication": "publish_after_verification_as_authorized",
+  "publication": "published",
   "requiredNewStaticAssets": false,
   "manualArtifactReview": true,
   "blockCount": 179,
   "replacedPracticeBlocks": 10,
   "unchangedGradedBlocks": 48,
   "lessonCount": 10,
-  "privateMaterials": "Readings, recovery scripts, database identities, fingerprints, baseline export, transfer cases and teacher rubric are retained in the private owner package."
+  "privateMaterials": "Readings, recovery scripts, database identities, fingerprints, baseline export, transfer cases and teacher rubric are retained in the private owner package.",
+  "publishedVersion": 13,
+  "publishedOn": "2026-10-30"
 }

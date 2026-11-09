@@ -1,10 +1,12 @@
 # Silk Road module 4: authored content dossier
 
-The ten primary exercises previously assembled supplied choices. The new v14 draft asks learners to create text, SVG cards, a real local video, captions, a case study, version records and a production report. Existing theory and 46 additional graded exercises remain. A teacher accepts the artifacts separately from automatic XP.
+The ten primary exercises previously assembled supplied choices. The published v14 lessons ask learners to create text, SVG cards, a real local video, captions, a case study, version records and a production report. Existing theory and 46 additional graded exercises remain. A teacher accepts the artifacts separately from automatic XP.
 
 ## Release state
 
-The ten v14 candidates are staged in Supabase. v13 remains published until the owner pulls `main`, publishes in Readdy, and the exact workbook is verified live. Publishing the lesson pointers is a separate guarded step. Modules 1–3 remain active at v16/v14/v14.
+All ten Module 4 lessons were published as v14 on 9 November 2026. The active and editor versions match in every lesson. Each practice links to its matching workbook stage. Modules 1 through 5 now have 44 published lessons, with no newer draft among them.
+
+The live workbook matched the reviewed file byte for byte. The plan, video and report stages opened, and the live HTML download succeeded. Opening the protected student lesson led to the login page. The signed-in student journey remains unverified.
 
 The owner archive contains the full readings, old content, editorial maps, hidden transfer case and teacher rubric. None of that paid or hidden material is in this public repository. Public assets contain generic tooling, metadata and guarded SQL only. Private answer keys are copied server-side; no keys or learner records are exported.
 
@@ -26,14 +28,12 @@ Exact repository `countVisibleLessonWords`: **19,301 → 19,524**, **+223 (+1.16
 
 Local Node + LinkeDOM checks cover restoration, escaping, reviewed imports, suppression, calculations, SVG overflow guards and cue intervals. LinkeDOM has no layout or video decoder; Chromium CI checks actual layout, canvas measurement, local video metadata and downloads. The nine M4 browser checks run with the repository's existing suite.
 
-Supabase candidate validation passed for all ten lessons. The publish → existing/new learner → rollback → republish/resume → rollback rehearsal passed inside an outer transaction that was rolled back. Existing progress: 12 rows, unchanged fingerprint `6a573fb140d35749e32de12faa77d9cc`. Attempts are preserved. No schema, authentication, RLS, payment or email service changes.
+Supabase candidate validation passed for all ten lessons. The publish → existing/new learner → rollback → republish/resume → rollback rehearsal passed inside an outer transaction that was rolled back. The 12 existing progress records matched before and after publication. Attempts are preserved. No schema, authentication, RLS, payment or email service changes.
 
-## Rollout and return
+## Publication and recovery
 
-1. Owner pulls `main` and publishes the static asset in Readdy.
-2. Check live bytes against the reviewed workbook, open all stages and test a downloaded copy and media/caption handling.
-3. Run `scripts/m4-pilot-20261029/publish.sql` only once those dependencies are ready. It verifies exact baseline/candidate identity and content fingerprints, archives current progress, changes ten publication pointers, and records the action.
-4. Verify all ten lessons publish v14 and inspect the learner route. Record any untested signed-in behavior explicitly.
-5. If necessary, run `rollback.sql`. It restores archived old progress and the exact v13 pointers; pilot progress is retained for resume. `rehearse.sql` is an optional isolated rehearsal, ending in ROLLBACK.
+The guarded publication completed on 9 November 2026 and created one publication audit for each of the ten lessons. Validation returned zero errors. The ten original v13 versions are available for recovery. The aggregate number of recorded attempts matched before and after publication.
+
+For an editorial rollback of this release, use `scripts/m4-pilot-20261029/rollback.sql`. It verifies the active edition, restores archived progress and the exact v13 versions, and retains v14 progress for resumption. The publication and rehearsal scripts require their expected starting state. The owner continues to pull and publish website assets manually.
 
 Backup branch: `backup/m4-before-pilot-20261029`, at `6ee16dfbea5c32637ac4a737fa584c14295eee34`. Do not rerun the private staging script: the candidates already exist. Changed scope, drafts, pointers or fingerprints cause a failure; inspect the change instead of removing guards.

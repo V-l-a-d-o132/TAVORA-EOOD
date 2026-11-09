@@ -6,7 +6,7 @@ The current fictional client brief is P-3. All mandatory inputs are in the lesso
 
 ## Release and recovery
 
-The owner explicitly requested direct delivery to `main` and active Module 5 lessons. GitHub contains editorial release metadata and word counts. Readings, database identities, fingerprints, recovery scripts, old-content export, transfer cases and the teacher rubric remain in the private owner package. Merging or pulling code alone does not publish database lessons. Run the guarded publication script only after validation and verify the actual pointers afterwards.
+All ten Module 5 lessons were published as v13 on 30 October 2026. The 9 November check found the same published version in each lesson. GitHub contains editorial release metadata and word counts. Readings, database identities, fingerprints, recovery scripts, old-content export, transfer cases and the teacher rubric remain in the private owner package. The guarded database publication is complete. The private recovery package restores the prior v12 edition when needed.
 
 - Code baseline: `0cc4e67a579ef205d1cf7ac43aa2fcaeb7e4da26`.
 - Backup branch: `backup/m5-before-pilot-20261029`.
@@ -23,4 +23,4 @@ On 29 October 2026 the database rehearsal passed publication, existing/new learn
 
 Current product claims were checked against dated primary sources in the private editorial package. Arithmetic and content invariants were checked separately. GitHub Actions records the automated build, security and browser checks for the commit. These are not a signed-in production learner journey or a beginner pilot. Teaching effectiveness and transfer still require observation with real beginners and a competent reviewer; the package includes the review protocol.
 
-Module 4 publication is outside this release. This release does not change its pointers.
+See [the Module 4 release](../m4-pilot-20261029/README.md) for its separate publication and recovery record.
