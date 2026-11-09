@@ -1,4 +1,5 @@
 // Visible text counts for Lesson Engine V2. Silk Road toolkit edition: 2026-10-18; Perfect Video AI routes: 2026-10-19.
+// Silk Road module 6 reflects the published 2026-11-09 edition.
 // Includes all 20 Marketing Basics community modules (2026-10-12).
 // Counts include lesson/step titles and learner-facing block text; retired open answers,
 // source URLs and private answer keys are excluded. Refresh when the curriculum changes.
@@ -48,16 +49,16 @@ export const ACADEMY_READING_WORDS: Readonly<Record<string, number>> = {
   's01-m05/l05-08': 1699,
   's01-m05/l05-09': 1927,
   's01-m05/l05-10': 2455,
-  's01-m06/l06-01': 1612,
-  's01-m06/l06-02': 2136,
-  's01-m06/l06-03': 1627,
-  's01-m06/l06-04': 1512,
-  's01-m06/l06-05': 1593,
-  's01-m06/l06-06': 1598,
-  's01-m06/l06-07': 1798,
-  's01-m06/l06-08': 1912,
-  's01-m06/l06-09': 2052,
-  's01-m06/l06-10': 2755,
+  's01-m06/l06-01': 1811,
+  's01-m06/l06-02': 2188,
+  's01-m06/l06-03': 1695,
+  's01-m06/l06-04': 1538,
+  's01-m06/l06-05': 1596,
+  's01-m06/l06-06': 1608,
+  's01-m06/l06-07': 1837,
+  's01-m06/l06-08': 1937,
+  's01-m06/l06-09': 2094,
+  's01-m06/l06-10': 3094,
   's01-m07/l07-01': 2003,
   's01-m07/l07-02': 2300,
   's01-m07/l07-03': 1895,
