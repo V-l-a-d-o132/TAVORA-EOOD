@@ -93,6 +93,9 @@ for (const theme of ['light', 'dark']) {
       await expect(frame.locator('#status')).toContainText('не успя');
       await selectTheme(page, title(theme)); await expect(frame.getByLabel('Условие за изпитване')).toHaveValue('error');
       await expect(frame.getByLabel('Учебен контакт', { exact: true })).toHaveValue('test@example.invalid');
+      await frame.getByLabel('Условие за изпитване').selectOption('slow');
+      await frame.getByRole('button', { name: 'Повтори същата заявка', exact: true }).click();
+      await expect(frame.getByRole('button', { name: 'Изпрати запитване', exact: true })).toBeDisabled();
       await page.getByRole('button', { name: 'Провери моя прототип', exact: true }).click();
       await expect(page.getByText('Прототипът покрива проверените условия за този случай. Приложи принципите към различния бизнес.')).toBeVisible();
       await selectTheme(page, opposite(theme));

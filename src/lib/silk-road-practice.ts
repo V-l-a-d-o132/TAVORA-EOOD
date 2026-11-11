@@ -65,14 +65,58 @@ export function buildSilkPrototype(study: SilkPracticeCase, plan: SilkPagePlan):
 const plan=${config};
 // Deliberate choices are applied to the learner's artifact, not merely to a quiz label.
 const originalProcess=TavoraRequestLab.processRequest;
-let entries=[];let last=null;let busy=false;let counter=0;
+let entries=[];let last=null;let counter=0;
+let pendingRequest = null;
 const store={all:()=>entries.slice(),save:item=>entries.push({...item,confirmed:plan.action!=='request'}),clear:()=>{entries=[]}};
 const draw=()=>{document.getElementById('record-count').textContent=String(entries.length);document.getElementById('records').replaceChildren(...entries.map(item=>{const row=document.createElement('tr');[item.id,item.name,item.contact,item.preferredDate||'неуточнена',item.confirmed?'Потвърдено без проверка':'Запитване; чака уточнение'].forEach(value=>{const cell=document.createElement('td');cell.textContent=value;row.appendChild(cell)});return row}));};
-const send=async repeat=>{if(busy)return;busy=true;const button=document.getElementById('send');button.disabled=true;document.getElementById('repeat').disabled=true;document.getElementById('clear').disabled=true;try{let input={name:document.getElementById('name').value.trim(),contact:document.getElementById('contact').value.trim(),preferredDate:document.getElementById('date').value};let same=last&&JSON.stringify(input)===JSON.stringify({name:last.name,contact:last.contact,preferredDate:last.preferredDate});let request=repeat&&last?{...last}:{...input,id:same?last.id:'T-'+(++counter)};if(plan.duplicates==='new-record'&&repeat)request.id='T-'+(++counter);if(plan.missingContact==='guess'&&!request.contact)request.contact='guessed@example.invalid';document.getElementById('status').textContent='Изпращане… още няма потвърждение.';const result=await originalProcess(request,document.getElementById('mode').value,store);if(result.state==='accepted'||result.state==='duplicate'||result.state==='error')last=request;document.getElementById('status').textContent=result.message;if(result.state==='accepted'&&plan.action!=='request')document.getElementById('status').textContent='Потвърдено без проверка на наличност или график.';if(result.field)document.getElementById(result.field).focus();draw();return result}finally{busy=false;button.disabled=false;document.getElementById('repeat').disabled=!last;document.getElementById('clear').disabled=false;}};
+const submitRequest = async repeat => {
+  const button = document.getElementById('send');
+  const repeatButton = document.getElementById('repeat');
+  const clearButton = document.getElementById('clear');
+  const status = document.getElementById('status');
+  button.disabled = repeatButton.disabled = clearButton.disabled = true;
+  try {
+    const input = {
+      name: document.getElementById('name').value.trim(),
+      contact: document.getElementById('contact').value.trim(),
+      preferredDate: document.getElementById('date').value,
+    };
+    const same = last && input.name === last.name && input.contact === last.contact && input.preferredDate === last.preferredDate;
+    const request = repeat && last ? { ...last } : { ...input, id: same ? last.id : 'T-' + (++counter) };
+    if (plan.duplicates === 'new-record' && repeat) request.id = 'T-' + (++counter);
+    if (plan.missingContact === 'guess' && !request.contact) request.contact = 'guessed@example.invalid';
+    status.textContent = 'Изпращане… още няма потвърждение.';
+    const result = await originalProcess(request, document.getElementById('mode').value, store);
+    if (['accepted', 'duplicate', 'error'].includes(result.state)) last = request;
+    status.textContent = result.state === 'accepted' && plan.action !== 'request'
+      ? 'Потвърдено без проверка на наличност или график.'
+      : result.message;
+    if (result.field) document.getElementById(result.field).focus();
+    draw();
+    return result;
+  } finally {
+    button.disabled = clearButton.disabled = false;
+    repeatButton.disabled = !last;
+  }
+};
+const send = repeat => {
+  if (!pendingRequest) pendingRequest = submitRequest(repeat).finally(() => { pendingRequest = null; });
+  return pendingRequest;
+};
 document.getElementById('request-form').addEventListener('submit',event=>{event.preventDefault();void send(false)});document.getElementById('repeat').addEventListener('click',()=>void send(true));document.getElementById('clear').addEventListener('click',()=>{store.clear();last=null;document.getElementById('repeat').disabled=true;draw();document.getElementById('status').textContent='Изчистени са само учебните записи.'});document.getElementById('storage-note').textContent='Списъкът е временен за тази отворена страница.';
-window.TavoraSilkPrototype={store,send,isBusy:()=>busy,reset:()=>{entries=[];last=null;counter=0;draw();document.getElementById('repeat').disabled=true;document.getElementById('status').textContent='Още няма изпратено запитване.'}};
+window.TavoraSilkPrototype={store,send,isBusy:()=>pendingRequest !== null,reset:()=>{entries=[];last=null;counter=0;draw();document.getElementById('repeat').disabled=true;document.getElementById('status').textContent='Още няма изпратено запитване.'}};
 const checkPrototype=${exerciseSilkPrototype.toString()};
-window.addEventListener('message',async event=>{if(event.source!==parent||event.data?.type!=='tavora-silk-check'||typeof event.data.requestId!=='string')return;try{const results=await checkPrototype(document,window.TavoraSilkPrototype);parent.postMessage({type:'tavora-silk-check-result',requestId:event.data.requestId,results},'*')}catch{parent.postMessage({type:'tavora-silk-check-result',requestId:event.data.requestId,error:true},'*')}});
+window.addEventListener('message', async event => {
+  if (event.source !== parent || event.data?.type !== 'tavora-silk-check' || typeof event.data.requestId !== 'string') return;
+  const reply = { type: 'tavora-silk-check-result', requestId: event.data.requestId };
+  try {
+    await pendingRequest;
+    const results = await checkPrototype(document, window.TavoraSilkPrototype);
+    parent.postMessage({ ...reply, results }, '*');
+  } catch {
+    parent.postMessage({ ...reply, error: true }, '*');
+  }
+});
 const reportHeight=()=>{if(parent!==window)parent.postMessage({type:'tavora-silk-prototype-height',height:Math.ceil(document.querySelector('main').getBoundingClientRect().height)},'*')};if(typeof ResizeObserver!=='undefined'){new ResizeObserver(reportHeight).observe(document.querySelector('main'));reportHeight();}
 </script></main></body></html>`;
 }
