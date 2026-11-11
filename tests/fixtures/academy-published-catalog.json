@@ -1,9 +1,9 @@
 {
-  "verifiedOn": "2026-10-16",
+  "verifiedOn": "2026-11-11",
   "modules": [
     {
       "id": "s01-m01",
-      "lessons": 4
+      "lessons": 7
     },
     {
       "id": "s01-m02",
@@ -27,23 +27,23 @@
     },
     {
       "id": "s01-m07",
-      "lessons": 4
+      "lessons": 7
     },
     {
       "id": "s01-m08",
-      "lessons": 4
+      "lessons": 7
     },
     {
       "id": "s01-m09",
-      "lessons": 4
+      "lessons": 7
     },
     {
       "id": "s01-m10",
-      "lessons": 4
+      "lessons": 7
     },
     {
       "id": "s01-m11",
-      "lessons": 4
+      "lessons": 7
     },
     {
       "id": "s02-m01",

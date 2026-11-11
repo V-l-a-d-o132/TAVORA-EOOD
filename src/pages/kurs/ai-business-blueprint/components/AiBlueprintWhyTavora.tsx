@@ -12,6 +12,6 @@ export default function AiBlueprintWhyTavora() {
         <p className="text-sm text-[#1C1C1E]/70 leading-relaxed">{item.body}</p>
       </article>)}
     </div>
-    <p className="p-6 rounded-2xl bg-[#0F1F35] text-sm leading-relaxed text-white">Първият модул е завършена безплатна проба с четири урока. След него можеш да прецениш дали искаш останалите теми; няма автоматична покупка.</p>
+    <p className="p-6 rounded-2xl bg-[#0F1F35] text-sm leading-relaxed text-white">Първият модул е завършена безплатна проба със седем урока. След него можеш да прецениш дали искаш останалите теми; няма автоматична покупка.</p>
   </section>;
 }

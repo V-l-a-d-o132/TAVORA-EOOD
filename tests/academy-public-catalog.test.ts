@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import published from './fixtures/academy-published-catalog.json';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
+import { lessonRoute, requestedLessonIndex } from '../src/lib/academy-lesson-location';
+import { parseBookmark } from '../src/lib/learning-resume';
 import { PRICING_TIERS } from '../src/config/pricing';
 import { ACADEMY_CATALOG_VERIFIED_ON, ACADEMY_FREE_MODULE_ID, ACADEMY_TOTAL_STATS } from '../src/config/academy-catalog';
 import { MARKETING_BASICS_PUBLIC_GROUPS, PERFECT_VIDEO_PUBLIC_MODULES, SILK_ROAD_PUBLIC_MODULES } from '../src/data/academy-public-programs';
@@ -16,6 +18,23 @@ describe('Public catalogue against the published Supabase snapshot', () => {
     }
     expect(ACADEMY_TOTAL_STATS.moduleCount).toBe(published.modules.length);
     expect(ACADEMY_TOTAL_STATS.lessonCount).toBe(published.modules.reduce((total, module) => total + module.lessons, 0));
+  });
+
+  it('has at least seven Silk Road lessons per module and keeps the original final exam reachable', () => {
+    const section = LEARNING_SECTIONS[0];
+    expect(section.totalLessons).toBe(92);
+    expect(section.modules.every(module => module.lessons.length >= 7)).toBe(true);
+    const last = section.modules.at(-1)!;
+    const final = last.lessons.at(-1)!;
+    expect(final.id).toBe('l11-04');
+    expect(last.lessons[requestedLessonIndex(last, '3')]).toBe(final);
+    const oldBookmark = parseBookmark({ moduleId: last.id, lessonIndex: 3, lessonTitle: final.title, timestamp: '2026-10-16T09:00:00Z' });
+    expect(oldBookmark?.lessonId).toBe(final.id);
+    for (const [index, lesson] of last.lessons.entries()) {
+      const route = lessonRoute(last.id, lesson.id, index);
+      const query = new URL(route, 'https://academy.test').searchParams.get('lesson');
+      expect(requestedLessonIndex(last, query)).toBe(index);
+    }
   });
 
   it('does not offer unpublished editing lessons through the navigation', () => {

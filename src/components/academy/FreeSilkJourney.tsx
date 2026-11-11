@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { buildCheckoutUrl, formatPrice, getTierById } from '@/config/pricing';
+import { FREE_SILK_STEPS } from '@/data/free-silk-steps';
 import { FREE_SILK_LESSONS, freeSilkDeviceSummary } from '@/lib/free-silk-progress';
 import { restoreFreeSilkToAccount } from '@/lib/restore-free-silk';
 import type { LessonProgressV2 } from '@/lib/lesson-engine-v2';
 
-const steps = [
-  { title: 'Избери полезна задача', result: 'Раздели фактите, липсващото и позволеното действие.' },
-  { title: 'Сглоби ясна страница', result: 'Използвай ИИ за чернова и запази условията на услугата.' },
-  { title: 'Сметни цялата работа', result: 'Сравни подготовка, поправки и проверен резултат.' },
-  { title: 'Провери и предай', result: 'Проследи заявката и избери ясен обхват за предаване.' },
-];
 
 export function FreeSilkAccountRestore({ onProgress, onFinished }: { onProgress:(lesson:string,progress:LessonProgressV2)=>void; onFinished:()=>void }) {
   const [available]=useState(()=>freeSilkDeviceSummary().xp>0);
@@ -26,14 +21,14 @@ export function FreeSilkAccountRestore({ onProgress, onFinished }: { onProgress:
 export function FreeSilkJourney({ completedLessons, activeLessonId, guest }: { completedLessons: string[]; activeLessonId: string; guest: boolean }) {
   const count = FREE_SILK_LESSONS.filter(id => completedLessons.includes(id)).length;
   return <section aria-label="Твоята първа работна задача" className="rounded-2xl border academy-border academy-surface p-5 academy-body">
-    <p className="text-xs font-semibold uppercase tracking-wider academy-accent">Безплатен модул · 4 урока</p>
+    <p className="text-xs font-semibold uppercase tracking-wider academy-accent">Безплатен модул · {FREE_SILK_STEPS.length} урока</p>
     <h2 className="mt-2 text-xl font-semibold academy-text">От нуждата на бизнеса до проверен учебен прототип</h2>
-    <p className="mt-3 text-sm leading-7">Работиш с предоставеното велоателие „Педал“. Избираш, виждаш какво подготвяш и променяш решението при ново условие. Нужни са само тези уроци — без външен акаунт или качване на файл.</p>
+    <p className="mt-3 text-sm leading-7">Започваш с велоателие „Педал“. После пишеш свое задание за шивашко ателие „Игла“, проверяваш черновата и показваш поправката.</p>
     <Link to="/academy-labs/silk-road/start#project" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold underline academy-text">Пробвай учебната страница</Link>
     <details className="mt-4">
-      <summary className="cursor-pointer text-sm font-semibold academy-text">Твоят маршрут: {count} от 4 урока преминати{guest ? ' на това устройство' : ''}</summary>
-      <ol className="mt-4 grid gap-3 sm:grid-cols-2">{steps.map((step, i) => <li key={step.title} className="rounded-xl border academy-border academy-tint p-4" aria-current={FREE_SILK_LESSONS[i] === activeLessonId ? 'step' : undefined}>
-        <Link to={`/module/s01-m01?lesson=${FREE_SILK_LESSONS[i]}`} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold academy-text">{completedLessons.includes(FREE_SILK_LESSONS[i]) ? <i className="ri-check-line academy-success" aria-label="Преминат" /> : <span>{i + 1}.</span>}{step.title}</Link>
+      <summary className="cursor-pointer text-sm font-semibold academy-text">Твоят маршрут: {count} от {FREE_SILK_STEPS.length} урока преминати{guest ? ' на това устройство' : ''}</summary>
+      <ol className="mt-4 grid gap-3 sm:grid-cols-2">{FREE_SILK_STEPS.map((step, i) => <li key={step.id} className="rounded-xl border academy-border academy-tint p-4" aria-current={step.id === activeLessonId ? 'step' : undefined}>
+        <Link to={`/module/s01-m01?lesson=${step.id}`} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold academy-text">{completedLessons.includes(step.id) ? <i className="ri-check-line academy-success" aria-label="Преминат" /> : <span>{i + 1}.</span>}{step.title}</Link>
         <p className="mt-1 text-sm leading-6">{step.result}</p>
       </li>)}</ol>
     </details>
@@ -44,9 +39,9 @@ export function FreeSilkJourney({ completedLessons, activeLessonId, guest }: { c
 export function FreeSilkBridge({ canContinue }: { canContinue: boolean }) {
   const course = getTierById('silkRoad');
   return <section aria-label="След безплатния модул" className="space-y-5 rounded-2xl border academy-accent-border academy-card-gradient p-5 academy-body sm:p-7">
-    <div><p className="text-xs font-semibold uppercase tracking-wider academy-accent">Четирите учебни урока са преминати</p>
+    <div><p className="text-xs font-semibold uppercase tracking-wider academy-accent">Всички {FREE_SILK_STEPS.length} урока са преминати</p>
       <h2 className="mt-2 text-2xl font-semibold academy-text">Свърза нуждата, страницата и проверката.</h2>
-      <p className="mt-3 text-sm leading-7">Избра полезна услуга, сглоби учебна страница, сравни цялото време за работа и провери как се предава резултатът. В модул 2 развиваш страницата: четимост, изображения, мобилна версия и приемане по конкретни проверки.</p>
+      <p className="mt-3 text-sm leading-7">Избра полезна услуга, сглоби учебна страница, сравни цялото време за работа и провери как се предава резултатът. За ателие „Игла“ изпробва своя чернова и защити поправката. В модул 2 развиваш страницата: четимост, изображения, мобилна версия и приемане по конкретни проверки.</p>
     </div>
     <p className="text-sm leading-7"><Link to="/academy-labs/silk-road/start#project" className="underline">Отвори прототипа и работния файл</Link>. Проверки в лабораторията и проверки в уроците са отделни действия.</p>
     {canContinue ? <Link to="/module/s01-m02" className="inline-flex min-h-11 items-center justify-center rounded-xl academy-primary px-5 py-3 text-sm font-semibold text-white">Продължи към модул 2: сайтът</Link> : <>

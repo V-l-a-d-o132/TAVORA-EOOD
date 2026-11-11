@@ -1,23 +1,23 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import snapshot from './fixtures/academy-public-facts-20261016.json';
+import silkLessons from './fixtures/silk-road-published-20261111.json';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
 import { ACADEMY_EXAM_STATS, ACADEMY_TOTAL_STATS } from '../src/config/academy-catalog';
 import { PRICING_TIERS } from '../src/config/pricing';
 import { MARKETING_BASICS_FAQ, PERFECT_VIDEO_FAQ, SILK_ROAD_FAQ } from '../src/data/academy-public-faq';
 import { MARKETING_BASICS_PUBLIC_GROUPS } from '../src/data/academy-public-programs';
 
-describe('Public promises against the independently read published catalogue of 16 October', () => {
-  it('resolves all 524 navigation entries to published lesson identities and titles, including the moved AI lesson', () => {
+describe('Public promises against published course snapshots', () => {
+  it('resolves all published navigation entries to published lesson identities and titles, including the moved AI lesson', () => {
     const navigation = LEARNING_SECTIONS.flatMap(section => section.modules.flatMap(module => module.lessons.map(lesson => ({
       module_id: lesson.sourceModuleId || module.id, lesson_id: lesson.id, title: lesson.title,
     }))));
     const sort = (rows: typeof navigation) => [...rows].sort((a, b) => `${a.module_id}/${a.lesson_id}`.localeCompare(`${b.module_id}/${b.lesson_id}`));
-    expect(navigation).toHaveLength(524);
-    const updated = readdirSync('course-assets/silk-road/first-service').filter(f => /^l\d\d-\d\d\.json$/.test(f)).map(f => JSON.parse(readFileSync(`course-assets/silk-road/first-service/${f}`, 'utf8')));
-    const expected = snapshot.lessons.map(l => ({ ...l, title: updated.find(u => u.moduleId === l.module_id && u.lessonId === l.lesson_id)?.title || l.title }));
-    expect(sort(navigation)).toEqual(sort(expected));
-    expect(ACADEMY_TOTAL_STATS.lessonCount).toBe(snapshot.programmes.reduce((sum, course) => sum + course.lessons, 0));
+    expect(navigation).toHaveLength(542);
+    const otherLessons = snapshot.lessons.filter(lesson => !lesson.module_id.startsWith('s01-'));
+    expect(sort(navigation)).toEqual(sort([...otherLessons, ...silkLessons]));
+    expect(ACADEMY_TOTAL_STATS.lessonCount).toBe(otherLessons.length + silkLessons.length);
   });
 
   it('keeps checkout prices and access counts equal to the read-only database snapshot', () => {
@@ -50,7 +50,7 @@ describe('Public promises against the independently read published catalogue of 
     for (const path of ['public/ai.txt', 'public/llms.txt']) {
       const text = readFileSync(path, 'utf8');
       expect(text).toContain('210 публикувани урока');
-      expect(text).toMatch(/524 (?:публикувани )?урока/);
+      expect(text).toMatch(/542 (?:публикувани )?урока/);
       expect(text).not.toMatch(/209 публикувани|523 (?:публикувани )?урока|AI Advantage/);
       expect(text).toContain('без свободни писмени отговори');
     }

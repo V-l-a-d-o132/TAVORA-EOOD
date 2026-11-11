@@ -12,7 +12,7 @@ export function locateLesson(moduleId: string, lessonId: string) {
 }
 
 export function lessonRoute(moduleId: string, lessonId: string, lessonIndex: number): string {
-  const query = (moduleId.startsWith('s03-') || PREVIOUS_VIDEO_WORKFLOW_LESSONS[moduleId]) ? lessonId : String(lessonIndex);
+  const query = (moduleId === 's01-m11' || moduleId.startsWith('s03-') || PREVIOUS_VIDEO_WORKFLOW_LESSONS[moduleId]) ? lessonId : String(lessonIndex);
   return `/module/${moduleId}?lesson=${encodeURIComponent(query)}`;
 }
 
@@ -28,8 +28,12 @@ export function legacyMarketingRoute(moduleId: string | undefined, query: string
 
 export function requestedLessonIndex(module: Module | null, query: string | null): number {
   if (!module || query === null) return 0;
-  const legacyId = /^[0-9]+$/.test(query) ? PREVIOUS_VIDEO_WORKFLOW_LESSONS[module.id]?.[Number(query)] : undefined;
-  const index = legacyId ? module.lessons.findIndex(lesson => lesson.id === legacyId) : /^[0-9]+$/.test(query) ? Number(query) : module.lessons.findIndex(lesson => lesson.id === query);
+  const numeric = /^[0-9]+$/.test(query);
+  // The fourth lesson used to be the exam. Keep its original indexed bookmarks working.
+  const legacyId = module.id === 's01-m11' && numeric && Number(query) === 3
+    ? 'l11-04'
+    : numeric ? PREVIOUS_VIDEO_WORKFLOW_LESSONS[module.id]?.[Number(query)] : undefined;
+  const index = legacyId ? module.lessons.findIndex(lesson => lesson.id === legacyId) : numeric ? Number(query) : module.lessons.findIndex(lesson => lesson.id === query);
   return index >= 0 && index < module.lessons.length ? index : 0;
 }
 

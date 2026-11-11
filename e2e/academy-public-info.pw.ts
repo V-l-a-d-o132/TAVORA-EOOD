@@ -3,7 +3,7 @@ import { prepareAcademyTheme } from './helpers/academy-theme-fixture';
 import { assertLearningFits } from './helpers/learning-contrast';
 
 const courses = [
-  { route: '/kurs/ai-business-blueprint', lessons: 74, lab: '/academy-labs/silk-road/start' },
+  { route: '/kurs/ai-business-blueprint', lessons: 92, lab: '/academy-labs/silk-road/start' },
   { route: '/kurs/perfektnoto-video', lessons: 240, lab: '/academy-labs/perfect-video/start' },
   { route: '/kurs/marketing-basics', lessons: 210, lab: '/academy/marketing-basics-practice.html' },
 ];
@@ -52,21 +52,21 @@ for (const width of [320, 1280]) {
     });
   }
 
-  test(`${width}px anonymous academy: four real free lessons and three separate lab previews`, async ({ page }) => {
+  test(`${width}px anonymous academy: seven real free lessons and three separate lab previews`, async ({ page }) => {
     await prepareAcademyTheme(page, 'dark', undefined, { anonymous: true });
     await page.setViewportSize({ width, height: 950 }); await page.goto('/kurs');
-    await expect(page.locator('#module1-preview ol > li')).toHaveCount(4);
-    await expect(page.locator('#module1-preview a[href^="/module/s01-m01"]')).toHaveCount(5);
+    await expect(page.locator('#module1-preview ol > li')).toHaveCount(7);
+    await expect(page.locator('#module1-preview a[href^="/module/s01-m01"]')).toHaveCount(8);
     await expect(page.locator('#akademiya-results article')).toHaveCount(3);
     await expect(page.locator('#akademiya-results')).toContainText('не отключват платени модули');
-    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /524/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /542/);
     await assertLearningFits(page);
     await page.locator('#module1-preview a[href="/module/s01-m01?lesson=0"]').first().click();
     await expect(page.getByRole('heading', { name: 'Какво ще можеш след урока', exact: true })).toBeVisible();
   });
 }
 
-for (const [tier, lessons] of [['systems-10', 70], ['koprinena-pateka', 74], ['perfektno-video', 240], ['marketing-basics', 210], ['premium-all', 524], ['strategic_access', 524]] as const) {
+for (const [tier, lessons] of [['systems-10', 85], ['koprinena-pateka', 92], ['perfektno-video', 240], ['marketing-basics', 210], ['premium-all', 542], ['strategic_access', 542]] as const) {
   test(`checkout ${tier}: published course scope is visible before authentication`, async ({ page }) => {
     const calls = await prepareAcademyTheme(page, 'dark', undefined, { anonymous: true });
     await page.setViewportSize({ width: 375, height: 950 }); await page.goto(`/kurs/checkout?tier=${tier}`);

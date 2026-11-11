@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { EDITORIAL_IMAGE_ALT, EDITORIAL_IMAGE_URL } from '@/config/editorial-image';
-import { ACADEMY_PROGRAM_STATS } from '@/config/academy-catalog';
+import { ACADEMY_PROGRAM_STATS, ACADEMY_STARTER_STATS } from '@/config/academy-catalog';
 import { SILK_ROAD_PUBLIC_MODULES } from '@/data/academy-public-programs';
 import { SILK_ROAD_ARTICLES } from '../silk-road-articles';
 import BlogArticleLayout, { ArticleSection, buildArticleSchema } from '../components/BlogArticleLayout';
@@ -10,7 +10,7 @@ const DESCRIPTION = `11 модула и ${ACADEMY_PROGRAM_STATS.silkRoad.lessonC
 const SCHEMA = buildArticleSchema({
   id: 'ai-business-blueprint-putyat-na-koprinata', name: TITLE, description: DESCRIPTION,
   image: EDITORIAL_IMAGE_URL, section: 'AI & Бизнес', keywords: 'Пътят на коприната, AI Business Blueprint, AI бизнес обучение',
-  datePublished: '2026-07-07', dateModified: '2026-10-16', breadcrumbLabel: 'Пътят на коприната',
+  datePublished: '2026-07-07', dateModified: '2026-11-11', breadcrumbLabel: 'Пътят на коприната',
 });
 
 export default function AiBusinessBlueprintPage() {
@@ -18,13 +18,13 @@ export default function AiBusinessBlueprintPage() {
     schemaId="schema-ai-business-blueprint" schema={SCHEMA}
     seoTitle={`${TITLE} | TAVORA`} seoDescription={DESCRIPTION}
     canonical="https://imashnujnoto.com/blog/ai-business-blueprint-putyat-na-koprinata"
-    category="AI & Бизнес" date="Обновено на 16 октомври 2026" readTime="5 мин. четене"
+    category="AI & Бизнес" date="Обновено на 11 ноември 2026" readTime="5 мин. четене"
     heroImage={EDITORIAL_IMAGE_URL} heroAlt={EDITORIAL_IMAGE_ALT}
     breadcrumbLabel="Пътят на коприната" title={TITLE} intro={DESCRIPTION}
     tocItems={[
       { id: 'for-whom', label: 'За кого е обучението' },
       { id: 'practice', label: 'Какво изработваш и проверяваш' },
-      { id: 'modules', label: '11 модула, 74 урока' },
+      { id: 'modules', label: `11 модула, ${ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} урока` },
       { id: 'start', label: 'Безплатно начало и пакети' },
       { id: 'articles', label: 'Започни от своя въпрос' },
       { id: 'questions', label: 'Практични въпроси' },
@@ -60,9 +60,9 @@ export default function AiBusinessBlueprintPage() {
       <ArticleSection id="start" title="Кратък публичен опит, безплатен модул и избор на пакет">
         <ul>
           <li><Link to="/academy-labs/silk-road/start">Публичен учебен прототип</Link>: ограничена проба без покупка и без учебен акаунт. Работи с предоставени измислени случаи.</li>
-          <li><Link to="/module/s01-m01?lesson=0">Безплатен модул 01 — „Първата ти дигитална услуга“</Link>: четири пълни урока и проверки. Можеш да опиташ като гост; акаунтът позволява запазен учебен прогрес.</li>
-          <li><strong>Стартов пакет:</strong> първите десет модула, общо 70 публикувани урока.</li>
-          <li><strong>Пълна програма:</strong> единадесетте модула, общо 74 публикувани урока, включително модул 11 за услуга, цена и устойчиво изпълнение.</li>
+          <li><Link to="/module/s01-m01?lesson=0">Безплатен модул 01 — „Първата ти дигитална услуга“</Link>: седем пълни урока и проверки. Можеш да опиташ като гост; акаунтът позволява запазен учебен прогрес.</li>
+          <li><strong>Стартов пакет:</strong> първите десет модула, общо {ACADEMY_STARTER_STATS.lessonCount} публикувани урока.</li>
+          <li><strong>Пълна програма:</strong> единадесетте модула, общо {ACADEMY_PROGRAM_STATS.silkRoad.lessonCount} публикувани урока, включително модул 11 за услуга, цена и устойчиво изпълнение.</li>
         </ul>
         <p>Актуалните пакети, цени и условия са на <Link to="/kurs/ai-business-blueprint">страницата на програмата</Link>. Разгледай обхвата след пробата и избери според задачата, която искаш да развиваш.</p>
       </ArticleSection>

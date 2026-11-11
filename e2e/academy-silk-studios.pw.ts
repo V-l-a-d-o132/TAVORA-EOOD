@@ -3,7 +3,14 @@ import {test,expect,type Page} from '@playwright/test';
 import {loadPracticalSilkCandidates} from '../scripts/prepare-practical-silk-assets.mjs';
 import {prepareAcademyTheme} from './helpers/academy-theme-fixture';
 import {assertLearningFits,assertLearningContrast} from './helpers/learning-contrast';
-const lessons=loadPracticalSilkCandidates();
+const historicalLessons = loadPracticalSilkCandidates();
+const firstFree = historicalLessons.find(lesson => lesson.lesson === 'l01-01')!;
+// Navigation fixtures use synthetic answers, independently of the live assessments.
+const newFree = ['l01-05', 'l01-06', 'l01-07'].map(lesson => ({
+  ...firstFree, lesson, title: 'Учебна проверка ' + lesson,
+}));
+const lessons = [...historicalLessons, ...newFree];
+const freeLessons = lessons.filter(lesson => lesson.module === 's01-m01');
 const privateRows=process.env.SILK_PRIVATE_CANDIDATES?JSON.parse(readFileSync(process.env.SILK_PRIVATE_CANDIDATES,'utf8')):null;
 const answersFor=l=>privateRows?.find(p=>p.lesson===l.lesson)?.payload.practice.evaluation.matches||Object.fromEntries(l.practice.content.left.map(s=>[s.id,s.choices[0]]));
 const versionFor=l=>`00000000-0000-4000-8000-${String(100+lessons.indexOf(l)).padStart(12,'0')}`;
@@ -33,17 +40,20 @@ async function prepare(page:Page,theme:string,guest=false){
 async function choose(page:Page,l){const answers=answersFor(l),studio=page.getByTestId('closed-practice-studio');for(const slot of l.practice.content.left)await studio.getByRole('combobox',{name:slot.text,exact:true}).selectOption(answers[slot.id]);return studio;}
 test.setTimeout(120000);
 
-for(const theme of ['light','dark'])for(const width of [320,1280])test(`${theme} ${width}px: all four guest practices, retry, reload and voluntary purchase bridge`,async({page},info)=>{
+for(const theme of ['light','dark'])for(const width of [320,1280])test(`${theme} ${width}px: all seven guest practices, retry, reload and voluntary purchase bridge`,async({page},info)=>{
  await page.setViewportSize({width,height:950});const calls=await prepare(page,theme,true);
  await page.goto('/module/s01-m01?lesson=l01-01');await expect(page.getByTestId('closed-practice-studio')).toBeVisible({timeout:30000});
  await expect(page.getByRole('region',{name:'След безплатния модул'})).toHaveCount(0);
- for(const [i,l]of lessons.filter(l=>l.module==='s01-m01').entries()){
+ for(const [i,l]of freeLessons.entries()){
   const studio=await choose(page,l);
   if(i===0){const slot=l.practice.content.left.at(-1),right=answersFor(l)[slot.id];await studio.getByRole('combobox',{name:slot.text,exact:true}).selectOption(slot.choices.find(id=>id!==right));await studio.getByRole('button',{name:'Провери решенията'}).click();await expect(studio.getByRole('button',{name:'Провери решенията'})).toBeEnabled();await studio.getByRole('combobox',{name:slot.text,exact:true}).selectOption(right);}
   await assertLearningFits(page);await assertLearningContrast(studio);
   expect(await studio.locator('input,textarea,[contenteditable="true"]').count()).toBe(0);
   await studio.getByRole('button',{name:'Провери решенията'}).click();await expect(studio.getByRole('button',{name:'Практиката е премината'})).toBeVisible();
-  if(i<3)await page.getByRole('button',{name:'Следващ урок',exact:true}).click();
+  if(i < freeLessons.length - 1) {
+    await expect(page.getByRole('region',{name:'След безплатния модул'})).toHaveCount(0);
+    await page.getByRole('button',{name:'Следващ урок',exact:true}).click();
+  }
  }
  const bridge=page.getByRole('region',{name:'След безплатния модул'});await expect(bridge).toBeVisible();await bridge.scrollIntoViewIfNeeded();await assertLearningContrast(bridge);await assertLearningFits(page);
  await expect(bridge.getByRole('link',{name:/Към покупка на пълния курс/})).toHaveAttribute('href','/kurs/checkout?tier=koprinena-pateka');
@@ -53,14 +63,17 @@ for(const theme of ['light','dark'])for(const width of [320,1280])test(`${theme}
  expect(calls.some(name=>/autosave|record_lesson_visit/.test(name))).toBe(false);expect(calls.some(name=>/checkout|purchase|upload/.test(name))).toBe(false);
 });
 
-test('a paid learner finishes the same four tasks and continues directly to the site module',async({page})=>{
+test('a paid learner finishes the same seven tasks and continues directly to the site module',async({page})=>{
  await prepare(page,'dark');await page.goto('/module/s01-m01?lesson=l01-01');
- for(const [i,l]of lessons.filter(l=>l.module==='s01-m01').entries()){await expect(page.getByTestId('closed-practice-studio')).toBeVisible();const studio=await choose(page,l);await studio.getByRole('button',{name:'Провери решенията'}).click();await expect(studio.getByRole('button',{name:'Практиката е премината'})).toBeVisible();if(i<3)await page.getByRole('button',{name:'Следващ урок',exact:true}).click();}
+ for(const [i,l]of freeLessons.entries()){await expect(page.getByTestId('closed-practice-studio')).toBeVisible();const studio=await choose(page,l);await studio.getByRole('button',{name:'Провери решенията'}).click();await expect(studio.getByRole('button',{name:'Практиката е премината'})).toBeVisible();if(i < freeLessons.length - 1) {
+    await expect(page.getByRole('region',{name:'След безплатния модул'})).toHaveCount(0);
+    await page.getByRole('button',{name:'Следващ урок',exact:true}).click();
+  }}
  const bridge=page.getByRole('region',{name:'След безплатния модул'});await expect(bridge).toBeVisible();await expect(bridge.getByRole('link',{name:/Продължи към модул 2/})).toHaveAttribute('href','/module/s01-m02');expect(await bridge.locator('a[href*="checkout"]').count()).toBe(0);
 });
 
 test('a signed-in learner can revalidate guest work without losing it or buying again',async({page})=>{
- await prepare(page,'light');const snapshots=lessons.filter(l=>l.module==='s01-m01').map(l=>({key:`academy:free-silk:20261016:${l.lesson}`,value:{versionId:versionFor(l),currentBlockKey:l.practice.key,blockState:{[l.practice.key]:{matches:answersFor(l)}},completedBlockKeys:[l.practice.key],xp:20,lessonComplete:true}}));
+ await prepare(page,'light');const snapshots=freeLessons.map(l=>({key:`academy:free-silk:20261016:${l.lesson}`,value:{versionId:versionFor(l),currentBlockKey:l.practice.key,blockState:{[l.practice.key]:{matches:answersFor(l)}},completedBlockKeys:[l.practice.key],xp:20,lessonComplete:true}}));
  await page.addInitScript(rows=>{for(const row of rows)localStorage.setItem(row.key,JSON.stringify(row.value));},snapshots);
  await page.goto('/module/s01-m01?lesson=l01-04');const restore=page.getByRole('region',{name:'Запази безплатната практика в профила'});await expect(restore).toBeVisible();await restore.getByRole('button',{name:'Провери и запази в профила'}).click();await expect(restore.getByRole('status')).toContainText('проверени и запазени');
  await expect(page.getByRole('button',{name:'Практиката е премината'})).toBeVisible();const bridge=page.getByRole('region',{name:'След безплатния модул'});await expect(bridge.getByRole('link',{name:/Продължи към модул 2/})).toBeVisible();expect(await bridge.locator('a[href*="checkout"]').count()).toBe(0);

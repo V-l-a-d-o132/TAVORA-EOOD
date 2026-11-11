@@ -50,9 +50,9 @@ test('changed conditions stay hidden until the learner makes the base decisions'
 test('untrusted draft choices cannot borrow operations from another slot',()=>{
  const s=find('l01-02');const matches=studioMatches(s,{matches:{[s.slots[0].id]:s.slots[1].choices[0],freeText:'произволно'}});expect(matches).toEqual({});expect(studioPlaylist(s,matches)).toEqual([]);
 });
-test('the free introduction offers the four-step work without a purchase demand',()=>{
+test('the free introduction offers the seven-step work without a purchase demand',()=>{
  const {container}=render(<MemoryRouter><FreeSilkJourney completedLessons={['l01-01']} activeLessonId="l01-02" guest/></MemoryRouter>);
- expect(screen.getByText(/1 от 4 урока преминати/)).toBeTruthy();fireEvent.click(screen.getByText(/1 от 4 урока преминати/));expect(container.querySelectorAll('a[href^="/module/s01-m01"]')).toHaveLength(4);expect(container.querySelector('a[href*="checkout"]')).toBeNull();expect(screen.getByText(/не е запис в профил/)).toBeTruthy();
+ expect(screen.getByText(/1 от 7 урока преминати/)).toBeTruthy();fireEvent.click(screen.getByText(/1 от 7 урока преминати/));expect(container.querySelectorAll('a[href^="/module/s01-m01"]')).toHaveLength(7);expect(container.querySelector('a[href*="checkout"]')).toBeNull();expect(screen.getByText(/не е запис в профил/)).toBeTruthy();
 });
 test('the completion bridge uses the actual course tier and keeps a return route',()=>{
  const {container}=render(<MemoryRouter><FreeSilkBridge canContinue={false}/></MemoryRouter>);

@@ -1,6 +1,6 @@
 import {completeLessonBlock,fetchLessonV2,type LessonProgressV2} from '@/lib/lesson-engine-v2';
 import {closedBlockState} from '@/lib/closed-lesson-state';
-import {FREE_SILK_LESSONS,readFreeSilkProgress,clearFreeSilkProgress} from '@/lib/free-silk-progress';
+import {freeSilkLessonsToRestore,readFreeSilkProgress,clearFreeSilkProgress} from '@/lib/free-silk-progress';
 
 const acknowledgement = new Set(['objective','hook','rich_text','example','before_after','summary','step_reveal','concept','case_study']);
 const defaultTransport = {fetchLesson:fetchLessonV2,grade:completeLessonBlock};
@@ -9,7 +9,7 @@ const defaultTransport = {fetchLesson:fetchLessonV2,grade:completeLessonBlock};
  * completion flags and XP are never submitted as account credit. */
 export async function restoreFreeSilkToAccount(onProgress:(lesson:string,progress:LessonProgressV2)=>void,transport=defaultTransport) {
   let restored=0;const needsReview:string[]=[];
-  for(const id of FREE_SILK_LESSONS){
+  for(const id of freeSilkLessonsToRestore()){
     const lesson=await transport.fetchLesson('s01-m01',id),saved=readFreeSilkProgress(lesson);
     if(!saved?.completedBlockKeys.length)continue;
     let progress=lesson.progress;

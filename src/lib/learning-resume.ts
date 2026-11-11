@@ -1,6 +1,6 @@
 import { LEARNING_SECTIONS, PREVIOUS_MARKETING_LESSONS } from '@/mocks/learning-platform';
 import { supabase } from '@/lib/supabase';
-import { lessonRoute, locateLesson } from '@/lib/academy-lesson-location';
+import { lessonRoute, locateLesson, requestedLessonIndex } from '@/lib/academy-lesson-location';
 
 export const LEARNING_PROGRESS_CHANGED = 'tavora:learning-progress-changed';
 export const bookmarkStorageKey = (userId: string) => `tavora:last-lesson:${userId}`;
@@ -31,8 +31,11 @@ export function parseBookmark(value: unknown): LessonBookmark | null {
   // Legacy profile bookmarks used an array index. Require the matching title
   // so an old index cannot silently point to different, rearranged content.
   const stableId = typeof raw.lessonId === 'string' ? raw.lessonId : null;
-  const previous = !stableId && Number.isInteger(raw.lessonIndex) && typeof raw.lessonTitle === 'string'
-    ? (mod.id.startsWith('s03-') ? PREVIOUS_MARKETING_LESSONS[mod.id] : mod.lessons)?.[raw.lessonIndex as number] : undefined;
+  const legacyLessons = mod.id.startsWith('s03-') ? PREVIOUS_MARKETING_LESSONS[mod.id] : mod.lessons;
+  const previousIndex = mod.id === 's01-m11' && raw.lessonIndex === 3
+    ? requestedLessonIndex(mod, '3') : raw.lessonIndex;
+  const previous = !stableId && typeof previousIndex === 'number' && Number.isInteger(previousIndex)
+    ? legacyLessons?.[previousIndex] : undefined;
   if (!stableId && (!previous || previous.title !== raw.lessonTitle)) return null;
   const lessonId = stableId || previous?.id;
   if (!lessonId) return null;

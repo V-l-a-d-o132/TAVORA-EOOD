@@ -1,7 +1,9 @@
 import { closedLessonState } from '@/lib/closed-lesson-state';
 import type { JsonObject, LessonV2 } from '@/lib/lesson-engine-v2';
 
-export const FREE_SILK_LESSONS = ['l01-01', 'l01-02', 'l01-03', 'l01-04'] as const;
+import { FREE_SILK_STEPS } from '@/data/free-silk-steps';
+
+export const FREE_SILK_LESSONS = FREE_SILK_STEPS.map(step => step.id);
 export const FREE_SILK_PROGRESS_EVENT = 'academy:free-silk-progress';
 const prefix = 'academy:free-silk:20261016:';
 type Snapshot = { versionId: string; currentBlockKey: string | null; blockState: Record<string, JsonObject>; completedBlockKeys: string[]; xp: number; lessonComplete: boolean };
@@ -9,6 +11,13 @@ const object = (v: unknown): Record<string, unknown> => v && typeof v === 'objec
 
 function read(lessonId: string) {
   try { const raw = localStorage.getItem(prefix + lessonId); return raw && raw.length < 65536 ? object(JSON.parse(raw)) : {}; } catch { return {}; }
+}
+
+export function freeSilkLessonsToRestore() {
+  return FREE_SILK_LESSONS.filter(id => {
+    const saved = read(id);
+    return typeof saved.versionId === 'string' && Array.isArray(saved.completedBlockKeys) && saved.completedBlockKeys.length > 0;
+  });
 }
 
 /** Device-only practice memory. It never grants account XP, access or a certificate. */

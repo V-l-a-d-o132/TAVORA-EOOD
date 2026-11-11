@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import type { PGlite } from '@electric-sql/pglite';
-import { actor, createSilkDatabase, learnerRecords, STUDENT } from './helpers/silk-road-db';
+import { actor, createSilkDatabase, learnerRecords, OTHER, STUDENT } from './helpers/silk-road-db';
 
 // Synthetic assessment fixtures only. Production questions and keys are private.
 const RELEASE = 'silk_road_closed_learning_20261008';
@@ -115,5 +115,49 @@ test('final exam requires 73 current completed versions and enforces coverage an
   expect(await exam(boundary, id)).toEqual(passed);
   await expect(exam(answerSet(), id)).rejects.toThrow(/Attempt conflict/);
   await expect(exam()).rejects.toThrow(/already passed/);
+  await actor(db);
+});
+
+test('the final requires every current published Silk Road lesson, including new editions and new lessons', async () => {
+  await actor(db);
+  await db.exec(readFileSync('supabase/migrations/20261111103638_silk_expanded_course_checks.sql', 'utf8'));
+  await db.exec(`UPDATE academy_private.lesson_block_keys k SET scoring='{"feedbackMode":"selected_choice"}'
+    FROM academy_lesson_blocks b JOIN academy_lessons l ON b.version_id=l.published_version_id
+    WHERE k.block_id=b.id AND l.lesson_id='l01-01' AND b.block_type='quiz';
+    UPDATE academy_lesson_versions SET change_note='other-edition' WHERE id IN
+    (SELECT published_version_id FROM academy_lessons WHERE module_id='s01-m01');`);
+  await actor(db, 'anon');
+  const guest = (await db.query<{ result: { feedback: Record<string, unknown> } }>(`
+    SELECT public.academy_complete_lesson_block('s01-m01','l01-01',
+      (public.academy_get_lesson_v2('s01-m01','l01-01')->>'versionId')::uuid,
+      'fixture-quiz','{"answer":"other"}',gen_random_uuid()) result`)).rows[0].result;
+  expect(guest.feedback).toEqual({ complete: false, correct: false, explanation: 'Провери условието отново.' });
+  await actor(db);
+  const learner = OTHER;
+  await db.query("INSERT INTO academy_access_grants(user_id,source,full_access) VALUES($1,'expanded-course-test',true)", [learner]);
+  await db.exec(`UPDATE academy_lesson_versions SET change_note='revised-editor-edition' WHERE id IN (
+    SELECT published_version_id FROM academy_lessons WHERE module_id='s01-m01'
+  );
+  INSERT INTO academy_lessons(module_id,lesson_id,status)
+    SELECT 's01-m'||m,'l'||m||'-0'||i,'draft'
+    FROM unnest(ARRAY['01','07','08','09','10','11']) m CROSS JOIN generate_series(5,7) i;
+  WITH versions AS (
+    INSERT INTO academy_lesson_versions(academy_lesson_id,version_number,title,change_note)
+    SELECT id,1,'Нов учебен урок','expanded-course-test' FROM academy_lessons WHERE status='draft'
+    RETURNING id,academy_lesson_id
+  )
+  UPDATE academy_lessons l SET status='published',published_version_id=v.id,draft_version_id=v.id
+  FROM versions v WHERE l.id=v.academy_lesson_id;
+  INSERT INTO academy_lessons(module_id,lesson_id,status) VALUES ('s01-m07','extra-draft','draft');`);
+  await db.query(`INSERT INTO academy_lesson_progress(user_id,academy_lesson_id,version_id,completed_at)
+    SELECT $1,id,published_version_id,now() FROM academy_lessons
+    WHERE module_id LIKE 's01-%' AND status='published' AND lesson_id NOT IN ('l11-04','l11-07')`, [learner]);
+  await actor(db, 'authenticated', learner);
+  await expect(exam()).rejects.toThrow(/90 от 91/);
+  await actor(db);
+  await db.query(`INSERT INTO academy_lesson_progress(user_id,academy_lesson_id,version_id,completed_at)
+    SELECT $1,id,published_version_id,now() FROM academy_lessons WHERE module_id='s01-m11' AND lesson_id='l11-07'`, [learner]);
+  await actor(db, 'authenticated', learner);
+  expect((await exam()).correct).toBe(true);
   await actor(db);
 });
