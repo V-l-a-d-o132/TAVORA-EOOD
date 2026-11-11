@@ -37,7 +37,19 @@ async function prepare(page:Page,theme:string,guest=false){
  });
  return calls;
 }
-async function choose(page:Page,l){const answers=answersFor(l),studio=page.getByTestId('closed-practice-studio');for(const slot of l.practice.content.left)await studio.getByRole('combobox',{name:slot.text,exact:true}).selectOption(answers[slot.id]);return studio;}
+async function choose(page: Page, lesson) {
+  const engine = page.getByTestId('lesson-engine-v2');
+  // The URL can change before the next lesson's request has finished.
+  await expect(engine.getByRole('heading', { name: lesson.title, exact: true, level: 1 })).toBeVisible();
+  const studio = engine.getByTestId('closed-practice-studio');
+  const answers = answersFor(lesson);
+  for (const slot of lesson.practice.content.left) {
+    const select = studio.getByRole('combobox', { name: slot.text, exact: true });
+    await select.selectOption(answers[slot.id]);
+    await expect(select).toHaveValue(answers[slot.id]);
+  }
+  return studio;
+}
 test.setTimeout(120000);
 
 for(const theme of ['light','dark'])for(const width of [320,1280])test(`${theme} ${width}px: all seven guest practices, retry, reload and voluntary purchase bridge`,async({page},info)=>{
