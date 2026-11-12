@@ -242,6 +242,7 @@ export default function LessonEngineV2({
     {moduleId.startsWith('s02-') && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
       <a href={`/academy-tools/perfect-video?module=${moduleId}`} className="font-semibold academy-accent underline underline-offset-4">Инструменти за модула и работилница с ИИ</a>
       <p className="mt-2">{videoClientStage(moduleId)?.result}</p>
+      <a href="/academy-labs/perfect-video/montage" className="mt-2 block font-semibold academy-accent underline underline-offset-4">Монтирай свой клип и го предай в две версии</a>
       <a href="/academy-labs/perfect-video/start#client-project" className="mt-2 inline-block font-semibold academy-accent underline underline-offset-4">Учебна поръчка V-1: монтаж, цена и предаване</a>
       {videoCompletionStage(moduleId) && <a href={`/academy-labs/perfect-video/start?completion=${videoCompletionStage(moduleId)}#client-completion`} className="mt-2 block font-semibold academy-accent underline underline-offset-4">Завърши V-1: отчет, цена, приемане и портфолио</a>}
       {videoWorkflowStage(moduleId) && <a href={`/academy-labs/perfect-video/start?workflow=${videoWorkflowStage(moduleId)}#client-workflow`} className="mt-2 block font-semibold academy-accent underline underline-offset-4">Продължи V-1: от подготовка до предаване</a>}

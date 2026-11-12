@@ -77,7 +77,9 @@ for (const theme of ['light', 'dark']) {
     await expect(region.getByText(first.options[1].note)).toBeVisible();
     await region.getByRole('radio', { name: first.options[0].label }).check(); await region.getByRole('button', { name: 'Провери основанието' }).click();
     await region.getByRole('radio', { name: changed.options[1].label }).check(); await region.getByRole('button', { name: 'Провери основанието' }).nth(1).click();
-    await expect(page.getByText('Обосновани решения в тази сесия: 2/22')).toBeVisible();
+    await expect(page.getByText('Обосновани решения: 2/22')).toBeVisible();
+    await page.reload();
+    await expect(page.getByText('Обосновани решения: 2/22')).toBeVisible();
     await region.getByRole('button', { name: 'Виж свързания вариант в демонстрацията' }).nth(1).click();
     await expect(page.getByRole('group', { name: 'Вариант на демонстрацията' }).getByRole('button', { name: 'Първо резултатът' })).toHaveAttribute('aria-pressed', 'true');
     await selectTheme(page, theme === 'light' ? 'Тъмна' : 'Светла');

@@ -91,6 +91,7 @@ const SilkRoadStartPage = lazyWithReload(() => import("../pages/silk-road-start/
 const AcademyToolsPage = lazyWithReload(() => import("../pages/academy-tools/page"));
 const VideoAiToolsPage = lazyWithReload(() => import("../pages/academy-tools/perfect-video"));
 const MarketingAiToolsPage = lazyWithReload(() => import("../pages/academy-tools/marketing-basics"));
+const VideoMontagePage = lazyWithReload(() => import("../pages/perfect-video-start/montage"));
 const PerfectVideoStartPage = lazyWithReload(() => import("../pages/perfect-video-start/page"));
 const DashboardPage = lazyWithReload(() => import("../pages/dashboard/page"));
 const CheckoutAkademiyaPage = lazyWithReload(() => import("../pages/checkout-akademiya/page"));
@@ -131,6 +132,7 @@ const routes: RouteObject[] = [
   { path: '/academy-tools/silk-road', element: <AcademyToolsPage /> },
   { path: '/academy-tools/perfect-video', element: <VideoAiToolsPage /> },
   { path: '/academy-tools/marketing-basics', element: <MarketingAiToolsPage /> },
+  { path: '/academy-labs/perfect-video/montage', element: <VideoMontagePage /> },
   { path: '/academy-labs/perfect-video/start', element: <PerfectVideoStartPage /> },
   { path: '/reset-password', element: <ResetPasswordPage /> },
   {

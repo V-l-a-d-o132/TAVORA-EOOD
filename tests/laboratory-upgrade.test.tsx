@@ -130,7 +130,7 @@ test('all eleven video topics require a new decision and accept a different goal
     expect(region.getByText(second.note)).toBeTruthy();
     expect(navigation.getAllByRole('button')[index].textContent).toContain('2/2 нови случая');
   }
-  expect(screen.getByText('Обосновани решения в тази сесия: 22/22')).toBeTruthy();
+  expect(screen.getByText('Обосновани решения: 22/22')).toBeTruthy();
   fireEvent.click(navigation.getAllByRole('button')[0]);
   expect((screen.getByRole('radio', { name: VIDEO_LAB_CHALLENGES.story[0].options[0].label }) as HTMLInputElement).checked).toBe(true);
   const preview = screen.getAllByRole('button', { name: 'Виж свързания вариант в демонстрацията' })[1]; fireEvent.click(preview);

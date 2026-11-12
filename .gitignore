@@ -14,8 +14,7 @@ supabase/.temp/
 *.pem
 .academy-private/
 __pycache__/
-# Verified build outputs, reconstructed from the small source parts in course-assets.
-/public/academy-labs/perfect-video/practical/coffee-machine.mp4
+# Generated curriculum payloads. Student-facing media are tracked in public/.
 /scripts/perfect-video/releases/practical-01-05-20261014.json
 /scripts/perfect-video/releases/practical-06-10-20261015.json
 
@@ -30,11 +29,3 @@ scripts/marketing-basics/releases/practical-16-20-20261015.json
 scripts/silk-road/releases/practical-20261016.json
 scripts/silk-road/releases/applied-20261018.json
 scripts/silk-road/releases/toolkit-20261018.json
-
-# Verified supplied media are reconstructed from the tracked AI asset manifest.
-/public/academy-labs/perfect-video/ai/*.mp3
-/public/academy-labs/perfect-video/ai/*.mp4
-/public/academy-labs/perfect-video/ai/*.webp
-
-# Verified first-client project movies reconstructed by prebuild.
-/public/academy-labs/perfect-video/first-client/*.mp4

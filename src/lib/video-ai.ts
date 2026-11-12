@@ -36,6 +36,12 @@ export const VIDEO_AI_CAPTIONS = [
   { id: 'late', label: 'Същите думи с изместено време', cues: [{ start: 1.6, end: 3.8, text: 'Първо провери звука.' }, { start: 3.8, end: 7.829, text: 'Доближи микрофона и чуй дали думите се разбират.' }], note: 'Думите са същите, но времевите граници са преместени. Наличието на верен текст не доказва синхрон.' },
 ] as const;
 const timestamp = (seconds: number) => { const ms = Math.round(seconds * 1000); return `${String(Math.floor(ms / 3600000)).padStart(2, '0')}:${String(Math.floor(ms / 60000) % 60).padStart(2, '0')}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')},${String(ms % 1000).padStart(3, '0')}`; };
-export function videoAiSrt(id: string) { const variant = VIDEO_AI_CAPTIONS.find(x => x.id === id); if (!variant) return null; return variant.cues.map((x, i) => `${i + 1}\n${timestamp(x.start)} --> ${timestamp(x.end)}\n${x.text}\n`).join('\n'); }
+export function buildVideoSrt(cues: ReadonlyArray<{ start: number; end: number; text: string }>) {
+  return cues.map((x, i) => `${i + 1}\n${timestamp(x.start)} --> ${timestamp(x.end)}\n${x.text}\n`).join('\n');
+}
+export function videoAiSrt(id: string) {
+  const variant = VIDEO_AI_CAPTIONS.find(x => x.id === id);
+  return variant ? buildVideoSrt(variant.cues) : null;
+}
 export const VIDEO_AI_SHOTS = [{ id: 'before', label: 'Преди действието', from: 0, to: 3 }, { id: 'start', label: 'Началото е видимо', from: 10, to: 13 }, { id: 'action', label: 'Действието продължава', from: 16, to: 19 }, { id: 'end', label: 'Действието е спряло', from: 26, to: 29 }] as const;
 export function videoAiShot(id: string) { return VIDEO_AI_SHOTS.find(x => x.id === id) || null; }
