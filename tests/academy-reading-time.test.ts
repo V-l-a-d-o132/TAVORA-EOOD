@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import videoEdition from '../scripts/perfect-video/releases/2026-11-12/manifest.json';
 import { LEARNING_SECTIONS } from '../src/mocks/learning-platform';
 import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
 import { countVisibleLessonWords, lessonReadingDuration, moduleReadingDuration } from '../src/lib/academy-reading-time';
 
 describe('reading-only estimates for published academy lessons', () => {
+  it('uses the reviewed word totals for every Perfect Video catalogue estimate', () => {
+    for (const { lesson, revisedWords } of videoEdition.lessons) {
+      const moduleId = 's02-m' + lesson.slice(2, 4);
+      expect(ACADEMY_READING_WORDS[moduleId + '/' + lesson], lesson).toBe(revisedWords);
+    }
+  });
+
   it('covers all 542 published lessons and every storage module without claiming practice time', () => {
     const modules = LEARNING_SECTIONS.flatMap((section) => section.modules);
     const keys = modules.flatMap((module) => module.lessons.map((lesson) => `${lesson.sourceModuleId || module.id}/${lesson.id}`));

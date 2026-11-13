@@ -4,6 +4,7 @@ import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import LessonRichText from './LessonRichText';
 import LessonGlossary from './LessonGlossary';
 import LessonOutcomes from './LessonOutcomes';
+import VideoPhonePractice from './VideoPhonePractice';
 import { visibleGlossaryText } from '@/lib/academy-glossary';
 import { lessonOptionOrder, usesShuffledChoices } from '@/lib/lesson-option-order';
 import ClosedPracticeStudio from '@/components/academy/ClosedPracticeStudio';
@@ -234,7 +235,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
       case 'submission':
         return <p className="leading-7 academy-body">Този стар тип задача е спрян. Използвай актуалната версия на урока с предоставени материали и затворени избори.</p>;
       case 'summary':
-        return <><ul className="space-y-3">{strArr(block.content.takeaways).map((takeaway) => <li key={takeaway} className="flex gap-3 leading-7 academy-body"><i className="ri-check-line mt-1 academy-success" />{takeaway}</li>)}</ul>{(!moduleId?.startsWith('s01-') || s(block.content.nextStep, body)) && <div className="mt-6 rounded-2xl border academy-accent-border academy-accent-bg p-5"><span className="text-xs font-bold uppercase tracking-widest academy-accent">Следваща стъпка</span><p className="mt-2 leading-7 academy-text">{s(block.content.nextStep, body)}</p></div>}{acknowledgement}</>;
+        return <><ul className="space-y-3">{strArr(block.content.takeaways).map((takeaway) => <li key={takeaway} className="flex gap-3 leading-7 academy-body"><i className="ri-check-line mt-1 academy-success" />{takeaway}</li>)}</ul>{moduleId?.startsWith('s02-') && block.content.phonePractice === true ? <VideoPhonePractice key={lessonId} instructions={s(block.content.nextStep)} /> : (!moduleId?.startsWith('s01-') || s(block.content.nextStep, body)) && <div className="mt-6 rounded-2xl border academy-accent-border academy-accent-bg p-5"><span className="text-xs font-bold uppercase tracking-widest academy-accent">Следваща стъпка</span><p className="mt-2 leading-7 academy-text">{s(block.content.nextStep, body)}</p></div>}{acknowledgement}</>;
       default:
         return <><p className="leading-7 academy-body">{body}</p>{acknowledgement}</>;
     }

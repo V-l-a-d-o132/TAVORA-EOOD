@@ -10,9 +10,10 @@ import { actor, createSilkDatabase, STUDENT, OTHER } from './helpers/silk-road-d
 import { loadVideoAiCandidates, loadVideoAiSource } from '../scripts/prepare-video-ai-assets.mjs';
 import { countVisibleLessonWords } from '../src/lib/academy-reading-time';
 import { loadVideoProductionLessons } from '../scripts/prepare-video-production-assets.mjs';
-import { ACADEMY_READING_WORDS } from '../src/data/academy-reading-words';
+import editorialManifest from '../scripts/perfect-video/releases/2026-11-12/manifest.json';
+const previousReadingWords = new Map(editorialManifest.lessons.map(lesson => [lesson.lesson, lesson.sourceWords]));
 const rows = loadVideoAiCandidates();
-// The publication under test is historical; current reading metadata includes the later first-client edition.
+// Verify this historical fixture against the reading counts from its corresponding client-work edition.
 const firstClientDir = 'course-assets/perfect-video/first-client/lessons';
 const currentFirstClient = new Map(readdirSync(firstClientDir).filter(f=>f.endsWith('.json')).map(f=>{const l=JSON.parse(readFileSync(`${firstClientDir}/${f}`,'utf8'));return [l.lessonId,l];}));
 for (const l of [...loadVideoProductionLessons(), ...loadVideoWorkflowLessons(), ...loadVideoCompletionLessons()]) currentFirstClient.set(l.lessonId,l);
@@ -88,7 +89,7 @@ test('atomic publication preserves all 3137 old blocks, 240 openings and five ex
   expect(changed).toBe(0); expect(await outside()).toEqual(beforeOutside); expect(await banks()).toEqual(examBanks);
   expect(examBanks).toHaveLength(5); expect(examBanks.reduce((n, b) => n + b.content.questions.length, 0)).toBe(78);
   const after = await currentTeaching(); expect(after).toHaveLength(240); expect(after.reduce((n, l) => n + l.blocks.length, 0)).toBe(3212);
-  for (const l of after) expect(ACADEMY_READING_WORDS[`${l.moduleId}/${l.lesson_id}`]).toBe(countVisibleLessonWords(currentFirstClient.get(l.lesson_id) || l));
+  for (const l of after) expect(previousReadingWords.get(l.lesson_id)).toBe(countVisibleLessonWords(currentFirstClient.get(l.lesson_id) || l));
   for (const [i, l] of after.entries()) expect(l.blocks.find(b => b.type === 'objective')).toEqual(beforeTeaching[i].blocks.find(b => b.type === 'objective'));
   const beforeWords = beforeTeaching.reduce((n, l) => n + countVisibleLessonWords(l), 0), afterWords = after.reduce((n, l) => n + countVisibleLessonWords(l), 0);
   expect(afterWords).toBeGreaterThan(beforeWords);

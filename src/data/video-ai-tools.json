@@ -447,10 +447,10 @@
     "access": "noncommercial",
     "accessLabel": "Free няма търговски лиценз",
     "purpose": "Синтетичен глас и дублаж с описана поддръжка на български.",
-    "limits": "За търговска употреба е нужен подходящ лиценз; Beta услуги имат отделни условия. Правото върху гласа и съдържанието се проверява независимо от абонамента.",
+    "limits": "Ако публикуваш разрешено нетърговско съдържание от Free, посочи elevenlabs.io или 11.ai в заглавието. За търговска употреба е нужен подходящ лиценз. Провери отделно правата върху гласа и условията за Beta услугите.",
     "sources": [
       "https://elevenlabs.io/docs/help-center/product/dubbing/which-languages-are-supported-in-dubbing",
-      "https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform"
+      "https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform"
     ],
     "steps": [
       "Подготви одобрен текст, произношение на имена и разрешение за точната употреба на гласа.",
@@ -458,7 +458,7 @@
       "Прослушай реалния изнесен файл дума по дума за числа, отрицания, ударения, паузи и синхрон."
     ],
     "verification": "Одобреният текст и звучащият текст съвпадат; лицензът и разрешението покриват използването в конкретния проект.",
-    "checkedAt": "2026-10-18",
+    "checkedAt": "2026-11-12",
     "lessons": [
       "pv05-04",
       "pv05-05",
