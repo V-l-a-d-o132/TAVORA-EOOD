@@ -9,6 +9,7 @@ import VideoDecisionLab, { VIDEO_LAB_KINDS, videoLabTitle, type VideoLabKind } f
 import VideoLabChallenge, { type VideoRehearsalState } from '@/components/academy/VideoLabChallenge';
 import { VIDEO_LAB_CHALLENGES } from '@/data/video-lab-challenges';
 import { buildVideoLabWorkbook } from '@/lib/video-lab-workbook';
+import VideoGoalPractice from './VideoGoalPractice';
 
 import { readRehearsal, saveRehearsal } from '@/lib/video-rehearsal-draft';
 
@@ -44,14 +45,8 @@ export default function PerfectVideoStartPage() {
   };
   return <main className="min-h-screen academy-bg academy-text"><div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-12"><div className="mb-4 flex justify-end"><ThemeSelector /></div>
     <Link to="/kurs" className="text-sm academy-accent underline underline-offset-4">Обратно към Академията</Link>
-    <header className="mb-8 mt-9 max-w-3xl"><p className="text-xs font-semibold uppercase tracking-[.15em] academy-accent">TAVORA · Перфектното видео</p><h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">Първо историята.<br />После изборът на кадър.</h1><p className="mt-5 text-lg leading-8 academy-body">Смени един избор и виж какво се променя. Тук можеш да подредиш разказ, да сравниш кадри и да чуеш звуков проблем с готови учебни материали.</p></header>
-    <section aria-label="Самостоятелен монтаж" className="mb-8 grid overflow-hidden rounded-2xl border academy-border-strong academy-surface sm:grid-cols-[12rem_1fr]">
-      <img src="/academy-labs/perfect-video/practical/coffee-poster.jpg" alt="Кафемашината от предоставения учебен запис" className="h-32 w-full object-cover sm:h-full" />
-      <div className="p-5 sm:p-6"><h2 className="text-2xl font-semibold academy-text">Направи първия си монтаж</h2>
-        <p className="my-3 text-sm leading-6 academy-body">Сглоби четири кадъра в кратко продуктово видео, изнеси файла и направи втора версия по клиентска бележка. Можеш да започнеш с кадрите от кафемашината.</p>
-        <Link to="/academy-labs/perfect-video/montage" className="inline-flex min-h-11 items-center rounded-lg academy-primary px-4 py-2 text-sm font-semibold text-white">Отвори монтажната маса</Link>
-      </div>
-    </section>
+    <header className="mb-6 mt-9 max-w-3xl"><p className="text-xs font-semibold uppercase tracking-[.15em] academy-accent">TAVORA · Перфектното видео</p><h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">Първият ти видеопроект</h1></header>
+    <VideoGoalPractice />
     <VideoClientProject />
     <VideoProductionWorkshop />
     <VideoWorkflowWorkshop />

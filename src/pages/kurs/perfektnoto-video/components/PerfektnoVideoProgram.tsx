@@ -20,13 +20,13 @@ export default function PerfektnoVideoProgram() {
         <em className="text-[#1C1C1E]/55">15-те модула.</em>
       </h2>
       <p className="text-sm text-[#1C1C1E]/65 leading-relaxed mb-2">
-        Първият урок показва цяла кратка история. След това разглеждаме как всеки избор — от сценарий до звук и монтаж — променя разбирането. Програмата се отключва с покупка или предоставен достъп.
+        Още в първия урок избираш проект за свой канал, за бизнес или за клиент. Работиш със заснети кадри, пробваш монтаж с ИИ или създаваш сцени по описание и снимка. За всяка цел има начин да провериш готовия клип. Програмата се отключва с покупка или предоставен достъп.
       </p>
       <p className="text-xs text-[#1C1C1E]/50 mb-8">
         {ACADEMY_PROGRAM_STATS.perfectVideo.lessonCount} урока с обяснения, примери и затворени проверки. Времената са ориентири за четене; решенията, повторенията и личното упражняване са със собствено темпо.
       </p>
 
-      <p className="mb-6 text-sm leading-relaxed text-[#1C1C1E]/75"><Link to="/academy-tools/perfect-video" className="font-medium underline underline-offset-4">Виж инструментите и пробвай работилницата с ИИ</Link>. Сравнявай предоставени сценарии, субтитри, звук и изнесени файлове. Публичните примери не отключват платените уроци.</p>
+      <p className="mb-6 flex flex-wrap gap-x-5 gap-y-2 text-sm leading-relaxed text-[#1C1C1E]/75"><Link to="/academy-labs/perfect-video/start" className="font-medium underline underline-offset-4">Започни с цел за първия си клип</Link><Link to="/academy-tools/perfect-video" className="font-medium underline underline-offset-4">Виж инструментите и пробвай работилницата с ИИ</Link></p>
 
       <div className="space-y-3">
         {MODULES.map((mod) => {

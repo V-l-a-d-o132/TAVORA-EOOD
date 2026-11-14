@@ -8,6 +8,34 @@ const catalog = JSON.parse(readFileSync(new URL('../src/data/video-ai-tools.json
 const privateRows = process.env.VIDEO_AI_PRIVATE ? JSON.parse(readFileSync(process.env.VIDEO_AI_PRIVATE, 'utf8')) : null;
 test.setTimeout(90000);
 
+test('a project started in lesson one can be resumed, edited with AI and opened in the montage lab', async ({ page, context }) => {
+  await prepareAcademyTheme(page, 'dark');
+  await page.setViewportSize({ width: 375, height: 850 });
+  await page.goto('/module/s02-m01?lesson=pv01-01');
+  const practice = page.getByRole('region', { name: 'Какво искаш да направиш?' });
+  await expect(practice.getByText(/Първият ти файл за около 45 минути/)).toBeVisible();
+  await practice.getByRole('button', { name: 'Видео за моя бизнес' }).click();
+  await practice.getByRole('textbox').fill('Как се поръчва кутия за подарък?');
+  await practice.getByRole('button', { name: 'ИИ монтира мои кадри' }).click();
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://127.0.0.1:5191' });
+  await practice.getByRole('button', { name: 'Копирай указанието' }).click();
+  await expect(practice.getByRole('status')).toHaveText('Копирано.');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('кутия за подарък');
+  await page.goto('/academy-labs/perfect-video/start');
+  await expect(practice.getByRole('textbox')).toHaveValue('Как се поръчва кутия за подарък?');
+  await expect(practice.getByRole('button', { name: 'ИИ монтира мои кадри' })).toHaveAttribute('aria-pressed', 'true');
+  await practice.getByRole('button', { name: 'ИИ създава нови кадри' }).click();
+  await expect(practice.getByText(/Тема на клипа — Как се поръчва/)).toContainText('хартиени кръга');
+  await assertLearningFits(page);
+  await assertLearningContrast(practice);
+  const downloading = page.waitForEvent('download');
+  await practice.getByRole('link', { name: 'Свали кадрите за упражнение' }).click();
+  const downloaded = await downloading;
+  expect(readFileSync((await downloaded.path())!).subarray(4, 8).toString()).toBe('ftyp');
+  await practice.getByRole('link', { name: 'Отвори монтажната маса' }).click();
+  await expect(page.getByRole('heading', { name: 'От четири кадъра до готов клип' })).toBeVisible();
+});
+
 for (const theme of ['light', 'dark']) for (const width of [320, 1280]) {
   test(`video tools and five comparisons fit: ${theme}, ${width}px`, async ({ page }, info) => {
     await page.setViewportSize({ width, height: 950 });

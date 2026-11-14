@@ -136,6 +136,7 @@ test('all eleven video topics require a new decision and accept a different goal
   const preview = screen.getAllByRole('button', { name: 'Виж свързания вариант в демонстрацията' })[1]; fireEvent.click(preview);
   const demo = within(screen.getByRole('group', { name: 'Вариант на демонстрацията' }));
   expect(demo.getByRole('button', { name: 'Първо резултатът' }).getAttribute('aria-pressed')).toBe('true');
-  expect(screen.queryByRole('textbox')).toBeNull(); expect(fetch).not.toHaveBeenCalled();
+  expect(within(screen.getByRole('region', { name: 'Приложи показаното в нов случай' })).queryByRole('textbox')).toBeNull();
+  expect(fetch).not.toHaveBeenCalled();
   expect(screen.getByRole('heading', { name: videoLabTitle('story') })).toBeTruthy();
 }, 15000);

@@ -14,6 +14,7 @@ import {
 import LessonBlockRenderer from './LessonBlockRenderer';
 import LessonGlossary from './LessonGlossary';
 import VideoPracticeBridge from './VideoPracticeBridge';
+import VideoGoalPractice from '@/pages/perfect-video-start/VideoGoalPractice';
 import { LessonDraftQueue, type DraftSaveStatus } from '@/lib/lesson-draft-queue';
 import { lessonBlockPresentation } from '@/lib/lesson-presentation';
 import { notifyLearningProgressChanged, recordLessonVisit } from '@/lib/learning-resume';
@@ -40,6 +41,12 @@ interface Props {
 function completedFromProgress(progress: LessonProgressV2 | null) {
   return new Set(progress?.completedBlockKeys || []);
 }
+
+const videoProjectNotes: Partial<Record<string, string>> = {
+  'pv09-01': 'Направи първа сглобка с ИИ и сравни един срез с оригинала.',
+  'pv12-01': 'Изпробвай две версии на една генерирана сцена. Запази тази, която отговаря на твоята цел.',
+  'pv15-08': 'Покажи изнесеното видео на човек от твоята аудитория и провери дали изпълнява първоначалната ти цел.',
+};
 
 export default function LessonEngineV2({
   moduleId,
@@ -219,6 +226,7 @@ export default function LessonEngineV2({
       <div className="mt-6"><div className="mb-2 flex items-center justify-between text-xs academy-body"><span>Напредък в урока</span><span className="font-semibold academy-text">{progressPercent}% · {requiredCompleted}/{requiredBlocks.length} задължителни стъпки</span></div><div className="h-2.5 overflow-hidden rounded-full academy-tint-strong"><div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 transition-[width] motion-reduce:transition-none" style={{ width: `${progressPercent}%` }} /></div></div>
     </header>
 
+    {moduleId === 's02-m01' && lesson.lessonId === 'pv01-01' && <VideoGoalPractice />}
     {lesson.versionChanged && <p role="status" className="mb-5 rounded-2xl border academy-warning-border academy-warning-bg p-4 text-sm leading-6 academy-warning">Урокът е обновен. Започни новите задачи; предишният ти резултат е запазен.</p>}
     {lesson.priorProgress && <p className="mb-5 rounded-2xl border academy-success-border academy-success-bg p-4 text-sm leading-6 academy-success">Предишен резултат: версия {lesson.priorProgress.version ?? 'по-ранна'}, {lesson.priorProgress.completedBlocks} завършени стъпки, {lesson.priorProgress.xp} XP{lesson.priorProgress.completedAt ? ' · завършен урок' : ''}. Резултатът е запазен в историята.</p>}
     {saveStatus === 'error' && <button type="button" onClick={() => void draftQueue.current?.flush()} className="mb-5 rounded-xl border academy-accent-border p-3 text-sm academy-accent">Опитай отново да запазиш бележките</button>}
@@ -240,6 +248,7 @@ export default function LessonEngineV2({
     </div>}
 
     {moduleId.startsWith('s02-') && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
+      {videoProjectNotes[lesson.lessonId] && <p className="mb-3">{videoProjectNotes[lesson.lessonId]}{' '}<a href="/academy-labs/perfect-video/start" className="font-semibold academy-accent underline underline-offset-4">Отвори своя видеопроект</a></p>}
       <a href={`/academy-tools/perfect-video?module=${moduleId}`} className="font-semibold academy-accent underline underline-offset-4">Инструменти за модула и работилница с ИИ</a>
       <p className="mt-2">{videoClientStage(moduleId)?.result}</p>
       <a href="/academy-labs/perfect-video/montage" className="mt-2 block font-semibold academy-accent underline underline-offset-4">Монтирай свой клип и го предай в две версии</a>
@@ -250,8 +259,7 @@ export default function LessonEngineV2({
     </div>}
 
     {['s02-m01', 's02-m02', 's02-m03'].includes(moduleId) && <div className="mb-5 rounded-2xl border academy-border p-4 text-sm leading-6 academy-body">
-      <a href="/academy-labs/perfect-video/start" className="font-semibold academy-accent underline underline-offset-4">Първи клип: учебна поръчка и работна маса</a>
-      <p className="mt-2">Започни с предоставения бриф, сравни монтажите и проследи разчета. Самостоятелните решения се проверяват в задачите на урока.</p>
+      {lesson.lessonId !== 'pv01-01' && <a href="/academy-labs/perfect-video/start" className="font-semibold academy-accent underline underline-offset-4">Първи клип: учебна поръчка и работна маса</a>}
       {lesson.blocks.filter(block => block.key.startsWith('checkpoint_video_')).map(block => <p key={block.key} className="mt-2">
         {typeof block.content.skillName === 'string' ? block.content.skillName : block.title}: <span className={completed.has(block.key) ? 'academy-success' : 'academy-muted'}>{completed.has(block.key) ? 'премината учебна проверка' : 'още няма премината проверка'}</span>
       </p>)}

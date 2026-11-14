@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import PerfectVideoStartPage from '../src/pages/perfect-video-start/page';
+import VideoGoalPractice from '../src/pages/perfect-video-start/VideoGoalPractice';
 import { VIDEO_STUDY_CASES } from '../src/data/perfect-video-start';
 import { buildVideoTimeline, checkVideoTimeline, contrastRatio, emptyVideoPlan, fileChecks, recordVideoTimeline, sceneAt, videoStoryboardCsv, type VideoPlan } from '../src/lib/perfect-video-practice';
 import { usesIndependentPractice } from '../src/lib/lesson-option-order';
@@ -58,10 +59,30 @@ describe('first video project checks the artifact that is rendered and recorded'
 });
 
 describe('a beginner can correct a project without an account or grader', () => {
-  it('uses only closed choices and visibly changes the story', () => {
+  it('keeps the personal brief when changing goals, editing methods and reopening the practice', () => {
+    const storage = 'tavora:perfect-video:project-choice:v1';
+    localStorage.removeItem(storage);
+    const view = render(<VideoGoalPractice />);
+    const choose = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Как се поръчва кутия за подарък?' } });
+    choose('Видео за моя бизнес');
+    choose('ИИ създава нови кадри');
+    expect(screen.getByText(/Тема на клипа — Как се поръчва/).textContent).toContain('хартиени кръга');
+    expect(screen.getByRole('link', { name: 'Как се създава видео във Firefly' })).toBeTruthy();
+    choose('Монтаж за клиент');
+    choose('ИИ монтира мои кадри');
+    expect(screen.getByText(/Тема на клипа — Как се поръчва/).textContent).toContain('Подбери ясните дубъли');
+    view.unmount();
+    render(<VideoGoalPractice />);
+    expect(screen.getByRole('button', { name: 'Монтаж за клиент' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'ИИ монтира мои кадри' }).getAttribute('aria-pressed')).toBe('true');
+    expect((screen.getByRole('textbox') as HTMLInputElement).value).toBe('Как се поръчва кутия за подарък?');
+    localStorage.removeItem(storage);
+  });
+  it('keeps the story exercise closed alongside the optional project topic', () => {
     render(<MemoryRouter><PerfectVideoStartPage /></MemoryRouter>);
-    expect(screen.getByRole('heading', { name: /Първо историята/ })).toBeTruthy();
-    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
+    expect(screen.getByRole('heading', { name: 'Първият ти видеопроект' })).toBeTruthy();
+    expect(screen.getAllByRole('textbox')).toEqual([screen.getByRole('textbox', { name: /Моята тема/ })]);
     expect(document.querySelector('input[type=file]')).toBeNull();
     expect(screen.getByText('Празната чаша')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Следващ момент' }));
