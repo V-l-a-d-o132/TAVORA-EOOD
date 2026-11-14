@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { videoAiLessonLink } from '@/lib/video-ai';
 import { coffee } from '@/lib/video-montage';
+import ProjectPrompt from './ProjectPrompt';
+import VideoEditingWorkshop from './VideoEditingWorkshop';
 
 const goals = {
   creator: {
@@ -61,12 +63,11 @@ function choiceStyle(selected: boolean) {
 
 export default function VideoGoalPractice() {
   const [choice, setChoice] = useState(initialChoice);
-  const [copyResult, setCopyResult] = useState({ text: '', message: '' });
   const project = goals[choice.goal];
-  const editing = choice.method === 'edit';
-  const prompt = [choice.topic.trim() && 'Тема на клипа — ' + choice.topic.trim(), ...(editing
-    ? [project.brief, project.edit, 'Използвай посочените от мен оригинали и запиши отделен вертикален файл от 20–30 секунди. За стила ще дам един свой или разрешен пример. Изведи две правила за ритъм и надписи. Запази смисловите паузи. Ако има говор, добави български субтитри и посочи думите, в които се съмняваш. Ако материалът е без звук, използвай кратки надписи за видимото действие. Запази оригиналите.']
-    : [project.scene, 'Вертикален кадър, неподвижна камера, едно непрекъснато движение. Без надписи или лога. Запази края неподвижен за срез.'])].filter(Boolean).join('\n');
+  const topic = choice.topic.trim();
+  const topicLine = topic && 'Тема на клипа — ' + topic;
+  const editBrief = [topicLine, project.brief, project.edit].filter(Boolean).join('\n');
+  const generationPrompt = [topicLine, project.scene, 'Вертикален кадър, неподвижна камера, едно непрекъснато движение. Без надписи или лога. Запази края неподвижен за срез.'].filter(Boolean).join('\n');
   useEffect(() => {
     try { localStorage.setItem(storageKey, JSON.stringify(choice)); } catch { /* Local persistence is optional. */ }
   }, [choice]);
@@ -98,26 +99,19 @@ export default function VideoGoalPractice() {
           <li><strong>25 минути.</strong> Отвори монтажната маса. Подреди четири отрязъка и добави кратък надпис на всеки. {project.edit}</li>
           <li><strong>10 минути.</strong> Изнеси клипа, намери файла на устройството и го отвори на телефон. {project.evidence}</li>
         </ol>
+      </> : choice.method === 'edit' ? <>
+        <h3 className="font-semibold academy-text">От суровия запис до първия монтаж</h3>
+        <p>На телефон отвори разрешените кадри в CapCut и пробвай Auto Cut, ако е наличен. Прослушай репликата от двете страни на среза, преди да изнесеш клипа. <a className={linkStyle} href="https://www.capcut.com/help/how-to-use-auto-cut">Как се използва Auto Cut</a></p>
+        <VideoEditingWorkshop brief={editBrief} />
       </> : <>
-        <h3 className="font-semibold academy-text">{editing ? 'От суровия запис до първия монтаж' : 'От идея до движеща се сцена'}</h3>
-        {editing ? <p>На телефон отвори разрешените кадри в CapCut и пробвай Auto Cut, ако е наличен. На компютър можеш да дадеш указанието по-долу на Claude Code. Във всяка сглобка прослушай репликата от двете страни на среза.</p>
-          : <p>Във Firefly Video въведи описание или задай своя снимка като начален кадър. Генерирай кратка сцена два пъти, като във втория вариант смениш само движението. Свали избрания файл. За клип изцяло с ИИ създай четири сцени по около 5 секунди — начало, действие, детайл и финал. Запази един и същ обект и цветове, подреди сцените и изнеси видеото.</p>}
-        <p className="font-semibold academy-text">{editing ? 'Указание за монтаж' : 'Указание за генериране'}</p>
-        <p className="select-text whitespace-pre-line rounded-lg border academy-border academy-surface p-3">{prompt}</p>
-        <div className="flex flex-wrap items-center gap-3"><button type="button" className={choiceStyle(false)} onClick={async () => {
-          try { await navigator.clipboard.writeText(prompt); setCopyResult({ text: prompt, message: 'Копирано.' }); }
-          catch { setCopyResult({ text: prompt, message: 'Маркирай указанието по-горе и избери „Копирай“.' }); }
-        }}>Копирай указанието</button><span role="status">{copyResult.text === prompt && copyResult.message}</span></div>
-        {editing && <p>Свери име, число и една пауза с оригинала. Върни бележка, например „На 00:08 върни началото на думата и премести надписа под ръцете“. Отвори втория изнесен файл и сравни този момент.</p>}
-        {editing ? <details>
-          <summary className="cursor-pointer py-2 font-semibold academy-text">На компютър с Claude Code</summary>
-          <p>Сложи копия на дублите в папка „Кадри“, един разрешен пример в „Стил“ и остави празна папка „Версии“. В локална сесия отвори общата папка. Поискай кратък тестов износ с FFmpeg. За български говор може да използваш многоезичен Whisper. Провери кои инструменти са налични, преди да пуснеш указанието за целия клип.</p>
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2"><a className={linkStyle} href="https://code.claude.com/docs/en/desktop-quickstart">Локална сесия в Claude Code</a><a className={linkStyle} href="https://ffmpeg.org/">FFmpeg</a><a className={linkStyle} href="https://github.com/openai/whisper">Whisper</a></div>
-        </details> : <p>Изгледай двата варианта на забавен ход. Следи дали предметът променя форма, буквите се разместват или се появява несъществуващ детайл. Означи илюстрацията като създадена с ИИ. Когато показваш реална стока или резултат от услуга, включи собствен кадър, който го потвърждава. Условията и кредитите зависят от генератора.</p>}
-        <p>{editing ? <a className={linkStyle} href="https://www.capcut.com/help/how-to-use-auto-cut">Как се използва Auto Cut</a>
-          : <a className={linkStyle} href="https://helpx.adobe.com/firefly/web/work-with-audio-and-video/work-with-video/generate-videos-using-images.html">Как се създава видео във Firefly</a>}</p>
-        <p><strong>Проверка на готовия клип.</strong> {project.evidence}</p>
+        <h3 className="font-semibold academy-text">От идея до движеща се сцена</h3>
+        <p>Във Firefly Video въведи описание или задай своя снимка като начален кадър. Генерирай кратка сцена два пъти, като във втория вариант смениш само движението. Свали избрания файл. За клип изцяло с ИИ създай четири сцени по около 5 секунди — начало, действие, детайл и финал. Запази един и същ обект и цветове, подреди сцените и изнеси видеото.</p>
+        <p className="font-semibold academy-text">Указание за генериране</p>
+        <ProjectPrompt text={generationPrompt} buttonLabel="Копирай указанието" />
+        <p>Изгледай двата варианта на забавен ход. Следи дали предметът променя форма, буквите се разместват или се появява несъществуващ детайл. Означи илюстрацията като създадена с ИИ. Когато показваш реална стока или резултат от услуга, включи собствен кадър, който го потвърждава. Условията и кредитите зависят от генератора.</p>
+        <p><a className={linkStyle} href="https://helpx.adobe.com/firefly/web/work-with-audio-and-video/work-with-video/generate-videos-using-images.html">Как се създава видео във Firefly</a></p>
       </>}
+      {choice.method !== 'phone' && <p><strong>Проверка на готовия клип.</strong> {project.evidence}</p>}
     </div>
     <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
       <a href="/academy-labs/perfect-video/montage" className="inline-flex min-h-11 items-center rounded-lg academy-primary px-4 py-2 text-sm font-semibold text-white">Отвори монтажната маса</a>

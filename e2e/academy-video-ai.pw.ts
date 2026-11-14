@@ -18,12 +18,27 @@ test('a project started in lesson one can be resumed, edited with AI and opened 
   await practice.getByRole('textbox').fill('Как се поръчва кутия за подарък?');
   await practice.getByRole('button', { name: 'ИИ монтира мои кадри' }).click();
   await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://127.0.0.1:5191' });
-  await practice.getByRole('button', { name: 'Копирай указанието' }).click();
-  await expect(practice.getByRole('status')).toHaveText('Копирано.');
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('кутия за подарък');
+  const steps = [
+    { title: '1. Подготви кадрите и отвори пробния клип', copied: ['FFmpeg', 'Whisper', 'Remotion', 'HyperFrames', 'yt-dlp'] },
+    { title: '2. Изведи правила за стила от примери', copied: ['STYLE.md', 'Покажи ми правилата за одобрение'] },
+    { title: '3. Изнеси първия монтаж и направи поправка', copied: ['кутия за подарък', 'Покажи истинския продукт', 'V1.mp4'] },
+  ];
+  for (const [i, step] of steps.entries()) {
+    await practice.getByText(step.title, { exact: true }).click();
+    const panel = practice.locator('details').filter({ hasText: step.title });
+    await panel.getByRole('button', { name: `Копирай задание ${i + 1}` }).click();
+    await expect(panel.getByRole('status')).toHaveText('Копирано.');
+    const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+    for (const fragment of step.copied) expect(clipboard).toContain(fragment);
+  }
+  await expect(practice.getByText(/Запази като V2\.mp4/)).toBeVisible();
+  await assertLearningFits(page);
+  await assertLearningContrast(practice);
   await page.goto('/academy-labs/perfect-video/start');
   await expect(practice.getByRole('textbox')).toHaveValue('Как се поръчва кутия за подарък?');
   await expect(practice.getByRole('button', { name: 'ИИ монтира мои кадри' })).toHaveAttribute('aria-pressed', 'true');
+  await practice.getByText(steps[2].title, { exact: true }).click();
+  await expect(practice.getByRole('button', { name: 'Копирай задание 3' })).toBeVisible();
   await practice.getByRole('button', { name: 'ИИ създава нови кадри' }).click();
   await expect(practice.getByText(/Тема на клипа — Как се поръчва/)).toContainText('хартиени кръга');
   await assertLearningFits(page);
