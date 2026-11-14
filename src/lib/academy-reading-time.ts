@@ -3,6 +3,7 @@ import { marketingVisibleWords } from '@/lib/marketing-reading-count';
 import { parseProvidedMaterials, type ProvidedMaterials } from '@/lib/provided-materials';
 import { parseLessonToolkit, toolkitVisibleText } from '@/lib/silk-toolkit';
 import { parseVideoAiGuide, videoAiVisibleText } from '@/lib/video-ai';
+import { videoLessonSteps } from '@/lib/video-lesson-steps';
 
 // A planning range, not a promise about how fast any student reads.
 // Practice, research, filming and assessment are deliberately outside it.
@@ -50,7 +51,7 @@ export function countVisibleLessonWords(lesson: {
   title: string;
   subtitle: string;
   objective: string;
-  blocks: readonly { title: string; content: unknown; type?: string }[];
+  blocks: readonly { title: string; content: unknown; type?: string; key?: string; required?: boolean; points?: number }[];
 }): number {
   if (lesson.moduleId?.startsWith('s03-') && lesson.blocks.every(block => typeof block.type === 'string')) {
     return marketingVisibleWords({ ...lesson, blocks: lesson.blocks as readonly { title: string; content: unknown; type: string }[] });
@@ -98,6 +99,7 @@ export function countVisibleLessonWords(lesson: {
   };
   const countMaterials = (materials: ProvidedMaterials) => count([materials.title, materials.instruction,
     ...materials.items.flatMap(item => [item.label, item.body, item.code, item.columns, item.rows])]);
+  const blocks = lesson.moduleId === 's02-m01' ? videoLessonSteps(lesson.blocks) : lesson.blocks;
   return count(lesson.title) + count(lesson.subtitle) + count(lesson.objective)
-    + lesson.blocks.reduce((total, block) => total + count(block.title) + count(block.content), 0);
+    + blocks.reduce((total, block) => total + count(block.title) + count(block.content), 0);
 }

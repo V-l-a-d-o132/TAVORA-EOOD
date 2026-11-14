@@ -21,6 +21,7 @@ import { notifyLearningProgressChanged, recordLessonVisit } from '@/lib/learning
 import { countVisibleLessonWords, lessonReadingDuration } from '@/lib/academy-reading-time';
 import { closedLessonState } from '@/lib/closed-lesson-state';
 import { readFreeSilkProgress, saveFreeSilkProgress } from '@/lib/free-silk-progress';
+import { videoLessonSteps } from '@/lib/video-lesson-steps';
 
 interface Props {
   moduleId: string;
@@ -63,7 +64,12 @@ export default function LessonEngineV2({
   previewMode = false,
   onTrustedProgress,
 }: Props) {
-  const [lesson, setLesson] = useState<LessonV2 | null>(lessonOverride || null);
+  const [loadedLesson, setLesson] = useState<LessonV2 | null>(lessonOverride || null);
+  const lesson = useMemo(() => {
+    if (!loadedLesson || loadedLesson.moduleId !== 's02-m01') return loadedLesson;
+    const blocks = videoLessonSteps(loadedLesson.blocks);
+    return blocks === loadedLesson.blocks ? loadedLesson : { ...loadedLesson, blocks: [...blocks] };
+  }, [loadedLesson]);
   const [loading, setLoading] = useState(!lessonOverride);
   const [error, setError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
@@ -116,7 +122,10 @@ export default function LessonEngineV2({
     const guest = !userId && !previewMode ? readFreeSilkProgress(lesson) : null;
     const states = closedLessonState(lesson.blocks, guest?.blockState || progress?.blockState || {});
     const done = guest ? new Set(guest.completedBlockKeys) : completedFromProgress(progress);
-    const resumeIndex = Math.max(0, lesson.blocks.findIndex((block) => block.key === (guest?.currentBlockKey || progress?.currentBlockKey)));
+    const cursor = guest?.currentBlockKey || progress?.currentBlockKey;
+    const mergedTarget = loadedLesson?.blocks.find(block => block.key === cursor)?.content.mergedInto;
+    const cursorIndex = lesson.blocks.findIndex(block => block.key === cursor);
+    const resumeIndex = cursorIndex >= 0 ? cursorIndex : Math.max(0, lesson.blocks.findIndex(block => block.key === mergedTarget));
     setBlockState(states);
     setCompleted(done);
     setXp(guest?.xp ?? progress?.xp ?? 0);
@@ -125,7 +134,7 @@ export default function LessonEngineV2({
     setShowPreviewGate(false);
     completionReported.current = false;
     setGuestVersion(lesson.versionId);
-  }, [lesson, userId, previewMode]);
+  }, [lesson, loadedLesson, userId, previewMode]);
 
   useEffect(() => {
     if (!userId && !previewMode && lesson && guestVersion === lesson.versionId) {
@@ -271,7 +280,7 @@ export default function LessonEngineV2({
     <nav aria-label="Стъпки на урока" className="mb-5 flex gap-2 overflow-x-auto pb-2">{lesson.blocks.map((block, index) => <button key={block.key} type="button" aria-label={`Стъпка ${index + 1}: ${block.title}`} aria-current={index === currentIndex ? 'step' : undefined} onClick={() => goTo(index)} className={`grid h-9 min-w-9 place-items-center rounded-xl border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 ${index === currentIndex ? 'academy-accent-border academy-primary text-white' : completed.has(block.key) ? 'academy-success-border academy-success-bg academy-success' : 'academy-border academy-tint academy-subtle'}`}>{completed.has(block.key) ? <i className="ri-check-line" aria-hidden /> : index + 1}</button>)}</nav>
 
     <div data-lesson-block className="scroll-mt-24">
-      <LessonBlockRenderer key={`${lesson.versionId}:${currentBlock.key}`} block={currentBlock} lessonId={lesson.lessonId} moduleId={moduleId} initialState={blockState[currentBlock.key]} completed={completed.has(currentBlock.key)} onStateChange={(state) => saveDraftState(currentBlock.key, state)} onSubmit={async (payload) => {
+      <LessonBlockRenderer key={`${lesson.versionId}:${currentBlock.key}`} block={currentBlock} lessonId={lesson.lessonId} lessonObjective={lesson.objective} moduleId={moduleId} initialState={blockState[currentBlock.key]} completed={completed.has(currentBlock.key)} onStateChange={(state) => saveDraftState(currentBlock.key, state)} onSubmit={async (payload) => {
         const saved = await draftQueue.current?.flush();
         if (saved === false) throw new Error('Бележките още не са запазени. Провери връзката и опитай отново.');
         const response = await completeLessonBlock(lesson, currentBlock, payload);

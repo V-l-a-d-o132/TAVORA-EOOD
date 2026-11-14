@@ -13,6 +13,7 @@ import { parseClosedStudio } from '@/lib/closed-practice-studio';
 interface Props {
   block: LessonBlockV2;
   lessonId: string;
+  lessonObjective?: string;
   moduleId?: string;
   initialState?: JsonObject;
   completed: boolean;
@@ -33,7 +34,7 @@ const obj = (value: unknown): JsonObject => value && typeof value === 'object' &
 const fieldClass = 'w-full rounded-xl border academy-border-strong academy-raised px-4 py-3 text-sm academy-text outline-none transition focus:academy-accent-border focus:ring-2 focus:ring-red-500/20';
 const choiceClass = 'w-full rounded-xl border academy-border academy-tint p-4 text-left text-sm academy-body transition hover:academy-border-strong focus:outline-none focus:ring-2 focus:ring-red-500/50';
 
-export default function LessonBlockRenderer({ block, lessonId, moduleId, initialState, completed, onStateChange, onSubmit }: Props) {
+export default function LessonBlockRenderer({ block, lessonId, lessonObjective, moduleId, initialState, completed, onStateChange, onSubmit }: Props) {
   const [state, setState] = useState<JsonObject>(initialState || {});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<BlockAttemptResult | null>(null);
@@ -86,7 +87,7 @@ export default function LessonBlockRenderer({ block, lessonId, moduleId, initial
   const renderBlock = () => {
     switch (block.type) {
       case 'objective':
-        return <><LessonOutcomes content={{ ...block.content, body: body || s(block.content.objective) }} />{acknowledgement}</>;
+        return <><LessonOutcomes content={{ ...block.content, body: (block.content.useLessonObjective === true && lessonObjective) || body || s(block.content.objective) }} />{acknowledgement}</>;
       case 'hook':
         return <><blockquote className="border-l-4 academy-accent-border pl-5 text-lg leading-relaxed academy-body">{body || s(block.content.problem)}</blockquote>{acknowledgement}</>;
       case 'concept':

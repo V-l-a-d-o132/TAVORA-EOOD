@@ -1,4 +1,5 @@
 import type { JsonObject } from '@/lib/lesson-engine-v2';
+import { lazy, Suspense } from 'react';
 import ClosedWorkflowLab from './ClosedWorkflowLab';
 import VideoDecisionLab, { isVideoLabKind } from '@/components/academy/VideoDecisionLab';
 import ProvidedMaterials from '@/components/academy/ProvidedMaterials';
@@ -9,6 +10,8 @@ import VideoAiGuide from '@/components/academy/VideoAiGuide';
 import { parseVideoAiGuide } from '@/lib/video-ai';
 import MarketingAiGuide from '@/components/academy/MarketingAiGuide';
 import { parseMarketingAiGuide } from '@/lib/marketing-ai';
+
+const VideoAiWorkbench = lazy(() => import('@/components/academy/VideoAiWorkbench'));
 
 const strings = (value: unknown): string[] => Array.isArray(value)
   ? value.filter((item): item is string => typeof item === 'string') : [];
@@ -74,6 +77,8 @@ export default function LessonRichText({ content, allowCode = false, allowVideoL
     {materials && <ProvidedMaterials key={materials.title} materials={materials} />}
     {toolkit && <LessonToolkit key={toolkit.title} toolkit={toolkit} />}
     {videoAi && <VideoAiGuide key={videoAi.title} guide={videoAi} />}
+    {allowVideoLab && content.videoAiDemo === 'story' && !videoAi &&
+      <Suspense fallback={<p role="status">Зареждане на монтажната работилница…</p>}><VideoAiWorkbench initialMode="story" fixed /></Suspense>}
     {marketingAi && <MarketingAiGuide key={marketingAi.lesson} guide={marketingAi} />}
     {objects(content.points).length > 0 && <ul className="mt-5 space-y-3">
       {objects(content.points).map((point, index) => <li key={text(point.id) || index} className="flex gap-3 academy-body">

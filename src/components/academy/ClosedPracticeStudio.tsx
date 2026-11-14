@@ -117,7 +117,7 @@ export default function ClosedPracticeStudio({ studio, state, busy, completed, o
           <dt className="text-xs font-semibold uppercase tracking-wider academy-subtle">{slot.text}</dt><dd className="mt-1 text-sm leading-6 academy-body">{studio.choices.find(choice => choice.id === matches[slot.id])?.text || 'Още няма избор.'}</dd>
         </div>)}</dl>
         {mediaError && <p role="alert" className="mt-3 text-sm academy-warning">{mediaError}</p>}
-        <p className="mt-5 border-t academy-border pt-4 text-xs leading-5 academy-muted">{studio.limit}</p>
+        {studio.limit && <p className="mt-5 border-t academy-border pt-4 text-xs leading-5 academy-muted">{studio.limit}</p>}
         {(studio.kind !== 'decision' || studio.domain !== 'video') && <a href={studio.domain === 'silk-road' ? '/academy-labs/silk-road/practical/SOURCES.md' : studio.domain === 'marketing' ? '/academy-labs/marketing/practical/SOURCES.md' : ['metrics', 'budget', 'storyboard'].includes(studio.kind) ? '/academy-labs/perfect-video/practical/FINAL-SOURCES.md' : ['sound', 'transition'].includes(studio.kind) ? '/academy-labs/perfect-video/closed/SOURCES.md' : studio.kind === 'schedule' ? '/academy-labs/perfect-video/practical/PRODUCTION-SOURCES.md' : '/academy-labs/perfect-video/practical/SOURCES.md'} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs underline academy-muted">Произход на учебния материал</a>}
       </section>
     </div>

@@ -8,6 +8,68 @@ const catalog = JSON.parse(readFileSync(new URL('../src/data/video-ai-tools.json
 const privateRows = process.env.VIDEO_AI_PRIVATE ? JSON.parse(readFileSync(process.env.VIDEO_AI_PRIVATE, 'utf8')) : null;
 test.setTimeout(90000);
 
+for (const theme of ['light', 'dark']) {
+  test(`module one concise pilot retains its examples and resumes a merged step: ${theme}`, async ({ page }, info) => {
+    test.skip(!process.env.VIDEO_M01_PILOT, 'The versioned pilot is supplied from protected editorial storage.');
+    const lessons = JSON.parse(readFileSync(process.env.VIDEO_M01_PILOT!, 'utf8'));
+    const project = [lessons[0], lessons[14], lessons[23]];
+    const requests = await prepareAcademyTheme(page, theme);
+    await page.setViewportSize({ width: theme === 'light' ? 320 : 1280, height: 950 });
+    await page.route('**/rest/v1/rpc/academy_get_lesson_v2', route => {
+      const id = route.request().postDataJSON().p_lesson;
+      const l = project.find((row: { id: string }) => row.id === id);
+      return route.fulfill({ json: {
+        id: '00000000-0000-4000-8000-000000000081', moduleId: l.m, lessonId: l.id,
+        status: 'published', versionId: '00000000-0000-4000-8000-000000000082', version: 12,
+        title: l.title, subtitle: l.subtitle, objective: l.objective, hook: l.hook, duration: l.duration,
+        estimatedMinutes: l.minutes, sourceKind: 'editor', validation: { errors: [], warnings: [] }, versionChanged: false,
+        progress: { current_block_key: id === 'pv01-15' ? 'field_diagnostic' : 'objective',
+          completed_block_keys: id === 'pv01-15' ? ['objective', 'story_transfer'] : [], block_state: {},
+          xp: id === 'pv01-15' ? 20 : 0, mastery_status: 'learning' },
+        blocks: l.blocks.map((b: { id: string; key: string; pos: number; type: string; title: string; c: unknown; required: boolean; pts: number }) =>
+          ({ id: b.id, key: b.key, position: b.pos, type: b.type, title: b.title, content: b.c, required: b.required, points: b.pts })),
+      } });
+    });
+    for (const l of project) {
+      await page.goto('/module/s02-m01?lesson=' + l.id);
+      const engine = page.getByTestId('lesson-engine-v2');
+      const nav = page.getByRole('navigation', { name: 'Стъпки на урока' });
+      await expect(engine.getByRole('heading', { name: l.title, exact: true })).toBeVisible();
+      await expect(engine.getByText(/задължителни стъпки/).first()).toContainText(l.id === 'pv01-01' ? '/7' : '/8');
+      await expect(nav.getByRole('button', { name: /Как да намериш причината/ })).toHaveCount(0);
+      if (l.id === 'pv01-15') {
+        await expect(nav.getByRole('button', { name: /Открий причината и избери поправка/ })).toHaveAttribute('aria-current', 'step');
+        await expect(engine.getByText('20 XP', { exact: true })).toBeVisible();
+      }
+      await nav.getByRole('button', { name: /Какво ще можеш след урока/ }).click();
+      await expect(engine.getByText(l.objective, { exact: true })).toHaveCount(1);
+      await expect(engine.getByRole('button', { name: 'Следваща', exact: true })).toBeEnabled();
+      const example = l.blocks.find((b: { key: string }) => b.key === (l.id === 'pv01-01' ? 'story_teaching_3' : 'worked_example'));
+      await nav.getByRole('button', { name: new RegExp(example.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) }).click();
+      await expect(engine.locator('[data-lesson-block]')).toContainText(l.id === 'pv01-15' ? '2 милиона' : 'Кафе пауза');
+      await assertLearningFits(page);
+      await assertLearningContrast(engine);
+      await page.screenshot({ path: info.outputPath(l.id + '.png') });
+      const practice = l.blocks.find((b: { key: string }) => b.key === (l.id === 'pv01-24' ? 'video_client_transfer_v1' : 'practical_studio_20261014'));
+      await nav.getByRole('button', { name: new RegExp('^Стъпка \\d+: ' + practice.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) }).click();
+      const selects = engine.getByRole('combobox');
+      await expect(selects.first()).toBeVisible();
+      for (let i = 0; i < await selects.count(); i++) {
+        const select = selects.nth(i);
+        await select.selectOption(await select.locator('option').nth(1).getAttribute('value') || '');
+      }
+      if (l.id === 'pv01-24') {
+        const selected = await selects.first().inputValue();
+        const option = practice.c.right.find((o: { id: string }) => o.id === selected);
+        await expect(engine.getByRole('region', { name: 'Резултат от изборите' })).toContainText(option.text);
+      }
+      await assertLearningFits(page);
+      await assertLearningContrast(engine);
+    }
+    expect(requests.academy_complete_lesson_block || 0).toBe(0);
+  });
+}
+
 test('a project started in lesson one can be resumed, edited with AI and opened in the montage lab', async ({ page, context }) => {
   await prepareAcademyTheme(page, 'dark');
   await page.setViewportSize({ width: 375, height: 850 });

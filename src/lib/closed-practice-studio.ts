@@ -33,6 +33,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
   const config = record(content.studio);
   const kind = kinds.includes(config.productionKind as StudioKind) ? config.productionKind : config.kind;
   if (!kinds.includes(kind as StudioKind)) return null;
+  const slotDefinitions = records(content.left);
   const choices: StudioChoice[] = records(content.right).map(item => {
     const preview = record(item.preview);
     const diagram = record(preview.diagram);
@@ -41,6 +42,10 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
     const calculation = record(preview.calculation), budget = record(preview.budget), board = record(preview.board);
     const copy = record(preview.copy), role = record(preview.role), flow = record(preview.flow);
     const document = record(preview.document), page = record(preview.page), search = record(preview.search);
+    const documentSlot = typeof document.slotId === 'string' ? slotDefinitions.find(slot =>
+      slot.id === document.slotId && Array.isArray(slot.choices) && slot.choices.includes(item.id)) : undefined;
+    const documentTitle = text(documentSlot ? documentSlot.text : document.title);
+    const documentText = text(documentSlot ? item.text : document.text);
     const focus = Array.isArray(preview.focus) && preview.focus.length === 2 && preview.focus.every(n => finite(n, 0, 3600)) && preview.focus[0] < preview.focus[1] ? preview.focus as [number, number] : undefined;
     const clip = Array.isArray(preview.clip) && preview.clip.length === 2 && preview.clip.every(n => typeof n === 'number' && Number.isFinite(n))
       && preview.clip[0] >= 0 && preview.clip[1] <= 32 && preview.clip[0] < preview.clip[1] ? preview.clip as [number, number] : undefined;
@@ -55,7 +60,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
       calculation: finite(calculation.a, 0, 1e9) && finite(calculation.b, 0, 1e9) && ['percent', 'multiply', 'divide'].includes(text(calculation.operation)) && text(calculation.label).length <= 100 && text(calculation.unit).length <= 40 ? { label: text(calculation.label), a: calculation.a, b: calculation.b, operation: calculation.operation as StudioCalculation['operation'], aLabel: text(calculation.aLabel).slice(0, 100), bLabel: text(calculation.bLabel).slice(0, 100), unit: text(calculation.unit) } : undefined,
       budget: finite(budget.hours, 0, 10000) && finite(budget.hourly, 0, 100000) && finite(budget.external, 0, 1e8) && finite(budget.reservePercent, 0, 100) && (budget.price === undefined || finite(budget.price, 0, 1e9)) ? budget as StudioBudget : undefined,
       board: ['choice', 'order', 'packing', 'handover', 'pickup', 'crop', 'missing'].includes(text(board.scene)) && text(board.caption).length <= 120 && finite(board.seconds, 1, 60) ? board as StudioBoard : undefined, focus,
-      document: ['goal', 'facts', 'scope', 'checks', 'handover'].includes(text(document.part)) && text(document.title).length > 0 && text(document.title).length <= 120 && text(document.text).length > 0 && text(document.text).length <= 1000 ? { part: document.part as StudioDocument['part'], title: text(document.title), text: text(document.text) } : undefined,
+      document: ['goal', 'facts', 'scope', 'checks', 'handover'].includes(text(document.part)) && documentTitle.length > 0 && documentTitle.length <= 120 && documentText.length > 0 && documentText.length <= 1000 ? { part: document.part as StudioDocument['part'], title: documentTitle, text: documentText } : undefined,
       page: ['heading', 'description', 'terms', 'action', 'layout', 'image', 'status', 'navigation'].includes(text(page.part)) && text(page.text).length > 0 && text(page.text).length <= 700 ? {
         part: page.part as StudioPagePart['part'], text: text(page.text),
         font: ['small', 'readable'].includes(text(page.font)) ? page.font as StudioPagePart['font'] : undefined,
@@ -69,7 +74,7 @@ export function parseClosedStudio(content: JsonObject): ClosedStudio | null {
       role: Array.isArray(role.roles) && role.roles.length > 0 && role.roles.length <= 5 && new Set(role.roles).size === role.roles.length && role.roles.every(r => ['seeker', 'user', 'payer', 'approver', 'adviser'].includes(text(r))) && text(role.person).length > 0 && text(role.person).length <= 80 && text(role.detail).length <= 240 ? role as StudioRole : undefined };
   });
   const ids = new Set(choices.map(choice => choice.id));
-  const slots = records(content.left).map(item => ({ id: text(item.id), text: text(item.text), preview: item.preview === true, phase: item.phase === 'change' ? 'change' as const : 'base' as const,
+  const slots = slotDefinitions.map(item => ({ id: text(item.id), text: text(item.text), preview: item.preview === true, phase: item.phase === 'change' ? 'change' as const : 'base' as const,
     choices: Array.isArray(item.choices) ? item.choices.filter((id): id is string => typeof id === 'string' && ids.has(id)) : [...ids] }));
   if (!slots.length || !choices.length || choices.some(choice => !choice.id || !choice.text) || ids.size !== choices.length
     || new Set(slots.map(slot => slot.id)).size !== slots.length || slots.some(slot => !slot.id || !slot.text || !slot.choices.length)) return null;
